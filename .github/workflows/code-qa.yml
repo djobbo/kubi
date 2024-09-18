@@ -1,0 +1,25 @@
+name: Code QA
+on: [push]
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Lint
+            action: bun run check:lint
+          - name: Typecheck
+            action: bun run check:types
+          - name: Build
+            action: bun run build
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: ${{ matrix.name }}
+        run: |
+          bun i --frozen-lockfile
+          ${{ matrix.action }}
