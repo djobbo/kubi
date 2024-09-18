@@ -1,78 +1,79 @@
-"use client";
+"use client"
 
-import { Box, Cylinder, SoftShadows, Sphere } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
-import { Color } from "three";
+import { Box, Cylinder, SoftShadows } from "@react-three/drei"
+import { Canvas } from "@react-three/fiber"
+import { Color } from "three"
 
 const getRandomNumber = (min: number, max: number) => {
-  return Math.random() * (max - min) + min;
-};
+  return Math.random() * (max - min) + min
+}
 
-type SceneCube = {
-  type: "Box";
-  position: [number, number, number];
-  rotation: [number, number, number];
-  dimensions: [number, number, number];
-  color: Color;
-};
+interface SceneCube {
+  type: "Box"
+  position: [number, number, number]
+  rotation: [number, number, number]
+  dimensions: [number, number, number]
+  color: Color
+}
 
 const getRandomColor = () => {
-  return new Color(Math.random(), Math.random(), Math.random());
-};
+  return new Color(Math.random(), Math.random(), Math.random())
+}
 
 const getRandomCube = (): SceneCube => {
-  const width = getRandomNumber(0.2, 3);
-  const height = getRandomNumber(0.2, 3);
-  const depth = getRandomNumber(0.2, 3);
+  const width = getRandomNumber(0.2, 3)
+  const height = getRandomNumber(0.2, 3)
+  const depth = getRandomNumber(0.2, 3)
 
   return {
     type: "Box",
     position: [getRandomNumber(-3, 3), height / 2, getRandomNumber(-3, 3)],
     rotation: [0, getRandomNumber(0, Math.PI), 0],
     dimensions: [width, height, depth],
-    // color: getRandomColor(),
-    color: new Color('#ffeedd')
-  };
-};
+    color: getRandomColor(),
+    // color: new Color('#ffeedd')
+  }
+}
 
-type SceneCylinder = {
-  type: "Cylinder";
-  position: [number, number, number];
-  rotation: [number, number, number];
-  dimensions: [number, number, number];
-  color: Color;
-};
+interface SceneCylinder {
+  type: "Cylinder"
+  position: [number, number, number]
+  rotation: [number, number, number]
+  dimensions: [number, number, number]
+  color: Color
+}
 
 const getRandomCylinder = (): SceneCylinder => {
-  const radiusTop = getRandomNumber(0.2, 0.8);
+  const radiusTop = getRandomNumber(0.2, 0.8)
   // const radiusBottom = getRandomNumber(0.25, 1);
-  const height = getRandomNumber(0.5, 3);
+  const height = getRandomNumber(0.5, 3)
 
   return {
     type: "Cylinder",
     position: [getRandomNumber(-3, 3), height / 2, getRandomNumber(-3, 3)],
     rotation: [0, getRandomNumber(0, Math.PI), 0],
     dimensions: [radiusTop, radiusTop, height],
-    // color: getRandomColor(),
-    color: new Color('#ffeedd')
-  };
-};
+    color: getRandomColor(),
+    // color: new Color('#ffeedd')
+  }
+}
 
-export type SceneObject = SceneCube | SceneCylinder;
+export type SceneObject = SceneCube | SceneCylinder
 
 export const getRandomObjects = (): SceneObject[] => {
-  const objectsCount = getRandomNumber(3, 6);
+  const objectsCount = getRandomNumber(3, 6)
 
   return Array.from({ length: objectsCount }, () => {
-    const random = Math.random();
+    const random = Math.random()
 
     if (random < 0.75) {
-      return getRandomCube();
-    } else {
-      return getRandomCylinder();
+      return getRandomCube()
     }
-  });
-};
+    else {
+      return getRandomCylinder()
+    }
+  })
+}
 
 const SceneCube = ({ cube }: { cube: SceneCube }) => {
   return (
@@ -86,8 +87,8 @@ const SceneCube = ({ cube }: { cube: SceneCube }) => {
     >
       <meshLambertMaterial color={cube.color} />
     </Box>
-  );
-};
+  )
+}
 
 const SceneCylinder = ({ cylinder }: { cylinder: SceneCylinder }) => {
   return (
@@ -101,21 +102,21 @@ const SceneCylinder = ({ cylinder }: { cylinder: SceneCylinder }) => {
     >
       <meshLambertMaterial color={cylinder.color} />
     </Cylinder>
-  );
-};
+  )
+}
 
 const SceneObjects = ({ objects }: { objects: SceneObject[] }) => {
   return objects.map((object, index) => {
     switch (object.type) {
       case "Box":
-        return <SceneCube key={index} cube={object} />;
+        return <SceneCube key={index} cube={object} />
       case "Cylinder":
-        return <SceneCylinder key={index} cylinder={object} />;
+        return <SceneCylinder key={index} cylinder={object} />
       default:
-        return null;
+        return null
     }
-  });
-};
+  })
+}
 
 export const Scene = ({ objects }: { objects: SceneObject[] }) => {
   return (
@@ -150,5 +151,5 @@ export const Scene = ({ objects }: { objects: SceneObject[] }) => {
         <gridHelper args={[20, 20, "lightgray", "lightgray"]} />
       </group>
     </Canvas>
-  );
-};
+  )
+}

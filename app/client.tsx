@@ -1,8 +1,11 @@
-import { hydrateRoot } from 'react-dom/client'
-import { StartClient } from '@tanstack/start'
-import { createRouter } from './router'
-import './global.css'
+import { hydrateRoot } from "react-dom/client"
+import { StartClient } from "@tanstack/start"
+import { createRouter } from "./router"
+import "./global.css"
 
 const router = createRouter()
 
-hydrateRoot(document.getElementById('root')!, <StartClient router={router} />)
+const root = document.getElementById("root")
+if (!root) throw new Error("No root element found")
+
+hydrateRoot(root, <StartClient router={router} />)

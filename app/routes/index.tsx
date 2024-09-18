@@ -1,7 +1,7 @@
-import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { getRandomObjects, Scene } from '../components/Scene'
+import { createFileRoute, useRouter } from "@tanstack/react-router"
+import { getRandomObjects, Scene } from "../components/Scene"
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute("/")({
   component: Home,
   loader: async () => getRandomObjects(),
 })
@@ -11,15 +11,15 @@ function Home() {
   const objects = Route.useLoaderData()
 
   return (
-    <div className='w-screen h-screen'>
+    <div className="w-screen h-screen">
       <button
-      onClick={() => {
+        onClick={() => {
           router.invalidate()
-      }}
-    >
-      Regenerate
-    </button>
-      <Scene objects={objects}/>
+        }}
+      >
+        Regenerate
+      </button>
+      <Scene objects={objects} />
     </div>
   )
 }
