@@ -137,7 +137,6 @@ export const Scene = ({ objects }: { objects: SceneObject[] }) => {
       </directionalLight>
       <pointLight position={[-10, 0, -20]} color="white" intensity={1} />
       <pointLight position={[0, -10, 0]} intensity={1} />
-
       <group position={[0, 0, 0]}>
         <SceneObjects objects={objects} />
         <mesh
