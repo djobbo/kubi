@@ -13,7 +13,7 @@ jobs:
           - name: Typecheck
             action: bun run check:types
           - name: Build
-            action: bun run build
+            action: bun run front:build
           - name: Dead Code
             action: bun run check:deadcode
     steps:
