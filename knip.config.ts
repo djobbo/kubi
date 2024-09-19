@@ -12,7 +12,7 @@ export default {
     // scripts
     "scripts/**/*.ts",
     // migration script
-    "app/features/db/migrate.ts",
+    "app/db/migrate.ts",
   ],
   ignore: [
     // tanstack/start ignore generated route file
