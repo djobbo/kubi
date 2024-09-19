@@ -9,6 +9,10 @@ export default {
     "app/router.ts",
     "app/ssr.tsx",
     "app/routes/**/*.tsx",
+    // scripts
+    "scripts/**/*.ts",
+    // migration scrip
+    "features/db/migrate.ts",
   ],
   ignore: [
     // tanstack/start ignore generated route file
