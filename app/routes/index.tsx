@@ -1,5 +1,5 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router"
-import { getRandomObjects, Scene } from "../components/Scene"
+import { getRandomObjects, Scene } from "@/features/scene/components/Scene"
 
 export const Route = createFileRoute("/")({
   component: Home,

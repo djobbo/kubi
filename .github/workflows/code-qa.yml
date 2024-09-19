@@ -14,6 +14,8 @@ jobs:
             action: bun run check:types
           - name: Build
             action: bun run build
+          - name: Dead Code
+            action: bun run check:deadcode
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2

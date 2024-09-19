@@ -58,7 +58,7 @@ const getRandomCylinder = (): SceneCylinder => {
   }
 }
 
-export type SceneObject = SceneCube | SceneCylinder
+type SceneObject = SceneCube | SceneCylinder
 
 export const getRandomObjects = (): SceneObject[] => {
   const objectsCount = getRandomNumber(3, 6)
