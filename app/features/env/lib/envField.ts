@@ -11,9 +11,8 @@ export const envField = <T>(
   const isWrongContext = context === "server" && isClient
 
   if (!parsed.success) {
-    const variableLog = `${name} - ${variable} - ${parsed.error.message}`
     throw new Error(
-      `Invalid environment variable: ${variableLog}`,
+      `Invalid environment variable: ${name} - ${variable} - ${parsed.error.message}`,
     )
   }
 

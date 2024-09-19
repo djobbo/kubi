@@ -1,7 +1,7 @@
 import {config as loadEnv} from "dotenv"
 import {z} from "zod"
 
-import {envField} from "./helpers/envField"
+import {envField} from "./lib/envField"
 
 const DEV_DATABASE_URL =
   "postgresql://postgres:postgres@localhost:5432/postgres"

@@ -3,7 +3,8 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "bun run dev:up && bun run db:migrate && vinxi dev",
+    "dev": "bun run dev:up && bun run db:migrate && bun run front:dev",
+    "front:dev": "vinxi dev",
     "dev:up": "bun run ./scripts/dev/up.ts",
     "dev:down": "bun run ./scripts/dev/down.ts",
     "dev:logs": "bun run ./scripts/dev/logs.ts",
@@ -37,6 +38,7 @@
     "vite-tsconfig-paths": "^5.0.1"
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.1.0",
     "@react-three/drei": "^9.112.0",
     "@react-three/fiber": "^8.17.7",
     "@tanstack/react-router": "^1.57.17",

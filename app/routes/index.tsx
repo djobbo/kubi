@@ -1,6 +1,7 @@
 import {createFileRoute, useRouter} from "@tanstack/react-router"
 
 import {getRandomObjects, Scene} from "@/features/scene/components/Scene"
+import {Button} from "@/ui/components/button"
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -13,13 +14,13 @@ function Home() {
 
   return (
     <div className="w-screen h-screen">
-      <button
+      <Button
         onClick={() => {
           router.invalidate()
         }}
       >
         Regenerate
-      </button>
+      </Button>
       <Scene objects={objects} />
     </div>
   )

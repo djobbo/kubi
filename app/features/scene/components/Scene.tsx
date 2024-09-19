@@ -120,7 +120,8 @@ const SceneObjects = ({objects}: {objects: SceneObject[]}) => {
 
 export const Scene = ({objects}: {objects: SceneObject[]}) => {
   return (
-    <Canvas shadows camera={{position: [-5, 2, 10], fov: 40}}>
+    <Canvas
+      shadows camera={{position: [-5, 2, 10], fov: 40}}>
       <SoftShadows size={24} focus={0} samples={10} />
       <fog attach="fog" args={["white", 0, 40]} />
       <ambientLight intensity={0.5} />

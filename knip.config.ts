@@ -23,7 +23,5 @@ export default {
     "@vitejs/plugin-react",
   ],
   // TOREMOVE: when github actions plugin works
-  "github-actions": {
-    "config": [".github/workflows/*.{yml}"],
-  },
+  "github-actions": {"config": [".github/workflows/*.{yml}"]},
 } satisfies KnipConfig
