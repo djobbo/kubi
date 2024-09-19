@@ -1,4 +1,4 @@
-import type {z} from "vinxi"
+import type {z} from "zod"
 
 export const envField = <T>(
   name: string,

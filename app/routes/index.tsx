@@ -5,22 +5,34 @@ import {Button} from "@/ui/components/button"
 
 export const Route = createFileRoute("/")({
   component: Home,
-  loader: async () => getRandomObjects(),
+  loader: async ({context: {session}}) => {
+    const objects = getRandomObjects()
+
+    return {
+      session,
+      objects,
+    }
+  },
 })
 
 function Home() {
   const router = useRouter()
-  const objects = Route.useLoaderData()
+  const {objects, session} = Route.useLoaderData()
 
   return (
     <div className="w-screen h-screen">
-      <Button
-        onClick={() => {
-          router.invalidate()
-        }}
-      >
-        Regenerate
-      </Button>
+      <div>
+        <Button
+          onClick={() => {
+            router.invalidate()
+          }}
+        >
+          Regenerate
+        </Button>
+        <pre>
+          {JSON.stringify(session, null, 2)}
+        </pre>
+      </div>
       <Scene objects={objects} />
     </div>
   )

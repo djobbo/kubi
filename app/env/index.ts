@@ -1,5 +1,5 @@
 import {config as loadEnv} from "dotenv"
-import {z} from "vinxi"
+import {z} from "zod"
 
 import {envField} from "./envField"
 

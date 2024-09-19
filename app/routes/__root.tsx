@@ -3,6 +3,8 @@ import {Outlet, ScrollRestoration} from "@tanstack/react-router"
 import {Body, Head, Html, Meta, Scripts} from "@tanstack/start"
 import * as React from "react"
 
+import {getSession} from "@/features/auth/functions/getSession"
+
 export const Route = createRootRoute({
   meta: () => [
     {charSet: "utf-8"},
@@ -13,6 +15,10 @@ export const Route = createRootRoute({
     {title: "TanStack Start Starter"},
   ],
   component: RootComponent,
+  beforeLoad: async () => {
+    const session = await getSession()
+    return {session}
+  },
 })
 
 function RootComponent() {
