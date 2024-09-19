@@ -4,12 +4,12 @@
   "type": "module",
   "scripts": {
     "dev": "bun run dev:up && bun run db:migrate && bun run front:dev",
-    "front:dev": "vinxi dev",
     "dev:up": "bun run ./scripts/dev/up.ts",
     "dev:down": "bun run ./scripts/dev/down.ts",
     "dev:logs": "bun run ./scripts/dev/logs.ts",
-    "build": "vinxi build",
-    "start": "vinxi start",
+    "front:dev": "vinxi dev",
+    "front:build": "vinxi build",
+    "front:start": "vinxi start",
     "check:types": "tsc --noEmit",
     "lint": "eslint . --fix",
     "check:lint": "eslint .",
@@ -38,16 +38,19 @@
     "vite-tsconfig-paths": "^5.0.1"
   },
   "dependencies": {
+    "@lucia-auth/adapter-drizzle": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@react-three/drei": "^9.112.0",
     "@react-three/fiber": "^8.17.7",
     "@tanstack/react-router": "^1.57.17",
     "@tanstack/start": "^1.57.17",
     "@vitejs/plugin-react": "^4.3.1",
+    "arctic": "^1.9.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.33.0",
+    "lucia": "^3.2.0",
     "lucide-react": "^0.441.0",
     "postgres": "^3.4.4",
     "react": "^18.3.1",
@@ -55,7 +58,6 @@
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.168.0",
-    "vinxi": "^0.4.3",
-    "zod": "^3.23.8"
+    "vinxi": "^0.4.3"
   }
 }

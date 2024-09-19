@@ -81,10 +81,11 @@ export default tseslint.config(
         {
           "ObjectExpression": {"multiline": true},
           "ObjectPattern": {"multiline": true},
-          "ImportDeclaration": "never",
-          "ExportDeclaration": {"multiline": true, "minProperties": 3},
+          "ImportDeclaration": {"multiline": true},
+          "ExportDeclaration": {"multiline": true},
         },
       ],
+      "@stylistic/comma-spacing": ["error", {"before": false, "after": true}],
     },
   },
   {
