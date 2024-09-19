@@ -9,4 +9,9 @@ export default {
     "app/ssr.tsx",
     "app/routes/**/*.tsx",
   ],
+  ignore: ["app/routeTree.gen.ts"],
+  // TOREMOVE: when github actions plugin works
+  "github-actions": {
+    "config": [".github/workflows/*.{yml}"],
+  },
 } satisfies KnipConfig
