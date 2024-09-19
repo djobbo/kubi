@@ -3,13 +3,18 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "vinxi dev",
+    "dev": "bun run dev:up && bun run db:migrate && vinxi dev",
+    "dev:up": "bun run ./scripts/dev/up.ts",
+    "dev:down": "bun run ./scripts/dev/down.ts",
+    "dev:logs": "bun run ./scripts/dev/logs.ts",
     "build": "vinxi build",
     "start": "vinxi start",
     "check:types": "tsc --noEmit",
-    "check:lint": "eslint .",
     "lint": "eslint . --fix",
-    "check:deadcode": "knip-bun"
+    "check:lint": "eslint .",
+    "check:deadcode": "knip-bun",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "bun run db:generate && bun run ./features/db/migrate.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.10.0",
@@ -20,6 +25,7 @@
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/parser": "^8.6.0",
     "autoprefixer": "^10.4.20",
+    "drizzle-kit": "^0.24.2",
     "eslint": "^9.10.0",
     "knip": "^5.30.2",
     "postcss": "^8.4.47",
@@ -34,9 +40,13 @@
     "@tanstack/react-router": "^1.57.17",
     "@tanstack/start": "^1.57.17",
     "@vitejs/plugin-react": "^4.3.1",
+    "dotenv": "^16.4.5",
+    "drizzle-orm": "^0.33.0",
+    "postgres": "^3.4.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "three": "^0.168.0",
-    "vinxi": "^0.4.3"
+    "vinxi": "^0.4.3",
+    "zod": "^3.23.8"
   }
 }

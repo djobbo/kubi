@@ -1,13 +1,16 @@
 # kubi
 
-To install dependencies:
+## Prerequisites
+- Bun
+- Docker
 
+Install dependencies:
 ```bash
 bun install
 ```
 
-To run:
-
+Start the developement server:
+> Create an `.env` file using `.env.example` as a template
 ```bash
 bun dev
 ```

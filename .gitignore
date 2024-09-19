@@ -177,3 +177,6 @@ dist
 # Vinxi
 .output
 .vinxi
+
+# Database
+.db
