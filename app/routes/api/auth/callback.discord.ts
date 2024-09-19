@@ -7,7 +7,10 @@ import {z} from "zod"
 
 import {db} from "@/db"
 import {lucia} from "@/features/auth/lucia"
-import {discord, DISCORD_OAUTH_STATE_COOKIE_NAME} from "@/features/auth/providers"
+import {
+  discord,
+  DISCORD_OAUTH_STATE_COOKIE_NAME,
+} from "@/features/auth/providers"
 import {oauthAccountsTable, usersTable} from "@/features/auth/schema"
 
 // TODO: add check against type {APIUser} from "discord-api-types/v10"
@@ -19,7 +22,7 @@ const discordUserResponseSchema = z.object({
   verified: z.boolean().optional(),
 })
 
-export const Route = createAPIFileRoute("/api/auth/callback/github")({
+export const Route = createAPIFileRoute("/api/auth/callback/discord")({
   GET: async ({request}) => {
     const url = new URL(request.url)
     const code = url.searchParams.get("code")
@@ -74,7 +77,11 @@ export const Route = createAPIFileRoute("/api/auth/callback/github")({
 
         await tx
           .insert(oauthAccountsTable)
-          .values({providerId: "discord", providerUserId: discordUser.id, userId})
+          .values({
+            providerId: "discord",
+            providerUserId: discordUser.id,
+            userId,
+          })
       })
 
       const session = await lucia.createSession(userId, {})
