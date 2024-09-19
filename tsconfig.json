@@ -24,10 +24,10 @@
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false,
     "paths": {
-      "~/*": [
+      "@/*": [
         "./app/*"
       ],
-      "@/*": [
+      "~/*": [
         "./*"
       ],
     },

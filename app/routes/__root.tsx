@@ -1,6 +1,6 @@
-import { createRootRoute } from "@tanstack/react-router"
-import { Outlet, ScrollRestoration } from "@tanstack/react-router"
-import { Body, Head, Html, Meta, Scripts } from "@tanstack/start"
+import {createRootRoute} from "@tanstack/react-router"
+import {Outlet, ScrollRestoration} from "@tanstack/react-router"
+import {Body, Head, Html, Meta, Scripts} from "@tanstack/start"
 import * as React from "react"
 
 export const Route = createRootRoute({
@@ -27,7 +27,7 @@ function RootComponent() {
   )
 }
 
-function RootDocument({ children }: { children: React.ReactNode }) {
+function RootDocument({children}: {children: React.ReactNode}) {
   return (
     <Html>
       <Head>

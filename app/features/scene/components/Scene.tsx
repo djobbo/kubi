@@ -1,8 +1,8 @@
 "use client"
 
-import { Box, Cylinder, SoftShadows } from "@react-three/drei"
-import { Canvas } from "@react-three/fiber"
-import { Color } from "three"
+import {Box, Cylinder, SoftShadows} from "@react-three/drei"
+import {Canvas} from "@react-three/fiber"
+import {Color} from "three"
 
 const getRandomNumber = (min: number, max: number) => {
   return Math.random() * (max - min) + min
@@ -63,7 +63,7 @@ type SceneObject = SceneCube | SceneCylinder
 export const getRandomObjects = (): SceneObject[] => {
   const objectsCount = getRandomNumber(3, 6)
 
-  return Array.from({ length: objectsCount }, () => {
+  return Array.from({length: objectsCount}, () => {
     const random = Math.random()
 
     if (random < 0.75) {
@@ -75,7 +75,7 @@ export const getRandomObjects = (): SceneObject[] => {
   })
 }
 
-const SceneCube = ({ cube }: { cube: SceneCube }) => {
+const SceneCube = ({cube}: {cube: SceneCube}) => {
   return (
     <Box
       position={cube.position}
@@ -90,7 +90,7 @@ const SceneCube = ({ cube }: { cube: SceneCube }) => {
   )
 }
 
-const SceneCylinder = ({ cylinder }: { cylinder: SceneCylinder }) => {
+const SceneCylinder = ({cylinder}: {cylinder: SceneCylinder}) => {
   return (
     <Cylinder
       position={cylinder.position}
@@ -105,7 +105,7 @@ const SceneCylinder = ({ cylinder }: { cylinder: SceneCylinder }) => {
   )
 }
 
-const SceneObjects = ({ objects }: { objects: SceneObject[] }) => {
+const SceneObjects = ({objects}: {objects: SceneObject[]}) => {
   return objects.map((object, index) => {
     switch (object.type) {
       case "Box":
@@ -118,9 +118,9 @@ const SceneObjects = ({ objects }: { objects: SceneObject[] }) => {
   })
 }
 
-export const Scene = ({ objects }: { objects: SceneObject[] }) => {
+export const Scene = ({objects}: {objects: SceneObject[]}) => {
   return (
-    <Canvas shadows camera={{ position: [-5, 2, 10], fov: 40 }}>
+    <Canvas shadows camera={{position: [-5, 2, 10], fov: 40}}>
       <SoftShadows size={24} focus={0} samples={10} />
       <fog attach="fog" args={["white", 0, 40]} />
       <ambientLight intensity={0.5} />

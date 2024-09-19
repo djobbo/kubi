@@ -1,6 +1,7 @@
-import { config as loadEnv } from "dotenv"
-import { z } from "zod"
-import { envField } from "./helpers/envField"
+import {config as loadEnv} from "dotenv"
+import {z} from "zod"
+
+import {envField} from "./helpers/envField"
 
 const DEV_DATABASE_URL =
   "postgresql://postgres:postgres@localhost:5432/postgres"
@@ -13,4 +14,4 @@ export const env = {
   ),
 }
 
-loadEnv({ path: ".env" })
+loadEnv({path: ".env"})
