@@ -1,6 +1,7 @@
 import {type KnipConfig} from "knip"
 
 export default {
+  // tanstack/start configs
   entry: [
     "app.config.ts",
     "eslint.config.mjs",
@@ -10,6 +11,7 @@ export default {
     "app/routes/**/*.tsx",
   ],
   ignore: ["app/routeTree.gen.ts"],
+  ignoreDependencies: ["@vitejs/plugin-react"],
   // TOREMOVE: when github actions plugin works
   "github-actions": {
     "config": [".github/workflows/*.{yml}"],

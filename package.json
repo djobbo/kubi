@@ -33,6 +33,7 @@
     "@react-three/fiber": "^8.17.7",
     "@tanstack/react-router": "^1.57.17",
     "@tanstack/start": "^1.57.17",
+    "@vitejs/plugin-react": "^4.3.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "three": "^0.168.0",
