@@ -54,7 +54,7 @@ export default tseslint.config(
         },
       ],
       "@stylistic/jsx-closing-tag-location": ["error"],
-      "@stylistic/jsx-first-prop-new-line": ["error", "multiline"],
+      "@stylistic/jsx-first-prop-new-line": ["error", "multiline-multiprop"],
       "@stylistic/jsx-newline": [
         "error",
         {"prevent": true},
@@ -86,6 +86,7 @@ export default tseslint.config(
         },
       ],
       "@stylistic/comma-spacing": ["error", {"before": false, "after": true}],
+      "@stylistic/jsx-curly-brace-presence": ["error", "never"],
     },
   },
   {

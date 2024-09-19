@@ -5,6 +5,9 @@ import * as React from "react"
 
 import {getSession} from "@/features/auth/functions/getSession"
 
+// @ts-expect-error - CSS is not typed
+import globalStyles from "../global.css?url"
+
 export const Route = createRootRoute({
   meta: () => [
     {charSet: "utf-8"},
@@ -15,6 +18,7 @@ export const Route = createRootRoute({
     {title: "TanStack Start Starter"},
   ],
   component: RootComponent,
+  links: () => [{rel: "stylesheet", href: globalStyles}],
   beforeLoad: async () => {
     const session = await getSession()
     return {session}
