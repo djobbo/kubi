@@ -14,7 +14,8 @@
     "check:lint": "eslint .",
     "check:deadcode": "knip-bun",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "bun run db:generate && bun run ./features/db/migrate.ts"
+    "db:migrate": "bun run db:generate && bun run ./features/db/migrate.ts",
+    "ui": "bunx shadcn@latest"
   },
   "devDependencies": {
     "@eslint/js": "^9.10.0",
@@ -41,11 +42,16 @@
     "@tanstack/react-router": "^1.57.17",
     "@tanstack/start": "^1.57.17",
     "@vitejs/plugin-react": "^4.3.1",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.33.0",
+    "lucide-react": "^0.441.0",
     "postgres": "^3.4.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "tailwind-merge": "^2.5.2",
+    "tailwindcss-animate": "^1.0.7",
     "three": "^0.168.0",
     "vinxi": "^0.4.3",
     "zod": "^3.23.8"

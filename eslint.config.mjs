@@ -52,6 +52,7 @@ export default tseslint.config(
       "@stylistic/no-whitespace-before-property": ["error"],
       "@stylistic/object-curly-spacing": ["error", "never"],
       "@stylistic/array-bracket-spacing": ["error", "never"],
+      "@stylistic/arrow-spacing": ["error", {"before": true, "after": true}],
     },
   },
   {
