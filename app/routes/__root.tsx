@@ -15,9 +15,16 @@ export const Route = createRootRoute({
       content: "width=device-width, initial-scale=1",
     },
     {title: "TanStack Start Starter"},
+    {name: "description", content: "A starter for TanStack Start"},
+    {name: "theme-color", content: "#ffffff"},
   ],
   component: RootComponent,
-  links: () => [{rel: "stylesheet", href: globalStyles}],
+  links: () => [
+    {rel: "stylesheet", href: globalStyles},
+    {rel: "icon", type: "image/svg+xml", href: "/favicon.svg"},
+    {rel: "apple-touch-icon", href: "/apple-touch-icon.png", sizes: "180x180"},
+    {rel: "mask-icon", href: "/mask-icon.svg", color: "#ffffff"},
+  ],
   beforeLoad: async () => {
     const session = await getSession()
     return {session}
