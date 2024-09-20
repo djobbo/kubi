@@ -115,6 +115,7 @@ export default tseslint.config(
         "error",
         {prefer: "type-imports", fixStyle: "separate-type-imports"},
       ],
+      "no-console": "error",
     },
   },
   {ignores: ["node_modules", ".db", "migrations", ".output", ".vinxi"]},

@@ -9,6 +9,8 @@ export default {
     "app/router.ts",
     "app/ssr.tsx",
     "app/routes/**/*.tsx",
+    "app/routes/api/**/*.ts",
+    "app/api.ts",
     // scripts
     "scripts/**/*.ts",
     // migration script

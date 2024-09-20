@@ -35,11 +35,11 @@ function Home() {
         {user ? (
           <>
             <span>Welcome, {user.name ?? "User"}</span>
-            <Button
-              type='button'
-              formMethod='POST' formAction='/api/auth/logout' className="w-fit" variant="destructive" size="lg">
-              Sign out
-            </Button>
+            <form method="POST" action="/api/auth/logout">
+              <Button type="submit" className="w-fit" variant="destructive" size="lg">
+                Sign out
+              </Button>
+            </form>
           </>
         ): (
           <form method="GET" className="flex flex-col gap-2">

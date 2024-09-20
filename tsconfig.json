@@ -1,7 +1,11 @@
 {
   "include": [
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    "drizzle.config.js",
+    "eslint.config.mjs",
+    "tailwind.config.js",
+    "postcss.config.js",
   ],
   "compilerOptions": {
     "lib": [

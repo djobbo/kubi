@@ -9,9 +9,11 @@ const db = drizzle(client)
 
 try {
   await migrate(db, {migrationsFolder: "./migrations"})
+  // eslint-disable-next-line no-console
   console.log("Migration complete")
 }
 catch (error) {
+  // eslint-disable-next-line no-console
   console.error("Migration failed", error)
   process.exit(1)
 }
