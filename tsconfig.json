@@ -1,28 +1,27 @@
 {
+  "include": [
+    "**/*.ts",
+    "**/*.tsx"
+  ],
   "compilerOptions": {
-    // Enable latest features
     "lib": [
       "ESNext",
-      "DOM"
+      "DOM",
+      "DOM.Iterable",
     ],
-    "target": "ES2022",
     "module": "ESNext",
-    "moduleDetection": "force",
-    "jsx": "react-jsx",
-    "allowJs": true,
-    // Bundler mode
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
-    "noEmit": true,
-    // Best practices
+    "moduleResolution": "Bundler",
     "strict": true,
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "isolatedModules": true,
+    "resolveJsonModule": true,
     "skipLibCheck": true,
+    "target": "ES2022",
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    // Some stricter flags (disabled by default)
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noPropertyAccessFromIndexSignature": false,
+    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./app/*"
@@ -31,5 +30,6 @@
         "./*"
       ],
     },
+    "noEmit": true
   }
 }

@@ -4,9 +4,8 @@ import {Body, Head, Html, Meta, Scripts} from "@tanstack/start"
 import * as React from "react"
 
 import {getSession} from "@/features/auth/functions/getSession"
-
 // @ts-expect-error - CSS is not typed
-import globalStyles from "../global.css?url"
+import globalStyles from "@/global.css?url"
 
 export const Route = createRootRoute({
   meta: () => [

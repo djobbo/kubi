@@ -1,7 +1,7 @@
 import {createServerFn, json} from "@tanstack/start"
 import {parseCookies, setCookie} from "vinxi/http"
 
-import {lucia} from "../lucia"
+import {lucia} from "@/features/auth/lucia"
 
 export const getSession = createServerFn("GET", async () => {
   const sessionId = parseCookies()[lucia.sessionCookieName]

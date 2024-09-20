@@ -1,5 +1,3 @@
-"use client"
-
 import {Box, Cylinder, SoftShadows} from "@react-three/drei"
 import {Canvas} from "@react-three/fiber"
 import {Color} from "three"

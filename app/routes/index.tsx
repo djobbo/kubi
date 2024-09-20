@@ -42,11 +42,16 @@ function Home() {
             </Button>
           </>
         ): (
-          <Button
-            type='button'
-            formAction="/api/auth/discord" variant="outline" size="lg">
-            Sign in with Discord
-          </Button>
+          <form method="GET" className="flex flex-col gap-2">
+            <Button
+              formAction="/api/auth/discord"
+              type="submit"
+              variant="outline"
+              size="sm"
+            >
+              Sign in with Discord
+            </Button>
+          </form>
         )}
       </div>
       <Scene objects={objects} />
