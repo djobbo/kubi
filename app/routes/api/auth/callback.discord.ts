@@ -1,17 +1,17 @@
-import {createAPIFileRoute} from "@tanstack/start/api"
-import {OAuth2RequestError} from "arctic"
-import {and, eq} from "drizzle-orm"
-import {generateIdFromEntropySize} from "lucia"
-import {parseCookies} from "vinxi/http"
-import {z} from "zod"
+import { createAPIFileRoute } from "@tanstack/start/api"
+import { OAuth2RequestError } from "arctic"
+import { and, eq } from "drizzle-orm"
+import { generateIdFromEntropySize } from "lucia"
+import { parseCookies } from "vinxi/http"
+import { z } from "zod"
 
-import {db} from "@/db"
-import {lucia} from "@/features/auth/lucia"
+import { db } from "@/db"
+import { lucia } from "@/features/auth/lucia"
 import {
   discord,
   DISCORD_OAUTH_STATE_COOKIE_NAME,
 } from "@/features/auth/providers"
-import {oauthAccountsTable, usersTable} from "@/features/auth/schema"
+import { oauthAccountsTable, usersTable } from "@/features/auth/schema"
 
 // TODO: add check against type {APIUser} from "discord-api-types/v10"
 const discordUserResponseSchema = z.object({
@@ -23,7 +23,7 @@ const discordUserResponseSchema = z.object({
 })
 
 export const Route = createAPIFileRoute("/api/auth/callback/discord")({
-  GET: async ({request}) => {
+  GET: async ({ request }) => {
     const url = new URL(request.url)
     const code = url.searchParams.get("code")
     const state = url.searchParams.get("state")
@@ -32,7 +32,7 @@ export const Route = createAPIFileRoute("/api/auth/callback/discord")({
     const storedState = cookies[DISCORD_OAUTH_STATE_COOKIE_NAME]
 
     if (!code || !state || !storedState || state !== storedState) {
-      return new Response(null, {status: 400})
+      return new Response(null, { status: 400 })
     }
 
     try {
@@ -40,7 +40,7 @@ export const Route = createAPIFileRoute("/api/auth/callback/discord")({
       // TODO: use discord.js
       const discordUserResponse = await fetch(
         "https://discord.com/api/v10/users/@me",
-        {headers: {Authorization: `Bearer ${tokens.accessToken}`}},
+        { headers: { Authorization: `Bearer ${tokens.accessToken}` } },
       )
       const discordUser = discordUserResponseSchema.parse(
         await discordUserResponse.json(),
@@ -75,13 +75,11 @@ export const Route = createAPIFileRoute("/api/auth/callback/discord")({
           avatarUrl: discordUser.avatar,
         })
 
-        await tx
-          .insert(oauthAccountsTable)
-          .values({
-            providerId: "discord",
-            providerUserId: discordUser.id,
-            userId,
-          })
+        await tx.insert(oauthAccountsTable).values({
+          providerId: "discord",
+          providerUserId: discordUser.id,
+          userId,
+        })
       })
 
       const session = await lucia.createSession(userId, {})
@@ -99,9 +97,9 @@ export const Route = createAPIFileRoute("/api/auth/callback/discord")({
       // the specific error message depends on the provider
       if (e instanceof OAuth2RequestError) {
         // invalid code
-        return new Response(null, {status: 400})
+        return new Response(null, { status: 400 })
       }
-      return new Response(null, {status: 500})
+      return new Response(null, { status: 500 })
     }
   },
 })

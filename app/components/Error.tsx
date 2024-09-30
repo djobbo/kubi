@@ -7,9 +7,9 @@ import {
   useRouter,
 } from "@tanstack/react-router"
 
-import {Button} from "@/ui/components/button"
+import { Button } from "@/ui/components/button"
 
-export const Error = ({error}: ErrorComponentProps) => {
+export const Error = ({ error }: ErrorComponentProps) => {
   const router = useRouter()
   const isRoot = useMatch({
     strict: false,

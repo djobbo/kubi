@@ -1,99 +1,112 @@
-import {Box, Cylinder, SoftShadows} from "@react-three/drei"
-import {Canvas} from "@react-three/fiber"
-import {Color} from "three"
+import { Box, Cylinder, SoftShadows } from "@react-three/drei"
+import { Canvas } from "@react-three/fiber"
 
-const getRandomNumber = (min: number, max: number) => {
-  return Math.random() * (max - min) + min
-}
+import type {
+  Scene as SceneType,
+  SceneBox as SceneBoxType,
+  SceneCylinder as SceneCylinderType,
+  SceneObject,
+} from "../helpers/generateScene"
 
-interface SceneCube {
-  type: "Box"
-  position: [number, number, number]
-  rotation: [number, number, number]
-  dimensions: [number, number, number]
-  color: Color
-}
+const CYLINDER_SEGMENTS = 32
 
-const getRandomColor = () => {
-  return new Color(Math.random(), Math.random(), Math.random())
-}
+// const getRandomNumber = (min: number, max: number) => {
+//   return Math.random() * (max - min) + min
+// }
 
-const getRandomCube = (): SceneCube => {
-  const width = getRandomNumber(0.2, 3)
-  const height = getRandomNumber(0.2, 3)
-  const depth = getRandomNumber(0.2, 3)
+// interface SceneCube {
+//   type: "Box"
+//   position: [number, number, number]
+//   rotation: [number, number, number]
+//   dimensions: [number, number, number]
+//   color: Color
+// }
 
-  return {
-    type: "Box",
-    position: [getRandomNumber(-3, 3), height / 2, getRandomNumber(-3, 3)],
-    rotation: [0, getRandomNumber(0, Math.PI), 0],
-    dimensions: [width, height, depth],
-    color: getRandomColor(),
-    // color: new Color('#ffeedd')
-  }
-}
+// const getRandomColor = () => {
+//   return new Color(Math.random(), Math.random(), Math.random())
+// }
 
-interface SceneCylinder {
-  type: "Cylinder"
-  position: [number, number, number]
-  rotation: [number, number, number]
-  dimensions: [number, number, number]
-  color: Color
-}
+// const getRandomCube = (): SceneCube => {
+//   const width = getRandomNumber(0.2, 3)
+//   const height = getRandomNumber(0.2, 3)
+//   const depth = getRandomNumber(0.2, 3)
 
-const getRandomCylinder = (): SceneCylinder => {
-  const radiusTop = getRandomNumber(0.2, 0.8)
-  // const radiusBottom = getRandomNumber(0.25, 1);
-  const height = getRandomNumber(0.5, 3)
+//   return {
+//     type: "Box",
+//     position: [getRandomNumber(-3, 3), height / 2, getRandomNumber(-3, 3)],
+//     rotation: [0, getRandomNumber(0, Math.PI), 0],
+//     dimensions: [width, height, depth],
+//     color: getRandomColor(),
+//     // color: new Color('#ffeedd')
+//   }
+// }
 
-  return {
-    type: "Cylinder",
-    position: [getRandomNumber(-3, 3), height / 2, getRandomNumber(-3, 3)],
-    rotation: [0, getRandomNumber(0, Math.PI), 0],
-    dimensions: [radiusTop, radiusTop, height],
-    color: getRandomColor(),
-    // color: new Color('#ffeedd')
-  }
-}
+// interface SceneCylinder {
+//   type: "Cylinder"
+//   position: [number, number, number]
+//   rotation: [number, number, number]
+//   dimensions: [number, number, number]
+//   color: Color
+// }
 
-type SceneObject = SceneCube | SceneCylinder
+// const getRandomCylinder = (): SceneCylinder => {
+//   const radiusTop = getRandomNumber(0.2, 0.8)
+//   // const radiusBottom = getRandomNumber(0.25, 1);
+//   const height = getRandomNumber(0.5, 3)
 
-export const getRandomObjects = (): SceneObject[] => {
-  const objectsCount = getRandomNumber(3, 6)
+//   return {
+//     type: "Cylinder",
+//     position: [getRandomNumber(-3, 3), height / 2, getRandomNumber(-3, 3)],
+//     rotation: [0, getRandomNumber(0, Math.PI), 0],
+//     dimensions: [radiusTop, radiusTop, height],
+//     color: getRandomColor(),
+//     // color: new Color('#ffeedd')
+//   }
+// }
 
-  return Array.from({length: objectsCount}, () => {
-    const random = Math.random()
+// type SceneObject = SceneCube | SceneCylinder
 
-    if (random < 0.75) {
-      return getRandomCube()
-    }
-    else {
-      return getRandomCylinder()
-    }
-  })
-}
+// export const getRandomObjects = (): SceneObject[] => {
+//   const objectsCount = getRandomNumber(3, 6)
 
-const SceneCube = ({cube}: {cube: SceneCube}) => {
+//   return Array.from({length: objectsCount}, () => {
+//     const random = Math.random()
+
+//     if (random < 0.75) {
+//       return getRandomCube()
+//     }
+//     else {
+//       return getRandomCylinder()
+//     }
+//   })
+// }
+
+const SceneBox = ({ box }: { box: SceneBoxType }) => {
   return (
     <Box
-      position={cube.position}
-      rotation={cube.rotation}
-      args={cube.dimensions}
+      position={box.position}
+      rotation={box.rotation}
+      args={[box.width, box.height, box.depth]}
       castShadow
       receiveShadow
       dispose={null}
     >
-      <meshLambertMaterial color={cube.color} />
+      <meshLambertMaterial color={box.color} />
     </Box>
   )
 }
 
-const SceneCylinder = ({cylinder}: {cylinder: SceneCylinder}) => {
+const SceneCylinder = ({ cylinder }: { cylinder: SceneCylinderType }) => {
   return (
     <Cylinder
       position={cylinder.position}
       rotation={cylinder.rotation}
-      args={cylinder.dimensions}
+      args={[
+        cylinder.radius,
+        cylinder.radius,
+        cylinder.height,
+        CYLINDER_SEGMENTS,
+      ]}
       castShadow
       receiveShadow
       dispose={null}
@@ -103,12 +116,12 @@ const SceneCylinder = ({cylinder}: {cylinder: SceneCylinder}) => {
   )
 }
 
-const SceneObjects = ({objects}: {objects: SceneObject[]}) => {
+const SceneObjects = ({ objects }: { objects: SceneObject[] }) => {
   return objects.map((object, index) => {
     switch (object.type) {
-      case "Box":
-        return <SceneCube key={index} cube={object} />
-      case "Cylinder":
+      case "box":
+        return <SceneBox key={index} box={object} />
+      case "cylinder":
         return <SceneCylinder key={index} cylinder={object} />
       default:
         return null
@@ -116,10 +129,9 @@ const SceneObjects = ({objects}: {objects: SceneObject[]}) => {
   })
 }
 
-export const Scene = ({objects}: {objects: SceneObject[]}) => {
+export const Scene = ({ scene }: { scene: SceneType }) => {
   return (
-    <Canvas
-      shadows camera={{position: [-5, 2, 10], fov: 40}}>
+    <Canvas shadows camera={{ position: [-5, 2, 10], fov: 40 }}>
       <SoftShadows size={24} focus={0} samples={10} />
       <fog attach="fog" args={["white", 0, 40]} />
       <ambientLight intensity={0.5} />
@@ -137,7 +149,7 @@ export const Scene = ({objects}: {objects: SceneObject[]}) => {
       <pointLight position={[-10, 0, -20]} color="white" intensity={1} />
       <pointLight position={[0, -10, 0]} intensity={1} />
       <group position={[0, 0, 0]}>
-        <SceneObjects objects={objects} />
+        <SceneObjects objects={scene.objects} />
         <mesh
           rotation={[-Math.PI / 2, 0, 0]}
           position={[0, 0, 0]}

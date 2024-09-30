@@ -1,7 +1,7 @@
-import {primaryKey, text} from "drizzle-orm/pg-core"
+import { primaryKey, text } from "drizzle-orm/pg-core"
 
-import {authSchema} from "./schema"
-import {usersTable} from "./users"
+import { authSchema } from "./schema"
+import { usersTable } from "./users"
 
 export const providersEnum = authSchema.enum("oauth_provider", ["discord"])
 
@@ -16,10 +16,7 @@ export const oauthAccountsTable = authSchema.table(
   },
   (table) => ({
     pk: primaryKey({
-      columns: [
-        table.providerId,
-        table.providerUserId,
-      ],
+      columns: [table.providerId, table.providerUserId],
     }),
   }),
 )

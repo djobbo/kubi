@@ -1,16 +1,16 @@
-import {defineConfig} from "@tanstack/start/config"
-import {VitePWA} from "vite-plugin-pwa"
+import { defineConfig } from "@tanstack/start/config"
+import { VitePWA } from "vite-plugin-pwa"
 import tsConfigPaths from "vite-tsconfig-paths"
 
 export default defineConfig({
   vite: {
     plugins: () => [
-      tsConfigPaths({projects: ["./tsconfig.json"]}),
+      tsConfigPaths({ projects: ["./tsconfig.json"] }),
       ...VitePWA({
         injectRegister: "auto",
         registerType: "autoUpdate",
-        devOptions: {enabled: true},
-        workbox: {globPatterns: ["**/*.{js,css,html,ico,png,svg}"]},
+        devOptions: { enabled: true },
+        workbox: { globPatterns: ["**/*.{js,css,html,ico,png,svg}"] },
         manifest: {
           name: "My Awesome App",
           short_name: "MyApp",
@@ -32,5 +32,5 @@ export default defineConfig({
       }),
     ],
   },
-  deployment: {preset: "bun"},
+  deployment: { preset: "bun" },
 })

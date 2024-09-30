@@ -1,6 +1,6 @@
-import {Link} from "@tanstack/react-router"
+import { Link } from "@tanstack/react-router"
 
-import {Button} from "@/ui/components/button"
+import { Button } from "@/ui/components/button"
 
 export const NotFound = () => {
   return (

@@ -1,3 +1,3 @@
-import {$} from "bun"
+import { $ } from "bun"
 
 await $`docker compose down`

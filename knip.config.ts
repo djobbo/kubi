@@ -1,4 +1,4 @@
-import type {KnipConfig} from "knip"
+import type { KnipConfig } from "knip"
 
 export default {
   entry: [
@@ -20,10 +20,10 @@ export default {
     // tanstack/start ignore generated route file
     "app/routeTree.gen.ts",
   ],
-  ignoreDependencies:[
+  ignoreDependencies: [
     // tansctack/start ignore dependency (used by vinxi)
     "@vitejs/plugin-react",
   ],
   // TOREMOVE: when github actions plugin works
-  "github-actions": {"config": [".github/workflows/*.{yml}"]},
+  "github-actions": { config: [".github/workflows/*.{yml}"] },
 } satisfies KnipConfig

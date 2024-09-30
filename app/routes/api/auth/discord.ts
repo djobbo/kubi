@@ -1,6 +1,6 @@
-import {createAPIFileRoute} from "@tanstack/start/api"
-import {generateState} from "arctic"
-import {setCookie, setHeader} from "vinxi/http"
+import { createAPIFileRoute } from "@tanstack/start/api"
+import { generateState } from "arctic"
+import { setCookie, setHeader } from "vinxi/http"
 
 import {
   discord,
@@ -13,7 +13,9 @@ export const Route = createAPIFileRoute("/api/auth/discord")({
   GET: async () => {
     const state = generateState()
 
-    const url = await discord.createAuthorizationURL(state, {scopes: ["identify", "email", "guilds", "guilds.members.read"]})
+    const url = await discord.createAuthorizationURL(state, {
+      scopes: ["identify", "email", "guilds", "guilds.members.read"],
+    })
 
     setCookie(DISCORD_OAUTH_STATE_COOKIE_NAME, state, {
       path: "/",
@@ -25,6 +27,6 @@ export const Route = createAPIFileRoute("/api/auth/discord")({
 
     setHeader("Location", url.toString())
 
-    return new Response(null, {status: 302})
+    return new Response(null, { status: 302 })
   },
 })
