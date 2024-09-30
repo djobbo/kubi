@@ -12,7 +12,7 @@ export const siteConfig = {
   social: [
     {
       name: "Github",
-      href: "",
+      href: "https://github.com/djobbo/kubi",
       Icon: SiGithub,
     },
   ] satisfies SocialLink[],

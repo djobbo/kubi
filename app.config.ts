@@ -9,7 +9,7 @@ export default defineConfig({
       ...VitePWA({
         injectRegister: "auto",
         registerType: "autoUpdate",
-        devOptions: { enabled: true },
+        devOptions: { enabled: false },
         workbox: { globPatterns: ["**/*.{js,css,html,ico,png,svg}"] },
         manifest: {
           name: "My Awesome App",
