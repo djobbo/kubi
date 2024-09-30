@@ -1,47 +1,17 @@
 import { Color, Euler, Vector3 } from "three"
 
-import type { Prettify } from "@/helpers/prettify"
+import { isIntersecting } from "@/features/scene/helpers/collisions"
+import type {
+  Box,
+  Cylinder,
+  Object,
+  Scene,
+  SceneObject,
+} from "@/features/scene/types"
 
-import { isIntersecting } from "./collisions"
-
-export interface Box {
-  type: "box"
-  width: number
-  depth: number
-  height: number
-}
-
-export interface Cylinder {
-  type: "cylinder"
-  radius: number
-  height: number
-}
-
-type Object = Box | Cylinder
-
-export type SceneObject<T = Box | Cylinder> = Prettify<
-  T & {
-    position: Vector3
-    rotation: Euler
-    color: Color
-  }
->
-
-export type SceneBox = SceneObject<Box>
-export type SceneCylinder = SceneObject<Cylinder>
-
-export interface Scene {
-  objects: SceneObject[]
-}
-
-// Helper functions
 const getRandomFloat = (min: number, max: number): number => {
   return Math.random() * (max - min) + min
 }
-
-// const getRandomPosition = (width: number, depth: number): Vector3 => {
-//   return new Vector3(getRandomFloat(0, width), 0, getRandomFloat(0, depth))
-// }
 
 const getRandomPosition = (
   minX: number,
@@ -123,11 +93,6 @@ function placeObject(
     sceneObject.position.x = pos.x
     sceneObject.position.z = pos.z
     sceneObject.rotation.y = rotation
-
-    // if (sceneObject.type === "box") {
-    //   sceneObject.position.x -= sceneObject.width / 2
-    //   sceneObject.position.z -= sceneObject.depth / 2
-    // }
 
     // Determine initial height based on stacking
     let height = sceneObject.height / 2

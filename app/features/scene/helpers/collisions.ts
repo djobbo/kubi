@@ -1,6 +1,6 @@
 import { Vector3 } from "three"
 
-import type { SceneBox, SceneObject } from "./generateScene"
+import type { SceneBox, SceneObject } from "@/features/scene/types"
 
 // Helper function to check overlapping of projections on an axis
 function overlap(

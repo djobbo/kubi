@@ -4,14 +4,13 @@ import { Link, useRouter } from "@tanstack/react-router"
 import type { ComponentPropsWithoutRef, ReactNode } from "react"
 import { useState } from "react"
 
+import { Logo } from "@/components/layout/Logo"
 import { navConfig } from "@/config/nav"
 import { siteConfig } from "@/config/site"
 import { Button } from "@/ui/components/button"
 import { ScrollArea } from "@/ui/components/scroll-area"
 import { Sheet, SheetContent, SheetTrigger } from "@/ui/components/sheet"
 import { cn } from "@/ui/lib/utils"
-
-import { Logo } from "./Logo"
 
 export function MobileNav() {
   const [open, setOpen] = useState(false)

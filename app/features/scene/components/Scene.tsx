@@ -1,62 +1,8 @@
-import { Box, Cylinder, SoftShadows } from "@react-three/drei"
+import { SoftShadows } from "@react-three/drei"
 import { Canvas } from "@react-three/fiber"
 
-import type {
-  Scene as SceneType,
-  SceneBox as SceneBoxType,
-  SceneCylinder as SceneCylinderType,
-  SceneObject,
-} from "../helpers/generateScene"
-
-const CYLINDER_SEGMENTS = 32
-
-const SceneBox = ({ box }: { box: SceneBoxType }) => {
-  return (
-    <Box
-      position={box.position}
-      rotation={box.rotation}
-      args={[box.width, box.height, box.depth]}
-      castShadow
-      receiveShadow
-      dispose={null}
-    >
-      <meshLambertMaterial color={box.color} />
-    </Box>
-  )
-}
-
-const SceneCylinder = ({ cylinder }: { cylinder: SceneCylinderType }) => {
-  return (
-    <Cylinder
-      position={cylinder.position}
-      rotation={cylinder.rotation}
-      args={[
-        cylinder.radius,
-        cylinder.radius,
-        cylinder.height,
-        CYLINDER_SEGMENTS,
-      ]}
-      castShadow
-      receiveShadow
-      dispose={null}
-    >
-      <meshLambertMaterial color={cylinder.color} />
-    </Cylinder>
-  )
-}
-
-const SceneObjects = ({ objects }: { objects: SceneObject[] }) => {
-  return objects.map((object, index) => {
-    switch (object.type) {
-      case "box":
-        return <SceneBox key={index} box={object} />
-      case "cylinder":
-        return <SceneCylinder key={index} cylinder={object} />
-      default:
-        return null
-    }
-  })
-}
+import { SceneObjects } from "@/features/scene/components/objects/Objects"
+import type { Scene as SceneType } from "@/features/scene/types"
 
 export const Scene = ({ scene }: { scene: SceneType }) => {
   return (

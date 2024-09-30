@@ -1,6 +1,6 @@
 import { text, timestamp } from "drizzle-orm/pg-core"
 
-import { authSchema } from "./schema"
+import { authSchema } from "@/features/auth/schema/schema"
 
 export const usersTable = authSchema.table("user", {
   id: text("id").primaryKey(),

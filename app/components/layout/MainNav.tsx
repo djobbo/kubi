@@ -2,11 +2,10 @@
 
 import { Link, useRouterState } from "@tanstack/react-router"
 
+import { Logo } from "@/components/layout/Logo"
 import { navConfig } from "@/config/nav"
 import { siteConfig } from "@/config/site"
 import { cn } from "@/ui/lib/utils"
-
-import { Logo } from "./Logo"
 
 export function MainNav() {
   const router = useRouterState()
