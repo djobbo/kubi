@@ -1,6 +1,12 @@
-import { Color, Euler, Vector3 } from "three"
+import { Euler, Vector3 } from "three"
 
 import { isIntersecting } from "@/features/scene/helpers/collisions"
+import {
+  getRandomColor,
+  getRandomFloat,
+  getRandomPosition,
+  getRandomRotation,
+} from "@/features/scene/helpers/random"
 import type {
   Box,
   Cylinder,
@@ -8,33 +14,6 @@ import type {
   Scene,
   SceneObject,
 } from "@/features/scene/types"
-
-const getRandomFloat = (min: number, max: number): number => {
-  return Math.random() * (max - min) + min
-}
-
-const getRandomPosition = (
-  minX: number,
-  maxX: number,
-  minY = 0,
-  maxY = 0,
-  minZ = 0,
-  maxZ = 0,
-): Vector3 => {
-  return new Vector3(
-    getRandomFloat(minX, maxX),
-    getRandomFloat(minY, maxY),
-    getRandomFloat(minZ, maxZ),
-  )
-}
-
-const getRandomRotation = (): number => {
-  return Math.random() * Math.PI * 2 // Random rotation around the vertical axis (Y)
-}
-
-const getRandomColor = () => {
-  return new Color(Math.random(), Math.random(), Math.random())
-}
 
 const createRandomBox = (
   minSize: Box,
