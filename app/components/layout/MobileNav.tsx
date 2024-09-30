@@ -69,7 +69,7 @@ export function MobileNav() {
             ))}
           </div>
           <div className="flex flex-col space-y-2">
-            {navConfig.sidebar.map((link, index) => (
+            {/* {navConfig.sidebar.map((link, index) => (
               <div key={index} className="flex flex-col space-y-3 pt-6">
                 <h4 className="font-medium">{link.name}</h4>
                 {link.items?.map((item) => (
@@ -83,7 +83,7 @@ export function MobileNav() {
                   </MobileLink>
                 ))}
               </div>
-            ))}
+            ))} */}
           </div>
         </ScrollArea>
       </SheetContent>

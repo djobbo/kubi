@@ -13,7 +13,6 @@ import {
 } from "@/features/auth/providers"
 import { oauthAccountsTable, usersTable } from "@/features/auth/schema"
 
-// TODO: add check against type {APIUser} from "discord-api-types/v10"
 const discordUserResponseSchema = z.object({
   id: z.string(),
   username: z.string(),
@@ -92,7 +91,7 @@ export const Route = createAPIFileRoute("/api/auth/callback/discord")({
         },
       })
     } catch (e) {
-      // TODO: dev debugging purposes
+      // eslint-disable-next-line no-console
       console.log(e)
       // the specific error message depends on the provider
       if (e instanceof OAuth2RequestError) {

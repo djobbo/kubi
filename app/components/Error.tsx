@@ -16,6 +16,7 @@ export const Error = ({ error }: ErrorComponentProps) => {
     select: (state) => state.id === rootRouteId,
   })
 
+  // eslint-disable-next-line no-console
   console.error(error)
 
   return (
