@@ -19,7 +19,12 @@ export const Header = () => {
           </div>
           <nav className="flex items-center">
             {siteConfig.social.map((socialLink) => (
-              <Link to={socialLink.href} target="_blank" rel="noreferrer">
+              <Link
+                to={socialLink.href}
+                target="_blank"
+                rel="noreferrer"
+                key={socialLink.name}
+              >
                 <div
                   className={cn(
                     buttonVariants({ variant: "ghost" }),

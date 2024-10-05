@@ -29,6 +29,7 @@ export function MainNav() {
                 ? "text-foreground"
                 : "text-foreground/60",
             )}
+            key={link.name}
           >
             {link.name}
           </Link>

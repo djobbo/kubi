@@ -9,12 +9,12 @@ export default defineConfig({
       ...VitePWA({
         injectRegister: "auto",
         registerType: "autoUpdate",
-        devOptions: { enabled: false },
+        devOptions: { enabled: true },
         workbox: { globPatterns: ["**/*.{js,css,html,ico,png,svg}"] },
         manifest: {
-          name: "My Awesome App",
-          short_name: "MyApp",
-          description: "My Awesome App description",
+          name: "Kubi",
+          short_name: "kubi",
+          description: "Kubi",
           theme_color: "#ffffff",
           icons: [
             {

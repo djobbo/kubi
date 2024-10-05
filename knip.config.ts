@@ -15,6 +15,8 @@ export default {
     "scripts/**/*.ts",
     // migration script
     "app/db/migrate.ts",
+    // pwa assets
+    "pwa-assets.config.ts",
   ],
   ignore: [
     // tanstack/start ignore generated route file
