@@ -9,7 +9,7 @@ import {
 
 import { Button } from "@/ui/components/button"
 
-export const Error = ({ error }: ErrorComponentProps) => {
+export const DefaultCatchBoundary = ({ error }: ErrorComponentProps) => {
   const router = useRouter()
   const isRoot = useMatch({
     strict: false,

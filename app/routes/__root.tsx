@@ -1,73 +1,51 @@
-import { createRootRoute, Link } from "@tanstack/react-router"
-import { Outlet, ScrollRestoration } from "@tanstack/react-router"
+import type { QueryClient } from "@tanstack/react-query"
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
+import {
+  createRootRouteWithContext,
+  Outlet,
+  ScrollRestoration,
+} from "@tanstack/react-router"
+import { TanStackRouterDevtools } from "@tanstack/router-devtools"
 import { Body, Head, Html, Meta, Scripts } from "@tanstack/start"
-import type { ComponentPropsWithoutRef, ElementRef } from "react"
-import { forwardRef, type ReactNode } from "react"
+import { type ReactNode } from "react"
 
 import { Header } from "@/components/layout/Header"
 import { getSession } from "@/features/auth/functions/getSession"
 // @ts-expect-error - CSS is not typed
 import globalStyles from "@/global.css?url"
-import { NavigationMenuLink } from "@/ui/components/navigation-menu"
-import { cn } from "@/ui/lib/utils"
+import { seo } from "@/helpers/seo"
 
-export const Route = createRootRoute({
-  meta: () => [
-    { charSet: "utf-8" },
-    {
-      name: "viewport",
-      content: "width=device-width, initial-scale=1",
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
+  {
+    meta: () => [
+      { charSet: "utf-8" },
+      {
+        name: "viewport",
+        content: "width=device-width, initial-scale=1",
+      },
+      { name: "theme-color", content: "#ffffff" },
+      ...seo({
+        title: "Kubi",
+        description: "Kubi",
+      }),
+    ],
+    component: RootComponent,
+    links: () => [
+      { rel: "stylesheet", href: globalStyles },
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+      {
+        rel: "apple-touch-icon",
+        href: "/apple-touch-icon.png",
+        sizes: "180x180",
+      },
+      { rel: "mask-icon", href: "/mask-icon.svg", color: "#ffffff" },
+    ],
+    beforeLoad: async () => {
+      const session = await getSession()
+      return { session }
     },
-    { title: "TanStack Start Starter" },
-    { name: "description", content: "A starter for TanStack Start" },
-    { name: "theme-color", content: "#ffffff" },
-  ],
-  component: RootComponent,
-  links: () => [
-    { rel: "stylesheet", href: globalStyles },
-    { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
-    {
-      rel: "apple-touch-icon",
-      href: "/apple-touch-icon.png",
-      sizes: "180x180",
-    },
-    { rel: "mask-icon", href: "/mask-icon.svg", color: "#ffffff" },
-  ],
-  beforeLoad: async () => {
-    const session = await getSession()
-    return { session }
   },
-})
-
-const ListItem = forwardRef<
-  ElementRef<"a">,
-  ComponentPropsWithoutRef<typeof Link>
->(({ className, title, children, ...props }, ref) => {
-  return (
-    <li>
-      <NavigationMenuLink asChild>
-        <Link
-          ref={ref}
-          className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-            className,
-          )}
-          {...props}
-        >
-          {(state) => (
-            <>
-              <div className="text-sm font-medium leading-none">{title}</div>
-              <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                {typeof children === "function" ? children(state) : children}
-              </p>
-            </>
-          )}
-        </Link>
-      </NavigationMenuLink>
-    </li>
-  )
-})
-ListItem.displayName = "ListItem"
+)
 
 function RootComponent() {
   return (
@@ -94,6 +72,8 @@ function RootDocument({ children }: { children: ReactNode }) {
       <Body>
         {children}
         <ScrollRestoration />
+        <TanStackRouterDevtools position="bottom-right" />
+        <ReactQueryDevtools buttonPosition="bottom-left" />
         <Scripts />
       </Body>
     </Html>

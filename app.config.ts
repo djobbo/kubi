@@ -32,5 +32,7 @@ export default defineConfig({
       }),
     ],
   },
-  deployment: { preset: "bun" },
+  server: {
+    preset: "bun",
+  },
 })

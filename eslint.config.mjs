@@ -1,8 +1,9 @@
 // @ts-check
 
 import eslint from "@eslint/js"
+import react from "@eslint-react/eslint-plugin"
+import pluginQuery from "@tanstack/eslint-plugin-query"
 import pluginRouter from "@tanstack/eslint-plugin-router"
-import tsParser from "@typescript-eslint/parser"
 import pluginPrettier from "eslint-plugin-prettier/recommended"
 import simpleImportSort from "eslint-plugin-simple-import-sort"
 import tseslint from "typescript-eslint"
@@ -19,17 +20,19 @@ export default tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.strict,
   ...tseslint.configs.stylisticTypeChecked,
-  ...pluginRouter.configs["flat/recommended"],
+  react.configs.recommended,
   pluginPrettier,
+  ...pluginRouter.configs["flat/recommended"],
+  ...pluginQuery.configs["flat/recommended"],
   {
     languageOptions: {
-      parser: tsParser,
       parserOptions: {
-        ecmaFeatures: { modules: true },
-        ecmaVersion: "latest",
+        parser: tseslint.parser,
         project: "./tsconfig.json",
+        tsconfigRootDir: import.meta.dirname,
       },
     },
+    ...react.configs["recommended-type-checked"],
   },
   {
     rules: {
