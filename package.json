@@ -10,7 +10,7 @@
     "front:dev": "vinxi dev",
     "front:build": "vinxi build",
     "front:start": "vinxi start",
-    "check:types": "tsc --noEmit",
+    "check:types": "bun locales:compile && tsc --noEmit",
     "lint": "eslint . --fix",
     "check:lint": "eslint .",
     "check:deadcode": "knip-bun",
