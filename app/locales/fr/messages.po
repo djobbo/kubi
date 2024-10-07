@@ -1,0 +1,46 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2024-10-05 16:53+0200\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: fr\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#: app/components/DefaultCatchBoundary.tsx:50
+msgid "Go Back"
+msgstr "Revenir en arrière"
+
+#: app/components/DefaultCatchBoundary.tsx:38
+msgid "Home"
+msgstr "Accueil"
+
+#: app/routes/index.tsx:35
+msgid "Regenerate"
+msgstr "Regénérer"
+
+#: app/routes/index.tsx:62
+msgid "Sign in with Discord"
+msgstr "Se connecter avec Discord"
+
+#: app/routes/index.tsx:50
+msgid "Sign out"
+msgstr "Se déconnecter"
+
+#: app/components/DefaultCatchBoundary.tsx:33
+msgid "Try Again"
+msgstr "Réessayer"
+
+#: app/routes/index.tsx:41
+msgid "User"
+msgstr "Utilisateur"
+
+#: app/routes/index.tsx:41
+msgid "Welcome, {0}"
+msgstr "Bienvenue, {0}"

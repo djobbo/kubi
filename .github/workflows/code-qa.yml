@@ -16,6 +16,8 @@ jobs:
             action: bun run front:build
           - name: Dead Code
             action: bun run check:deadcode
+          - name: Locales
+            action: bun run check:locales
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2

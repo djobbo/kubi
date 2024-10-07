@@ -1,3 +1,6 @@
+/* eslint-disable lingui/no-unlocalized-strings */
+
+import { lingui } from "@lingui/vite-plugin"
 import { defineConfig } from "@tanstack/start/config"
 import { VitePWA } from "vite-plugin-pwa"
 import tsConfigPaths from "vite-tsconfig-paths"
@@ -30,7 +33,13 @@ export default defineConfig({
           ],
         },
       }),
+      lingui(),
     ],
+  },
+  react: {
+    babel: {
+      plugins: ["macros"],
+    },
   },
   server: {
     preset: "bun",
