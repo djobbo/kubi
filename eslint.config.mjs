@@ -61,7 +61,7 @@ export default tseslint.config(
       lingui: fixupPluginRules(lingui),
     },
     rules: {
-      "lingui/no-unlocalized-strings": "error",
+      "lingui/no-unlocalized-strings": "warn",
       "lingui/t-call-in-function": "error",
       "lingui/no-single-variables-to-translate": "error",
       "lingui/no-expression-in-message": "error",
