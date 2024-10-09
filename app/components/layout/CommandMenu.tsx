@@ -1,5 +1,3 @@
-"use client"
-
 import { type DialogProps } from "@radix-ui/react-dialog"
 import { useRouter } from "@tanstack/react-router"
 import { FileIcon } from "lucide-react"

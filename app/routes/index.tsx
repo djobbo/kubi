@@ -1,3 +1,4 @@
+import { t, Trans } from "@lingui/macro"
 import { createFileRoute, useRouter } from "@tanstack/react-router"
 
 import { Scene } from "@/features/scene/components/Scene"
@@ -31,11 +32,14 @@ function Home() {
             router.invalidate()
           }}
         >
-          Regenerate
+          <Trans>Regenerate</Trans>
         </Button>
         {user ? (
           <>
-            <span>Welcome, {user.name ?? "User"}</span>
+            {/* <span>Welcome, {user.name ?? "User"}</span> */}
+            <span>
+              <Trans>Welcome, {user.name ?? t`User`}</Trans>
+            </span>
             <form method="POST" action="/api/auth/logout">
               <Button
                 type="submit"
@@ -43,7 +47,7 @@ function Home() {
                 variant="destructive"
                 size="lg"
               >
-                Sign out
+                <Trans>Sign out</Trans>
               </Button>
             </form>
           </>
@@ -55,7 +59,7 @@ function Home() {
               variant="outline"
               size="sm"
             >
-              Sign in with Discord
+              <Trans>Sign in with Discord</Trans>
             </Button>
           </form>
         )}

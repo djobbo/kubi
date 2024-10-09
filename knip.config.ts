@@ -17,6 +17,8 @@ export default {
     "app/db/migrate.ts",
     // pwa assets
     "pwa-assets.config.ts",
+    // lingui
+    "lingui.config.ts",
   ],
   ignore: [
     // tanstack/start ignore generated route file

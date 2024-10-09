@@ -1,3 +1,4 @@
+import { t } from "@lingui/macro"
 import type { Link } from "@tanstack/react-router"
 import type { LucideIcon } from "lucide-react"
 import { HomeIcon, SparkleIcon } from "lucide-react"
@@ -5,7 +6,7 @@ import type { ComponentProps } from "react"
 
 interface NavLink {
   to: ComponentProps<typeof Link>["to"]
-  name: string
+  name: () => string
   Icon: LucideIcon
   isActive: (pathname: string, to: string) => boolean
 }
@@ -13,13 +14,13 @@ interface NavLink {
 const main = [
   {
     to: "/",
-    name: "Home",
+    name: () => t`Home`,
     Icon: HomeIcon,
     isActive: (pathname, to) => pathname === to,
   },
   {
     to: "/generate",
-    name: "Generate",
+    name: () => t`Generate`,
     Icon: SparkleIcon,
     isActive: (pathname, to) => pathname.startsWith(to),
   },

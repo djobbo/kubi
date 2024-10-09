@@ -1,5 +1,3 @@
-"use client"
-
 import { Link, useRouterState } from "@tanstack/react-router"
 
 import { Logo } from "@/components/layout/Logo"
@@ -29,7 +27,7 @@ export function MainNav() {
                 ? "text-foreground"
                 : "text-foreground/60",
             )}
-            key={link.name}
+            key={link.name()}
           >
             {link.name}
           </Link>

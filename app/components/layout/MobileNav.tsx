@@ -63,7 +63,7 @@ export function MobileNav() {
           <div className="flex flex-col space-y-3">
             {navConfig.main.map((link) => (
               <MobileLink key={link.to} to={link.to} onOpenChange={setOpen}>
-                {link.name}
+                {link.name()}
               </MobileLink>
             ))}
           </div>

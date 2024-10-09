@@ -180,3 +180,6 @@ dist
 
 # Database
 .db
+
+# lingui
+**/locales/*/messages.ts

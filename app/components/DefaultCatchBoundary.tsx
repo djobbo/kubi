@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/macro"
 import {
   ErrorComponent,
   type ErrorComponentProps,
@@ -29,11 +30,13 @@ export const DefaultCatchBoundary = ({ error }: ErrorComponentProps) => {
             router.invalidate()
           }}
         >
-          Try Again
+          <Trans>Try Again</Trans>
         </Button>
         {isRoot ? (
           <Button asChild variant="secondary">
-            <Link to="/">Home</Link>
+            <Link to="/">
+              <Trans>Home</Trans>
+            </Link>
           </Button>
         ) : (
           <Button asChild variant="secondary">
@@ -44,7 +47,7 @@ export const DefaultCatchBoundary = ({ error }: ErrorComponentProps) => {
                 window.history.back()
               }}
             >
-              Go Back
+              <Trans>Go Back</Trans>
             </Link>
           </Button>
         )}
