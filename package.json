@@ -3,7 +3,7 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "bun run dev:up && bun run db:migrate && bun run front:dev",
+    "dev": "bun run dev:up && bun run db:migrate && bun locales:compile && bun run front:dev",
     "dev:up": "bun run ./scripts/dev/up.ts",
     "dev:down": "bun run ./scripts/dev/down.ts",
     "dev:logs": "bun run ./scripts/dev/logs.ts",

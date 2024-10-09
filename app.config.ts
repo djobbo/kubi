@@ -2,12 +2,14 @@
 
 import { lingui } from "@lingui/vite-plugin"
 import { defineConfig } from "@tanstack/start/config"
+import react from "@vitejs/plugin-react"
 import { VitePWA } from "vite-plugin-pwa"
 import tsConfigPaths from "vite-tsconfig-paths"
 
 export default defineConfig({
   vite: {
     plugins: () => [
+      lingui(),
       tsConfigPaths({ projects: ["./tsconfig.json"] }),
       ...VitePWA({
         injectRegister: "auto",
@@ -33,7 +35,6 @@ export default defineConfig({
           ],
         },
       }),
-      lingui(),
     ],
   },
   react: {
@@ -43,5 +44,18 @@ export default defineConfig({
   },
   server: {
     preset: "bun",
+  },
+  routers: {
+    ssr: {
+      vite: {
+        plugins: () => [
+          react({
+            babel: {
+              plugins: ["macros"],
+            },
+          }),
+        ],
+      },
+    },
   },
 })
