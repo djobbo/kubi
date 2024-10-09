@@ -12,7 +12,7 @@ export const envField = <T>(
 
   if (!parsed.success) {
     throw new Error(
-      `Invalid environment variable: ${name} - ${variable} - ${parsed.error.message}`,
+      `Invalid environment variable: ${name} - ${variable} - ${parsed.error.message} ${process.env.NODE_ENV}`,
     )
   }
 

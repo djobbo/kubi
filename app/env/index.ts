@@ -29,4 +29,6 @@ export const env = {
   ),
 }
 
-loadEnv({ path: ".env" })
+loadEnv({
+  path: process.env.NODE_ENV === "CI" ? ".env.ci" : ".env",
+})
