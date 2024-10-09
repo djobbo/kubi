@@ -2,7 +2,7 @@ import type { KnipConfig } from "knip"
 
 export default {
   entry: [
-    // tanstack/start entrypoints
+    // @tanstack/start
     "app.config.ts",
     "eslint.config.mjs",
     "app/client.tsx",
@@ -10,6 +10,7 @@ export default {
     "app/ssr.tsx",
     "app/routes/**/*.tsx",
     "app/routes/api/**/*.ts",
+    "app/routeTree.gen.ts",
     "app/api.ts",
     // scripts
     "scripts/**/*.ts",
@@ -19,14 +20,6 @@ export default {
     "pwa-assets.config.ts",
     // lingui
     "lingui.config.ts",
-  ],
-  ignore: [
-    // tanstack/start ignore generated route file
-    "app/routeTree.gen.ts",
-  ],
-  ignoreDependencies: [
-    // tansctack/start ignore dependency (used by vinxi)
-    "@vitejs/plugin-react",
   ],
   // TOREMOVE: when github actions plugin works
   "github-actions": { config: [".github/workflows/*.{yml}"] },
