@@ -1,5 +1,3 @@
-/* eslint-disable lingui/no-unlocalized-strings */
-
 import { lingui } from "@lingui/vite-plugin"
 import { defineConfig } from "@tanstack/start/config"
 import react from "@vitejs/plugin-react"

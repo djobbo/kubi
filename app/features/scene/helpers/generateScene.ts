@@ -1,4 +1,5 @@
 import { Euler, Vector3 } from "three"
+import { v4 as uuidV4 } from "uuid"
 
 import { getRandomColor, getRandomFloat } from "@/features/scene/helpers/random"
 import type {
@@ -13,6 +14,7 @@ import { isCollision } from "./collisions"
 
 const getRandomBox = (minSize: Box, maxSize: Box, sizeMultiplier = 1): Box => {
   return {
+    id: uuidV4(),
     type: "box",
     width: getRandomFloat(minSize.width, maxSize.width) * sizeMultiplier,
     depth: getRandomFloat(minSize.depth, maxSize.depth) * sizeMultiplier,
@@ -26,6 +28,7 @@ const getRandomCylinder = (
   sizeMultiplier = 1,
 ): Cylinder => {
   return {
+    id: uuidV4(),
     type: "cylinder",
     radius: getRandomFloat(minSize.radius, maxSize.radius) * sizeMultiplier,
     height: getRandomFloat(minSize.height, maxSize.height) * sizeMultiplier,
@@ -69,12 +72,12 @@ export const generateScene = (objectsCount = 4) => {
     const object =
       i % 2 === 0
         ? getRandomBox(
-            { type: "box", width: 0.2, depth: 0.2, height: 0.2 },
-            { type: "box", width: 4, depth: 4, height: 2.5 },
+            { id: "min_box", type: "box", width: 0.2, depth: 0.2, height: 0.2 },
+            { id: "max_box", type: "box", width: 4, depth: 4, height: 2.5 },
           )
         : getRandomCylinder(
-            { type: "cylinder", radius: 0.2, height: 0.5 },
-            { type: "cylinder", radius: 2, height: 2.5 },
+            { id: "min_cylinder", type: "cylinder", radius: 0.2, height: 0.5 },
+            { id: "max_cylinder", type: "cylinder", radius: 2, height: 2.5 },
           )
     const sceneObject = placeObject(scene, object)
 

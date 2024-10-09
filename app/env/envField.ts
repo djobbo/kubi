@@ -12,12 +12,14 @@ export const envField = <T>(
 
   if (!parsed.success) {
     throw new Error(
+      // eslint-disable-next-line lingui/no-unlocalized-strings
       `Invalid environment variable: ${name} - ${variable} - ${parsed.error.message}`,
     )
   }
 
   if (isWrongContext) {
     throw new Error(
+      // eslint-disable-next-line lingui/no-unlocalized-strings
       `Environment variable ${variable} should not be used in the client`,
     )
   }

@@ -56,12 +56,12 @@ export default tseslint.config(
     },
   },
   {
-    files: ["**/*.{ts,tsx}"],
+    files: ["app/**/*.{ts,tsx}"],
     plugins: {
       lingui: fixupPluginRules(lingui),
     },
     rules: {
-      "lingui/no-unlocalized-strings": "warn",
+      "lingui/no-unlocalized-strings": "error",
       "lingui/t-call-in-function": "error",
       "lingui/no-single-variables-to-translate": "error",
       "lingui/no-expression-in-message": "error",

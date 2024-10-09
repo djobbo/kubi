@@ -8,21 +8,25 @@ const DEV_DATABASE_URL =
 
 export const env = {
   DATABASE_URL: envField(
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     "Database URL",
     process.env.DATABASE_URL ?? DEV_DATABASE_URL,
     z.string().min(1),
   ),
   DISCORD_CLIENT_ID: envField(
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     "Discord Client ID",
     process.env.DISCORD_CLIENT_ID,
     z.string().min(1),
   ),
   DISCORD_CLIENT_SECRET: envField(
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     "Discord Client Secret",
     process.env.DISCORD_CLIENT_SECRET,
     z.string().min(1),
   ),
   DISCORD_REDIRECT_URI: envField(
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     "Discord Redirect URI",
     process.env.DISCORD_REDIRECT_URI,
     z.string().min(1),

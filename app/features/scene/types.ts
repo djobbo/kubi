@@ -3,6 +3,7 @@ import type { Color, Euler, Vector3 } from "three"
 import type { Prettify } from "@/helpers/prettify"
 
 export interface Box {
+  id: string
   type: "box"
   width: number
   depth: number
@@ -10,6 +11,7 @@ export interface Box {
 }
 
 export interface Cylinder {
+  id: string
   type: "cylinder"
   radius: number
   height: number
