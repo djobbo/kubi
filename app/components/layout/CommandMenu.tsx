@@ -1,3 +1,4 @@
+import { t, Trans } from "@lingui/macro"
 import { type DialogProps } from "@radix-ui/react-dialog"
 import { useRouter } from "@tanstack/react-router"
 import { FileIcon } from "lucide-react"
@@ -55,17 +56,24 @@ export const CommandMenu = ({ ...props }: DialogProps) => {
         onClick={() => setOpen(true)}
         {...props}
       >
-        <span className="hidden lg:inline-flex">Search documentation...</span>
-        <span className="inline-flex lg:hidden">Search...</span>
+        <span className="hidden lg:inline-flex">
+          <Trans>Search documentation...</Trans>
+        </span>
+        <span className="inline-flex lg:hidden">
+          <Trans>Search...</Trans>
+        </span>
         <kbd className="pointer-events-none absolute right-[0.3rem] top-[0.3rem] hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
-          <span className="text-xs">⌘</span>K
+          <span className="text-xs">⌘</span>
+          <Trans>K</Trans>
         </kbd>
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Type a command or search..." />
+        <CommandInput placeholder={t`Type a command or search...`} />
         <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Links">
+          <CommandEmpty>
+            <Trans>No results found.</Trans>
+          </CommandEmpty>
+          <CommandGroup heading={t`Links`}>
             <CommandItem
               value="hello"
               onSelect={() => {
@@ -73,7 +81,7 @@ export const CommandMenu = ({ ...props }: DialogProps) => {
               }}
             >
               <FileIcon className="mr-2 h-4 w-4" />
-              Hello World
+              <Trans>Hello World</Trans>
             </CommandItem>
           </CommandGroup>
           <CommandSeparator />

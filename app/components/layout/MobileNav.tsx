@@ -1,5 +1,4 @@
-"use client"
-
+import { Trans } from "@lingui/macro"
 import { Link, useRouter } from "@tanstack/react-router"
 import type { ComponentPropsWithoutRef, ReactNode } from "react"
 import { useState } from "react"
@@ -51,26 +50,28 @@ export function MobileNav() {
               strokeLinejoin="round"
             ></path>
           </svg>
-          <span className="sr-only">Toggle Menu</span>
+          <span className="sr-only">
+            <Trans>Toggle Menu</Trans>
+          </span>
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="pr-0">
         <MobileLink to="/" className="flex items-center" onOpenChange={setOpen}>
           <Logo className="mr-2 h-4 w-4" />
-          <span className="font-bold">{siteConfig.name}</span>
+          <span className="font-bold">{siteConfig.title}</span>
         </MobileLink>
         <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
           <div className="flex flex-col space-y-3">
             {navConfig.main.map((link) => (
               <MobileLink key={link.to} to={link.to} onOpenChange={setOpen}>
-                {link.name()}
+                {link.title}
               </MobileLink>
             ))}
           </div>
           <div className="flex flex-col space-y-2">
-            {/* {navConfig.sidebar.map((link, index) => (
+            {/* {navConfig().sidebar.map((link, index) => (
               <div key={index} className="flex flex-col space-y-3 pt-6">
-                <h4 className="font-medium">{link.name}</h4>
+                <h4 className="font-medium">{link.title}</h4>
                 {link.items?.map((item) => (
                   <MobileLink
                     key={item.to}
@@ -78,7 +79,7 @@ export function MobileNav() {
                     onOpenChange={setOpen}
                     className="text-muted-foreground"
                   >
-                    {item.name}
+                    {item.title}
                   </MobileLink>
                 ))}
               </div>

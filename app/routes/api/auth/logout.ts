@@ -5,6 +5,7 @@ import { lucia } from "@/features/auth/lucia"
 
 export const Route = createAPIFileRoute("/api/auth/logout")({
   POST: async () => {
+    // eslint-disable-next-line lingui/no-unlocalized-strings
     setHeader("Location", "/")
 
     const sessionId = parseCookies()[lucia.sessionCookieName]

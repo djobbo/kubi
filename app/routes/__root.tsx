@@ -1,3 +1,4 @@
+import { t, Trans } from "@lingui/macro"
 import type { QueryClient } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import {
@@ -21,12 +22,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       {
         name: "viewport",
+        // eslint-disable-next-line lingui/no-unlocalized-strings
         content: "width=device-width, initial-scale=1",
       },
       { name: "theme-color", content: "#ffffff" },
       ...seo({
-        title: "Kubi",
-        description: "Kubi",
+        title: t`Kubi`,
+        description: t`Kubi`,
       }),
     ],
     component: RootComponent,
@@ -53,7 +55,9 @@ function RootComponent() {
       <div className="flex h-screen w-full flex-col bg-muted/40">
         <Header />
         <main className="flex h-[calc(100vh_-_theme(spacing.16))] flex-1 mx-1 mb-1">
-          <div className="hidden md:block w-60 flex-shrink-0 p-4">Sidenav</div>
+          <div className="hidden md:block w-60 flex-shrink-0 p-4">
+            <Trans>Sidenav</Trans>
+          </div>
           <div className="flex-1 bg-background p-4 md:p-10 border rounded-lg overflow-scroll">
             <Outlet />
           </div>

@@ -23,7 +23,7 @@ export const Header = () => {
                 to={socialLink.href}
                 target="_blank"
                 rel="noreferrer"
-                key={socialLink.name}
+                key={socialLink.title}
               >
                 <div
                   className={cn(
@@ -32,7 +32,7 @@ export const Header = () => {
                   )}
                 >
                   <socialLink.Icon className="h-4 w-4" />
-                  <span className="sr-only">{socialLink.name}</span>
+                  <span className="sr-only">{socialLink.title}</span>
                 </div>
               </Link>
             ))}

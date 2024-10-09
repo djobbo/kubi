@@ -6,45 +6,45 @@ import type { ComponentProps } from "react"
 
 interface NavLink {
   to: ComponentProps<typeof Link>["to"]
-  name: () => string
+  title: string
   Icon: LucideIcon
   isActive: (pathname: string, to: string) => boolean
 }
-
-const main = [
-  {
-    to: "/",
-    name: () => t`Home`,
-    Icon: HomeIcon,
-    isActive: (pathname, to) => pathname === to,
-  },
-  {
-    to: "/generate",
-    name: () => t`Generate`,
-    Icon: SparkleIcon,
-    isActive: (pathname, to) => pathname.startsWith(to),
-  },
-] as const satisfies NavLink[]
 
 interface SidebarLink extends NavLink {
   items?: NavLink[]
 }
 
-const sidebar = [
-  // {
-  //   to: "/generate",
-  //   name: "Generate",
-  //   Icon: SparkleIcon,
-  //   isActive: (pathname, to) => pathname.startsWith(to),
-  //   items: [
-  //     {
-  //       to: "/generate",
-  //       name: "Home",
-  //       Icon: SparkleIcon,
-  //       isActive: (pathname, to) => pathname.startsWith(to),
-  //     },
-  //   ],
-  // },
-] as const satisfies SidebarLink[]
-
-export const navConfig = { main, sidebar } as const
+export const navConfig = (() =>
+  ({
+    main: [
+      {
+        to: "/",
+        title: t`Home`,
+        Icon: HomeIcon,
+        isActive: (pathname, to) => pathname === to,
+      },
+      {
+        to: "/generate",
+        title: t`Generate`,
+        Icon: SparkleIcon,
+        isActive: (pathname, to) => pathname.startsWith(to),
+      },
+    ] as const satisfies NavLink[],
+    sidebar: [
+      // {
+      //   to: "/generate",
+      //   title: "Generate",
+      //   Icon: SparkleIcon,
+      //   isActive: (pathname, to) => pathname.startsWith(to),
+      //   items: [
+      //     {
+      //       to: "/generate",
+      //       title: "Home",
+      //       Icon: SparkleIcon,
+      //       isActive: (pathname, to) => pathname.startsWith(to),
+      //     },
+      //   ],
+      // },
+    ] as const satisfies SidebarLink[],
+  }) as const)()

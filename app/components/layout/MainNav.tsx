@@ -14,7 +14,7 @@ export function MainNav() {
       <Link to="/" className="mr-4 flex items-center space-x-2 lg:mr-6">
         <Logo className="h-6 w-6" />
         <span className="hidden font-bold lg:inline-block">
-          {siteConfig.name}
+          {siteConfig.title}
         </span>
       </Link>
       <nav className="flex items-center gap-4 text-sm lg:gap-6">
@@ -27,9 +27,9 @@ export function MainNav() {
                 ? "text-foreground"
                 : "text-foreground/60",
             )}
-            key={link.name()}
+            key={link.title}
           >
-            {link.name}
+            {link.title}
           </Link>
         ))}
       </nav>

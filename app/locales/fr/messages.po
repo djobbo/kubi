@@ -13,17 +13,62 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#: app/config/nav.ts:29
+msgid "Generate"
+msgstr "Générer"
+
+#: app/config/site.ts:16
+msgid "Github"
+msgstr "Github"
+
 #: app/components/DefaultCatchBoundary.tsx:50
-msgid "Go Back"
+#: app/components/NotFound.tsx:14
+msgid "Go back"
 msgstr "Revenir en arrière"
 
+#: app/components/layout/CommandMenu.tsx:84
+msgid "Hello World"
+msgstr "Bonjour, Monde"
+
 #: app/components/DefaultCatchBoundary.tsx:38
+#: app/components/NotFound.tsx:18
+#: app/config/nav.ts:23
 msgid "Home"
 msgstr "Accueil"
+
+#: app/components/layout/CommandMenu.tsx:67
+msgid "K"
+msgstr "K"
+
+#: app/config/site.ts:13
+#: app/routes/__root.tsx:30
+#: app/routes/__root.tsx:31
+msgid "Kubi"
+msgstr "Kubi"
+
+#: app/components/layout/CommandMenu.tsx:76
+msgid "Links"
+msgstr "Liens"
+
+#: app/components/layout/CommandMenu.tsx:74
+msgid "No results found."
+msgstr "Pas de résultats."
 
 #: app/routes/index.tsx:35
 msgid "Regenerate"
 msgstr "Regénérer"
+
+#: app/components/layout/CommandMenu.tsx:60
+msgid "Search documentation..."
+msgstr "Chercher dans la documentation..."
+
+#: app/components/layout/CommandMenu.tsx:63
+msgid "Search..."
+msgstr "Rechercher..."
+
+#: app/routes/__root.tsx:59
+msgid "Sidenav"
+msgstr "Navigation"
 
 #: app/routes/index.tsx:62
 msgid "Sign in with Discord"
@@ -33,9 +78,21 @@ msgstr "Se connecter avec Discord"
 msgid "Sign out"
 msgstr "Se déconnecter"
 
+#: app/components/NotFound.tsx:10
+msgid "The page you are looking for does not exist."
+msgstr "La page que vous avez demandé n'existe pas."
+
+#: app/components/layout/MobileNav.tsx:54
+msgid "Toggle Menu"
+msgstr "Basculer le menu"
+
 #: app/components/DefaultCatchBoundary.tsx:33
 msgid "Try Again"
 msgstr "Réessayer"
+
+#: app/components/layout/CommandMenu.tsx:71
+msgid "Type a command or search..."
+msgstr "Entrez une commande ou recherchez..."
 
 #: app/routes/index.tsx:41
 msgid "User"

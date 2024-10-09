@@ -39,6 +39,7 @@ export const Route = createAPIFileRoute("/api/auth/callback/discord")({
       // TODO: use discord.js
       const discordUserResponse = await fetch(
         "https://discord.com/api/v10/users/@me",
+        // eslint-disable-next-line lingui/no-unlocalized-strings
         { headers: { Authorization: `Bearer ${tokens.accessToken}` } },
       )
       const discordUser = discordUserResponseSchema.parse(

@@ -47,7 +47,7 @@ export const DefaultCatchBoundary = ({ error }: ErrorComponentProps) => {
                 window.history.back()
               }}
             >
-              <Trans>Go Back</Trans>
+              <Trans>Go back</Trans>
             </Link>
           </Button>
         )}
