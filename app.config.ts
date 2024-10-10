@@ -41,7 +41,8 @@ export default defineConfig({
     },
   },
   server: {
-    preset: "bun",
+    //TODO: change to `bun` when https://github.com/nksaraf/vinxi/issues/177 is resolved
+    preset: "node-server",
   },
   routers: {
     ssr: {
