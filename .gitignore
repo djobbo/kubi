@@ -183,3 +183,6 @@ dist
 
 # lingui
 **/locales/*/messages.ts
+
+# nixpacks
+.nixpacks
