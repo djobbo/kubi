@@ -1,12 +1,16 @@
 services:
-  db:
+  postgres:
     image: postgres
     restart: always
+    env_file:
+      - path: ".env"
+        required: false
     ports:
-      - "5432:5432"
+      - "5432:${POSTGRES_PORT}"
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - ./.db/data:/var/lib/postgresql/data
 
@@ -14,8 +18,11 @@ services:
     image: dpage/pgadmin4
     container_name: pgadmin4_container
     restart: always
+    env_file:
+      - path: ".env"
+        required: false
     ports:
-      - "8888:80"
+      - "8888:${PGADMIN_PORT}"
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
@@ -27,10 +34,15 @@ services:
       context: .
       dockerfile: .nixpacks/Dockerfile
     restart: always
+    env_file:
+      - path: ".env"
+        required: false
+    ports:
+      - "3000:${WEB_PORT}"
     environment:
-      - DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
-      - DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID}
-      - DISCORD_CLIENT_SECRET: ${DISCORD_CLIENT_SECRET}
-      - DISCORD_REDIRECT_URI: ${DISCORD_REDIRECT_URI}
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_DB}
+      DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID}
+      DISCORD_CLIENT_SECRET: ${DISCORD_CLIENT_SECRET}
+      DISCORD_REDIRECT_URI: ${DISCORD_REDIRECT_URI}
     depends_on:
-      - db
+      - postgres

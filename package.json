@@ -3,7 +3,7 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "bun dev:up && bun db:migrate && bun locales:compile && bun front:dev",
+    "dev": "bun dev:up && bun db:migrate && bun locales:compile && dotenv -e .env -- bun front:dev",
     "dev:up": "bun run ./scripts/dev/up.ts",
     "dev:down": "bun run ./scripts/dev/down.ts",
     "dev:logs": "bun run ./scripts/dev/logs.ts",

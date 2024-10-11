@@ -1,25 +1,10 @@
 services:
-  db:
-    image: postgres
-    restart: always
-    ports:
-      - "5432:5432"
-    env_file: ".env"
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    volumes:
-      - ./.db/data:/var/lib/postgresql/data
+  postgres:
+    extends:
+      file: docker-compose.yml
+      service: postgres
 
   pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin4_container
-    restart: always
-    ports:
-      - "8888:80"
-    env_file: ".env"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-    volumes:
-      - .db/admin:/var/lib/pgadmin
+    extends:
+      file: docker-compose.yml
+      service: pgadmin
