@@ -4,7 +4,12 @@ services:
       file: docker-compose.yml
       service: postgres
 
-  pgadmin:
+  metabase-postgres:
     extends:
       file: docker-compose.yml
-      service: pgadmin
+      service: metabase-postgres
+
+  metabase:
+    extends:
+      file: docker-compose.yml
+      service: metabase
