@@ -1,3 +1,5 @@
 import { $ } from "bun"
 
-await $`docker compose down`
+import { COMPOSE_FILE } from "./constants"
+
+await $`docker compose -f ${COMPOSE_FILE} down`
