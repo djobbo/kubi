@@ -25,6 +25,7 @@ services:
     ports:
       - "${WEB_PORT}:3000"
     environment:
+      NODE_ENV: production
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
       DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID}
       DISCORD_CLIENT_SECRET: ${DISCORD_CLIENT_SECRET}
@@ -45,8 +46,6 @@ services:
       MB_DB_USER: ${METABASE_POSTGRES_USER}
       MB_DB_PASS: ${METABASE_POSTGRES_PASSWORD}
       MB_DB_HOST: metabase-postgres
-    volumes:
-      - .db/metabase:/metabase-data
   
   metabase-postgres:
     image: postgres
