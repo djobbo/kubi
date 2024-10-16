@@ -4,32 +4,6 @@ services:
       file: docker-compose.yml
       service: postgres
 
-  web:
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
-    env_file:
-      - path: ".env"
-        required: true
-    volumes:
-      - .:/usr/local/app
-      - /usr/local/app/node_modules
-    ports:
-      - "${WEB_PORT}:3000"
-    environment:
-      NODE_ENV: development
-      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
-      DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID}
-      DISCORD_CLIENT_SECRET: ${DISCORD_CLIENT_SECRET}
-      DISCORD_REDIRECT_URI: ${DISCORD_REDIRECT_URI}
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-    depends_on:
-      - postgres
-
   metabase-postgres:
     extends:
       file: docker-compose.yml
@@ -39,13 +13,3 @@ services:
     extends:
       file: docker-compose.yml
       service: metabase
-  
-  cloudflared:
-    image: cloudflare/cloudflared:latest
-    restart: unless-stopped
-    command: tunnel run
-    env_file:
-      - path: ".env"
-        required: false
-    environment:
-      TUNNEL_TOKEN: ${CLOUDFLARE_TOKEN}
