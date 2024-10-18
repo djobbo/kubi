@@ -95,9 +95,7 @@
     "three": "^0.169.0",
     "uuid": "^10.0.0",
     "vinxi": "^0.4.3",
-    "zod": "^3.23.8"
-  },
-  "patchedDependencies": {
-    "vinxi@0.4.3": "patches/vinxi@0.4.3.patch"
+    "zod": "^3.23.8",
+    "zustand": "^5.0.0"
   }
 }
