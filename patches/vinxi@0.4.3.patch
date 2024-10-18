@@ -1,0 +1,27 @@
+diff --git a/lib/dev-server.js b/lib/dev-server.js
+index 381b6326958e55feb0e611d94c29c2b5e6fc8038..51f38a163e843319ab4f9f17486c7c3642de45f4 100644
+--- a/lib/dev-server.js
++++ b/lib/dev-server.js
+@@ -39,6 +39,13 @@ export async function createViteDevServer(config) {
+ 	return vite.createServer(config);
+ }
+ 
++const portMap = {
++	client: 3002,
++	server: 3003,
++	ssr: 3004,
++	api: 3005,
++}
++
+ /**
+  *
+  * @param {import('./app.js').App} app
+@@ -49,7 +56,7 @@ export async function createViteDevServer(config) {
+ export async function createViteHandler(router, app, serveConfig) {
+ 	const vite = await import("vite");
+ 	const { getRandomPort } = await import("get-port-please");
+-	const port = await getRandomPort();
++	const port = portMap[router.name] ?? await getRandomPort();
+ 	const plugins = [
+ 		// ...(serveConfig.devtools ? [inspect()] : []),
+ 		...(((await router.internals.type.dev.plugins?.(router, app)) ?? []).filter(

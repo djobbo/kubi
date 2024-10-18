@@ -7,10 +7,11 @@
     "dev:up": "bun run ./scripts/dev/up.ts",
     "dev:down": "bun run ./scripts/dev/down.ts",
     "dev:logs": "bun run ./scripts/dev/logs.ts",
+    "dev:rm": "bun run ./scripts/dev/rm.ts",
     "build": "bun locales:compile && bun front:build",
-    "front:dev": "vinxi dev",
-    "front:build": "vinxi build",
-    "front:start": "vinxi start",
+    "front:dev": "bunx --bun vinxi dev",
+    "front:build": "bunx --bun vinxi build",
+    "front:start": "bunx --bun vinxi start",
     "start": "bun db:migrate && bun front:start",
     "check:types": "bun locales:compile && tsc --noEmit",
     "lint": "eslint . --fix",
@@ -88,11 +89,15 @@
     "postgres": "^3.4.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-qr-barcode-scanner": "^2.0.0",
     "tailwind-merge": "^2.5.3",
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.169.0",
     "uuid": "^10.0.0",
     "vinxi": "^0.4.3",
     "zod": "^3.23.8"
+  },
+  "patchedDependencies": {
+    "vinxi@0.4.3": "patches/vinxi@0.4.3.patch"
   }
 }
