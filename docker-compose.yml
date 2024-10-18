@@ -1,25 +1,61 @@
 services:
-  db:
+  postgres:
     image: postgres
     restart: always
+    env_file:
+      - path: ".env"
+        required: false
     ports:
-      - "5432:5432"
-    env_file: ".env"
+      - "${POSTGRES_PORT}:5432"
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - ./.db/data:/var/lib/postgresql/data
 
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin4_container
+  web:
+    build:
+      context: .
+      dockerfile: .nixpacks/Dockerfile
+    restart: always
+    env_file:
+      - path: ".env"
+        required: false
+    ports:
+      - "${WEB_PORT}:3000"
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID}
+      DISCORD_CLIENT_SECRET: ${DISCORD_CLIENT_SECRET}
+      DISCORD_REDIRECT_URI: ${DISCORD_REDIRECT_URI}
+    depends_on:
+      - postgres
+
+  metabase:
+    image: metabase/metabase
+    container_name: metabase_container
     restart: always
     ports:
-      - "8888:80"
-    env_file: ".env"
+      - "${METABASE_PORT}:3000"
     environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: ${METABASE_POSTGRES_DB}
+      MB_DB_PORT: 5432
+      MB_DB_USER: ${METABASE_POSTGRES_USER}
+      MB_DB_PASS: ${METABASE_POSTGRES_PASSWORD}
+      MB_DB_HOST: metabase-postgres
+  
+  metabase-postgres:
+    image: postgres
+    restart: always
+    env_file:
+      - path: ".env"
+        required: false
+    environment:
+      POSTGRES_USER: ${METABASE_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${METABASE_POSTGRES_PASSWORD}
+      POSTGRES_DB: ${METABASE_POSTGRES_DB}
     volumes:
-      - .db/admin:/var/lib/pgadmin
+      - .db/metabase-postgres:/var/lib/postgresql/data
