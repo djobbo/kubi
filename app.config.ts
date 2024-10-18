@@ -4,35 +4,37 @@ import react from "@vitejs/plugin-react"
 import { VitePWA } from "vite-plugin-pwa"
 import tsConfigPaths from "vite-tsconfig-paths"
 
+const pwaConfig = VitePWA({
+  injectRegister: "auto",
+  registerType: "autoUpdate",
+  devOptions: { enabled: true },
+  workbox: { globPatterns: ["**/*.{js,css,html,ico,png,svg}"] },
+  manifest: {
+    name: "Kubi",
+    short_name: "kubi",
+    description: "Kubi",
+    theme_color: "#ffffff",
+    icons: [
+      {
+        src: "pwa-192x192.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
+      {
+        src: "pwa-512x512.png",
+        sizes: "512x512",
+        type: "image/png",
+      },
+    ],
+  },
+})
+
 export default defineConfig({
   vite: {
-    plugins: () => [
+    plugins: [
       lingui(),
       tsConfigPaths({ projects: ["./tsconfig.json"] }),
-      ...VitePWA({
-        injectRegister: "auto",
-        registerType: "autoUpdate",
-        devOptions: { enabled: true },
-        workbox: { globPatterns: ["**/*.{js,css,html,ico,png,svg}"] },
-        manifest: {
-          name: "Kubi",
-          short_name: "kubi",
-          description: "Kubi",
-          theme_color: "#ffffff",
-          icons: [
-            {
-              src: "pwa-192x192.png",
-              sizes: "192x192",
-              type: "image/png",
-            },
-            {
-              src: "pwa-512x512.png",
-              sizes: "512x512",
-              type: "image/png",
-            },
-          ],
-        },
-      }),
+      ...pwaConfig,
     ],
   },
   react: {
@@ -47,8 +49,8 @@ export default defineConfig({
   routers: {
     ssr: {
       vite: {
-        plugins: () => [
-          react({
+        plugins: [
+          ...react({
             babel: {
               plugins: ["macros"],
             },
