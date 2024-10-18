@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-import { useSkillTreeStore } from "@/features/skill-tree/store"
+import { useSkillTreeStore } from "@/features/skill-tree/components/SkillTreeProvider"
 
 export interface Connector {
   id: string

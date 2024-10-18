@@ -1,9 +1,13 @@
+import type { ComponentProps } from "react"
 import { useEffect, useRef } from "react"
 import { v4 as uuidV4 } from "uuid"
 
 import type { Connector } from "@/features/skill-tree/components/Connectors"
 import { Connectors } from "@/features/skill-tree/components/Connectors"
-import { useSkillTreeStore } from "@/features/skill-tree/store"
+import {
+  SkillTreeStoreProvider,
+  useSkillTreeStore,
+} from "@/features/skill-tree/components/SkillTreeProvider"
 
 export interface SkillNode {
   id: string
@@ -22,10 +26,10 @@ const SkillNodeComponent = ({ node, parentConnectorRef }: SkillNodeProps) => {
   const topConnectorRef = useRef<HTMLDivElement>(null)
   const bottomConnectorRef = useRef<HTMLDivElement>(null)
   const reversedTree = useSkillTreeStore((state) => state.reversed)
+  const addConnector = useSkillTreeStore((state) => state.addConnector)
+  const removeConnector = useSkillTreeStore((state) => state.removeConnector)
 
   useEffect(() => {
-    const { addConnector, removeConnector } = useSkillTreeStore.getState()
-
     if (!parentConnectorRef?.current || !topConnectorRef.current) return
 
     const connectorId = uuidV4()
@@ -50,11 +54,11 @@ const SkillNodeComponent = ({ node, parentConnectorRef }: SkillNodeProps) => {
         className={`relative p-4 border rounded ${isMain ? "border-yellow-500" : "border-blue-500"}`}
       >
         <div
-          ref={topConnectorRef}
+          ref={reversedTree ? bottomConnectorRef : topConnectorRef}
           className="absolute top-0 left-1/2 w-2 h-2 bg-blue-500 transform -translate-x-1/2 -translate-y-1/2"
         />
         <div
-          ref={bottomConnectorRef}
+          ref={reversedTree ? topConnectorRef : bottomConnectorRef}
           className="absolute bottom-0 left-1/2 w-2 h-2 bg-red-500 transform -translate-x-1/2 translate-y-1/2"
         />
         {node.title}
@@ -80,19 +84,30 @@ const SkillNodeComponent = ({ node, parentConnectorRef }: SkillNodeProps) => {
   )
 }
 
-interface SkillTreeProps {
-  rootNodes: SkillNode[]
-}
+const SkillTreeDisplay = () => {
+  const roots = useSkillTreeStore((state) => state.roots)
 
-export const SkillTree = ({ rootNodes }: SkillTreeProps) => {
   return (
     <div className="flex flex-col items-center z-0">
       <div className="z-10">
-        {rootNodes.map((rootNode) => (
-          <SkillNodeComponent key={rootNode.id} node={rootNode} />
+        {roots.map((root) => (
+          <SkillNodeComponent key={root.id} node={root} />
         ))}
       </div>
       <Connectors />
     </div>
+  )
+}
+
+type SkillTreeProps = Omit<
+  ComponentProps<typeof SkillTreeStoreProvider>,
+  "children"
+>
+
+export const SkillTree = (props: SkillTreeProps) => {
+  return (
+    <SkillTreeStoreProvider {...props}>
+      <SkillTreeDisplay />
+    </SkillTreeStoreProvider>
   )
 }
