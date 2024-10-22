@@ -45,11 +45,8 @@ const calculateConnectorPath = (connector: Connector) => {
 
   if (!connectorCoords) return null
 
-  const path = `M${connectorCoords[0][0]} ${connectorCoords[0][1]} L${connectorCoords[0][0]} ${
-    (connectorCoords[0][1] + connectorCoords[1][1]) / 2
-  } L${connectorCoords[1][0]} ${(connectorCoords[0][1] + connectorCoords[1][1]) / 2} L${
-    connectorCoords[1][0]
-  } ${connectorCoords[1][1]}`
+  const [start, end] = connectorCoords
+  const path = `M ${start[0]} ${start[1]} L ${start[0]} ${end[1]} L ${end[0]} ${end[1]}`
 
   return path
 }
