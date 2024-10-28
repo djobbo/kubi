@@ -95,5 +95,8 @@
     "uuid": "^11.0.1",
     "vinxi": "^0.4.3",
     "zod": "^3.23.8"
+  },
+  "patchedDependencies": {
+    "knip@5.34.1": "patches/knip@5.34.1.patch"
   }
 }
