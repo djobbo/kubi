@@ -18,6 +18,11 @@ import { seo } from "@/helpers/seo"
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   {
+    beforeLoad: async () => {
+      const session = await getSession()
+      return { session }
+    },
+    component: RootComponent,
     meta: () => [
       { charSet: "utf-8" },
       {
@@ -31,7 +36,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         description: t`Kubi`,
       }),
     ],
-    component: RootComponent,
     links: () => [
       { rel: "stylesheet", href: globalStyles },
       { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
@@ -42,10 +46,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { rel: "mask-icon", href: "/mask-icon.svg", color: "#ffffff" },
     ],
-    beforeLoad: async () => {
-      const session = await getSession()
-      return { session }
-    },
   },
 )
 

@@ -61,6 +61,7 @@ export const Route = createAPIFileRoute("/api/auth/callback/discord")({
           status: 302,
           headers: {
             Location: "/",
+            // eslint-disable-next-line lingui/no-unlocalized-strings
             "Set-Cookie": sessionCookie.serialize(),
           },
         })
@@ -89,6 +90,7 @@ export const Route = createAPIFileRoute("/api/auth/callback/discord")({
         status: 302,
         headers: {
           Location: "/",
+          // eslint-disable-next-line lingui/no-unlocalized-strings
           "Set-Cookie": sessionCookie.serialize(),
         },
       })

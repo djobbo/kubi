@@ -22,6 +22,7 @@ function Home() {
   const { scene, session } = Route.useLoaderData()
 
   const { user } = session
+  const username = user?.name ?? t`User`
 
   return (
     <div className="w-full h-full">
@@ -36,9 +37,8 @@ function Home() {
         </Button>
         {user ? (
           <>
-            {/* <span>Welcome, {user.name ?? "User"}</span> */}
             <span>
-              <Trans>Welcome, {user.name ?? t`User`}</Trans>
+              <Trans>Welcome, {username}</Trans>
             </span>
             <form method="POST" action="/api/auth/logout">
               <Button
