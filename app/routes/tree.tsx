@@ -1,6 +1,7 @@
 import { t } from "@lingui/macro"
 import { createFileRoute } from "@tanstack/react-router"
 
+import { Mermaid } from "@/features/skill-tree/components/Mermaid"
 import { SkillTree } from "@/features/skill-tree/components/SkillTree"
 import type { SkillTreePublicState } from "@/features/skill-tree/components/SkillTreeProvider"
 
@@ -88,5 +89,13 @@ export const Route = createFileRoute("/tree")({
 function Tree() {
   const { tree } = Route.useLoaderData()
 
-  return <SkillTree initState={tree} />
+  return (
+    <Mermaid
+      id="skill-tree-diagram"
+      diagram={`
+       graph TD
+      BasicForms@{ shape: kubi, label: "Basic Forms"} --> Lines@{ shape: rect, label: "Lines"}
+    `}
+    />
+  )
 }
