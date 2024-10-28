@@ -1,0 +1,12 @@
+diff --git a/dist/chunks/mermaid.core/chunk-O5FTX4FK.mjs b/dist/chunks/mermaid.core/chunk-O5FTX4FK.mjs
+index 346216bbcfdf0633cc3c5b197f6095f861f167ec..e8db39231fb948f87a99ced89e32d0cdfbcc890d 100644
+--- a/dist/chunks/mermaid.core/chunk-O5FTX4FK.mjs
++++ b/dist/chunks/mermaid.core/chunk-O5FTX4FK.mjs
+@@ -4467,6 +4467,7 @@ var shapes2 = {
+   "sloped-rectangle": slopedRect,
+   "sl-rect": slopedRect,
+   "manual-input": slopedRect,
++  "kubi": slopedRect,
+   // documents with alias: 'docs', 'documents', 'st-doc', 'stacked-document'
+   docs: multiWaveEdgedRectangle,
+   documents: multiWaveEdgedRectangle,

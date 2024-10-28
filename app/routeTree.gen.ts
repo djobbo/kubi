@@ -11,10 +11,16 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as TreeImport } from './routes/tree'
 import { Route as FoodScannerImport } from './routes/food-scanner'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
+
+const TreeRoute = TreeImport.update({
+  path: '/tree',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const FoodScannerRoute = FoodScannerImport.update({
   path: '/food-scanner',
@@ -44,6 +50,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FoodScannerImport
       parentRoute: typeof rootRoute
     }
+    '/tree': {
+      id: '/tree'
+      path: '/tree'
+      fullPath: '/tree'
+      preLoaderRoute: typeof TreeImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -52,36 +65,41 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/food-scanner': typeof FoodScannerRoute
+  '/tree': typeof TreeRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/food-scanner': typeof FoodScannerRoute
+  '/tree': typeof TreeRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/food-scanner': typeof FoodScannerRoute
+  '/tree': typeof TreeRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/food-scanner'
+  fullPaths: '/' | '/food-scanner' | '/tree'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/food-scanner'
-  id: '__root__' | '/' | '/food-scanner'
+  to: '/' | '/food-scanner' | '/tree'
+  id: '__root__' | '/' | '/food-scanner' | '/tree'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   FoodScannerRoute: typeof FoodScannerRoute
+  TreeRoute: typeof TreeRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   FoodScannerRoute: FoodScannerRoute,
+  TreeRoute: TreeRoute,
 }
 
 export const routeTree = rootRoute
@@ -97,7 +115,8 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/food-scanner"
+        "/food-scanner",
+        "/tree"
       ]
     },
     "/": {
@@ -105,6 +124,9 @@ export const routeTree = rootRoute
     },
     "/food-scanner": {
       "filePath": "food-scanner.tsx"
+    },
+    "/tree": {
+      "filePath": "tree.tsx"
     }
   }
 }
