@@ -13,9 +13,12 @@ export const Route = createAPIFileRoute("/api/auth/discord")({
   GET: async () => {
     const state = generateState()
 
-    const url = await discord.createAuthorizationURL(state, {
-      scopes: ["identify", "email", "guilds", "guilds.members.read"],
-    })
+    const url = discord.createAuthorizationURL(state, [
+      "identify",
+      "email",
+      "guilds",
+      "guilds.members.read",
+    ])
 
     setCookie(DISCORD_OAUTH_STATE_COOKIE_NAME, state, {
       path: "/",
