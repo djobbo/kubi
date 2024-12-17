@@ -11,16 +11,9 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as FoodScannerImport } from './routes/food-scanner'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
-
-const FoodScannerRoute = FoodScannerImport.update({
-  id: '/food-scanner',
-  path: '/food-scanner',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -39,13 +32,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/food-scanner': {
-      id: '/food-scanner'
-      path: '/food-scanner'
-      fullPath: '/food-scanner'
-      preLoaderRoute: typeof FoodScannerImport
-      parentRoute: typeof rootRoute
-    }
   }
 }
 
@@ -53,37 +39,32 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/food-scanner': typeof FoodScannerRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/food-scanner': typeof FoodScannerRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/food-scanner': typeof FoodScannerRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/food-scanner'
+  fullPaths: '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/food-scanner'
-  id: '__root__' | '/' | '/food-scanner'
+  to: '/'
+  id: '__root__' | '/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  FoodScannerRoute: typeof FoodScannerRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  FoodScannerRoute: FoodScannerRoute,
 }
 
 export const routeTree = rootRoute
@@ -96,15 +77,11 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
-        "/food-scanner"
+        "/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
-    },
-    "/food-scanner": {
-      "filePath": "food-scanner.tsx"
     }
   }
 }

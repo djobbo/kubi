@@ -65,7 +65,7 @@ const SheetContent = ({
   children,
   ...props
 }: SheetContentProps & {
-  ref: React.RefObject<ElementRef<typeof SheetPrimitive.Content>>
+  ref?: React.RefObject<ElementRef<typeof SheetPrimitive.Content>>
 }) => (
   <SheetPortal>
     <SheetOverlay />
