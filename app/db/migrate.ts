@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-/* eslint-disable lingui/no-unlocalized-strings */
 
 import { drizzle } from "drizzle-orm/postgres-js"
 import { migrate } from "drizzle-orm/postgres-js/migrator"

@@ -59,7 +59,54 @@ export default tseslint.config(
       lingui,
     },
     rules: {
-      "lingui/no-unlocalized-strings": "error",
+      "lingui/no-unlocalized-strings": [
+        "error",
+        {
+          ignore: [
+            // Ignore strings which are a single "word" (no spaces)
+            // and doesn't start with an uppercase letter
+            "^(?![A-Z])\\S+$",
+            // Ignore UPPERCASE literals
+            "^[A-Z0-9_-]+$",
+          ],
+          ignoreNames: [
+            // Ignore matching className (case-insensitive)
+            { regex: { pattern: "className", flags: "i" } },
+            "styleName",
+            "src",
+            "srcSet",
+            "type",
+            "id",
+            "width",
+            "height",
+            "displayName",
+            "Authorization",
+          ],
+          ignoreFunctions: [
+            "cva",
+            "cn",
+            "track",
+            "Error",
+            "console.*",
+            "*headers.set",
+            "*.addEventListener",
+            "*.removeEventListener",
+            "*.postMessage",
+            "*.getElementById",
+            "*.dispatch",
+            "*.commit",
+            "*.includes",
+            "*.indexOf",
+            "*.endsWith",
+            "*.startsWith",
+            "require",
+            "envField",
+            "setHeader",
+          ],
+          useTsTypes: true,
+          ignoreMethodsOnTypes: ["Map.get", "Map.has", "Set.has"],
+        },
+      ],
       "lingui/t-call-in-function": "error",
       "lingui/no-single-variables-to-translate": "error",
       "lingui/no-expression-in-message": "error",

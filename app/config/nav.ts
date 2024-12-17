@@ -1,12 +1,11 @@
-import { FileRouteTypes } from '@/routeTree.gen'
 import { t } from "@lingui/core/macro"
-import type { Link } from "@tanstack/react-router"
 import type { LucideIcon } from "lucide-react"
-import { HomeIcon, SparkleIcon } from "lucide-react"
-import type { ComponentProps } from "react"
+import { HomeIcon } from "lucide-react"
+
+import type { FileRouteTypes } from "@/routeTree.gen"
 
 interface NavLink {
-  to: FileRouteTypes['to']
+  to: FileRouteTypes["to"]
   title: string
   Icon: LucideIcon
   isActive: (pathname: string, to: string) => boolean

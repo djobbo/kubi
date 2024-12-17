@@ -28,7 +28,6 @@ export const APIRoute = createAPIFileRoute("/api/auth/discord")({
       sameSite: "lax",
     })
 
-    // eslint-disable-next-line lingui/no-unlocalized-strings
     setHeader("Location", url.toString())
 
     return new Response(null, { status: 302 })
