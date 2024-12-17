@@ -1,4 +1,4 @@
-import { t } from "@lingui/macro"
+import { t } from "@lingui/core/macro"
 import type { Link } from "@tanstack/react-router"
 import type { LucideIcon } from "lucide-react"
 import { HomeIcon, SparkleIcon } from "lucide-react"

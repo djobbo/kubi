@@ -32,14 +32,14 @@ const pwaConfig = VitePWA({
 export default defineConfig({
   vite: {
     plugins: [
-      lingui(),
+      ...lingui(),
       tsConfigPaths({ projects: ["./tsconfig.json"] }),
       ...pwaConfig,
     ],
   },
   react: {
     babel: {
-      plugins: ["macros"],
+      plugins: ["@lingui/babel-plugin-lingui-macro"],
     },
   },
   server: {

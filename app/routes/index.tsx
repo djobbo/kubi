@@ -1,25 +1,21 @@
-import { t, Trans } from "@lingui/macro"
+import { t } from "@lingui/core/macro"
+import { Trans } from "@lingui/react/macro"
 import { createFileRoute, useRouter } from "@tanstack/react-router"
 
-import { Scene } from "@/features/scene/components/Scene"
-import { generateScene } from "@/features/scene/helpers/generateScene"
 import { Button } from "@/ui/components/button"
 
 export const Route = createFileRoute("/")({
   component: Home,
   loader: async ({ context: { session } }) => {
-    const scene = generateScene(5)
-
     return {
       session,
-      scene,
     }
   },
 })
 
 function Home() {
   const router = useRouter()
-  const { scene, session } = Route.useLoaderData()
+  const { session } = Route.useLoaderData()
 
   const { user } = session
   const username = user?.name ?? t`User`
@@ -64,7 +60,6 @@ function Home() {
           </form>
         )}
       </div>
-      <Scene scene={scene} />
     </div>
   )
 }

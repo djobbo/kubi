@@ -9,7 +9,7 @@ import {
 
 const COOKIE_MAX_AGE_SECONDS = 60 * 10
 
-export const Route = createAPIFileRoute("/api/auth/discord")({
+export const APIRoute = createAPIFileRoute("/api/auth/discord")({
   GET: async () => {
     const state = generateState()
 

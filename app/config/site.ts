@@ -1,6 +1,6 @@
 import type { IconType } from "@icons-pack/react-simple-icons"
 import { SiGithub } from "@icons-pack/react-simple-icons"
-import { t } from "@lingui/macro"
+import { t } from "@lingui/core/macro"
 
 interface SocialLink {
   title: string
