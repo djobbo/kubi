@@ -1,11 +1,11 @@
-import { t } from "@lingui/macro"
-import type { Link } from "@tanstack/react-router"
+import { t } from "@lingui/core/macro"
 import type { LucideIcon } from "lucide-react"
-import { HomeIcon, SparkleIcon } from "lucide-react"
-import type { ComponentProps } from "react"
+import { HomeIcon } from "lucide-react"
+
+import type { FileRouteTypes } from "@/routeTree.gen"
 
 interface NavLink {
-  to: ComponentProps<typeof Link>["to"]
+  to: FileRouteTypes["to"]
   title: string
   Icon: LucideIcon
   isActive: (pathname: string, to: string) => boolean
@@ -24,12 +24,12 @@ export const navConfig = (() =>
         Icon: HomeIcon,
         isActive: (pathname, to) => pathname === to,
       },
-      {
-        to: "/generate",
-        title: t`Generate`,
-        Icon: SparkleIcon,
-        isActive: (pathname, to) => pathname.startsWith(to),
-      },
+      // {
+      //   to: "/generate",
+      //   title: t`Generate`,
+      //   Icon: SparkleIcon,
+      //   isActive: (pathname, to) => pathname.startsWith(to),
+      // },
     ] as const satisfies NavLink[],
     sidebar: [
       // {

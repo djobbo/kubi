@@ -1,4 +1,5 @@
-import { t, Trans } from "@lingui/macro"
+import { t } from "@lingui/core/macro"
+import { Trans } from "@lingui/react/macro"
 import { type DialogProps } from "@radix-ui/react-dialog"
 import { useRouter } from "@tanstack/react-router"
 import { FileIcon } from "lucide-react"

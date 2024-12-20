@@ -1,11 +1,9 @@
 // @ts-check
 
-import { fixupPluginRules } from "@eslint/compat"
 import eslint from "@eslint/js"
 import react from "@eslint-react/eslint-plugin"
 import pluginQuery from "@tanstack/eslint-plugin-query"
 import pluginRouter from "@tanstack/eslint-plugin-router"
-// @ts-expect-error eslint-plugin-lingui is not typed yet (waiting for eslint v9 support - https://github.com/lingui/eslint-plugin/issues/31)
 import lingui from "eslint-plugin-lingui"
 import pluginPrettier from "eslint-plugin-prettier/recommended"
 import simpleImportSort from "eslint-plugin-simple-import-sort"
@@ -58,10 +56,57 @@ export default tseslint.config(
   {
     files: ["app/**/*.{ts,tsx}"],
     plugins: {
-      lingui: fixupPluginRules(lingui),
+      lingui,
     },
     rules: {
-      "lingui/no-unlocalized-strings": "error",
+      "lingui/no-unlocalized-strings": [
+        "error",
+        {
+          ignore: [
+            // Ignore strings which are a single "word" (no spaces)
+            // and doesn't start with an uppercase letter
+            "^(?![A-Z])\\S+$",
+            // Ignore UPPERCASE literals
+            "^[A-Z0-9_-]+$",
+          ],
+          ignoreNames: [
+            // Ignore matching className (case-insensitive)
+            { regex: { pattern: "className", flags: "i" } },
+            "styleName",
+            "src",
+            "srcSet",
+            "type",
+            "id",
+            "width",
+            "height",
+            "displayName",
+            "Authorization",
+          ],
+          ignoreFunctions: [
+            "cva",
+            "cn",
+            "track",
+            "Error",
+            "console.*",
+            "*headers.set",
+            "*.addEventListener",
+            "*.removeEventListener",
+            "*.postMessage",
+            "*.getElementById",
+            "*.dispatch",
+            "*.commit",
+            "*.includes",
+            "*.indexOf",
+            "*.endsWith",
+            "*.startsWith",
+            "require",
+            "envField",
+            "setHeader",
+          ],
+          useTsTypes: true,
+          ignoreMethodsOnTypes: ["Map.get", "Map.has", "Set.has"],
+        },
+      ],
       "lingui/t-call-in-function": "error",
       "lingui/no-single-variables-to-translate": "error",
       "lingui/no-expression-in-message": "error",

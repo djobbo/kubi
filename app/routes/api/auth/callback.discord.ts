@@ -1,5 +1,5 @@
 import { createAPIFileRoute } from "@tanstack/start/api"
-import { OAuth2RequestError } from "arctic"
+import { ArcticFetchError, OAuth2RequestError } from "arctic"
 import { and, eq } from "drizzle-orm"
 import { generateIdFromEntropySize } from "lucia"
 import { parseCookies } from "vinxi/http"
@@ -21,7 +21,7 @@ const discordUserResponseSchema = z.object({
   verified: z.boolean().optional(),
 })
 
-export const Route = createAPIFileRoute("/api/auth/callback/discord")({
+export const APIRoute = createAPIFileRoute("/api/auth/callback/discord")({
   GET: async ({ request }) => {
     const url = new URL(request.url)
     const code = url.searchParams.get("code")
@@ -36,11 +36,11 @@ export const Route = createAPIFileRoute("/api/auth/callback/discord")({
 
     try {
       const tokens = await discord.validateAuthorizationCode(code)
+      const accessToken = tokens.accessToken()
       // TODO: use discord.js
       const discordUserResponse = await fetch(
         "https://discord.com/api/v10/users/@me",
-        // eslint-disable-next-line lingui/no-unlocalized-strings
-        { headers: { Authorization: `Bearer ${tokens.accessToken}` } },
+        { headers: { Authorization: `Bearer ${accessToken}` } },
       )
       const discordUser = discordUserResponseSchema.parse(
         await discordUserResponse.json(),
@@ -60,6 +60,7 @@ export const Route = createAPIFileRoute("/api/auth/callback/discord")({
           status: 302,
           headers: {
             Location: "/",
+            // eslint-disable-next-line lingui/no-unlocalized-strings
             "Set-Cookie": sessionCookie.serialize(),
           },
         })
@@ -88,6 +89,7 @@ export const Route = createAPIFileRoute("/api/auth/callback/discord")({
         status: 302,
         headers: {
           Location: "/",
+          // eslint-disable-next-line lingui/no-unlocalized-strings
           "Set-Cookie": sessionCookie.serialize(),
         },
       })
@@ -99,6 +101,12 @@ export const Route = createAPIFileRoute("/api/auth/callback/discord")({
         // invalid code
         return new Response(null, { status: 400 })
       }
+
+      if (e instanceof ArcticFetchError) {
+        // Failed to call `fetch()`
+        return new Response(null, { status: 500 })
+      }
+
       return new Response(null, { status: 500 })
     }
   },

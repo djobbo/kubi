@@ -3,6 +3,7 @@
 ## Prerequisites
 - Bun
 - Docker
+- Nixpacks
 
 Install dependencies:
 ```bash
@@ -14,3 +15,9 @@ Start the developement server:
 ```bash
 bun dev
 ```
+
+### Build/Deploy
+
+run `bun web:build` to build the docker image for the frontend
+
+then run `docker compose up`

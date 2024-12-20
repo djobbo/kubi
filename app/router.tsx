@@ -9,7 +9,7 @@ import { NotFound } from "@/components/NotFound"
 import { activate as activateLocales } from "@/locales/activate"
 import { routeTree } from "@/routeTree.gen"
 
-activateLocales("fr")
+activateLocales("en")
 
 export function createRouter() {
   const queryClient = new QueryClient()

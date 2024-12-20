@@ -1,0 +1,12 @@
+diff --git a/dist/constants.js b/dist/constants.js
+index eea8b0ecd376719c8adc9fc964363257d9d07785..ef814d51f7cbd29fea911cc612db489d51e0e4ab 100644
+--- a/dist/constants.js
++++ b/dist/constants.js
+@@ -117,6 +117,7 @@ export const IGNORED_GLOBAL_BINARIES = new Set([
+     'xvfb-run',
+     'yarn',
+     'yes',
++    'nixpacks',
+ ]);
+ export const IGNORED_DEPENDENCIES = new Set(['knip', 'typescript']);
+ export const IGNORED_RUNTIME_DEPENDENCIES = new Set(['node', 'bun', 'deno']);

@@ -1,4 +1,5 @@
-import { t, Trans } from "@lingui/macro"
+import { t } from "@lingui/core/macro"
+import { Trans } from "@lingui/react/macro"
 import type { QueryClient } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import {
@@ -7,7 +8,7 @@ import {
   ScrollRestoration,
 } from "@tanstack/react-router"
 import { TanStackRouterDevtools } from "@tanstack/router-devtools"
-import { Body, Head, Html, Meta, Scripts } from "@tanstack/start"
+import { Meta, Scripts } from "@tanstack/start"
 import { type ReactNode } from "react"
 
 import { Header } from "@/components/layout/Header"
@@ -18,33 +19,37 @@ import { seo } from "@/helpers/seo"
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   {
-    meta: () => [
-      { charSet: "utf-8" },
-      {
-        name: "viewport",
-        // eslint-disable-next-line lingui/no-unlocalized-strings
-        content: "width=device-width, initial-scale=1",
-      },
-      { name: "theme-color", content: "#ffffff" },
-      ...seo({
-        title: t`Kubi`,
-        description: t`Kubi`,
-      }),
-    ],
-    component: RootComponent,
-    links: () => [
-      { rel: "stylesheet", href: globalStyles },
-      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
-      {
-        rel: "apple-touch-icon",
-        href: "/apple-touch-icon.png",
-        sizes: "180x180",
-      },
-      { rel: "mask-icon", href: "/mask-icon.svg", color: "#ffffff" },
-    ],
     beforeLoad: async () => {
       const session = await getSession()
       return { session }
+    },
+    component: RootComponent,
+    head: () => {
+      return {
+        meta: [
+          { charSet: "utf-8" },
+          {
+            name: "viewport",
+            // eslint-disable-next-line lingui/no-unlocalized-strings
+            content: "width=device-width, initial-scale=1",
+          },
+          { name: "theme-color", content: "#ffffff" },
+          ...seo({
+            title: t`Kubi`,
+            description: t`Kubi`,
+          }),
+        ],
+        links: [
+          { rel: "stylesheet", href: globalStyles },
+          { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+          {
+            rel: "apple-touch-icon",
+            href: "/apple-touch-icon.png",
+            sizes: "180x180",
+          },
+          { rel: "mask-icon", href: "/mask-icon.svg", color: "#ffffff" },
+        ],
+      }
     },
   },
 )
@@ -69,17 +74,17 @@ function RootComponent() {
 
 function RootDocument({ children }: { children: ReactNode }) {
   return (
-    <Html>
-      <Head>
+    <html>
+      <head>
         <Meta />
-      </Head>
-      <Body>
+      </head>
+      <body>
         {children}
         <ScrollRestoration />
         <TanStackRouterDevtools position="bottom-right" />
         <ReactQueryDevtools buttonPosition="bottom-left" />
         <Scripts />
-      </Body>
-    </Html>
+      </body>
+    </html>
   )
 }

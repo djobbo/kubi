@@ -9,13 +9,16 @@ import {
 
 const COOKIE_MAX_AGE_SECONDS = 60 * 10
 
-export const Route = createAPIFileRoute("/api/auth/discord")({
+export const APIRoute = createAPIFileRoute("/api/auth/discord")({
   GET: async () => {
     const state = generateState()
 
-    const url = await discord.createAuthorizationURL(state, {
-      scopes: ["identify", "email", "guilds", "guilds.members.read"],
-    })
+    const url = discord.createAuthorizationURL(state, [
+      "identify",
+      "email",
+      "guilds",
+      "guilds.members.read",
+    ])
 
     setCookie(DISCORD_OAUTH_STATE_COOKIE_NAME, state, {
       path: "/",
@@ -25,7 +28,6 @@ export const Route = createAPIFileRoute("/api/auth/discord")({
       sameSite: "lax",
     })
 
-    // eslint-disable-next-line lingui/no-unlocalized-strings
     setHeader("Location", url.toString())
 
     return new Response(null, { status: 302 })

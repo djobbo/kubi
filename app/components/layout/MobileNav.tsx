@@ -1,4 +1,4 @@
-import { Trans } from "@lingui/macro"
+import { Trans } from "@lingui/react/macro"
 import { Link, useRouter } from "@tanstack/react-router"
 import type { ComponentPropsWithoutRef, ReactNode } from "react"
 import { useState } from "react"

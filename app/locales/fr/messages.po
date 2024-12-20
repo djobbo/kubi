@@ -13,68 +13,69 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: app/config/nav.ts:29
-msgid "Generate"
-msgstr "Générer"
+#: app/ui/components/sheet.tsx:79
+#: app/ui/components/dialog.tsx:56
+msgid "Close"
+msgstr "Fermer"
 
 #: app/config/site.ts:16
 msgid "Github"
 msgstr "Github"
 
-#: app/components/DefaultCatchBoundary.tsx:50
 #: app/components/NotFound.tsx:14
+#: app/components/DefaultCatchBoundary.tsx:50
 msgid "Go back"
 msgstr "Revenir en arrière"
 
-#: app/components/layout/CommandMenu.tsx:84
+#: app/components/layout/CommandMenu.tsx:85
 msgid "Hello World"
 msgstr "Bonjour, Monde"
 
-#: app/components/DefaultCatchBoundary.tsx:38
-#: app/components/NotFound.tsx:18
 #: app/config/nav.ts:23
+#: app/components/NotFound.tsx:18
+#: app/components/DefaultCatchBoundary.tsx:38
 msgid "Home"
 msgstr "Accueil"
 
-#: app/components/layout/CommandMenu.tsx:67
+#: app/components/layout/CommandMenu.tsx:68
 msgid "K"
 msgstr "K"
 
+#: app/routes/__root.tsx:38
+#: app/routes/__root.tsx:39
 #: app/config/site.ts:13
-#: app/routes/__root.tsx:30
-#: app/routes/__root.tsx:31
 msgid "Kubi"
 msgstr "Kubi"
 
-#: app/components/layout/CommandMenu.tsx:76
+#: app/components/layout/CommandMenu.tsx:77
 msgid "Links"
 msgstr "Liens"
 
-#: app/components/layout/CommandMenu.tsx:74
+#: app/components/layout/CommandMenu.tsx:75
 msgid "No results found."
 msgstr "Pas de résultats."
 
-#: app/routes/index.tsx:35
+#: app/routes/index.tsx:32
 msgid "Regenerate"
 msgstr "Regénérer"
 
-#: app/components/layout/CommandMenu.tsx:60
+#: app/components/layout/CommandMenu.tsx:61
 msgid "Search documentation..."
 msgstr "Chercher dans la documentation..."
 
-#: app/components/layout/CommandMenu.tsx:63
+#: app/components/layout/CommandMenu.tsx:64
 msgid "Search..."
 msgstr "Rechercher..."
 
-#: app/routes/__root.tsx:59
+#: app/routes/__root.tsx:64
 msgid "Sidenav"
 msgstr "Navigation"
 
-#: app/routes/index.tsx:62
+#: app/routes/index.tsx:58
 msgid "Sign in with Discord"
 msgstr "Se connecter avec Discord"
 
-#: app/routes/index.tsx:50
+#: app/routes/index.tsx:46
 msgid "Sign out"
 msgstr "Se déconnecter"
 
@@ -90,14 +91,14 @@ msgstr "Basculer le menu"
 msgid "Try Again"
 msgstr "Réessayer"
 
-#: app/components/layout/CommandMenu.tsx:71
+#: app/components/layout/CommandMenu.tsx:72
 msgid "Type a command or search..."
 msgstr "Entrez une commande ou recherchez..."
 
-#: app/routes/index.tsx:41
+#: app/routes/index.tsx:21
 msgid "User"
 msgstr "Utilisateur"
 
-#: app/routes/index.tsx:41
-msgid "Welcome, {0}"
-msgstr "Bienvenue, {0}"
+#: app/routes/index.tsx:37
+msgid "Welcome, {username}"
+msgstr "Bienvenue, {username}"
