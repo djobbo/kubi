@@ -27,6 +27,11 @@ export const env = {
     process.env.DISCORD_REDIRECT_URI,
     z.string().min(1),
   ),
+  NODE_ENV: envField(
+    "Node Environment",
+    process.env.NODE_ENV ?? "development",
+    z.enum(["development", "production"]).default("development"),
+  ),
 }
 
 loadEnv({ path: ".env" })

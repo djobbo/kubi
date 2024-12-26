@@ -1,3 +1,4 @@
+import type { InferSelectModel } from "drizzle-orm"
 import { text, timestamp } from "drizzle-orm/pg-core"
 
 import { authSchema } from "@/features/auth/schema/schema"
@@ -13,3 +14,5 @@ export const sessionsTable = authSchema.table("session", {
     mode: "date",
   }).notNull(),
 })
+
+export type Session = InferSelectModel<typeof sessionsTable>

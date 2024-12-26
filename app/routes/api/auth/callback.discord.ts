@@ -1,12 +1,13 @@
 import { createAPIFileRoute } from "@tanstack/start/api"
 import { ArcticFetchError, OAuth2RequestError } from "arctic"
 import { and, eq } from "drizzle-orm"
-import { generateIdFromEntropySize } from "lucia"
 import { parseCookies } from "vinxi/http"
 import { z } from "zod"
 
 import { db } from "@/db"
-import { lucia } from "@/features/auth/lucia"
+import { createSession, generateSessionToken } from "@/features/auth/api"
+import { setSessionTokenCookie } from "@/features/auth/cookies"
+import { generateIdFromEntropySize } from "@/features/auth/helpers/crypto"
 import {
   discord,
   DISCORD_OAUTH_STATE_COOKIE_NAME,
@@ -54,14 +55,14 @@ export const APIRoute = createAPIFileRoute("/api/auth/callback/discord")({
       })
 
       if (existingUser) {
-        const session = await lucia.createSession(existingUser.userId, {})
-        const sessionCookie = lucia.createSessionCookie(session.id)
+        const token = generateSessionToken()
+        const session = await createSession(token, existingUser.userId)
+        setSessionTokenCookie(token, session.expiresAt)
+
         return new Response(null, {
           status: 302,
           headers: {
             Location: "/",
-            // eslint-disable-next-line lingui/no-unlocalized-strings
-            "Set-Cookie": sessionCookie.serialize(),
           },
         })
       }
@@ -83,14 +84,14 @@ export const APIRoute = createAPIFileRoute("/api/auth/callback/discord")({
         })
       })
 
-      const session = await lucia.createSession(userId, {})
-      const sessionCookie = lucia.createSessionCookie(session.id)
+      const token = generateSessionToken()
+      const session = await createSession(token, userId)
+      setSessionTokenCookie(token, session.expiresAt)
+
       return new Response(null, {
         status: 302,
         headers: {
           Location: "/",
-          // eslint-disable-next-line lingui/no-unlocalized-strings
-          "Set-Cookie": sessionCookie.serialize(),
         },
       })
     } catch (e) {

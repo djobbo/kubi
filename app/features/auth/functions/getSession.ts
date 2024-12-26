@@ -1,35 +1,24 @@
 import { createServerFn } from "@tanstack/start"
-import { parseCookies, setCookie } from "vinxi/http"
+import { parseCookies } from "vinxi/http"
 
-import { lucia } from "@/features/auth/lucia"
+import type { SessionValidationResult } from "../api"
+import { validateSessionToken } from "../api"
+import { AUTH_COOKIE_NAME, deleteSessionTokenCookie } from "../cookies"
 
 export const getSession = createServerFn({ method: "GET" }).handler(
-  async () => {
-    const sessionId = parseCookies()[lucia.sessionCookieName]
+  async (): Promise<SessionValidationResult> => {
+    const sessionId = parseCookies()[AUTH_COOKIE_NAME]
     if (!sessionId) {
-      return { user: null }
+      return { session: null, user: null }
     }
 
-    const result = await lucia.validateSession(sessionId)
+    const { session, user } = await validateSessionToken(sessionId)
 
-    if (result.session?.fresh) {
-      const sessionCookie = lucia.createSessionCookie(result.session.id)
-      setCookie(
-        sessionCookie.name,
-        sessionCookie.value,
-        sessionCookie.attributes,
-      )
+    if (!session) {
+      deleteSessionTokenCookie()
+      return { session: null, user: null }
     }
 
-    if (!result.session) {
-      const sessionCookie = lucia.createBlankSessionCookie()
-      setCookie(
-        sessionCookie.name,
-        sessionCookie.value,
-        sessionCookie.attributes,
-      )
-    }
-
-    return { user: result.user }
+    return { session, user }
   },
 )

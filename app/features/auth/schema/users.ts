@@ -1,3 +1,4 @@
+import type { InferSelectModel } from "drizzle-orm"
 import { text, timestamp } from "drizzle-orm/pg-core"
 
 import { authSchema } from "@/features/auth/schema/schema"
@@ -13,4 +14,4 @@ export const usersTable = authSchema.table("user", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 })
 
-export type User = typeof usersTable.$inferSelect
+export type User = InferSelectModel<typeof usersTable>

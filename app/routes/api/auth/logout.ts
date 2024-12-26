@@ -1,26 +1,29 @@
 import { createAPIFileRoute } from "@tanstack/start/api"
-import { parseCookies, setCookie, setHeader } from "vinxi/http"
+import { parseCookies, setHeader } from "vinxi/http"
 
-import { lucia } from "@/features/auth/lucia"
+import { invalidateSession, validateSessionToken } from "@/features/auth/api"
+import {
+  AUTH_COOKIE_NAME,
+  deleteSessionTokenCookie,
+} from "@/features/auth/cookies"
 
 export const APIRoute = createAPIFileRoute("/api/auth/logout")({
   POST: async () => {
     setHeader("Location", "/")
 
-    const sessionId = parseCookies()[lucia.sessionCookieName]
+    const sessionId = parseCookies()[AUTH_COOKIE_NAME]
     if (!sessionId) {
       return new Response(null, { status: 401 })
     }
 
-    const { session } = await lucia.validateSession(sessionId)
-    const sessionCookie = lucia.createBlankSessionCookie()
-    setCookie(sessionCookie.name, sessionCookie.value, sessionCookie.attributes)
+    const { session } = await validateSessionToken(sessionId)
+    deleteSessionTokenCookie()
 
     if (!session) {
       return new Response(null, { status: 401 })
     }
 
-    await lucia.invalidateSession(session.id)
+    await invalidateSession(session.id)
 
     return new Response(null, { status: 302 })
   },
