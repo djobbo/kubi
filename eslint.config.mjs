@@ -51,6 +51,32 @@ export default tseslint.config(
         { prefer: "type-imports", fixStyle: "separate-type-imports" },
       ],
       "no-console": "error",
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "MemberExpression[object.name='React']",
+          message:
+            "Use named imports for React exports instead of `React.<member>`.",
+        },
+        {
+          selector: "TSQualifiedName[left.name='React']",
+          message:
+            "Use named imports for React types instead of `React.<type>`.",
+        },
+      ],
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [
+            {
+              name: "react",
+              importNames: ["default"],
+              message:
+                "Avoid importing React as a default export. Use named imports instead.",
+            },
+          ],
+        },
+      ],
     },
   },
   {
@@ -102,6 +128,7 @@ export default tseslint.config(
             "require",
             "envField",
             "setHeader",
+            "query",
           ],
           useTsTypes: true,
           ignoreMethodsOnTypes: ["Map.get", "Map.has", "Set.has"],

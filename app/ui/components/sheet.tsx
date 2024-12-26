@@ -6,6 +6,7 @@ import type {
   ComponentPropsWithoutRef,
   ElementRef,
   HTMLAttributes,
+  RefObject,
 } from "react"
 
 import { cn } from "@/ui/lib/utils"
@@ -23,7 +24,7 @@ const SheetOverlay = ({
   className,
   ...props
 }: ComponentPropsWithoutRef<typeof SheetPrimitive.Overlay> & {
-  ref?: React.RefObject<ElementRef<typeof SheetPrimitive.Overlay>>
+  ref?: RefObject<ElementRef<typeof SheetPrimitive.Overlay>>
 }) => (
   <SheetPrimitive.Overlay
     className={cn(
@@ -64,7 +65,7 @@ const SheetContent = ({
   children,
   ...props
 }: SheetContentProps & {
-  ref?: React.RefObject<ElementRef<typeof SheetPrimitive.Content>>
+  ref?: RefObject<ElementRef<typeof SheetPrimitive.Content>>
 }) => (
   <SheetPortal>
     <SheetOverlay />
@@ -118,7 +119,7 @@ const SheetTitle = ({
   className,
   ...props
 }: ComponentPropsWithoutRef<typeof SheetPrimitive.Title> & {
-  ref: React.RefObject<ElementRef<typeof SheetPrimitive.Title>>
+  ref?: RefObject<ElementRef<typeof SheetPrimitive.Title>>
 }) => (
   <SheetPrimitive.Title
     ref={ref}
@@ -133,7 +134,7 @@ const SheetDescription = ({
   className,
   ...props
 }: ComponentPropsWithoutRef<typeof SheetPrimitive.Description> & {
-  ref: React.RefObject<ElementRef<typeof SheetPrimitive.Description>>
+  ref?: RefObject<ElementRef<typeof SheetPrimitive.Description>>
 }) => (
   <SheetPrimitive.Description
     ref={ref}

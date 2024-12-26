@@ -1,7 +1,12 @@
 import { Trans } from "@lingui/react/macro"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { XIcon } from "lucide-react"
-import * as React from "react"
+import type {
+  ComponentPropsWithoutRef,
+  ElementRef,
+  HTMLAttributes,
+  RefObject,
+} from "react"
 
 import { cn } from "@/ui/lib/utils"
 
@@ -17,8 +22,8 @@ const DialogOverlay = ({
   ref,
   className,
   ...props
-}: React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay> & {
-  ref?: React.RefObject<React.ElementRef<typeof DialogPrimitive.Overlay>>
+}: ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay> & {
+  ref?: RefObject<ElementRef<typeof DialogPrimitive.Overlay>>
 }) => (
   <DialogPrimitive.Overlay
     ref={ref}
@@ -36,8 +41,8 @@ const DialogContent = ({
   className,
   children,
   ...props
-}: React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
-  ref?: React.RefObject<React.ElementRef<typeof DialogPrimitive.Content>>
+}: ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
+  ref?: RefObject<ElementRef<typeof DialogPrimitive.Content>>
 }) => (
   <DialogPortal>
     <DialogOverlay />
@@ -64,7 +69,7 @@ DialogContent.displayName = DialogPrimitive.Content.displayName
 const DialogHeader = ({
   className,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
+}: HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
       "flex flex-col space-y-1.5 text-center sm:text-left",
@@ -78,7 +83,7 @@ DialogHeader.displayName = "DialogHeader"
 const DialogFooter = ({
   className,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
+}: HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
       "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
@@ -93,8 +98,8 @@ const DialogTitle = ({
   ref,
   className,
   ...props
-}: React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title> & {
-  ref: React.RefObject<React.ElementRef<typeof DialogPrimitive.Title>>
+}: ComponentPropsWithoutRef<typeof DialogPrimitive.Title> & {
+  ref?: RefObject<ElementRef<typeof DialogPrimitive.Title>>
 }) => (
   <DialogPrimitive.Title
     ref={ref}
@@ -111,8 +116,8 @@ const DialogDescription = ({
   ref,
   className,
   ...props
-}: React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description> & {
-  ref: React.RefObject<React.ElementRef<typeof DialogPrimitive.Description>>
+}: ComponentPropsWithoutRef<typeof DialogPrimitive.Description> & {
+  ref?: RefObject<ElementRef<typeof DialogPrimitive.Description>>
 }) => (
   <DialogPrimitive.Description
     ref={ref}

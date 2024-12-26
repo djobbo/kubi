@@ -8,17 +8,49 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as ExploreTablesImport } from './routes/explore/_tables'
+import { Route as ExploreTablesIndexImport } from './routes/explore/_tables/index'
+import { Route as ExploreTablesSchemaTableImport } from './routes/explore/_tables/$schema.$table'
+
+// Create Virtual Routes
+
+const ExploreImport = createFileRoute('/explore')()
 
 // Create/Update Routes
+
+const ExploreRoute = ExploreImport.update({
+  id: '/explore',
+  path: '/explore',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const ExploreTablesRoute = ExploreTablesImport.update({
+  id: '/_tables',
+  getParentRoute: () => ExploreRoute,
+} as any)
+
+const ExploreTablesIndexRoute = ExploreTablesIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ExploreTablesRoute,
+} as any)
+
+const ExploreTablesSchemaTableRoute = ExploreTablesSchemaTableImport.update({
+  id: '/$schema/$table',
+  path: '/$schema/$table',
+  getParentRoute: () => ExploreTablesRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -32,39 +64,109 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/explore': {
+      id: '/explore'
+      path: '/explore'
+      fullPath: '/explore'
+      preLoaderRoute: typeof ExploreImport
+      parentRoute: typeof rootRoute
+    }
+    '/explore/_tables': {
+      id: '/explore/_tables'
+      path: '/explore'
+      fullPath: '/explore'
+      preLoaderRoute: typeof ExploreTablesImport
+      parentRoute: typeof ExploreRoute
+    }
+    '/explore/_tables/': {
+      id: '/explore/_tables/'
+      path: '/'
+      fullPath: '/explore/'
+      preLoaderRoute: typeof ExploreTablesIndexImport
+      parentRoute: typeof ExploreTablesImport
+    }
+    '/explore/_tables/$schema/$table': {
+      id: '/explore/_tables/$schema/$table'
+      path: '/$schema/$table'
+      fullPath: '/explore/$schema/$table'
+      preLoaderRoute: typeof ExploreTablesSchemaTableImport
+      parentRoute: typeof ExploreTablesImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface ExploreTablesRouteChildren {
+  ExploreTablesIndexRoute: typeof ExploreTablesIndexRoute
+  ExploreTablesSchemaTableRoute: typeof ExploreTablesSchemaTableRoute
+}
+
+const ExploreTablesRouteChildren: ExploreTablesRouteChildren = {
+  ExploreTablesIndexRoute: ExploreTablesIndexRoute,
+  ExploreTablesSchemaTableRoute: ExploreTablesSchemaTableRoute,
+}
+
+const ExploreTablesRouteWithChildren = ExploreTablesRoute._addFileChildren(
+  ExploreTablesRouteChildren,
+)
+
+interface ExploreRouteChildren {
+  ExploreTablesRoute: typeof ExploreTablesRouteWithChildren
+}
+
+const ExploreRouteChildren: ExploreRouteChildren = {
+  ExploreTablesRoute: ExploreTablesRouteWithChildren,
+}
+
+const ExploreRouteWithChildren =
+  ExploreRoute._addFileChildren(ExploreRouteChildren)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/explore': typeof ExploreTablesRouteWithChildren
+  '/explore/': typeof ExploreTablesIndexRoute
+  '/explore/$schema/$table': typeof ExploreTablesSchemaTableRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/explore': typeof ExploreTablesIndexRoute
+  '/explore/$schema/$table': typeof ExploreTablesSchemaTableRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/explore': typeof ExploreRouteWithChildren
+  '/explore/_tables': typeof ExploreTablesRouteWithChildren
+  '/explore/_tables/': typeof ExploreTablesIndexRoute
+  '/explore/_tables/$schema/$table': typeof ExploreTablesSchemaTableRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/explore' | '/explore/' | '/explore/$schema/$table'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/explore' | '/explore/$schema/$table'
+  id:
+    | '__root__'
+    | '/'
+    | '/explore'
+    | '/explore/_tables'
+    | '/explore/_tables/'
+    | '/explore/_tables/$schema/$table'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ExploreRoute: typeof ExploreRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ExploreRoute: ExploreRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -77,11 +179,34 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/",
+        "/explore"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/explore": {
+      "filePath": "explore",
+      "children": [
+        "/explore/_tables"
+      ]
+    },
+    "/explore/_tables": {
+      "filePath": "explore/_tables.tsx",
+      "parent": "/explore",
+      "children": [
+        "/explore/_tables/",
+        "/explore/_tables/$schema/$table"
+      ]
+    },
+    "/explore/_tables/": {
+      "filePath": "explore/_tables/index.tsx",
+      "parent": "/explore/_tables"
+    },
+    "/explore/_tables/$schema/$table": {
+      "filePath": "explore/_tables/$schema.$table.tsx",
+      "parent": "/explore/_tables"
     }
   }
 }
