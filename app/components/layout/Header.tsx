@@ -1,9 +1,10 @@
+import { t } from "@lingui/core/macro"
 import { Link } from "@tanstack/react-router"
 
-import { CommandMenu } from "@/components/layout/CommandMenu"
 import { MainNav } from "@/components/layout/MainNav"
 import { MobileNav } from "@/components/layout/MobileNav"
 import { siteConfig } from "@/config/site"
+import { CommandMenu } from "@/features/command/components/CommandMenu"
 import { buttonVariants } from "@/ui/components/button"
 import { cn } from "@/ui/lib/utils"
 
@@ -15,7 +16,7 @@ export const Header = () => {
         <MobileNav />
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
           <div className="w-full flex-1 md:w-auto md:flex-none">
-            <CommandMenu />
+            <CommandMenu title={t`Search player...`} keyboardShortcut />
           </div>
           <nav className="flex items-center">
             {siteConfig.social.map((socialLink) => (

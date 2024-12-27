@@ -17,11 +17,24 @@ import {
 } from "@/ui/components/command"
 import { cn } from "@/ui/lib/utils"
 
-export const CommandMenu = ({ ...props }: DialogProps) => {
+interface CommandMenuProps extends DialogProps {
+  title?: string
+  titleShort?: string
+  keyboardShortcut?: boolean
+}
+
+export const CommandMenu = ({
+  title = t`Search...`,
+  titleShort = t`Search...`,
+  keyboardShortcut = false,
+  ...props
+}: CommandMenuProps) => {
   const router = useRouter()
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
+    if (!keyboardShortcut) return
+
     const down = (e: KeyboardEvent) => {
       if ((e.key === "k" && (e.metaKey || e.ctrlKey)) || e.key === "/") {
         if (
@@ -40,7 +53,7 @@ export const CommandMenu = ({ ...props }: DialogProps) => {
 
     document.addEventListener("keydown", down)
     return () => document.removeEventListener("keydown", down)
-  }, [])
+  }, [keyboardShortcut])
 
   const runCommand = useCallback((command: () => unknown) => {
     setOpen(false)
@@ -57,12 +70,8 @@ export const CommandMenu = ({ ...props }: DialogProps) => {
         onClick={() => setOpen(true)}
         {...props}
       >
-        <span className="hidden lg:inline-flex">
-          <Trans>Search documentation...</Trans>
-        </span>
-        <span className="inline-flex lg:hidden">
-          <Trans>Search...</Trans>
-        </span>
+        <span className="hidden lg:inline-flex">{title}</span>
+        <span className="inline-flex lg:hidden">{titleShort}</span>
         <kbd className="pointer-events-none absolute right-[0.3rem] top-[0.3rem] hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
           <span className="text-xs">⌘</span>
           <Trans>K</Trans>

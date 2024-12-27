@@ -23,6 +23,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       const session = await getSession()
       return { session }
     },
+    loader: async ({ context: { session } }) => {
+      return {
+        session,
+      }
+    },
     component: RootComponent,
     head: () => {
       return {
@@ -35,8 +40,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           },
           { name: "theme-color", content: "#ffffff" },
           ...seo({
-            title: t`Kubi`,
-            description: t`Kubi`,
+            title: t`Track your Brawlhalla stats, view rankings, and more! • Corehalla`,
+            description: t`Improve your Brawlhalla Game, and find your place among the Elite with our in-depth Player and Clan stats tracking and live leaderboards.`,
           }),
         ],
         links: [

@@ -18,7 +18,7 @@ export const envField = <T>(
 
   if (isWrongContext) {
     throw new Error(
-      `Environment variable ${variable} should not be used in the client`,
+      `Environment variable ${name} should not be used in the client`,
     )
   }
 

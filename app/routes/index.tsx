@@ -2,22 +2,17 @@ import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
 import { createFileRoute, useRouter } from "@tanstack/react-router"
 
+import { useAuth } from "@/features/auth/use-auth"
 import { Button } from "@/ui/components/button"
 
 export const Route = createFileRoute("/")({
   component: Home,
-  loader: async ({ context: { session } }) => {
-    return {
-      session,
-    }
-  },
 })
 
 function Home() {
   const router = useRouter()
-  const { session } = Route.useLoaderData()
+  const { user } = useAuth()
 
-  const { user } = session
   const username = user?.name ?? t`User`
 
   return (

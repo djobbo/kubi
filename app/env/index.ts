@@ -32,6 +32,35 @@ export const env = {
     process.env.NODE_ENV ?? "development",
     z.enum(["development", "production"]).default("development"),
   ),
+  BRAWLHALLA_API_KEY: envField(
+    "Brawlhalla API Key",
+    process.env.BRAWLHALLA_API_KEY,
+    z.string().min(1),
+  ),
+  SOCIAL_DISCORD_URL: envField(
+    "Social Discord URL",
+    process.env.SOCIAL_DISCORD_URL,
+    z.string().min(1),
+    "client",
+  ),
+  SOCIAL_TWITTER_URL: envField(
+    "Social Twitter URL",
+    process.env.SOCIAL_TWITTER_URL,
+    z.string().min(1),
+    "client",
+  ),
+  SOCIAL_GITHUB_URL: envField(
+    "Social GitHub URL",
+    process.env.SOCIAL_GITHUB_URL,
+    z.string().min(1),
+    "client",
+  ),
+  SOCIAL_KOFI_URL: envField(
+    "Social Ko-fi URL",
+    process.env.SOCIAL_KOFI_URL,
+    z.string().min(1),
+    "client",
+  ),
 }
 
 loadEnv({ path: ".env" })
