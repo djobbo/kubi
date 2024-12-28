@@ -9,10 +9,18 @@ import {
 } from "@tanstack/react-router"
 import { TanStackRouterDevtools } from "@tanstack/router-devtools"
 import { Meta, Scripts } from "@tanstack/start"
+import { KBarProvider } from "kbar"
 import { type ReactNode } from "react"
+import { Toaster } from "react-hot-toast"
 
+import { AnimatedLogo } from "@/components/base/AnimatedLogo"
+import { PageLoader } from "@/components/base/PageLoader"
 import { Header } from "@/components/layout/Header"
 import { getSession } from "@/features/auth/functions/getSession"
+import { BackToTopButton } from "@/features/brawlhalla/components/BackToTopButton"
+import { Layout } from "@/features/brawlhalla/components/layout/Layout"
+import { Searchbox } from "@/features/brawlhalla/components/search/Searchbox"
+import { SideNavProvider } from "@/features/sidenav/sidenav-provider"
 // @ts-expect-error - CSS is not typed
 import globalStyles from "@/global.css?url"
 import { seo } from "@/helpers/seo"
@@ -42,6 +50,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           ...seo({
             title: t`Track your Brawlhalla stats, view rankings, and more! • Corehalla`,
             description: t`Improve your Brawlhalla Game, and find your place among the Elite with our in-depth Player and Clan stats tracking and live leaderboards.`,
+            image: "/assets/images/og/main-og.jpg",
           }),
         ],
         links: [
@@ -62,20 +71,46 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 function RootComponent() {
   return (
     <RootDocument>
-      <div className="flex h-screen w-full flex-col bg-muted/40">
-        <Header />
-        <main className="flex h-[calc(100vh_-_theme(spacing.16))] flex-1 mx-1 mb-1">
-          <div className="hidden md:block w-60 flex-shrink-0 p-4">
-            <Trans>Sidenav</Trans>
-          </div>
-          <div className="flex-1 bg-background p-4 md:p-10 border rounded-lg overflow-scroll">
+      {/* TODO: GAscripts */}
+      {/* <GAScripts /> */}
+      <KBarProvider actions={[]} options={{}}>
+        <SideNavProvider>
+          <PageLoader>
+            <div className="flex items-center gap-4">
+              <span className="text-sm">
+                <Trans>Loading...</Trans>
+              </span>
+              <AnimatedLogo size={32} />
+            </div>
+          </PageLoader>
+          <Toaster />
+          <Layout>
             <Outlet />
-          </div>
-        </main>
-      </div>
+          </Layout>
+          <Searchbox />
+          <BackToTopButton />
+        </SideNavProvider>
+      </KBarProvider>
     </RootDocument>
   )
 }
+// function RootComponent() {
+//   return (
+//     <RootDocument>
+//       <div className="flex h-screen w-full flex-col bg-muted/40">
+//         <Header />
+//         <main className="flex h-[calc(100vh_-_theme(spacing.16))] flex-1 mx-1 mb-1">
+//           <div className="hidden md:block w-60 flex-shrink-0 p-4">
+//             <Trans>Sidenav</Trans>
+//           </div>
+//           <div className="flex-1 bg-background p-4 md:p-10 border rounded-lg overflow-scroll">
+//             <Outlet />
+//           </div>
+//         </main>
+//       </div>
+//     </RootDocument>
+//   )
+// }
 
 function RootDocument({ children }: { children: ReactNode }) {
   return (

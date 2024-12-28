@@ -1,4 +1,3 @@
-import { useSideNav } from "@ctx/SideNavProvider"
 import {
   SiDiscord as DiscordIcon,
   SiGithub as GithubIcon,
@@ -9,9 +8,10 @@ import { Trans } from "@lingui/react/macro"
 import { Link, useRouterState } from "@tanstack/react-router"
 import { Menu } from "lucide-react"
 
-import { Button } from "@/components/base/Button"
 import { useAuth } from "@/features/auth/use-auth"
 import { Image } from "@/features/brawlhalla/components/Image"
+import { useSideNav } from "@/features/sidenav/sidenav-provider"
+import { Button } from "@/ui/components/button"
 import { cn } from "@/ui/lib/utils"
 
 import { SearchButton, SearchButtonIcon } from "../search/SearchButton"

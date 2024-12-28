@@ -4,12 +4,13 @@ import {
 } from "@icons-pack/react-simple-icons"
 import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
+import { Link } from "@tanstack/react-router"
 import { ArrowRight } from "lucide-react"
 import { useEffect, useRef } from "react"
 
-import { Button } from "@/components/base/Button"
 import { Image } from "@/features/brawlhalla/components/Image"
 import { clamp } from "@/helpers/math"
+import { Button } from "@/ui/components/button"
 
 export const DiscordCard = () => {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -103,16 +104,15 @@ export const DiscordCard = () => {
             </a>
           </div>
           <div className="flex gap-2 justify-end p-4">
-            <Button as="a" href="/discord" target="_blank">
-              <DiscordIcon size="16" className="mr-2" /> <Trans>Join</Trans>
+            <Button asChild>
+              <Link to="/discord" target="_blank">
+                <DiscordIcon size="16" className="mr-2" /> <Trans>Join</Trans>
+              </Link>
             </Button>
-            <Button
-              as="a"
-              href="/donate"
-              target="_blank"
-              className="bg-accentAlt"
-            >
-              <KofiIcon size="16" className="mr-2" /> <Trans>Donate</Trans>
+            <Button asChild variant="outline">
+              <Link to="/donate" target="_blank" className="bg-accentAlt">
+                <KofiIcon size="16" className="mr-2" /> <Trans>Donate</Trans>
+              </Link>
             </Button>
           </div>
         </div>

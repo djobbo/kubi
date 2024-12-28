@@ -1,10 +1,7 @@
-import { usePlayerSearch } from "@hooks/stats/usePlayerSearch"
 import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
 import { css } from "@stitches/react"
-import { MAX_SHOWN_ALIASES } from "@util/constants"
-import { trpc } from "@util/trpc"
-import { gaEvent } from "common/analytics/gtag"
+import { queryOptions, useQuery } from "@tanstack/react-query"
 import {
   KBarAnimator,
   KBarPortal,
@@ -13,8 +10,7 @@ import {
   useKBar,
 } from "kbar"
 import { ArrowUp, UserRound } from "lucide-react"
-import { useEffect, useState } from "react"
-import { z } from "zod"
+import { useEffect } from "react"
 
 import { Spinner } from "@/components/base/Spinner"
 import { cleanString } from "@/helpers/cleanString"
@@ -22,7 +18,8 @@ import { useDebouncedState } from "@/hooks/useDebouncedState"
 import { cn } from "@/ui/lib/utils"
 import { styled, theme } from "@/ui/theme"
 
-import type { Ranking1v1 } from "../../api/schema/rankings"
+import { searchPlayer } from "../../api/functions"
+import { MAX_SHOWN_ALIASES } from "../../constants/aliases"
 import { RankedPlayerItem } from "./RankedPlayerItem"
 import { SearchboxItem } from "./SearchboxItem"
 
@@ -70,24 +67,33 @@ const AliasesSubtitle = ({
   )
 }
 
+export const usePlayerSearch = (name: string) => {
+  return useQuery(
+    queryOptions({
+      queryKey: ["player-search", name],
+      queryFn: async () => {
+        const search = await searchPlayer({
+          data: name,
+        })
+
+        return search
+      },
+    }),
+  )
+}
+
 export const Searchbox = () => {
-  const [rankings, setRankings] = useState<Ranking1v1[]>([])
   const [search, setSearch, immediateSearch, isDebouncingSearch] =
     useDebouncedState("", __DEV ? 250 : 750)
 
-  const { rankings1v1, aliases, isLoading } = usePlayerSearch(search)
+  const playerSearchQuery = usePlayerSearch(search)
 
-  const isPotentialBrawlhallaId = z
-    .string()
-    .regex(/^[0-9]+$/)
-    .safeParse(search).success
-
-  const { data: potentialBrawlhallaIdAliases } = trpc.getPlayerAliases.useQuery(
-    { playerId: search },
-    {
-      enabled: isPotentialBrawlhallaId,
-    },
-  )
+  const { data, isLoading } = playerSearchQuery
+  const {
+    rankings = [],
+    aliases = [],
+    potentialBrawlhallaIdPlayer = null,
+  } = data ?? {}
 
   const {
     query: { toggle },
@@ -108,21 +114,15 @@ export const Searchbox = () => {
     return () => document.removeEventListener("keydown", onKeyDown)
   }, [toggle])
 
-  useEffect(() => {
-    if (isLoading) return
+  const filteredRankings =
+    rankings?.filter((player) =>
+      player.name.toLowerCase().startsWith(immediateSearch.toLowerCase()),
+    ) ?? []
 
-    gaEvent({
-      action: "use_searchbox",
-      category: "app",
-      label: `player ${search}`,
-    })
-
-    setRankings(rankings1v1 ?? [])
-  }, [rankings1v1, isLoading, search])
-
-  const filteredRankings = rankings.filter((player) =>
-    player.name.toLowerCase().startsWith(immediateSearch.toLowerCase()),
-  )
+  const hasResults =
+    filteredRankings.length > 0 ||
+    aliases.length > 0 ||
+    !!potentialBrawlhallaIdPlayer
 
   const categoryTitleClassName = "text-xs font-semibold text-textVar1 px-4 py-2"
 
@@ -159,12 +159,9 @@ export const Searchbox = () => {
             {/* TODO: add tabs for searching for clans, tournaments, etc */}
             <ResultsContainer className="overflow-y-auto">
               <div className="max-h-[50vh] my-2">
-                {immediateSearch &&
-                (rankings.length > 0 ||
-                  aliases.length > 0 ||
-                  isPotentialBrawlhallaId) ? (
+                {hasResults ? (
                   <>
-                    {isPotentialBrawlhallaId && (
+                    {potentialBrawlhallaIdPlayer && (
                       <>
                         <p className={categoryTitleClassName}>
                           <Trans>Search by Brawlhalla ID</Trans>
@@ -176,7 +173,7 @@ export const Searchbox = () => {
                           subtitle={
                             <AliasesSubtitle
                               immediateSearch={immediateSearch}
-                              aliases={potentialBrawlhallaIdAliases?.slice(
+                              aliases={potentialBrawlhallaIdPlayer.aliases?.slice(
                                 0,
                                 MAX_SHOWN_ALIASES,
                               )}

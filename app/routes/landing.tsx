@@ -1,7 +1,7 @@
 import { SiDiscord as DiscordIcon } from "@icons-pack/react-simple-icons"
 import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute, Link } from "@tanstack/react-router"
 import { ArrowRight } from "lucide-react"
 import { Suspense } from "react"
 
@@ -77,23 +77,23 @@ function Home() {
             </Trans>
           </p>
           <div className="mt-8 flex items-center gap-3 sm:gap-6 flex-col sm:flex-row">
-            <CommandMenu title={t`Search player...`} />
+            <SearchButton />
+            {/* <CommandMenu title={t`Search player...`} /> */}
             <span className="text-textVar1 text-sm sm:text-base">or</span>
             <div className="flex items-center gap-2">
-              <Button
-                as="a"
-                href="/rankings"
-                className="whitespace-nowrap font-semibold"
-              >
-                <Trans>View rankings</Trans>
+              <Button asChild className="whitespace-nowrap font-semibold">
+                <Link to="/rankings">
+                  <Trans>View rankings</Trans>
+                </Link>
               </Button>
               <Button
-                as="a"
-                buttonStyle="outline"
-                href="/rankings/2v2"
+                asChild
+                variant="outline"
                 className="whitespace-nowrap font-semibold"
               >
-                <Trans>2v2</Trans>
+                <Link to="/rankings/2v2">
+                  <Trans>2v2</Trans>
+                </Link>
               </Button>
             </div>
           </div>

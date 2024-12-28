@@ -5,9 +5,10 @@ import {
 } from "@icons-pack/react-simple-icons"
 import { Trans } from "@lingui/react/macro"
 import { Link } from "@tanstack/react-router"
+import { X } from "lucide-react"
 
-import { Button } from "@/components/base/Button"
 import { useLocalStorageState } from "@/hooks/useLocalStorageState"
+import { Button } from "@/ui/components/button"
 
 export const FirstTimePopup = () => {
   const [showPopup, setShowPopup] = useLocalStorageState(
@@ -66,7 +67,7 @@ export const FirstTimePopup = () => {
           setShowPopup(false)
         }}
       >
-        <CloseIcon size={16} />
+        <X size={16} />
       </button>
     </div>
   )

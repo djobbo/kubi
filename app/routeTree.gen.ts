@@ -14,8 +14,8 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as LandingImport } from './routes/landing'
 import { Route as IndexImport } from './routes/index'
 import { Route as socialTwitterImport } from './routes/(social)/twitter'
-import { Route as socialKofiImport } from './routes/(social)/kofi'
 import { Route as socialGithubImport } from './routes/(social)/github'
+import { Route as socialDonateImport } from './routes/(social)/donate'
 import { Route as socialDiscordImport } from './routes/(social)/discord'
 import { Route as StatsPlayerPlayerIdImport } from './routes/stats/player/$playerId'
 import { Route as StatsClanClanIdImport } from './routes/stats/clan/$clanId'
@@ -40,15 +40,15 @@ const socialTwitterRoute = socialTwitterImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const socialKofiRoute = socialKofiImport.update({
-  id: '/(social)/kofi',
-  path: '/kofi',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const socialGithubRoute = socialGithubImport.update({
   id: '/(social)/github',
   path: '/github',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const socialDonateRoute = socialDonateImport.update({
+  id: '/(social)/donate',
+  path: '/donate',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -95,18 +95,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof socialDiscordImport
       parentRoute: typeof rootRoute
     }
+    '/(social)/donate': {
+      id: '/(social)/donate'
+      path: '/donate'
+      fullPath: '/donate'
+      preLoaderRoute: typeof socialDonateImport
+      parentRoute: typeof rootRoute
+    }
     '/(social)/github': {
       id: '/(social)/github'
       path: '/github'
       fullPath: '/github'
       preLoaderRoute: typeof socialGithubImport
-      parentRoute: typeof rootRoute
-    }
-    '/(social)/kofi': {
-      id: '/(social)/kofi'
-      path: '/kofi'
-      fullPath: '/kofi'
-      preLoaderRoute: typeof socialKofiImport
       parentRoute: typeof rootRoute
     }
     '/(social)/twitter': {
@@ -139,8 +139,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/landing': typeof LandingRoute
   '/discord': typeof socialDiscordRoute
+  '/donate': typeof socialDonateRoute
   '/github': typeof socialGithubRoute
-  '/kofi': typeof socialKofiRoute
   '/twitter': typeof socialTwitterRoute
   '/stats/clan/$clanId': typeof StatsClanClanIdRoute
   '/stats/player/$playerId': typeof StatsPlayerPlayerIdRoute
@@ -150,8 +150,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/landing': typeof LandingRoute
   '/discord': typeof socialDiscordRoute
+  '/donate': typeof socialDonateRoute
   '/github': typeof socialGithubRoute
-  '/kofi': typeof socialKofiRoute
   '/twitter': typeof socialTwitterRoute
   '/stats/clan/$clanId': typeof StatsClanClanIdRoute
   '/stats/player/$playerId': typeof StatsPlayerPlayerIdRoute
@@ -162,8 +162,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/landing': typeof LandingRoute
   '/(social)/discord': typeof socialDiscordRoute
+  '/(social)/donate': typeof socialDonateRoute
   '/(social)/github': typeof socialGithubRoute
-  '/(social)/kofi': typeof socialKofiRoute
   '/(social)/twitter': typeof socialTwitterRoute
   '/stats/clan/$clanId': typeof StatsClanClanIdRoute
   '/stats/player/$playerId': typeof StatsPlayerPlayerIdRoute
@@ -175,8 +175,8 @@ export interface FileRouteTypes {
     | '/'
     | '/landing'
     | '/discord'
+    | '/donate'
     | '/github'
-    | '/kofi'
     | '/twitter'
     | '/stats/clan/$clanId'
     | '/stats/player/$playerId'
@@ -185,8 +185,8 @@ export interface FileRouteTypes {
     | '/'
     | '/landing'
     | '/discord'
+    | '/donate'
     | '/github'
-    | '/kofi'
     | '/twitter'
     | '/stats/clan/$clanId'
     | '/stats/player/$playerId'
@@ -195,8 +195,8 @@ export interface FileRouteTypes {
     | '/'
     | '/landing'
     | '/(social)/discord'
+    | '/(social)/donate'
     | '/(social)/github'
-    | '/(social)/kofi'
     | '/(social)/twitter'
     | '/stats/clan/$clanId'
     | '/stats/player/$playerId'
@@ -207,8 +207,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LandingRoute: typeof LandingRoute
   socialDiscordRoute: typeof socialDiscordRoute
+  socialDonateRoute: typeof socialDonateRoute
   socialGithubRoute: typeof socialGithubRoute
-  socialKofiRoute: typeof socialKofiRoute
   socialTwitterRoute: typeof socialTwitterRoute
   StatsClanClanIdRoute: typeof StatsClanClanIdRoute
   StatsPlayerPlayerIdRoute: typeof StatsPlayerPlayerIdRoute
@@ -218,8 +218,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LandingRoute: LandingRoute,
   socialDiscordRoute: socialDiscordRoute,
+  socialDonateRoute: socialDonateRoute,
   socialGithubRoute: socialGithubRoute,
-  socialKofiRoute: socialKofiRoute,
   socialTwitterRoute: socialTwitterRoute,
   StatsClanClanIdRoute: StatsClanClanIdRoute,
   StatsPlayerPlayerIdRoute: StatsPlayerPlayerIdRoute,
@@ -238,8 +238,8 @@ export const routeTree = rootRoute
         "/",
         "/landing",
         "/(social)/discord",
+        "/(social)/donate",
         "/(social)/github",
-        "/(social)/kofi",
         "/(social)/twitter",
         "/stats/clan/$clanId",
         "/stats/player/$playerId"
@@ -254,11 +254,11 @@ export const routeTree = rootRoute
     "/(social)/discord": {
       "filePath": "(social)/discord.tsx"
     },
+    "/(social)/donate": {
+      "filePath": "(social)/donate.tsx"
+    },
     "/(social)/github": {
       "filePath": "(social)/github.tsx"
-    },
-    "/(social)/kofi": {
-      "filePath": "(social)/kofi.tsx"
     },
     "/(social)/twitter": {
       "filePath": "(social)/twitter.tsx"

@@ -6,12 +6,12 @@ import { ExternalLink, UserRoundMinus, UserRoundPlus } from "lucide-react"
 import type { ReactNode } from "react"
 import toast from "react-hot-toast"
 
-import { Button } from "@/components/base/Button"
 import type { Bookmark } from "@/db/schema"
 import { useAuth } from "@/features/auth/use-auth"
 import { useBookmarks } from "@/features/bookmarks/use-bookmarks"
 import { cleanString } from "@/helpers/cleanString"
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard"
+import { Button } from "@/ui/components/button"
 import { cn } from "@/ui/lib/utils"
 
 import type { MiscStat } from "./MiscStatGroup"
@@ -57,7 +57,7 @@ export const StatsHeader = ({
         {isLoggedIn ? (
           bookmark && (
             <Button
-              buttonStyle={isItemFavorite ? "outline" : "primary"}
+              variant={isItemFavorite ? "outline" : "default"}
               onClick={() => {
                 if (isItemFavorite) return deleteBookmark(bookmark)
                 addBookmark(bookmark)
@@ -77,13 +77,13 @@ export const StatsHeader = ({
             </Button>
           )
         ) : (
-          <Button buttonStyle="primary" onClick={signIn}>
+          <Button onClick={signIn}>
             <DiscordIcon size="16" className="mr-2" />{" "}
             <Trans>Sign in to add favorites</Trans>
           </Button>
         )}
         <Button
-          buttonStyle="outline"
+          variant="outline"
           onClick={() => {
             copyToClipboard(window.location.href)
             toast(t`Copied link to clipboard!`, {

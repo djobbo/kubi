@@ -12,7 +12,12 @@ export const rankedRegions = [
   "sa",
   "me",
 ] as const
+const upperCaseRankedRegions = rankedRegions.map(
+  (region) => region.toUpperCase() as Uppercase<(typeof rankedRegions)[number]>,
+)
 
-export const rankedRegionSchema = z.enum(rankedRegions).catch("all")
+export const rankedRegionSchema = z
+  .enum([...rankedRegions, ...upperCaseRankedRegions])
+  .catch("all")
 
-export type RankedRegion = (typeof rankedRegions)[number]
+export type RankedRegion = z.infer<typeof rankedRegionSchema>

@@ -1,5 +1,7 @@
 import amimate from "tailwindcss-animate"
 
+import colors from "@/ui/theme/theme"
+
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: ["class"],
@@ -12,6 +14,7 @@ export default {
     },
     extend: {
       colors: {
+        ...colors,
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -64,6 +67,9 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      screens: {
+        hashover: { raw: "(hover: hover)" },
       },
     },
   },
