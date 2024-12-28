@@ -15,4 +15,4 @@ export const rankedRegions = [
 
 export const rankedRegionSchema = z.enum(rankedRegions).catch("all")
 
-export type RankedRegion = z.infer<typeof rankedRegionSchema>
+export type RankedRegion = (typeof rankedRegions)[number]

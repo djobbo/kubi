@@ -3,7 +3,7 @@ import type { FullWeapon } from "bhapi/legends"
 import type { JSX } from "react"
 
 import { Card } from "@/components/base/Card"
-import { Image } from "@/features/brawlhalla/components/Image"
+import { WeaponIcon } from "@/features/brawlhalla/components/Image"
 import { formatTime } from "@/helpers/date"
 
 import { CollapsibleContent } from "../../../layout/CollapsibleContent"
@@ -111,8 +111,8 @@ export const Weapon = ({
         <span className="flex items-center justify-between w-full">
           <span className="flex items-center gap-2">
             <span className="text-sm text-textVar1">{rank}</span>
-            <Image
-              src={`/images/icons/weapons/${weapon.weapon}.png`}
+            <WeaponIcon
+              weapon={weapon.weapon}
               alt={weapon.weapon}
               Container="span"
               containerClassName="block w-6 h-6"

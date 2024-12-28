@@ -1,12 +1,15 @@
 import { z } from "zod"
 
+import { rankedRegionSchema } from "../../constants/ranked/regions"
+import { rankedTierSchema } from "../../constants/ranked/tiers"
+
 const rankingSchema = z.strictObject({
   rank: z.number(),
   rating: z.number(),
-  tier: z.string(),
+  tier: rankedTierSchema,
   games: z.number(),
   wins: z.number(),
-  region: z.string(),
+  region: rankedRegionSchema,
   peak_rating: z.number(),
 })
 

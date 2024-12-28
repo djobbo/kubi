@@ -10,18 +10,29 @@ const pwaConfig = VitePWA({
   devOptions: { enabled: true },
   workbox: { globPatterns: ["**/*.{js,css,html,ico,png,svg}"] },
   manifest: {
-    name: "Kubi",
-    short_name: "kubi",
-    description: "Kubi",
-    theme_color: "#ffffff",
+    name: "Corehalla",
+    short_name: "corehalla",
+    description:
+      "Track your Brawlhalla stats, view rankings, and more! • Corehalla",
+    theme_color: "#f69435",
     icons: [
       {
-        src: "pwa-192x192.png",
+        src: "/icons/icon-192x192.png",
         sizes: "192x192",
         type: "image/png",
       },
       {
-        src: "pwa-512x512.png",
+        src: "/icons/icon-256x256.png",
+        sizes: "256x256",
+        type: "image/png",
+      },
+      {
+        src: "/icons/icon-384x384.png",
+        sizes: "384x384",
+        type: "image/png",
+      },
+      {
+        src: "/icons/icon-512x512.png",
         sizes: "512x512",
         type: "image/png",
       },

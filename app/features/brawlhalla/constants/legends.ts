@@ -775,4 +775,6 @@ export const legends = [
   },
 ] as const satisfies Legend[]
 
+export type LegendNameKey = (typeof legends)[number]["legend_name_key"]
+
 export const legendsMap = arrayToMap(legends as Legend[], "legend_id")

@@ -27,7 +27,7 @@ export const ErrorPageContent = ({
       <SectionTitle className="text-center">{title}</SectionTitle>
       {!!statusCode && (
         <Image
-          src={`/images/errors/${statusCode}.png`}
+          src={`assets/images/errors/error-${statusCode}.png`}
           alt={t`${statusCode} Error`}
           containerClassName="w-full h-full min-h-[240px] md:min-h-[400px]"
           className="object-contain object-center"

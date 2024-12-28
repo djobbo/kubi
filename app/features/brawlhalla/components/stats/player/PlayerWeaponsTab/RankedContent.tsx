@@ -3,7 +3,7 @@ import { Trans } from "@lingui/react/macro"
 import type { FullLegend, FullWeapon } from "bhapi/legends"
 import { memo } from "react"
 
-import { Image } from "@/features/brawlhalla/components/Image"
+import { Image, LegendIcon } from "@/features/brawlhalla/components/Image"
 import { calculateWinrate } from "@/features/brawlhalla/helpers/winrate"
 
 import { SectionTitle } from "../../../layout/SectionTitle"
@@ -93,8 +93,8 @@ export const PlayerWeaponRankedContent = memo(
         name: t`Most played`,
         value: ranked.mostPlayedLegend ? (
           <div className="flex items-center gap-2">
-            <Image
-              src={`/images/icons/roster/legends/${ranked.mostPlayedLegend.legend_name_key}.png`}
+            <LegendIcon
+              legendNameKey={ranked.mostPlayedLegend.legend_name_key}
               alt={ranked.mostPlayedLegend.bio_name}
               containerClassName="w-8 h-8 overflow-hidden rounded-sm"
               className="object-contain object-center"
@@ -111,8 +111,8 @@ export const PlayerWeaponRankedContent = memo(
         value: ranked.highestRatedLegend ? (
           <div className="flex items-center gap-2">
             <div>
-              <Image
-                src={`/images/icons/roster/legends/${ranked.highestRatedLegend.legend_name_key}.png`}
+              <LegendIcon
+                legendNameKey={ranked.highestRatedLegend.legend_name_key}
                 alt={ranked.highestRatedLegend.bio_name}
                 containerClassName="w-8 h-8 overflow-hidden rounded-sm"
                 className="object-contain object-center"
@@ -129,8 +129,8 @@ export const PlayerWeaponRankedContent = memo(
         name: t`Highest peak elo`,
         value: ranked.highestPeakRatedLegend ? (
           <div className="flex items-center gap-2">
-            <Image
-              src={`/images/icons/roster/legends/${ranked.highestPeakRatedLegend.legend_name_key}.png`}
+            <LegendIcon
+              legendNameKey={ranked.highestPeakRatedLegend.legend_name_key}
               alt={ranked.highestPeakRatedLegend.bio_name}
               containerClassName="w-8 h-8 overflow-hidden rounded-sm"
               className="object-contain object-center"

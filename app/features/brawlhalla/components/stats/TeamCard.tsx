@@ -2,7 +2,10 @@ import { t } from "@lingui/core/macro"
 import { Link } from "@tanstack/react-router"
 
 import { Card } from "@/components/base/Card"
-import { Image } from "@/features/brawlhalla/components/Image"
+import {
+  FlagIcon,
+  RankedTierImage,
+} from "@/features/brawlhalla/components/Image"
 import { cleanString } from "@/helpers/cleanString"
 import { cn } from "@/ui/lib/utils"
 import { css } from "@/ui/theme"
@@ -36,7 +39,7 @@ export const TeamCard = ({ playerId, team }: TeamCardProps) => {
   if (!teamData) return null
 
   const { playerName, teammate } = teamData
-  const regionTxt = rankedRegions[team.region - 1]?.toUpperCase() ?? "ALL"
+  const regionTxt = rankedRegions[team.region - 1] ?? "all"
   const eloReset = getLegendEloReset(team.rating)
   const eloResetTier = getTierFromRating(eloReset)
 
@@ -46,8 +49,8 @@ export const TeamCard = ({ playerId, team }: TeamCardProps) => {
         className="relative overflow-hidden z-0 hover:bg-bgVar2 border border-bg"
         title={
           <span className="flex items-center">
-            <Image
-              src={`/images/icons/flags/${regionTxt}.png`}
+            <FlagIcon
+              region={regionTxt}
               alt={regionTxt}
               Container="span"
               containerClassName="block w-4 h-4 rounded overflow-hidden mr-2"
@@ -57,8 +60,9 @@ export const TeamCard = ({ playerId, team }: TeamCardProps) => {
           </span>
         }
       >
-        <Image
-          src={`/images/ranked-banners/${team.tier}.png`}
+        <RankedTierImage
+          type="banner"
+          tier={team.tier}
           alt={team.tier}
           containerClassName={cn(" w-full", rankedBannerClassName)}
           position="absolute"

@@ -87,11 +87,11 @@ function RouteComponent() {
         name={cleanString(clan.clan_name)}
         id={clan.clan_id}
         miscStats={clanStats}
-        favorite={{
-          type: "clan",
-          id: clan.clan_id.toString(),
+        bookmark={{
+          pageType: "clan_stats",
+          pageId: clan.clan_id.toString(),
           name: cleanString(clan.clan_name),
-          meta: {},
+          meta: { type: "clan_stats" },
         }}
       />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">

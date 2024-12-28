@@ -54,10 +54,9 @@ export const Header = ({ className }: HeaderProps) => {
               className="relative rounded-lg w-32 h-8 overflow-hidden"
             >
               <Image
-                src="/images/logo.png"
+                src="/assets/images/brand/logos/logo-text.png"
                 alt={t`Corehalla logo`}
                 className="object-contain object-center"
-                Container={null}
               />
             </Link>
           </div>
@@ -76,7 +75,6 @@ export const Header = ({ className }: HeaderProps) => {
                         alt={userProfile.username}
                         containerClassName="rounded-lg w-8 h-8 overflow-hidden"
                         className="object-cover object-center"
-                        unoptimized
                       />
                     </div>
                   </>

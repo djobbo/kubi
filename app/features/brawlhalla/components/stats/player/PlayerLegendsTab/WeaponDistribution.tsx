@@ -2,7 +2,7 @@ import { t } from "@lingui/core/macro"
 import type { FullLegend } from "bhapi/legends"
 
 import { Card } from "@/components/base/Card"
-import { Image } from "@/features/brawlhalla/components/Image"
+import { Image, WeaponIcon } from "@/features/brawlhalla/components/Image"
 import { formatTime } from "@/helpers/date"
 
 import { CollapsibleSection } from "../../../layout/CollapsibleSection"
@@ -48,9 +48,8 @@ export const PlayerLegendWeaponDistribution = ({
             key={weapon.weapon}
             title={
               <span className="flex gap-2 items-center">
-                <Image
-                  key={weapon.weapon}
-                  src={`/images/icons/weapons/${weapon.weapon}.png`}
+                <WeaponIcon
+                  weapon={weapon.weapon}
                   alt={weapon.weapon}
                   Container="span"
                   containerClassName="block w-6 h-6"

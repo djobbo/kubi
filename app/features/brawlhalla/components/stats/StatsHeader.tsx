@@ -7,6 +7,7 @@ import type { ReactNode } from "react"
 import toast from "react-hot-toast"
 
 import { Button } from "@/components/base/Button"
+import type { Bookmark } from "@/db/schema"
 import { useAuth } from "@/features/auth/use-auth"
 import { useBookmarks } from "@/features/bookmarks/use-bookmarks"
 import { cleanString } from "@/helpers/cleanString"
@@ -22,7 +23,7 @@ interface StatsHeaderProps {
   icon?: ReactNode
   aliases?: string[]
   miscStats?: MiscStat[]
-  favorite?: Favorite
+  bookmark?: Bookmark
 }
 
 export const StatsHeader = ({
@@ -31,20 +32,21 @@ export const StatsHeader = ({
   icon,
   aliases,
   miscStats,
-  favorite,
+  bookmark,
 }: StatsHeaderProps) => {
   const { isLoggedIn, signIn } = useAuth()
-  const { addBookmark, isFavorite, deleteBookmark } = useBookmarks()
+  const { addBookmark, isBookmarked, deleteBookmark } = useBookmarks()
   const copyToClipboard = useCopyToClipboard()
 
-  const isItemFavorite = favorite && isFavorite(favorite)
+  const isItemFavorite = bookmark && isBookmarked(bookmark)
 
   return (
     <>
       <div
         className="w-full h-28 max-h-28 relative rounded-md overflow-hidden shadow-md"
         style={{
-          background: "url(/images/backgrounds/Wallpaper_TextSm.jpg)",
+          background:
+            "url(/assets/images/brand/backgrounds/background-text-sm.jpg)",
           backgroundPosition: "center",
           backgroundSize: "cover",
         }}
@@ -53,12 +55,12 @@ export const StatsHeader = ({
       </div>
       <div className="flex flex-col sm:flex-row justify-end py-2 gap-2">
         {isLoggedIn ? (
-          favorite && (
+          bookmark && (
             <Button
               buttonStyle={isItemFavorite ? "outline" : "primary"}
               onClick={() => {
-                if (isItemFavorite) return deleteBookmark(favorite)
-                addBookmark(favorite)
+                if (isItemFavorite) return deleteBookmark(bookmark)
+                addBookmark(bookmark)
               }}
             >
               {isItemFavorite ? (
@@ -94,8 +96,8 @@ export const StatsHeader = ({
       </div>
       <div
         className={cn("flex flex-col justify-center items-center", {
-          "mt-8": !favorite,
-          "mt-4": !!favorite,
+          "mt-8": !bookmark,
+          "mt-4": !!bookmark,
         })}
       >
         <h1 className="font-bold text-3xl lg:text-5xl flex items-center">

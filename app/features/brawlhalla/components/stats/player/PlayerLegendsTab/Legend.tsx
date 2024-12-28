@@ -2,7 +2,7 @@ import { t } from "@lingui/core/macro"
 import type { FullLegend } from "bhapi/legends"
 import type { JSX } from "react"
 
-import { Image } from "@/features/brawlhalla/components/Image"
+import { Image, LegendIcon } from "@/features/brawlhalla/components/Image"
 import { formatTime } from "@/helpers/date"
 
 import { CollapsibleContent } from "../../../layout/CollapsibleContent"
@@ -68,8 +68,8 @@ export const Legend = ({
         <span className="flex items-center justify-between w-full">
           <span className="flex items-center gap-2">
             <span className="text-sm text-textVar1">{rank}</span>
-            <Image
-              src={`/images/icons/roster/legends/${legend.legend_name_key}.png`}
+            <LegendIcon
+              legendNameKey={legend.legend_name_key}
               alt={legend.bio_name}
               Container="span"
               containerClassName="block w-6 h-6 rounded-lg overflow-hidden"

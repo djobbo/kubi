@@ -3,7 +3,7 @@ import { Star, StarOff } from "lucide-react"
 
 import { useAuth } from "@/features/auth/use-auth"
 import { useBookmarks } from "@/features/bookmarks/use-bookmarks"
-import { Image } from "@/features/brawlhalla/components/Image"
+import { LegendIcon } from "@/features/brawlhalla/components/Image"
 import { cleanString } from "@/helpers/cleanString"
 
 import type { Ranking1v1 } from "../../api/schema/rankings"
@@ -21,9 +21,8 @@ export const RankedPlayerItem = ({ player }: RankedPlayerItemProps) => {
   const legend = legendsMap[player.best_legend]
 
   const icon = legend && (
-    <Image
-      key={legend.legend_id}
-      src={`/images/icons/roster/legends/${legend.legend_name_key}.png`}
+    <LegendIcon
+      legendNameKey={legend.legend_name_key}
       alt={legend.bio_name}
       containerClassName="w-8 h-8 rounded-lg overflow-hidden border border-textVar1"
       className="object-contain object-center"

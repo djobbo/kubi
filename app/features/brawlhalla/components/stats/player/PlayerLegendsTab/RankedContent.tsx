@@ -1,7 +1,7 @@
 import { t } from "@lingui/core/macro"
 import type { FullLegend } from "bhapi/legends"
 
-import { Image } from "@/features/brawlhalla/components/Image"
+import { Image, RankedTierImage } from "@/features/brawlhalla/components/Image"
 import { getTierFromRating } from "@/features/brawlhalla/constants/ranked/tiers"
 import { getLegendEloReset } from "@/features/brawlhalla/helpers/season-reset"
 import { calculateWinrate } from "@/features/brawlhalla/helpers/winrate"
@@ -48,8 +48,9 @@ export const PlayerLegendRankedContent = ({
   return (
     <CollapsibleSection trigger={t`Ranked Season`}>
       <div className="flex items-center gap-4">
-        <Image
-          src={`/images/ranked-banners/${ranked.tier}.png`}
+        <RankedTierImage
+          type="banner"
+          tier={ranked.tier}
           alt={ranked.tier ?? t`Valhallan`}
           containerClassName="h-24 w-16"
           className="object-contain object-center"

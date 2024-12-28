@@ -2,7 +2,11 @@ import { Trans } from "@lingui/react/macro"
 import type { ReactNode } from "react"
 
 import { Progress } from "@/components/base/Progress"
-import { Image } from "@/features/brawlhalla/components/Image"
+import {
+  FlagIcon,
+  Image,
+  RankedTierImage,
+} from "@/features/brawlhalla/components/Image"
 import { cn } from "@/ui/lib/utils"
 
 import type { Ranking } from "../../api/schema/rankings"
@@ -49,19 +53,18 @@ export const RankingsTableItem = ({
             {rank} -
           </span>
           {content}
-          <Image
-            src={`/images/icons/ranked/${tier}${
-              tier === "Valhallan" ? ".webp" : ".png"
-            }`}
-            alt={region}
+          <RankedTierImage
+            type="icon"
+            tier={tier}
+            alt={tier}
             containerClassName="w-6 h-6 rounded-md overflow-hidden"
             className="object-contain object-center"
           />
         </div>
         <div className={cn("mt-2 flex flex-col", className)}>
           <p className="flex gap-2 items-baseline text-2xl font-bold">
-            <Image
-              src={`/images/icons/flags/${region}.png`}
+            <FlagIcon
+              region={region}
               alt={region}
               containerClassName="w-4 h-4 rounded-sm overflow-hidden"
               className="object-contain object-center"
@@ -111,10 +114,9 @@ export const RankingsTableItem = ({
           {rank}
         </p>
         <p className="w-8 h-full flex items-center justify-center text-xs">
-          <Image
-            src={`/images/icons/ranked/${tier}${
-              tier === "Valhallan" ? ".webp" : ".png"
-            }`}
+          <RankedTierImage
+            type="icon"
+            tier={tier}
             alt={region}
             containerClassName="w-8 h-8 rounded-md overflow-hidden"
             className="object-contain object-center"

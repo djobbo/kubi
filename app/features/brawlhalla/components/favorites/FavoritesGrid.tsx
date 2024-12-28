@@ -5,7 +5,7 @@ import type { ReactNode } from "react"
 
 import type { Bookmark } from "@/features/bookmarks/schema/bookmarks"
 import { useBookmarks } from "@/features/bookmarks/use-bookmarks"
-import { Image } from "@/features/brawlhalla/components/Image"
+import { Image, LegendIcon } from "@/features/brawlhalla/components/Image"
 import { cleanString } from "@/helpers/cleanString"
 import { cn } from "@/ui/lib/utils"
 import { css } from "@/ui/theme"
@@ -61,8 +61,8 @@ export const FavoritesGrid = ({ bookmarks }: FavoritesGridProps) => {
           const legend = !!legendId && legendsMap[legendId]
           if (legend)
             icon = (
-              <Image
-                src={`/images/icons/roster/legends/${legend.legend_name_key}.png`}
+              <LegendIcon
+                legendNameKey={legend.legend_name_key}
                 alt={t`player ${favoriteName} icon`}
                 containerClassName="w-8 h-8"
                 className="object-contain object-center flex-shrink-0"

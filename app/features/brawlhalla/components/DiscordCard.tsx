@@ -64,14 +64,14 @@ export const DiscordCard = () => {
         className="bg-bgVar2/50 border border-bg/75 rounded-2xl w-96 overflow-hidden"
       >
         <Image
-          src="/images/backgrounds/Wallpaper_Text.jpg"
+          src="/assets/images/brand/backgrounds/background-text.jpg"
           alt={t`Discord header image`}
           className="object-cover object-center"
           containerClassName="w-full h-32"
         />
         <div className="flex">
           <Image
-            src="/images/Corehalla_Logo.gif"
+            src="/assets/images/brand/logos/logo-animated.gif"
             alt={t`Corehalla animated logo`}
             className="object-cover object-center"
             containerClassName="w-20 h-20 rounded-3xl -mt-10 ml-6 border-8 border-bgVar2 overflow-hidden"

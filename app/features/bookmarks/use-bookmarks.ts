@@ -6,6 +6,7 @@ import { addBookmark } from "./functions/add-bookmark"
 import { deleteBookmark } from "./functions/delete-bookmark"
 import type { BookmarksQuery } from "./functions/get-bookmarks"
 import { getBookmarks } from "./functions/get-bookmarks"
+import type { Bookmark } from "./schema"
 
 export const useBookmarks = (query: BookmarksQuery = {}) => {
   const { isLoggedIn } = useAuth()
@@ -27,7 +28,7 @@ export const useBookmarks = (query: BookmarksQuery = {}) => {
     bookmarks,
     addBookmark,
     deleteBookmark,
-    isBookmarked: () => {
+    isBookmarked: (bookmark: Bookmark) => {
       // TODO: Implement isBookmarked
       throw new Error("Not implemented")
     },
