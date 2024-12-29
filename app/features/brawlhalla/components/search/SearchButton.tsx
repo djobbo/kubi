@@ -8,18 +8,15 @@ import { cn } from "@/ui/lib/utils"
 
 interface SearchButtonProps {
   className?: string
-  customWidth?: boolean
 }
 
-export const SearchButton = ({ className, customWidth }: SearchButtonProps) => {
+export const SearchButton = ({ className }: SearchButtonProps) => {
   const { query } = useKBar()
 
   return (
     <Button
       variant="outline"
-      className={cn(className, "flex justify-between", {
-        "w-48": !customWidth,
-      })}
+      className={cn("flex justify-between w-48", className)}
       onClick={query.toggle}
     >
       <span className="flex items-center gap-2">

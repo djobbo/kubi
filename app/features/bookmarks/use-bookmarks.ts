@@ -30,7 +30,8 @@ export const useBookmarks = (query: BookmarksQuery = {}) => {
     deleteBookmark,
     isBookmarked: (bookmark: Bookmark) => {
       // TODO: Implement isBookmarked
-      throw new Error("Not implemented")
+      // throw new Error("Not implemented")
+      return false
     },
   }
 }

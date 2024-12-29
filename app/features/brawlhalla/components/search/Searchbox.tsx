@@ -1,6 +1,5 @@
 import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
-import { css } from "@stitches/react"
 import { queryOptions, useQuery } from "@tanstack/react-query"
 import {
   KBarAnimator,
@@ -143,14 +142,7 @@ export const Searchbox = () => {
               {immediateSearch.length > 0 &&
                 (isLoading || isDebouncingSearch) && (
                   <Spinner
-                    className={cn(
-                      "absolute",
-                      css({
-                        top: "50%",
-                        right: "0.5rem",
-                        transform: "translateY(-50%)",
-                      })(),
-                    )}
+                    className="absolute top-1/2 -translate-x-1/2 right-2"
                     size="2rem"
                     color={theme.colors.bg.toString()}
                   />

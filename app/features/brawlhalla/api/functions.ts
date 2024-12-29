@@ -102,16 +102,18 @@ export const get1v1Rankings = createServerFn({ method: "GET" })
   .validator(
     z.object({
       region: rankedRegionSchema,
-      page: z.number(),
+      page: z.number().optional(),
       name: z.string().optional(),
     }),
   )
-  .handler(async ({ data: { region, page, name } }) => {
+  .handler(async ({ data: query }) => {
+    const { region = "all", page = 1, name } = query
+
     return withCache(
       `ranked-1v1-${region}-${page}-${name}`,
       () =>
         getBhApi(
-          `/rankings/1v1/${region}/${page}${name ? `?name=${name}` : ""}`,
+          `/rankings/1v1/${region.toLowerCase()}/${page}${name ? `?name=${name}` : ""}`,
           z.array(ranking1v1Schema),
           rankings1v1Mock,
         ),
@@ -123,15 +125,17 @@ export const get2v2Rankings = createServerFn({ method: "GET" })
   .validator(
     z.object({
       region: rankedRegionSchema,
-      page: z.number(),
+      page: z.number().optional(),
     }),
   )
-  .handler(async ({ data: { region, page } }) => {
+  .handler(async ({ data: query }) => {
+    const { region = "all", page = 1 } = query
+
     return withCache(
       `ranked-2v2-${region}-${page}`,
       () =>
         getBhApi(
-          `/rankings/2v2/${region}/${page}`,
+          `/rankings/2v2/${region.toLowerCase()}/${page}`,
           z.array(ranking2v2Schema),
           rankings2v2Mock,
         ),

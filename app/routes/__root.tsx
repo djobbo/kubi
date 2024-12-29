@@ -15,7 +15,6 @@ import { Toaster } from "react-hot-toast"
 
 import { AnimatedLogo } from "@/components/base/AnimatedLogo"
 import { PageLoader } from "@/components/base/PageLoader"
-import { Header } from "@/components/layout/Header"
 import { getSession } from "@/features/auth/functions/getSession"
 import { BackToTopButton } from "@/features/brawlhalla/components/BackToTopButton"
 import { Layout } from "@/features/brawlhalla/components/layout/Layout"
@@ -94,23 +93,6 @@ function RootComponent() {
     </RootDocument>
   )
 }
-// function RootComponent() {
-//   return (
-//     <RootDocument>
-//       <div className="flex h-screen w-full flex-col bg-muted/40">
-//         <Header />
-//         <main className="flex h-[calc(100vh_-_theme(spacing.16))] flex-1 mx-1 mb-1">
-//           <div className="hidden md:block w-60 flex-shrink-0 p-4">
-//             <Trans>Sidenav</Trans>
-//           </div>
-//           <div className="flex-1 bg-background p-4 md:p-10 border rounded-lg overflow-scroll">
-//             <Outlet />
-//           </div>
-//         </main>
-//       </div>
-//     </RootDocument>
-//   )
-// }
 
 function RootDocument({ children }: { children: ReactNode }) {
   return (
@@ -118,7 +100,7 @@ function RootDocument({ children }: { children: ReactNode }) {
       <head>
         <Meta />
       </head>
-      <body>
+      <body className="dark">
         {children}
         <ScrollRestoration />
         <TanStackRouterDevtools position="bottom-right" />

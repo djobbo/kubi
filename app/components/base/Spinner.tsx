@@ -1,5 +1,7 @@
+import { css } from "@emotion/css"
+
 import { cn } from "@/ui/lib/utils"
-import { css, keyframes, styled } from "@/ui/theme"
+import { keyframes, styled } from "@/ui/theme"
 
 const puff = [
   keyframes({
@@ -25,10 +27,10 @@ export const Spinner = ({
   speedMultiplier = 1,
   color = "white",
 }: SpinnerProps) => {
-  const containerClassName = css({
-    height: size,
-    width: size,
-  })()
+  const containerClassName = css`
+    height: ${size};
+    width: ${size};
+  `
 
   const Puff = styled("span", {
     position: "absolute",

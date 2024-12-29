@@ -20,6 +20,8 @@ export const DiscordCard = () => {
     const onMousePositionChange = (e: MouseEvent) => {
       if (!containerRef.current || !cardRef.current) return
 
+      console.log("onMousePositionChange")
+
       const {
         x: cardX,
         y: cardY,
@@ -67,7 +69,7 @@ export const DiscordCard = () => {
         <Image
           src="/assets/images/brand/backgrounds/background-text.jpg"
           alt={t`Discord header image`}
-          className="object-cover object-center"
+          className="object-cover object-center w-full h-full"
           containerClassName="w-full h-32"
         />
         <div className="flex">

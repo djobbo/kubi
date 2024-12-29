@@ -1,3 +1,4 @@
+import { css } from "@emotion/css"
 import { SiDiscord as DiscordIcon } from "@icons-pack/react-simple-icons"
 import { t } from "@lingui/core/macro"
 import { Link, useRouterState } from "@tanstack/react-router"
@@ -18,8 +19,8 @@ import { useBookmarks } from "@/features/bookmarks/use-bookmarks"
 import { Image } from "@/features/brawlhalla/components/Image"
 import { useSideNav } from "@/features/sidenav/sidenav-provider"
 import { cleanString } from "@/helpers/cleanString"
+import { Button } from "@/ui/components/button"
 import { cn } from "@/ui/lib/utils"
-import { css } from "@/ui/theme"
 
 import { legendsMap } from "../../constants/legends"
 
@@ -35,13 +36,13 @@ interface SideNavIconProps {
   external?: boolean
 }
 
-const sideNavIconClassName = css({
-  "&:hover .remove-btn": {
-    display: "flex",
-    top: "-0.375rem",
-    right: "-0.375rem",
-  },
-})()
+const sideNavIconClassName = css`
+  &:hover .remove-btn {
+    display: flex;
+    top: -0.375rem;
+    right: -0.375rem;
+  }
+`
 
 const SideNavIcon = ({
   className,
@@ -60,41 +61,35 @@ const SideNavIcon = ({
   return (
     <Tooltip content={desc ?? cleanName} side="right">
       <div className={cn("relative", sideNavIconClassName)}>
-        <Link
-          to={href}
-          className={cn(
-            className,
-            "w-full sm:w-10 h-10 rounded-lg flex gap-2 px-2 sm:uppercase cursor-pointer border border-transparent",
-            "justify-start sm:justify-center items-center",
-            {
-              "bg-accent": active,
-              "bg-bg hover:border-text": !active,
-            },
-          )}
-          target={external ? "_blank" : undefined}
-          onClick={() => {
-            closeSideNav()
-          }}
-        >
-          {image && (
-            <Image
-              src={image}
-              alt={t`player ${cleanName} icon`}
-              Container="span"
-              containerClassName="w-8 h-8 text-xs z-0 opacity-50 rounded-md overflow-hidden"
-              // eslint-disable-next-line lingui/no-unlocalized-strings
-              position="relative sm:absolute"
-              className="object-contain object-center"
-            />
-          )}
-          <span className="font-semibold text-sm z-10 hidden sm:inline-block whitespace-nowrap">
-            {content ?? cleanName.slice(0, 3)}
-          </span>
-          <span className="text-sm inline-flex items-center gap-2 sm:hidden whitespace-nowrap">
-            {content}
-            {cleanName.slice(0, 20)}
-          </span>
-        </Link>
+        <Button asChild variant={active ? "outline" : "ghost"}>
+          <Link
+            to={href}
+            className={cn(className, "w-full sm:w-10 h-10")}
+            target={external ? "_blank" : undefined}
+            onClick={() => {
+              closeSideNav()
+            }}
+          >
+            {image && (
+              <Image
+                src={image}
+                alt={t`player ${cleanName} icon`}
+                Container="span"
+                containerClassName="w-8 h-8 text-xs z-0 opacity-50 rounded-md overflow-hidden"
+                // eslint-disable-next-line lingui/no-unlocalized-strings
+                position="relative sm:absolute"
+                className="object-contain object-center"
+              />
+            )}
+            <span className="font-semibold text-sm z-10 hidden sm:inline-block whitespace-nowrap">
+              {content ?? cleanName.slice(0, 3)}
+            </span>
+            <span className="text-sm inline-flex items-center gap-2 sm:hidden whitespace-nowrap">
+              {content}
+              {cleanName.slice(0, 20)}
+            </span>
+          </Link>
+        </Button>
         {onRemove && (
           <button
             type="button"
@@ -201,14 +196,10 @@ export const SideNav = ({ className }: SideNavProps) => {
         }}
       />
       <div
-        className={cn(
-          "fixed w-64 sm:w-auto sm:sticky top-0 flex-col border-r border-bg h-screen bg-bgVar2 z-50 overflow-y-auto",
-          className,
-          {
-            "-translate-x-full sm:translate-x-0": !isSideNavOpen,
-            "translate-x-0": isSideNavOpen,
-          },
-        )}
+        className={cn("w-full flex-col", className, {
+          "-translate-x-full sm:translate-x-0": !isSideNavOpen,
+          "translate-x-0": isSideNavOpen,
+        })}
         style={{
           transition: "0.15s all ease",
         }}

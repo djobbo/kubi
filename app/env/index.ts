@@ -61,6 +61,18 @@ export const env = {
     z.string().min(1),
     "client",
   ),
+  GOOGLE_ANALYTICS_TRACKING_ID: envField(
+    "Google Analytics Tracking ID",
+    process.env.GOOGLE_ANALYTICS_TRACKING_ID,
+    z.string().min(1),
+    "client",
+  ),
+  GOOGLE_ADSENSE_ID: envField(
+    "Google Adsense ID",
+    process.env.GOOGLE_ADSENSE_ID,
+    z.string().min(1),
+    "client",
+  ),
 }
 
 loadEnv({ path: ".env" })

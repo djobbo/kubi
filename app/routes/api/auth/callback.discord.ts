@@ -22,6 +22,16 @@ const discordUserResponseSchema = z.object({
   verified: z.boolean().optional(),
 })
 
+type DiscordUserResponse = z.infer<typeof discordUserResponseSchema>
+
+const getAvatarUrl = (discordUser: DiscordUserResponse) => {
+  if (discordUser.avatar) {
+    return `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png`
+  }
+
+  return null
+}
+
 export const APIRoute = createAPIFileRoute("/api/auth/callback/discord")({
   GET: async ({ request }) => {
     const url = new URL(request.url)
@@ -59,6 +69,20 @@ export const APIRoute = createAPIFileRoute("/api/auth/callback/discord")({
         const session = await createSession(token, existingUser.userId)
         setSessionTokenCookie(token, session.expiresAt)
 
+        await db
+          .insert(usersTable)
+          .values({
+            id: existingUser.userId,
+            name: discordUser.username,
+            avatarUrl: getAvatarUrl(discordUser),
+          })
+          .onConflictDoUpdate({
+            target: [usersTable.id],
+            set: {
+              avatarUrl: getAvatarUrl(discordUser),
+            },
+          })
+
         return new Response(null, {
           status: 302,
           headers: {
@@ -74,7 +98,7 @@ export const APIRoute = createAPIFileRoute("/api/auth/callback/discord")({
           id: userId,
           email: discordUser.email,
           name: discordUser.username,
-          avatarUrl: discordUser.avatar,
+          avatarUrl: getAvatarUrl(discordUser),
         })
 
         await tx.insert(oauthAccountsTable).values({

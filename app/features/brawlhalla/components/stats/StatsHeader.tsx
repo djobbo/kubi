@@ -1,12 +1,12 @@
 import { SiDiscord as DiscordIcon } from "@icons-pack/react-simple-icons"
 import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
-import { AdsenseStatsHeader } from "common/analytics/Adsense"
 import { ExternalLink, UserRoundMinus, UserRoundPlus } from "lucide-react"
 import type { ReactNode } from "react"
 import toast from "react-hot-toast"
 
 import type { Bookmark } from "@/db/schema"
+import { AdsenseStatsHeader } from "@/features/analytics/components/adsense"
 import { useAuth } from "@/features/auth/use-auth"
 import { useBookmarks } from "@/features/bookmarks/use-bookmarks"
 import { cleanString } from "@/helpers/cleanString"

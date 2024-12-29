@@ -58,6 +58,7 @@
     "vite-tsconfig-paths": "^5.1.4"
   },
   "dependencies": {
+    "@emotion/css": "^11.13.5",
     "@icons-pack/react-simple-icons": "^10.2.0",
     "@lingui/core": "^5.1.2",
     "@lingui/react": "^5.1.2",

@@ -11,7 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as LandingImport } from './routes/landing'
+import { Route as TestImport } from './routes/test'
 import { Route as IndexImport } from './routes/index'
 import { Route as socialTwitterImport } from './routes/(social)/twitter'
 import { Route as socialGithubImport } from './routes/(social)/github'
@@ -19,12 +19,13 @@ import { Route as socialDonateImport } from './routes/(social)/donate'
 import { Route as socialDiscordImport } from './routes/(social)/discord'
 import { Route as StatsPlayerPlayerIdImport } from './routes/stats/player/$playerId'
 import { Route as StatsClanClanIdImport } from './routes/stats/clan/$clanId'
+import { Route as Rankings1v1RegionPageImport } from './routes/rankings/1v1.$region.$page'
 
 // Create/Update Routes
 
-const LandingRoute = LandingImport.update({
-  id: '/landing',
-  path: '/landing',
+const TestRoute = TestImport.update({
+  id: '/test',
+  path: '/test',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -70,6 +71,12 @@ const StatsClanClanIdRoute = StatsClanClanIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const Rankings1v1RegionPageRoute = Rankings1v1RegionPageImport.update({
+  id: '/rankings/1v1/$region/$page',
+  path: '/rankings/1v1/$region/$page',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -81,11 +88,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/landing': {
-      id: '/landing'
-      path: '/landing'
-      fullPath: '/landing'
-      preLoaderRoute: typeof LandingImport
+    '/test': {
+      id: '/test'
+      path: '/test'
+      fullPath: '/test'
+      preLoaderRoute: typeof TestImport
       parentRoute: typeof rootRoute
     }
     '/(social)/discord': {
@@ -130,6 +137,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StatsPlayerPlayerIdImport
       parentRoute: typeof rootRoute
     }
+    '/rankings/1v1/$region/$page': {
+      id: '/rankings/1v1/$region/$page'
+      path: '/rankings/1v1/$region/$page'
+      fullPath: '/rankings/1v1/$region/$page'
+      preLoaderRoute: typeof Rankings1v1RegionPageImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -137,92 +151,100 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/landing': typeof LandingRoute
+  '/test': typeof TestRoute
   '/discord': typeof socialDiscordRoute
   '/donate': typeof socialDonateRoute
   '/github': typeof socialGithubRoute
   '/twitter': typeof socialTwitterRoute
   '/stats/clan/$clanId': typeof StatsClanClanIdRoute
   '/stats/player/$playerId': typeof StatsPlayerPlayerIdRoute
+  '/rankings/1v1/$region/$page': typeof Rankings1v1RegionPageRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/landing': typeof LandingRoute
+  '/test': typeof TestRoute
   '/discord': typeof socialDiscordRoute
   '/donate': typeof socialDonateRoute
   '/github': typeof socialGithubRoute
   '/twitter': typeof socialTwitterRoute
   '/stats/clan/$clanId': typeof StatsClanClanIdRoute
   '/stats/player/$playerId': typeof StatsPlayerPlayerIdRoute
+  '/rankings/1v1/$region/$page': typeof Rankings1v1RegionPageRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/landing': typeof LandingRoute
+  '/test': typeof TestRoute
   '/(social)/discord': typeof socialDiscordRoute
   '/(social)/donate': typeof socialDonateRoute
   '/(social)/github': typeof socialGithubRoute
   '/(social)/twitter': typeof socialTwitterRoute
   '/stats/clan/$clanId': typeof StatsClanClanIdRoute
   '/stats/player/$playerId': typeof StatsPlayerPlayerIdRoute
+  '/rankings/1v1/$region/$page': typeof Rankings1v1RegionPageRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/landing'
+    | '/test'
     | '/discord'
     | '/donate'
     | '/github'
     | '/twitter'
     | '/stats/clan/$clanId'
     | '/stats/player/$playerId'
+    | '/rankings/1v1/$region/$page'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/landing'
+    | '/test'
     | '/discord'
     | '/donate'
     | '/github'
     | '/twitter'
     | '/stats/clan/$clanId'
     | '/stats/player/$playerId'
+    | '/rankings/1v1/$region/$page'
   id:
     | '__root__'
     | '/'
-    | '/landing'
+    | '/test'
     | '/(social)/discord'
     | '/(social)/donate'
     | '/(social)/github'
     | '/(social)/twitter'
     | '/stats/clan/$clanId'
     | '/stats/player/$playerId'
+    | '/rankings/1v1/$region/$page'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  LandingRoute: typeof LandingRoute
+  TestRoute: typeof TestRoute
   socialDiscordRoute: typeof socialDiscordRoute
   socialDonateRoute: typeof socialDonateRoute
   socialGithubRoute: typeof socialGithubRoute
   socialTwitterRoute: typeof socialTwitterRoute
   StatsClanClanIdRoute: typeof StatsClanClanIdRoute
   StatsPlayerPlayerIdRoute: typeof StatsPlayerPlayerIdRoute
+  Rankings1v1RegionPageRoute: typeof Rankings1v1RegionPageRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  LandingRoute: LandingRoute,
+  TestRoute: TestRoute,
   socialDiscordRoute: socialDiscordRoute,
   socialDonateRoute: socialDonateRoute,
   socialGithubRoute: socialGithubRoute,
   socialTwitterRoute: socialTwitterRoute,
   StatsClanClanIdRoute: StatsClanClanIdRoute,
   StatsPlayerPlayerIdRoute: StatsPlayerPlayerIdRoute,
+  Rankings1v1RegionPageRoute: Rankings1v1RegionPageRoute,
 }
 
 export const routeTree = rootRoute
@@ -236,20 +258,21 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/landing",
+        "/test",
         "/(social)/discord",
         "/(social)/donate",
         "/(social)/github",
         "/(social)/twitter",
         "/stats/clan/$clanId",
-        "/stats/player/$playerId"
+        "/stats/player/$playerId",
+        "/rankings/1v1/$region/$page"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/landing": {
-      "filePath": "landing.tsx"
+    "/test": {
+      "filePath": "test.tsx"
     },
     "/(social)/discord": {
       "filePath": "(social)/discord.tsx"
@@ -268,6 +291,9 @@ export const routeTree = rootRoute
     },
     "/stats/player/$playerId": {
       "filePath": "stats/player/$playerId.tsx"
+    },
+    "/rankings/1v1/$region/$page": {
+      "filePath": "rankings/1v1.$region.$page.tsx"
     }
   }
 }
