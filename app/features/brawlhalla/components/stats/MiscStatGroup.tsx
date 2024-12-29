@@ -1,8 +1,8 @@
+import { css } from "@emotion/css"
 import type { ReactNode } from "react"
 
 import { Tooltip } from "@/components/base/Tooltip"
 import { cn } from "@/ui/lib/utils"
-import { css } from "@/ui/theme"
 
 export interface MiscStat {
   name: string
@@ -32,10 +32,12 @@ export const MiscStatGroup = ({
       ["flex flex-col"]
     : [
         "grid",
-        css({
-          // eslint-disable-next-line lingui/no-unlocalized-strings
-          gridTemplateColumns: `repeat(auto-${fit}, minmax(${minItemWidth}, 1fr))`,
-        })(),
+        css`
+          grid-template-columns: repeat(
+            auto-${fit},
+            minmax(${minItemWidth}, 1fr)
+          );
+        `,
       ]
 
   return (

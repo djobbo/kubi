@@ -23,7 +23,7 @@ export const Route = createFileRoute("/")({
 
 const landingClassName = css`
   height: 60vh;
-  minHeight: 400px";
+  min-height: 400px";
 `
 
 function Home() {
