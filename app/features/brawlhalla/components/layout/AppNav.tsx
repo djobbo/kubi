@@ -33,7 +33,7 @@ interface SubHeaderProps {
 
 export const AppNav = ({ className }: SubHeaderProps) => {
   return (
-    <div className="w-full gap-8 bg-gradient-to-l from-accent to-accentAlt shadow-md">
+    <div className="w-full gap-8 bg-gradient-to-l from-accentOld to-accentAlt shadow-md">
       <div
         className={cn(
           className,

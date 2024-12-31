@@ -96,7 +96,7 @@ export const FavoritesGrid = ({ bookmarks }: FavoritesGridProps) => {
             </Link>
             <button
               type="button"
-              className="hidden remove-btn absolute w-5 h-5 p-0.5 rounded-full overflow-hidden shadow-md bg-accent hover:bg-text hover:text-bgVar2"
+              className="hidden remove-btn absolute w-5 h-5 p-0.5 rounded-full overflow-hidden shadow-md bg-accentOld hover:bg-text hover:text-bgVar2"
               onClick={() => deleteBookmark(bookmark)}
             >
               <X />

@@ -37,7 +37,7 @@ function Home() {
           className={cn(
             "relative flex flex-col justify-center items-center lg:items-start",
             landingClassName,
-            'after:content[""] after:absolute after:inset-0 after:bg-accent after:blur-[256px] after:opacity-[0.15] after:-z-10',
+            'after:content[""] after:absolute after:inset-0 after:bg-accentOld after:blur-[256px] after:opacity-[0.15] after:-z-10',
           )}
         >
           <a
@@ -49,7 +49,7 @@ function Home() {
             <span className="border-r border-r-bg pr-2">
               <Trans>Join our community</Trans>
             </span>
-            <span className="flex items-center gap-1 font-semibold text-center bg-gradient-to-l from-accent to-accentVar1 bg-clip-text text-fill-none">
+            <span className="flex items-center gap-1 font-semibold text-center bg-gradient-to-l from-accentOld to-accentVar1 bg-clip-text text-fill-none">
               <Trans>Discord</Trans>
               <ArrowRight className="w-4 h-4" />
             </span>

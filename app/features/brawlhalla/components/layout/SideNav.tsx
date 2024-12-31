@@ -61,10 +61,10 @@ const SideNavIcon = ({
   return (
     <Tooltip content={desc ?? cleanName} side="right">
       <div className={cn("relative", sideNavIconClassName)}>
-        <Button asChild variant={active ? "outline" : "ghost"}>
+        <Button asChild variant={active ? "outline" : "ghost"} className="h-10">
           <Link
             to={href}
-            className={cn(className, "w-full sm:w-10 h-10")}
+            className={cn(className, "w-full h-12")}
             target={external ? "_blank" : undefined}
             onClick={() => {
               closeSideNav()
@@ -93,7 +93,7 @@ const SideNavIcon = ({
         {onRemove && (
           <button
             type="button"
-            className="items-center justify-center hidden remove-btn absolute w-4 h-4 p-0.5 rounded-full overflow-hidden shadow-md bg-accent hover:bg-text hover:text-bgVar2"
+            className="items-center justify-center hidden remove-btn absolute w-4 h-4 p-0.5 rounded-full overflow-hidden shadow-md bg-accentOld hover:bg-text hover:text-bgVar2"
             onClick={() => onRemove()}
           >
             <X size={12} />

@@ -63,7 +63,7 @@ export const Paginator = ({
               className={cn(
                 "p-2 h-8 flex items-center justify-center text-sm rounded-lg border-bg whitespace-nowrap",
                 {
-                  "bg-accent": page === currentPage,
+                  "bg-accentOld": page === currentPage,
                   "bg-bgVar2": page !== currentPage,
                 },
               )}

@@ -62,7 +62,7 @@ export const FirstTimePopup = () => {
       </Button>
       <button
         type="button"
-        className="absolute top-0 right-0 text-text text-sm font-bold hover:text-accent cursor-pointer p-2"
+        className="absolute top-0 right-0 text-text text-sm font-bold hover:text-accentOld cursor-pointer p-2"
         onClick={() => {
           setShowPopup(false)
         }}

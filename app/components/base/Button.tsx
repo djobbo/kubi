@@ -28,7 +28,7 @@ export const Button = <Type extends ButtonType = "button">(
     "flex font-semibold cursor-pointer items-center justify-center rounded-lg",
     "scale-100 hover:scale-[1.025] transition-transform",
     {
-      "shadow-md bg-accent hover:bg-textVar1 hover:text-bgVar2":
+      "shadow-md bg-accentOld hover:bg-textVar1 hover:text-bgVar2":
         buttonStyle === "primary",
       "border border-bg bg-bgVar2 hover:border-textVar1":
         buttonStyle === "outline",

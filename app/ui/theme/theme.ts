@@ -5,7 +5,7 @@ export default {
   bgLanding: "#1A1B23AA",
   textVar1: "#CCD0D6",
   text: "#FFFFFF",
-  accent: "#3861FB",
+  accentOld: "#3861FB",
   accentVar1: "#2095F2",
   success: "#24CD7C",
   danger: "#ED7853",

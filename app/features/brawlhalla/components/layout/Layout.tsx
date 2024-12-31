@@ -23,10 +23,10 @@ const BackgroundContainer = styled("div", {
 export const Layout = ({ children }: LayoutProps) => {
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 h-16 bg-background z-10">
+      <header className="fixed top-0 left-0 right-0 h-16 bg-bgVar2 z-10">
         <Header />
       </header>
-      <div className="fixed bottom-0 left-0 right-0 h-1 bg-background z-10" />
+      <div className="fixed bottom-0 left-0 right-0 h-1 bg-bgVar2 z-10" />
       <aside className="fixed top-16 left-0 bottom-0 w-16 overflow-x-hidden overflow-y-auto">
         <SideNav />
       </aside>

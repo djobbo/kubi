@@ -76,7 +76,7 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-bgVar2 text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
@@ -93,11 +93,11 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-bg rounded-full hover:bg-accent;
+    @apply bg-bg rounded-full hover:bg-accentOld;
   }
 
   .p-link {
-    @apply text-accent hover:underline;
+    @apply text-accentOld hover:underline;
   }
 
   .text-fill-none {
