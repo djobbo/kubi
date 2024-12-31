@@ -16,8 +16,6 @@ import { playerRankedSchema } from "./schema/player-ranked"
 import { playerStatsSchema } from "./schema/player-stats"
 import { ranking1v1Schema, ranking2v2Schema } from "./schema/rankings"
 
-const __DEV = process.env.NODE_ENV === "development"
-
 const BH_API_BASE = "https://api.brawlhalla.com"
 
 const getBhApi = async <T>(
@@ -29,7 +27,7 @@ const getBhApi = async <T>(
 
   url.searchParams.append("api_key", env.BRAWLHALLA_API_KEY)
 
-  if (__DEV && mock) return mock
+  if (env.IS_DEV && mock) return mock
 
   const response = await fetch(url)
 

@@ -20,10 +20,10 @@ export function createRouter() {
       context: { queryClient },
       defaultPreload: "intent",
       defaultErrorComponent: DefaultCatchBoundary,
-      defaultNotFoundComponent: () => <NotFound />,
-      Wrap: function WrapComponent({ children }) {
-        return <I18nProvider i18n={i18n}>{children}</I18nProvider>
-      },
+      defaultNotFoundComponent: NotFound,
+      Wrap: ({ children }) => (
+        <I18nProvider i18n={i18n}>{children}</I18nProvider>
+      ),
     }),
     queryClient,
   )

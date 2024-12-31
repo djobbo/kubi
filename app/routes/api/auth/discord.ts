@@ -2,6 +2,7 @@ import { createAPIFileRoute } from "@tanstack/start/api"
 import { generateState } from "arctic"
 import { setCookie, setHeader } from "vinxi/http"
 
+import { env } from "@/env"
 import {
   discord,
   DISCORD_OAUTH_STATE_COOKIE_NAME,
@@ -22,7 +23,7 @@ export const APIRoute = createAPIFileRoute("/api/auth/discord")({
 
     setCookie(DISCORD_OAUTH_STATE_COOKIE_NAME, state, {
       path: "/",
-      secure: process.env.NODE_ENV === "production",
+      secure: env.IS_PROD,
       httpOnly: true,
       maxAge: COOKIE_MAX_AGE_SECONDS,
       sameSite: "lax",

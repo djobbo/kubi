@@ -31,7 +31,9 @@ export const Tooltip = ({
   return (
     <Provider delayDuration={delay}>
       <Root>
-        <Trigger className="text-left">{children}</Trigger>
+        <Trigger className="text-left" asChild>
+          {children}
+        </Trigger>
         <Portal>
           <Content
             side={side}

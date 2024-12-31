@@ -10,7 +10,7 @@ import {
 import { TanStackRouterDevtools } from "@tanstack/router-devtools"
 import { Meta, Scripts } from "@tanstack/start"
 import { KBarProvider } from "kbar"
-import { type ReactNode } from "react"
+import { type ReactNode, Suspense } from "react"
 import { Toaster } from "react-hot-toast"
 
 import { AnimatedLogo } from "@/components/base/AnimatedLogo"
@@ -103,8 +103,10 @@ function RootDocument({ children }: { children: ReactNode }) {
       <body className="dark">
         {children}
         <ScrollRestoration />
-        <TanStackRouterDevtools position="bottom-right" />
         <ReactQueryDevtools buttonPosition="bottom-left" />
+        <Suspense>
+          <TanStackRouterDevtools position="bottom-right" />
+        </Suspense>
         <Scripts />
       </body>
     </html>

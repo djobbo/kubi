@@ -12,6 +12,7 @@ import { ArrowUp, UserRound } from "lucide-react"
 import { useEffect } from "react"
 
 import { Spinner } from "@/components/base/Spinner"
+import { env } from "@/env"
 import { cleanString } from "@/helpers/cleanString"
 import { useDebouncedState } from "@/hooks/useDebouncedState"
 import { cn } from "@/ui/lib/utils"
@@ -21,8 +22,6 @@ import { searchPlayer } from "../../api/functions"
 import { MAX_SHOWN_ALIASES } from "../../constants/aliases"
 import { RankedPlayerItem } from "./RankedPlayerItem"
 import { SearchboxItem } from "./SearchboxItem"
-
-const __DEV = process.env.NODE_ENV === "development"
 
 const ResultsContainer = styled("div", {
   // eslint-disable-next-line lingui/no-unlocalized-strings
@@ -83,7 +82,7 @@ export const usePlayerSearch = (name: string) => {
 
 export const Searchbox = () => {
   const [search, setSearch, immediateSearch, isDebouncingSearch] =
-    useDebouncedState("", __DEV ? 250 : 750)
+    useDebouncedState("", env.IS_DEV ? 250 : 750)
 
   const playerSearchQuery = usePlayerSearch(search)
 

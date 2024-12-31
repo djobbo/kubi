@@ -10,7 +10,7 @@ export function setSessionTokenCookie(token: string, expiresAt: Date): void {
     sameSite: "lax",
     expires: expiresAt,
     path: "/",
-    secure: env.NODE_ENV === "production",
+    secure: env.IS_PROD,
   })
 }
 
@@ -20,6 +20,6 @@ export function deleteSessionTokenCookie(): void {
     sameSite: "lax",
     maxAge: 0,
     path: "/",
-    secure: env.NODE_ENV === "production",
+    secure: env.IS_PROD,
   })
 }
