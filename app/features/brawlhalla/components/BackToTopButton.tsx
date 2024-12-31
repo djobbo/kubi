@@ -1,17 +1,41 @@
 import { t } from "@lingui/core/macro"
 import { ChevronUp } from "lucide-react"
+import { useEffect, useState } from "react"
 
 import { Tooltip } from "@/components/base/Tooltip"
-import { useWindowScroll } from "@/hooks/useWindowScroll"
 import { cn } from "@/ui/lib/utils"
 
+const SCROLL_TOP_THRESHOLD = 300
+
 export const BackToTopButton = () => {
-  const { y: scrollY } = useWindowScroll()
+  const [isVisible, setIsVisible] = useState(false)
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    })
+  }
+
+  useEffect(() => {
+    const abortController = new AbortController()
+    window.addEventListener(
+      "scroll",
+      () => {
+        setIsVisible(window.scrollY > SCROLL_TOP_THRESHOLD)
+      },
+      { signal: abortController.signal },
+    )
+
+    return () => {
+      abortController.abort()
+    }
+  }, [])
 
   return (
     <div
       className={cn("fixed right-0 bottom-0 z-30", {
-        "opacity-0 pointer-events-none": scrollY <= 0,
+        "opacity-0 pointer-events-none": !isVisible,
       })}
     >
       <Tooltip content={t`Back to top`}>
@@ -21,11 +45,7 @@ export const BackToTopButton = () => {
           style={{
             transition: "0.15s opacity ease",
           }}
-          onClick={() => {
-            window.scrollTo({
-              top: 0,
-            })
-          }}
+          onClick={scrollToTop}
         >
           <ChevronUp size={20} />
         </button>

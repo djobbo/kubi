@@ -20,8 +20,6 @@ export const DiscordCard = () => {
     const onMousePositionChange = (e: MouseEvent) => {
       if (!containerRef.current || !cardRef.current) return
 
-      console.log("onMousePositionChange")
-
       const {
         x: cardX,
         y: cardY,

@@ -1,7 +1,6 @@
 import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
 import { createFileRoute, useRouter } from "@tanstack/react-router"
-import { useEffect } from "react"
 
 import { useAuth } from "@/features/auth/use-auth"
 import { Button } from "@/ui/components/button"
@@ -15,10 +14,6 @@ function Home() {
   const { user } = useAuth()
 
   const username = user?.name ?? t`User`
-
-  useEffect(() => {
-    console.log("Home")
-  }, [])
 
   return (
     <div className="w-full h-full">
