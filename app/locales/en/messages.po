@@ -13,92 +13,1199 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: ranked.mostPlayedLegend.ranked?.games
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/RankedContent.tsx:102
+msgid "{0} games"
+msgstr "{0} games"
+
+#. placeholder {0}: legend.ranked?.peak_rating ?? 0
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/PlayerLegendsTab.tsx:114
+msgid "{0} peak elo"
+msgstr "{0} peak elo"
+
+#. placeholder {0}: calculateWinrate(totalWins, totalGames).toFixed(2)
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:106
+msgid "{0}%"
+msgstr "{0}%"
+
+#. placeholder {0}: calculateWinrate(weapon.wins ?? 0, weapon.games ?? 0).toFixed(2)
+#. placeholder {0}: calculateWinrate( legend.stats?.wins ?? 0, legend.stats?.games ?? 0, ).toFixed(2)
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/PlayerWeaponsTab.tsx:92
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/PlayerLegendsTab.tsx:95
+msgid "{0}% winrate"
+msgstr "{0}% winrate"
+
+#: app/routes/stats/clan/$clanId.tsx:33
+msgid "{clan_name} - Clan Stats • Corehalla"
+msgstr "{clan_name} - Clan Stats • Corehalla"
+
+#: app/routes/stats/clan/$clanId.tsx:34
+msgid "{clan_name} Stats - Brawlhalla Clan Stats • Corehalla"
+msgstr "{clan_name} Stats - Brawlhalla Clan Stats • Corehalla"
+
+#: app/helpers/date.ts:39
+msgid "{hours}h {minutes}m {seconds}s"
+msgstr "{hours}h {minutes}m {seconds}s"
+
+#: app/routes/stats/player/$playerId.tsx:40
+msgid "{name} - Player Stats • Corehalla"
+msgstr "{name} - Player Stats • Corehalla"
+
+#: app/routes/stats/player/$playerId.tsx:41
+msgid "{name} Stats - Brawlhalla Player Stats • Corehalla"
+msgstr "{name} Stats - Brawlhalla Player Stats • Corehalla"
+
+#: app/features/brawlhalla/components/search/RankedPlayerItem.tsx:45
+msgid "{rating} / {peak_rating} peak ({tier})"
+msgstr "{rating} / {peak_rating} peak ({tier})"
+
+#: app/features/brawlhalla/components/layout/ErrorPageContent.tsx:31
+msgid "{statusCode} Error"
+msgstr "{statusCode} Error"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:75
+msgid "{weaponName} usage rate (percentage of total games)"
+msgstr "{weaponName} usage rate (percentage of total games)"
+
+#: app/features/brawlhalla/components/layout/Footer.tsx:94
+msgid "© 2018-{currentYear} Corehalla"
+msgstr "© 2018-{currentYear} Corehalla"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:91
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:114
+msgid "1 Ko every"
+msgstr "1 Ko every"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:128
+msgid "1 Suicide every"
+msgstr "1 Suicide every"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:133
+msgid "1 Team KO every"
+msgstr "1 Team KO every"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/RankedContent.tsx:32
+msgid "1v1 Games"
+msgstr "1v1 Games"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/RankedContent.tsx:75
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/RankedContent.tsx:34
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/RankedContent.tsx:30
+msgid "1v1 Ranked games played this season"
+msgstr "1v1 Ranked games played this season"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/RankedContent.tsx:85
+msgid "1v1 Ranked losses this season"
+msgstr "1v1 Ranked losses this season"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/RankedContent.tsx:80
+msgid "1v1 Ranked wins this season"
+msgstr "1v1 Ranked wins this season"
+
+#: app/features/brawlhalla/components/layout/SideNav.tsx:121
+#: app/features/brawlhalla/components/layout/AppNav.tsx:9
+msgid "1v1 Rankings"
+msgstr "1v1 Rankings"
+
+#: app/routes/index.tsx:95
+msgid "2v2"
+msgstr "2v2"
+
+#: app/features/brawlhalla/components/layout/SideNav.tsx:127
+#: app/features/brawlhalla/components/layout/AppNav.tsx:14
+msgid "2v2 Rankings"
+msgstr "2v2 Rankings"
+
+#: app/features/brawlhalla/components/DiscordCard.tsx:81
+msgid "7k+ discord members, and growing!"
+msgstr "7k+ discord members, and growing!"
+
+#: app/features/brawlhalla/components/stats/StatsHeader.tsx:73
+msgid "Add favorite"
+msgstr "Add favorite"
+
+#: app/features/brawlhalla/components/layout/alerts.tsx:54
+msgid "Authentication server is back online, you can reconnect! Don't forget to join our <0>Discord</0> !"
+msgstr "Authentication server is back online, you can reconnect! Don't forget to join our <0>Discord</0> !"
+
+#: app/features/brawlhalla/components/layout/alerts.tsx:38
+msgid "Authentication server is down, and so favorites aren't accessible, sorry for the inconvenience. Updates <0>here</0> !"
+msgstr "Authentication server is down, and so favorites aren't accessible, sorry for the inconvenience. Updates <0>here</0> !"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:140
+msgid "Average damage dealt per game"
+msgstr "Average damage dealt per game"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:100
+msgid "Average damage dealt per game {weaponName}"
+msgstr "Average damage dealt per game {weaponName}"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:80
+msgid "Average damage dealt unarmed per game"
+msgstr "Average damage dealt unarmed per game"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:103
+msgid "Average damage dealt with gadgets per game"
+msgstr "Average damage dealt with gadgets per game"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:145
+msgid "Average damage taken per game"
+msgstr "Average damage taken per game"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/RankedContent.tsx:146
+msgid "Average elo"
+msgstr "Average elo"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/RankedContent.tsx:148
+msgid "Average elo of the legends that use this weapon"
+msgstr "Average elo of the legends that use this weapon"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:125
+msgid "Average Falls per game"
+msgstr "Average Falls per game"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:150
+msgid "Average game length in seconds"
+msgstr "Average game length in seconds"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:93
+msgid "Average games between each gadget KO"
+msgstr "Average games between each gadget KO"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:130
+msgid "Average games between each suicides"
+msgstr "Average games between each suicides"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:135
+msgid "Average games between each Team KO"
+msgstr "Average games between each Team KO"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:116
+msgid "Average games between each thrown item KO"
+msgstr "Average games between each thrown item KO"
+
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:127
+msgid "Average games lost per teammate"
+msgstr "Average games lost per teammate"
+
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:117
+msgid "Average games played per teammate"
+msgstr "Average games played per teammate"
+
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:122
+msgid "Average games won per teammate"
+msgstr "Average games won per teammate"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:120
+msgid "Average Kos per game"
+msgstr "Average Kos per game"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:85
+msgid "Average KOs per game with {weaponName}"
+msgstr "Average KOs per game with {weaponName}"
+
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/PlayerLegendsTab.tsx:175
+msgid "Average level of all legends"
+msgstr "Average level of all legends"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/RankedContent.tsx:151
+msgid "Average peak elo"
+msgstr "Average peak elo"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/RankedContent.tsx:153
+msgid "Average peak elo of the legends that use this weapon"
+msgstr "Average peak elo of the legends that use this weapon"
+
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:132
+msgid "Average team Elo rating"
+msgstr "Average team Elo rating"
+
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:137
+msgid "Average team peak Elo rating"
+msgstr "Average team peak Elo rating"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:65
+msgid "Average unarmed KOs per game"
+msgstr "Average unarmed KOs per game"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:138
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:98
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:78
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:101
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:124
+msgid "Avg. dmg dealt per game"
+msgstr "Avg. dmg dealt per game"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:143
+msgid "Avg. dmg taken per game"
+msgstr "Avg. dmg taken per game"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:123
+msgid "Avg. Falls per game"
+msgstr "Avg. Falls per game"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:148
+msgid "Avg. game length"
+msgstr "Avg. game length"
+
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:115
+msgid "Avg. games per teammate"
+msgstr "Avg. games per teammate"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:118
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:83
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:63
+msgid "Avg. Kos per game"
+msgstr "Avg. Kos per game"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:48
+msgid "Avg. legend level"
+msgstr "Avg. legend level"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:58
+msgid "Avg. legend xp"
+msgstr "Avg. legend xp"
+
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/PlayerLegendsTab.tsx:168
+msgid "Avg. level"
+msgstr "Avg. level"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:50
+msgid "Avg. level of the legends that use {weaponName}"
+msgstr "Avg. level of the legends that use {weaponName}"
+
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:125
+msgid "Avg. losses per teammate"
+msgstr "Avg. losses per teammate"
+
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:135
+msgid "Avg. team peak rating"
+msgstr "Avg. team peak rating"
+
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:130
+msgid "Avg. team rating"
+msgstr "Avg. team rating"
+
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:120
+msgid "Avg. wins per teammate"
+msgstr "Avg. wins per teammate"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:60
+msgid "Avg. xp of the legends that use {weaponName}"
+msgstr "Avg. xp of the legends that use {weaponName}"
+
+#: app/features/brawlhalla/components/BackToTopButton.tsx:41
+msgid "Back to top"
+msgstr "Back to top"
+
+#: app/routes/rankings/1v1.$region.$page.tsx:46
+#: app/routes/rankings/1v1.$region.$page.tsx:49
+msgid "Brawlhalla {formatedRegion} 1v1 Rankings - Page {page}{formatedSearch} • Corehalla"
+msgstr "Brawlhalla {formatedRegion} 1v1 Rankings - Page {page}{formatedSearch} • Corehalla"
+
+#: app/features/brawlhalla/components/layout/Footer.tsx:67
+msgid "Brawlhalla and Blue Mammoth Games are trademarks of <0>Blue Mammoth Games</0>"
+msgstr "Brawlhalla and Blue Mammoth Games are trademarks of <0>Blue Mammoth Games</0>"
+
+#: app/features/brawlhalla/components/layout/alerts.tsx:7
+msgid "Brawlhalla maintenance ongoing. More info <0>here</0> !"
+msgstr "Brawlhalla maintenance ongoing. More info <0>here</0> !"
+
+#: app/features/brawlhalla/components/layout/ErrorPageContent.tsx:38
+msgid "Bring me home"
+msgstr "Bring me home"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/ClanContent.tsx:31
+#: app/features/brawlhalla/components/favorites/FavoritesGrid.tsx:40
+msgid "Clan"
+msgstr "Clan"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/ClanContent.tsx:50
+msgid "Clan XP"
+msgstr "Clan XP"
+
+#: app/features/brawlhalla/components/layout/SideNav.tsx:138
+#: app/features/brawlhalla/components/layout/AppNav.tsx:24
+msgid "Clans"
+msgstr "Clans"
+
 #: app/ui/components/sheet.tsx:79
 #: app/ui/components/dialog.tsx:56
 msgid "Close"
 msgstr "Close"
 
+#: app/features/brawlhalla/components/layout/ErrorPageContent.tsx:57
+msgid "Contribute"
+msgstr "Contribute"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/ClanContent.tsx:55
+msgid "Contribution"
+msgstr "Contribution"
+
+#: app/features/brawlhalla/components/stats/StatsHeader.tsx:89
+msgid "Copied link to clipboard!"
+msgstr "Copied link to clipboard!"
+
+#: app/features/brawlhalla/components/DiscordCard.tsx:76
+msgid "Corehalla animated logo"
+msgstr "Corehalla animated logo"
+
+#: app/features/brawlhalla/components/layout/Footer.tsx:61
+msgid "Corehalla is neither associated nor endorsed by Blue Mammoth Games and doesn't reflect the views or opinions of Blue Mammoth Games or anyone officially involved in developing Brawlhalla."
+msgstr "Corehalla is neither associated nor endorsed by Blue Mammoth Games and doesn't reflect the views or opinions of Blue Mammoth Games or anyone officially involved in developing Brawlhalla."
+
+#: app/features/brawlhalla/components/layout/Header.tsx:51
+msgid "Corehalla logo"
+msgstr "Corehalla logo"
+
+#: app/routes/stats/clan/$clanId.tsx:54
+msgid "Created on"
+msgstr "Created on"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:81
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/WeaponDistribution.tsx:85
+msgid "Damage dealt"
+msgstr "Damage dealt"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:88
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:68
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:96
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:119
+msgid "Damage Dealt"
+msgstr "Damage Dealt"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:100
+msgid "Damage dealt per second"
+msgstr "Damage dealt per second"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:95
+msgid "Damage dealt per second with {weaponName}"
+msgstr "Damage dealt per second with {weaponName}"
+
+#. placeholder {0}: weapon.weapon
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/WeaponDistribution.tsx:128
+msgid "Damage dealt per second with this {0}"
+msgstr "Damage dealt per second with this {0}"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:70
+msgid "Damage dealt unarmed"
+msgstr "Damage dealt unarmed"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:75
+msgid "Damage dealt unarmed per second"
+msgstr "Damage dealt unarmed per second"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:90
+msgid "Damage dealt with {weaponName}"
+msgstr "Damage dealt with {weaponName}"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:98
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/WeaponDistribution.tsx:218
+msgid "Damage dealt with gadgets"
+msgstr "Damage dealt with gadgets"
+
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/WeaponDistribution.tsx:102
+msgid "Damage dealt with this weapon"
+msgstr "Damage dealt with this weapon"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:121
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/WeaponDistribution.tsx:180
+msgid "Damage dealt with thrown items"
+msgstr "Damage dealt with thrown items"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:126
+msgid "Damage dealt with thrown items per game"
+msgstr "Damage dealt with thrown items per game"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:86
+msgid "Damage taken"
+msgstr "Damage taken"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:105
+msgid "Damage taken per second"
+msgstr "Damage taken per second"
+
+#: app/routes/stats/clan/$clanId.tsx:56
+msgid "Date when {clanName} was created"
+msgstr "Date when {clanName} was created"
+
+#: app/features/brawlhalla/components/stats/clan/ClanMember.tsx:35
+msgid "Date when {memberName} joined the clan"
+msgstr "Date when {memberName} joined the clan"
+
+#: app/routes/index.tsx:53
+#: app/features/brawlhalla/components/layout/Footer.tsx:16
+msgid "Discord"
+msgstr "Discord"
+
+#: app/features/brawlhalla/components/DiscordCard.tsx:69
+msgid "Discord header image"
+msgstr "Discord header image"
+
+#: app/features/brawlhalla/components/layout/SideNav.tsx:143
+msgid "Discord Server"
+msgstr "Discord Server"
+
+#: app/features/brawlhalla/components/DiscordCard.tsx:114
+msgid "Donate"
+msgstr "Donate"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:93
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/WeaponDistribution.tsx:124
+msgid "DPS"
+msgstr "DPS"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:98
+msgid "DPS (Dealt)"
+msgstr "DPS (Dealt)"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:103
+msgid "DPS (Taken)"
+msgstr "DPS (Taken)"
+
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/PlayerLegendsTab.tsx:105
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:74
+msgid "Elo"
+msgstr "Elo"
+
+#: app/features/brawlhalla/components/stats/TeamCard.tsx:91
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/RankedContent.tsx:72
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/RankedContent.tsx:40
+msgid "Elo reset"
+msgstr "Elo reset"
+
+#. placeholder {0}: getTierFromRating(eloReset)
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/RankedContent.tsx:74
+msgid "Elo reset for next season ({0})"
+msgstr "Elo reset for next season ({0})"
+
+#: app/features/brawlhalla/components/stats/TeamCard.tsx:93
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/RankedContent.tsx:42
+msgid "Elo reset for next season ({eloResetTier})"
+msgstr "Elo reset for next season ({eloResetTier})"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:60
+msgid "Falls"
+msgstr "Falls"
+
+#: app/features/brawlhalla/components/layout/SideNav.tsx:175
+msgid "Favorites"
+msgstr "Favorites"
+
+#: app/features/brawlhalla/components/WeeklyRotation.tsx:48
+msgid "Free Legends Rotation"
+msgstr "Free Legends Rotation"
+
+#: app/features/brawlhalla/components/layout/Footer.tsx:57
+msgid "Freepik - Flaticon"
+msgstr "Freepik - Flaticon"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:179
+msgid "Gadgets"
+msgstr "Gadgets"
+
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/WeaponDistribution.tsx:201
+msgid "Gadgets damage"
+msgstr "Gadgets damage"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:88
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/WeaponDistribution.tsx:183
+msgid "Gadgets KOs"
+msgstr "Gadgets KOs"
+
+#: app/features/brawlhalla/components/stats/TeamCard.tsx:81
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:47
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:129
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/RankedContent.tsx:73
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/PlayerWeaponsTab.tsx:69
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/RankedContent.tsx:28
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/PlayerLegendsTab.tsx:70
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:55
+msgid "Games"
+msgstr "Games"
+
+#: app/features/brawlhalla/components/stats/TeamCard.tsx:83
+msgid "Games played this season"
+msgstr "Games played this season"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:138
+msgid "General Stats"
+msgstr "General Stats"
+
+#: app/features/brawlhalla/components/layout/Footer.tsx:26
 #: app/config/site.ts:16
 msgid "Github"
 msgstr "Github"
+
+#: app/routes/rankings/1v1.$region.$page.tsx:41
+msgid "Global"
+msgstr "Global"
+
+#. placeholder {0}: glory.bestRating
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/RankedContent.tsx:56
+msgid "Glory earned from best rating ({0} Elo)"
+msgstr "Glory earned from best rating ({0} Elo)"
+
+#. placeholder {0}: glory.totalWins
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/RankedContent.tsx:61
+msgid "Glory earned from wins ({0} Wins)"
+msgstr "Glory earned from wins ({0} Wins)"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/RankedContent.tsx:54
+msgid "Glory from rating"
+msgstr "Glory from rating"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/RankedContent.tsx:59
+msgid "Glory from wins"
+msgstr "Glory from wins"
 
 #: app/components/NotFound.tsx:14
 #: app/components/DefaultCatchBoundary.tsx:50
 msgid "Go back"
 msgstr "Go back"
 
-#: app/components/layout/CommandMenu.tsx:85
+#: app/features/command/components/CommandMenu.tsx:94
 msgid "Hello World"
 msgstr "Hello World"
 
+#: app/routes/index.tsx:131
+msgid "Here you'll be able to see your favorite players and clans"
+msgstr "Here you'll be able to see your favorite players and clans"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/RankedContent.tsx:110
+msgid "Highest elo"
+msgstr "Highest elo"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/RankedContent.tsx:129
+msgid "Highest peak elo"
+msgstr "Highest peak elo"
+
+#: app/features/brawlhalla/components/layout/SideNav.tsx:115
 #: app/config/nav.ts:23
 #: app/components/NotFound.tsx:18
 #: app/components/DefaultCatchBoundary.tsx:38
 msgid "Home"
 msgstr "Home"
 
-#: app/components/layout/CommandMenu.tsx:68
+#: app/features/brawlhalla/components/FirstTimePopup.tsx:61
+msgid "I understand 💪"
+msgstr "I understand 💪"
+
+#: app/features/brawlhalla/components/search/Searchbox.tsx:243
+msgid "If you're having trouble finding a player by name, trying using their brawlhalla id instead."
+msgstr "If you're having trouble finding a player by name, trying using their brawlhalla id instead."
+
+#: app/routes/__root.tsx:51
+msgid "Improve your Brawlhalla Game, and find your place among the Elite with our in-depth Player and Clan stats tracking and live leaderboards."
+msgstr "Improve your Brawlhalla Game, and find your place among the Elite with our in-depth Player and Clan stats tracking and live leaderboards."
+
+#: app/routes/index.tsx:74
+msgid "Improve your Brawlhalla Game, and find your place among the Elite with our in-depth stats tracking and live leaderboards."
+msgstr "Improve your Brawlhalla Game, and find your place among the Elite with our in-depth stats tracking and live leaderboards."
+
+#: app/features/brawlhalla/components/DiscordCard.tsx:109
+msgid "Join"
+msgstr "Join"
+
+#: app/features/brawlhalla/components/search/Searchbox.tsx:248
+msgid "Join our <0>Discord</0> if you need help."
+msgstr "Join our <0>Discord</0> if you need help."
+
+#: app/routes/index.tsx:50
+msgid "Join our community"
+msgstr "Join our community"
+
+#: app/features/brawlhalla/components/layout/Footer.tsx:78
+msgid "Join the community:"
+msgstr "Join the community:"
+
+#: app/features/brawlhalla/components/FirstTimePopup.tsx:31
+msgid "Join us:"
+msgstr "Join us:"
+
+#: app/features/brawlhalla/components/stats/clan/ClanMember.tsx:33
+msgid "Joined on"
+msgstr "Joined on"
+
+#: app/features/command/components/CommandMenu.tsx:77
 msgid "K"
 msgstr "K"
 
-#: app/routes/__root.tsx:38
-#: app/routes/__root.tsx:39
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/WeaponDistribution.tsx:198
+msgid "Kills with gadgets"
+msgstr "Kills with gadgets"
+
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/WeaponDistribution.tsx:82
+msgid "Kills with this weapon"
+msgstr "Kills with this weapon"
+
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/WeaponDistribution.tsx:160
+msgid "Kills with thrown items"
+msgstr "Kills with thrown items"
+
+#: app/features/brawlhalla/components/layout/alerts.tsx:22
+msgid "Known issues with fetching stats from Brawlhalla's servers, don't panic. Updates <0>here</0> !"
+msgstr "Known issues with fetching stats from Brawlhalla's servers, don't panic. Updates <0>here</0> !"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:55
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:78
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:58
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:86
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:109
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/WeaponDistribution.tsx:67
+msgid "KOs"
+msgstr "KOs"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:80
+msgid "KOs with {weaponName}"
+msgstr "KOs with {weaponName}"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:111
+msgid "KOs with thrown items"
+msgstr "KOs with thrown items"
+
 #: app/config/site.ts:13
 msgid "Kubi"
 msgstr "Kubi"
 
-#: app/components/layout/CommandMenu.tsx:77
+#: app/features/brawlhalla/components/LandingArticles.tsx:30
+msgid "Latest News"
+msgstr "Latest News"
+
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/Legend.tsx:34
+msgid "Legend level"
+msgstr "Legend level"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/RankedContent.tsx:107
+msgid "Legend that has played the most games with this weapon"
+msgstr "Legend that has played the most games with this weapon"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/RankedContent.tsx:126
+msgid "Legend that has the highest elo with this weapon"
+msgstr "Legend that has the highest elo with this weapon"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/RankedContent.tsx:143
+msgid "Legend that has the highest peak elo with this weapon"
+msgstr "Legend that has the highest peak elo with this weapon"
+
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/PlayerLegendsTab.tsx:134
+msgid "Legends played"
+msgstr "Legends played"
+
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/PlayerLegendsTab.tsx:145
+msgid "Legends that were played at least once"
+msgstr "Legends that were played at least once"
+
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/PlayerLegendsTab.tsx:157
+msgid "Legends that were played at least once in ranked 1v1 during this season"
+msgstr "Legends that were played at least once in ranked 1v1 during this season"
+
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/Legend.tsx:32
+msgid "Level"
+msgstr "Level"
+
+#. placeholder {0}: weapon.level ?? 0
+#. placeholder {0}: legend.stats?.level ?? 0
+#. placeholder {1}: weapon.xp ?? 0
+#. placeholder {1}: legend.stats?.xp ?? 0
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/PlayerWeaponsTab.tsx:58
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/PlayerLegendsTab.tsx:59
+msgid "Level {0} ({1} xp)"
+msgstr "Level {0} ({1} xp)"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/PlayerWeaponsTab.tsx:55
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/PlayerLegendsTab.tsx:56
+msgid "Level / XP"
+msgstr "Level / XP"
+
+#: app/features/command/components/CommandMenu.tsx:86
 msgid "Links"
 msgstr "Links"
 
-#: app/components/layout/CommandMenu.tsx:75
+#: app/routes/__root.tsx:80
+msgid "Loading..."
+msgstr "Loading..."
+
+#: app/routes/index.tsx:147
+#: app/routes/index.tsx:157
+msgid "Loading<0>...</0>"
+msgstr "Loading<0>...</0>"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/RankedContent.tsx:83
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/PlayerWeaponsTab.tsx:79
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/PlayerLegendsTab.tsx:80
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:63
+msgid "Losses"
+msgstr "Losses"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/PlayerWeaponsTab.tsx:64
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/PlayerLegendsTab.tsx:65
+msgid "Matchtime"
+msgstr "Matchtime"
+
+#: app/routes/stats/clan/$clanId.tsx:68
+msgid "Members"
+msgstr "Members"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/RankedContent.tsx:93
+msgid "Most played"
+msgstr "Most played"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/RankedContent.tsx:67
+msgid "N/A (not enough games)"
+msgstr "N/A (not enough games)"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/PlayerWeaponsTab.tsx:51
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/PlayerLegendsTab.tsx:52
+msgid "Name"
+msgstr "Name"
+
+#: app/features/brawlhalla/components/search/Searchbox.tsx:222
+msgid "No players found"
+msgstr "No players found"
+
+#: app/features/command/components/CommandMenu.tsx:84
 msgid "No results found."
 msgstr "No results found."
 
-#: app/routes/index.tsx:32
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/RankedContent.tsx:105
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/RankedContent.tsx:124
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/RankedContent.tsx:141
+msgid "None"
+msgstr "None"
+
+#: app/routes/stats/clan/$clanId.tsx:70
+msgid "Number of members in {clanName}"
+msgstr "Number of members in {clanName}"
+
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:112
+msgid "Number of teammates this season"
+msgstr "Number of teammates this season"
+
+#: app/features/brawlhalla/components/search/Searchbox.tsx:231
+msgid "Only players that have completed their 10 placement matches are shown."
+msgstr "Only players that have completed their 10 placement matches are shown."
+
+#: app/features/brawlhalla/components/layout/ErrorPageContent.tsx:20
+msgid "Oops, something went wrong"
+msgstr "Oops, something went wrong"
+
+#: app/features/brawlhalla/components/search/Searchbox.tsx:192
+msgid "Other players with similar names"
+msgstr "Other players with similar names"
+
+#: app/features/brawlhalla/components/stats/RatingDisplay.tsx:32
+msgid "Peak"
+msgstr "Peak"
+
+#: app/features/brawlhalla/components/stats/RankingsTableItem.tsx:76
+msgid "peak ({tier})"
+msgstr "peak ({tier})"
+
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/PlayerLegendsTab.tsx:110
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:78
+msgid "Peak elo"
+msgstr "Peak elo"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/ClanContent.tsx:60
+msgid "Percentage of the clan XP earned by {playerName}"
+msgstr "Percentage of the clan XP earned by {playerName}"
+
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/PlayerLegendsTab.tsx:148
+msgid "Played in ranked"
+msgstr "Played in ranked"
+
+#: app/features/brawlhalla/components/favorites/FavoritesGrid.tsx:34
+msgid "Player"
+msgstr "Player"
+
+#: app/features/brawlhalla/components/layout/SideNav.tsx:76
+msgid "player {cleanName} icon"
+msgstr "player {cleanName} icon"
+
+#: app/features/brawlhalla/components/favorites/FavoritesGrid.tsx:66
+msgid "player {favoriteName} icon"
+msgstr "player {favoriteName} icon"
+
+#: app/features/brawlhalla/components/search/Searchbox.tsx:163
+msgid "Player#{search}"
+msgstr "Player#{search}"
+
+#: app/features/brawlhalla/components/layout/SideNav.tsx:133
+#: app/features/brawlhalla/components/layout/AppNav.tsx:19
+msgid "Power Rankings"
+msgstr "Power Rankings"
+
+#: app/features/brawlhalla/components/DiscordCard.tsx:87
+msgid "Question of the day"
+msgstr "Question of the day"
+
+#: app/features/brawlhalla/components/search/Searchbox.tsx:179
+msgid "Ranked players"
+msgstr "Ranked players"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/RankedContent.tsx:160
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/RankedContent.tsx:83
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/RankedContent.tsx:49
+msgid "Ranked Season"
+msgstr "Ranked Season"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/RankedContent.tsx:90
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/RankedContent.tsx:44
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/RankedContent.tsx:35
+msgid "Ranked winrate (ranked wins / ranked games)"
+msgstr "Ranked winrate (ranked wins / ranked games)"
+
+#: app/routes/test.tsx:27
 msgid "Regenerate"
 msgstr "Regenerate"
 
-#: app/components/layout/CommandMenu.tsx:61
-msgid "Search documentation..."
-msgstr "Search documentation..."
+#: app/features/brawlhalla/components/stats/StatsHeader.tsx:68
+msgid "Remove Favorite"
+msgstr "Remove Favorite"
 
-#: app/components/layout/CommandMenu.tsx:64
+#: app/features/brawlhalla/components/layout/ErrorPageContent.tsx:48
+msgid "Report bug"
+msgstr "Report bug"
+
+#: app/features/brawlhalla/components/search/Searchbox.tsx:158
+msgid "Search by Brawlhalla ID"
+msgstr "Search by Brawlhalla ID"
+
+#: app/features/brawlhalla/components/search/Searchbox.tsx:226
+msgid "Search for a player (must start with exact match)"
+msgstr "Search for a player (must start with exact match)"
+
+#: app/features/brawlhalla/components/search/Searchbox.tsx:135
+msgid "Search player by name or brawlhalla id..."
+msgstr "Search player by name or brawlhalla id..."
+
+#: app/features/brawlhalla/components/search/SearchButton.tsx:24
+msgid "Search player..."
+msgstr "Search player..."
+
+#: app/features/command/components/CommandMenu.tsx:27
+#: app/features/command/components/CommandMenu.tsx:28
+#: app/features/brawlhalla/components/stats/rankings/RankingsLayout.tsx:39
 msgid "Search..."
 msgstr "Search..."
 
-#: app/routes/__root.tsx:64
-msgid "Sidenav"
-msgstr "Sidenav"
+#: app/features/brawlhalla/components/stats/StatsHeader.tsx:94
+msgid "Share"
+msgstr "Share"
 
-#: app/routes/index.tsx:58
+#: app/features/brawlhalla/components/DiscordCard.tsx:101
+msgid "Share your thoughts"
+msgstr "Share your thoughts"
+
+#: app/routes/index.tsx:138
+#: app/features/brawlhalla/components/layout/Header.tsx:79
+msgid "Sign in"
+msgstr "Sign in"
+
+#: app/features/brawlhalla/components/stats/StatsHeader.tsx:82
+msgid "Sign in to add favorites"
+msgstr "Sign in to add favorites"
+
+#: app/routes/test.tsx:53
 msgid "Sign in with Discord"
 msgstr "Sign in with Discord"
 
-#: app/routes/index.tsx:46
+#: app/routes/test.tsx:41
+#: app/features/brawlhalla/components/layout/Header.tsx:73
 msgid "Sign out"
 msgstr "Sign out"
+
+#: app/routes/index.tsx:63
+msgid "Stay ahead of <0/>the competition"
+msgstr "Stay ahead of <0/>the competition"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:65
+msgid "Suicides"
+msgstr "Suicides"
+
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/PlayerLegendsTab.tsx:165
+msgid "Sum of of all legends"
+msgstr "Sum of of all legends"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:45
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:55
+msgid "Sum of the legends that use {weaponName}"
+msgstr "Sum of the legends that use {weaponName}"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:70
+msgid "Team KOs"
+msgstr "Team KOs"
+
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:110
+msgid "Teammates"
+msgstr "Teammates"
+
+#: app/features/brawlhalla/components/layout/alerts.tsx:70
+msgid "The Brawlhalla Wiki has officially migrated to its new home at wiki.gg! Explore the latest updates and resources by visiting <0>brawlhalla.wiki.gg</0> today!"
+msgstr "The Brawlhalla Wiki has officially migrated to its new home at wiki.gg! Explore the latest updates and resources by visiting <0>brawlhalla.wiki.gg</0> today!"
 
 #: app/components/NotFound.tsx:10
 msgid "The page you are looking for does not exist."
 msgstr "The page you are looking for does not exist."
 
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/WeaponDistribution.tsx:163
+msgid "Throw damage"
+msgstr "Throw damage"
+
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/WeaponDistribution.tsx:144
+msgid "Throw KOs"
+msgstr "Throw KOs"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:65
+msgid "Time {weaponName} was held"
+msgstr "Time {weaponName} was held"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:70
+msgid "Time {weaponName} was held (percentage of total time)"
+msgstr "Time {weaponName} was held (percentage of total time)"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:115
+msgid "Time between each fall in seconds"
+msgstr "Time between each fall in seconds"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:110
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/WeaponDistribution.tsx:133
+msgid "Time between each kill in seconds"
+msgstr "Time between each kill in seconds"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:63
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/WeaponDistribution.tsx:105
+msgid "Time held"
+msgstr "Time held"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:68
+msgid "Time held (%)"
+msgstr "Time held (%)"
+
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/WeaponDistribution.tsx:121
+msgid "Time held with this weapon"
+msgstr "Time held with this weapon"
+
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/Legend.tsx:42
+msgid "Time played"
+msgstr "Time played"
+
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/Legend.tsx:47
+msgid "Time played (%)"
+msgstr "Time played (%)"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:50
+msgid "Time played unarmed"
+msgstr "Time played unarmed"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:55
+msgid "Time played unarmed (percentage of total time)"
+msgstr "Time played unarmed (percentage of total time)"
+
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/Legend.tsx:44
+msgid "Time played with this legend"
+msgstr "Time played with this legend"
+
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/Legend.tsx:51
+msgid "Time played with this legend (percentage of total time)"
+msgstr "Time played with this legend (percentage of total time)"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:113
+msgid "Time to fall"
+msgstr "Time to fall"
+
+#: app/features/brawlhalla/components/stats/GeneralStats.tsx:108
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/WeaponDistribution.tsx:131
+msgid "Time to kill"
+msgstr "Time to kill"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:48
+msgid "Time unarmed"
+msgstr "Time unarmed"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:53
+msgid "Time unarmed (%)"
+msgstr "Time unarmed (%)"
+
 #: app/components/layout/MobileNav.tsx:54
 msgid "Toggle Menu"
 msgstr "Toggle Menu"
+
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:90
+msgid "Total games"
+msgstr "Total games"
+
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:102
+msgid "Total games lost this season"
+msgstr "Total games lost this season"
+
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:92
+msgid "Total games played this season"
+msgstr "Total games played this season"
+
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:97
+msgid "Total games won this season"
+msgstr "Total games won this season"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/RankedContent.tsx:49
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/RankedContent.tsx:66
+msgid "Total Glory"
+msgstr "Total Glory"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/RankedContent.tsx:51
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/RankedContent.tsx:68
+msgid "Total glory earned this season (wins + best rating)"
+msgstr "Total glory earned this season (wins + best rating)"
+
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/PlayerLegendsTab.tsx:160
+msgid "Total legends level"
+msgstr "Total legends level"
+
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:100
+msgid "Total losses"
+msgstr "Total losses"
+
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:95
+msgid "Total wins"
+msgstr "Total wins"
+
+#: app/routes/__root.tsx:50
+msgid "Track your Brawlhalla stats, view rankings, and more! • Corehalla"
+msgstr "Track your Brawlhalla stats, view rankings, and more! • Corehalla"
 
 #: app/components/DefaultCatchBoundary.tsx:33
 msgid "Try Again"
 msgstr "Try Again"
 
-#: app/components/layout/CommandMenu.tsx:72
+#: app/features/brawlhalla/components/layout/Footer.tsx:21
+msgid "Twitter"
+msgstr "Twitter"
+
+#: app/features/command/components/CommandMenu.tsx:81
 msgid "Type a command or search..."
 msgstr "Type a command or search..."
 
-#: app/routes/index.tsx:21
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:159
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/WeaponDistribution.tsx:33
+msgid "Unarmed"
+msgstr "Unarmed"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:60
+msgid "Unarmed KOs"
+msgstr "Unarmed KOs"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:73
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/Legend.tsx:54
+msgid "Usage rate (games)"
+msgstr "Usage rate (games)"
+
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/Legend.tsx:56
+msgid "Usage rate of this legend (percentage of total games)"
+msgstr "Usage rate of this legend (percentage of total games)"
+
+#: app/routes/test.tsx:16
 msgid "User"
 msgstr "User"
 
-#: app/routes/index.tsx:37
+#: app/features/brawlhalla/components/layout/Header.tsx:65
+msgid "User avatar"
+msgstr "User avatar"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/RankedContent.tsx:91
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/RankedContent.tsx:54
+msgid "Valhallan"
+msgstr "Valhallan"
+
+#: app/routes/index.tsx:86
+#: app/routes/index.tsx:125
+msgid "View rankings"
+msgstr "View rankings"
+
+#: app/features/brawlhalla/components/layout/Footer.tsx:41
+msgid "Visual assets courtesy of <0>Blue Mammoth Games</0>"
+msgstr "Visual assets courtesy of <0>Blue Mammoth Games</0>"
+
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/WeaponDistribution.tsx:44
+msgid "Weapon Distribution"
+msgstr "Weapon Distribution"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:43
+msgid "Weapon level"
+msgstr "Weapon level"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/PlayerOverviewTab.tsx:169
+msgid "Weapon Throws"
+msgstr "Weapon Throws"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:53
+msgid "Weapon xp"
+msgstr "Weapon xp"
+
+#: app/features/brawlhalla/components/FirstTimePopup.tsx:25
+msgid "Welcome to the new and improved Corehalla 🎉. Have fun exploring!"
+msgstr "Welcome to the new and improved Corehalla 🎉. Have fun exploring!"
+
+#: app/routes/test.tsx:32
 msgid "Welcome, {username}"
 msgstr "Welcome, {username}"
+
+#: app/features/brawlhalla/components/DiscordCard.tsx:90
+msgid "Which weapon(s) do you enjoy playing the most? and which one(s) you dislike playing?"
+msgstr "Which weapon(s) do you enjoy playing the most? and which one(s) you dislike playing?"
+
+#: app/features/brawlhalla/components/layout/SideNav.tsx:149
+msgid "Wiki"
+msgstr "Wiki"
+
+#: app/features/brawlhalla/components/stats/TeamCard.tsx:86
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/RankedContent.tsx:88
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/PlayerWeaponsTab.tsx:87
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/RankedContent.tsx:42
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/RankedContent.tsx:33
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/PlayerLegendsTab.tsx:90
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:68
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:105
+msgid "Winrate"
+msgstr "Winrate"
+
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:107
+msgid "Winrate (total wins / total games)"
+msgstr "Winrate (total wins / total games)"
+
+#: app/features/brawlhalla/components/stats/TeamCard.tsx:88
+msgid "Winrate this season (wins / games)"
+msgstr "Winrate this season (wins / games)"
+
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/RankedContent.tsx:78
+#: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/PlayerWeaponsTab.tsx:74
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/PlayerLegendsTab.tsx:75
+#: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:59
+msgid "Wins"
+msgstr "Wins"
+
+#: app/routes/stats/clan/$clanId.tsx:63
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/Legend.tsx:37
+#: app/features/brawlhalla/components/stats/clan/ClanMember.tsx:38
+msgid "XP"
+msgstr "XP"
+
+#: app/features/brawlhalla/components/stats/clan/ClanMember.tsx:44
+msgid "XP earned {memberName} the member since joining the clan"
+msgstr "XP earned {memberName} the member since joining the clan"
+
+#: app/routes/stats/clan/$clanId.tsx:65
+msgid "XP earned by {clanName} members since creation"
+msgstr "XP earned by {clanName} members since creation"
+
+#: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/ClanContent.tsx:52
+msgid "XP earned by the clan members since creation"
+msgstr "XP earned by the clan members since creation"
+
+#: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/Legend.tsx:39
+msgid "XP earned with this legend"
+msgstr "XP earned with this legend"
+
+#: app/routes/index.tsx:120
+msgid "You don't have any favorites yet, you can a player or a clan as favorite when visiting their profile page."
+msgstr "You don't have any favorites yet, you can a player or a clan as favorite when visiting their profile page."
