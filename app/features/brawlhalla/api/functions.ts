@@ -67,7 +67,7 @@ export const getPlayerStats = createServerFn({ method: "GET" })
           playerStatsSchema,
           playerStatsMock,
         ),
-      15 * 60 * 1000,
+      env.IS_DEV ? 30 * 1000 : 15 * 60 * 1000,
     )
   })
 
@@ -82,7 +82,7 @@ export const getPlayerRanked = createServerFn({ method: "GET" })
           playerRankedSchema,
           playerRankedMock,
         ),
-      15 * 60 * 1000,
+      env.IS_DEV ? 30 * 1000 : 15 * 60 * 1000,
     )
   })
 
@@ -92,7 +92,7 @@ export const getClan = createServerFn({ method: "GET" })
     return withCache(
       `clan-stats-${clanId}`,
       () => getBhApi(`/clan/${clanId}`, clanSchema, clanMock),
-      15 * 60 * 1000,
+      env.IS_DEV ? 30 * 1000 : 15 * 60 * 1000,
     )
   })
 
@@ -115,7 +115,7 @@ export const get1v1Rankings = createServerFn({ method: "GET" })
           z.array(ranking1v1Schema),
           rankings1v1Mock,
         ),
-      5 * 60 * 1000,
+      env.IS_DEV ? 30 * 1000 : 5 * 60 * 1000,
     )
   })
 
@@ -137,7 +137,7 @@ export const get2v2Rankings = createServerFn({ method: "GET" })
           z.array(ranking2v2Schema),
           rankings2v2Mock,
         ),
-      5 * 60 * 1000,
+      env.IS_DEV ? 30 * 1000 : 5 * 60 * 1000,
     )
   })
 
