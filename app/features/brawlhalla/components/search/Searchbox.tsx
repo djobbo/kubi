@@ -1,3 +1,4 @@
+import { css } from "@emotion/css"
 import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
 import { queryOptions, useQuery } from "@tanstack/react-query"
@@ -16,17 +17,16 @@ import { env } from "@/env"
 import { cleanString } from "@/helpers/cleanString"
 import { useDebouncedState } from "@/hooks/useDebouncedState"
 import { cn } from "@/ui/lib/utils"
-import { styled, theme } from "@/ui/theme"
+import { colors } from "@/ui/theme"
 
 import { searchPlayer } from "../../api/functions"
 import { MAX_SHOWN_ALIASES } from "../../constants/aliases"
 import { RankedPlayerItem } from "./RankedPlayerItem"
 import { SearchboxItem } from "./SearchboxItem"
 
-const ResultsContainer = styled("div", {
-  // eslint-disable-next-line lingui/no-unlocalized-strings
-  maxHeight: "calc(100vh - 14vh - 100px)",
-})
+const resultsContainerClass = css`
+  max-height: calc(100vh - 14vh - 100px);
+`
 
 interface AliasesSubtitleProps {
   immediateSearch: string
@@ -143,12 +143,12 @@ export const Searchbox = () => {
                   <Spinner
                     className="absolute top-1/2 -translate-x-1/2 right-2"
                     size="2rem"
-                    color={theme.colors.bg.toString()}
+                    color={colors.bg}
                   />
                 )}
             </div>
             {/* TODO: add tabs for searching for clans, tournaments, etc */}
-            <ResultsContainer className="overflow-y-auto">
+            <div className={cn(resultsContainerClass, "overflow-y-auto")}>
               <div className="max-h-[50vh] my-2">
                 {hasResults ? (
                   <>
@@ -238,7 +238,7 @@ export const Searchbox = () => {
                   </div>
                 )}
               </div>
-            </ResultsContainer>
+            </div>
             <p className="text-center text-xs text-textVar1 italic p-2 border-t border-bg">
               <Trans>
                 If you{"'"}re having trouble finding a player by name, trying

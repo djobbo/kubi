@@ -1,6 +1,6 @@
 import amimate from "tailwindcss-animate"
 
-import colors from "@/ui/theme/theme"
+import { colors } from "./app/ui/theme"
 
 /** @type {import('tailwindcss').Config} */
 export default {

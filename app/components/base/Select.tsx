@@ -2,7 +2,7 @@ import { useId } from "react"
 import ReactSelect from "react-select"
 
 import { cn } from "@/ui/lib/utils"
-import { theme } from "@/ui/theme"
+import { colors } from "@/ui/theme"
 
 interface SelectOption<T> {
   value: T
@@ -51,29 +51,29 @@ export const Select = <T extends string>({
         styles={{
           singleValue: (styles) => ({
             ...styles,
-            color: theme.colors.text.toString(),
+            color: colors.text.toString(),
           }),
           control: (styles) => ({
             ...styles,
-            backgroundColor: theme.colors.bgVar2.toString(),
+            backgroundColor: colors.bgVar2.toString(),
             borderRadius: "0.5rem",
             // eslint-disable-next-line lingui/no-unlocalized-strings
-            border: `thin solid ${theme.colors.bg}`,
+            border: `thin solid ${colors.bg}`,
             cursor: "pointer",
             // eslint-disable-next-line lingui/no-unlocalized-strings
             padding: "0.25rem 0.5rem",
           }),
           menu: (styles) => ({
             ...styles,
-            backgroundColor: theme.colors.bg.toString(),
+            backgroundColor: colors.bg.toString(),
           }),
           option: (styles) => ({
             ...styles,
-            color: theme.colors.text.toString(),
-            backgroundColor: theme.colors.bg.toString(),
+            color: colors.text.toString(),
+            backgroundColor: colors.bg.toString(),
             cursor: "pointer",
             ":hover": {
-              backgroundColor: theme.colors.bgVar1.toString(),
+              backgroundColor: colors.bgVar1.toString(),
             },
           }),
         }}

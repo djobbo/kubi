@@ -20,7 +20,6 @@ import { BackToTopButton } from "@/features/brawlhalla/components/BackToTopButto
 import { Layout } from "@/features/brawlhalla/components/layout/Layout"
 import { Searchbox } from "@/features/brawlhalla/components/search/Searchbox"
 import { SideNavProvider } from "@/features/sidenav/sidenav-provider"
-// @ts-expect-error - CSS is not typed
 import globalStyles from "@/global.css?url"
 import { seo } from "@/helpers/seo"
 

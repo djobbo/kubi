@@ -1,8 +1,9 @@
+import { css } from "@emotion/css"
 import type { ReactNode } from "react"
 
 import { FirstTimePopup } from "@/features/brawlhalla/components/FirstTimePopup"
-import { styled } from "@/ui/theme"
-import theme from "@/ui/theme/theme"
+import { cn } from "@/ui/lib/utils"
+import { colors } from "@/ui/theme"
 
 import { Footer } from "./Footer"
 import { Header } from "./Header"
@@ -13,12 +14,15 @@ export interface LayoutProps {
   children: ReactNode
 }
 
-const BackgroundContainer = styled("div", {
-  "&>svg": {
-    // eslint-disable-next-line lingui/no-unlocalized-strings
-    maskImage: `linear-gradient(0deg, ${theme.bgVar1}00 0%, ${theme.bgVar1} 40%)`,
-  },
-})
+const backgroundContainerClass = css`
+  & > svg {
+    mask-image: linear-gradient(
+      0deg,
+      ${colors.bgVar1}00 0%,
+      ${colors.bgVar1} 40%
+    );
+  }
+`
 
 export const Layout = ({ children }: LayoutProps) => {
   return (
@@ -33,9 +37,14 @@ export const Layout = ({ children }: LayoutProps) => {
       <div className="pointer-events-none fixed border rounded-lg top-16 left-16 bottom-1 right-1" />
       <div className="pointer-events-none fixed border rounded-lg top-16 left-16 bottom-1 right-1 bg-bgVar1" />
       <div className="relative mt-16 ml-16 mr-1">
-        <BackgroundContainer className="w-full h-screen absolute pointer-events-none">
+        <div
+          className={cn(
+            backgroundContainerClass,
+            "w-full h-screen absolute pointer-events-none",
+          )}
+        >
           <LandingBackground className="w-full h-5/6" />
-        </BackgroundContainer>
+        </div>
         <div className="relative p-8">
           <div className="w-full max-w-screen-xl mx-auto">{children}</div>
         </div>

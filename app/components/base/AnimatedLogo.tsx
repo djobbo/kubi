@@ -1,25 +1,26 @@
-import { keyframes, styled } from "@/ui/theme"
+import { css, keyframes } from "@emotion/css"
 
-const centerAnimation = keyframes({
-  "0%": {
-    opacity: 0.25,
-    transform: "rotate(0deg)",
-  },
-  "40%": {
-    opacity: 1,
-    transform: "rotate(360deg)",
-  },
-  "100%": {
-    opacity: 0.25,
-    transform: "rotate(720deg)",
-  },
-})
+const centerAnimation = keyframes`
+  0% {
+    opacity: 0.25;
+    transform: rotate(0deg) scale(0.9);
+    animation-timing-function: ease-in;
+  }
+  40% {
+    opacity: 1;
+    transform: rotate(360deg) scale(1);
+    animation-timing-function: ease-out;
+  }
+  100% {
+    opacity: 0.25;
+    transform: rotate(720deg) scale(0.9);
+  }
+`
 
-const Center = styled("g", {
-  transformOrigin: "center",
-  // eslint-disable-next-line lingui/no-unlocalized-strings
-  animation: `${centerAnimation} 2s linear infinite`,
-})
+const centerClass = css`
+  transform-origin: center;
+  animation: ${centerAnimation} 2.5s infinite;
+`
 
 interface AnimatedLogoProps {
   size?: number
@@ -44,7 +45,7 @@ export const AnimatedLogo = ({ size }: AnimatedLogoProps) => {
         fill="#ffffff"
       />
 
-      <Center>
+      <g className={centerClass}>
         <path
           d="M267.37,959.5c-3.39.3-6.83.47-10.29.5-70.54.58-128.7-56.76-129.08-127.31A128,128,0,0,1,188.84,723,23.86,23.86,0,0,1,224,735.84l.08.25a24,24,0,0,1-10.28,28,80,80,0,0,0,38.64,147.86,82.64,82.64,0,0,0,10.93-.25A23.79,23.79,0,0,1,288,927.9l.08.25A23.91,23.91,0,0,1,267.37,959.5Z"
           transform="translate(-32 -613.76)"
@@ -55,7 +56,7 @@ export const AnimatedLogo = ({ size }: AnimatedLogoProps) => {
           transform="translate(-32 -613.76)"
           fill="#f44336"
         />
-      </Center>
+      </g>
     </svg>
   )
 }

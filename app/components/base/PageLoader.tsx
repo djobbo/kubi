@@ -3,7 +3,7 @@ import nprogress from "nprogress"
 import type { ReactNode } from "react"
 import { useEffect, useState } from "react"
 
-import { theme } from "@/ui/theme"
+import { colors } from "@/ui/theme"
 
 interface PageLoaderProps {
   children: ReactNode
@@ -43,7 +43,7 @@ export const PageLoader = ({ children }: PageLoaderProps) => {
     <div
       className="fixed inset-x-0 bottom-0 flex items-end justify-end z-50 p-4 pointer-events-none"
       style={{
-        background: `linear-gradient(to top, ${theme.colors.bgVar1}, rgba(0, 0, 0, 0))`,
+        background: `linear-gradient(to top, ${colors.bgVar1}, rgba(0, 0, 0, 0))`,
       }}
     >
       {children}

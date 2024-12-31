@@ -1,4 +1,4 @@
-export default {
+const colors = {
   bgVar2: "#1A1B23",
   bgVar1: "#1E212C",
   bg: "#2B3043",
@@ -12,4 +12,6 @@ export default {
   warning: "#F3DA57",
   accentAlt: "#E568D9",
   accentAltVar1: "#FF99E9",
-}
+} as const
+
+export { colors }

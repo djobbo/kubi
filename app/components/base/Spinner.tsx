@@ -1,18 +1,25 @@
-import { css } from "@emotion/css"
+import { css, keyframes } from "@emotion/css"
 
 import { cn } from "@/ui/lib/utils"
-import { keyframes, styled } from "@/ui/theme"
 
-const puff = [
-  keyframes({
-    "0%": { transform: "scale(0)" },
-    "100%": { transform: "scale(1.0)" },
-  }),
-  keyframes({
-    "0%": { opacity: 1 },
-    "100%": { opacity: 0 },
-  }),
-]
+const puffAnimations = [
+  keyframes`
+    0% {
+      transform: scale(0);
+    }
+    100% {
+      transform: scale(1);
+    }
+  `,
+  keyframes`
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  `,
+] as const
 
 interface SpinnerProps {
   className?: string
@@ -28,48 +35,40 @@ export const Spinner = ({
   color = "white",
 }: SpinnerProps) => {
   const containerClassName = css`
-    height: ${size};
     width: ${size};
+    height: ${size};
   `
 
-  const Puff = styled("span", {
-    position: "absolute",
-    height: size,
-    width: size,
-    // eslint-disable-next-line lingui/no-unlocalized-strings
-    border: `thick solid ${color}`,
-    borderRadius: `50%`,
-    opacity: 1,
-    top: 0,
-    left: 0,
-    animationFillMode: "both",
-    animation: `${puff[0]}, ${puff[1]}`,
-    animationDuration: `${2 / speedMultiplier}s`,
-    animationIterationCount: "infinite",
-    animationTimingFunction:
-      // eslint-disable-next-line lingui/no-unlocalized-strings
-      "cubic-bezier(0.165, 0.84, 0.44, 1), cubic-bezier(0.3, 0.61, 0.355, 1)",
-    variants: {
-      first: {
-        true: {
-          animationDelay: "0s",
-        },
-        false: {
-          animationDelay: "-1s",
-        },
-      },
-    },
-    defaultVariants: {
-      first: false,
-    },
-  })
+  const puffClass = css`
+    position: absolute;
+    width: ${size};
+    height: ${size};
+    border: thick solid ${color};
+    border-radius: 50%;
+    opacity: 1;
+    top: 0;
+    left: 0;
+    animation-fill-mode: both;
+    animation: ${puffAnimations[0]}, ${puffAnimations[1]};
+    animation-duration: ${2 / speedMultiplier}s;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1),
+      cubic-bezier(0.3, 0.61, 0.355, 1);
+  `
 
   return (
     <div
       className={cn(containerClassName, { relative: !className }, className)}
     >
-      <Puff first />
-      <Puff />
+      <span className={puffClass} />
+      <span
+        className={cn(
+          puffClass,
+          css`
+            animation-delay: -1s;
+          `,
+        )}
+      />
     </div>
   )
 }
