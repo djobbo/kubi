@@ -8,7 +8,7 @@ const metaEnv = { ...(import.meta.env ?? {}), ...process.env }
 const NODE_ENV = envField(
   "Node Environment",
   metaEnv.NODE_ENV ?? metaEnv.MODE,
-  z.enum(["development", "production"]).default("production"),
+  z.enum(["development", "production"]).catch("production"),
   "client",
 )
 
