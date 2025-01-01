@@ -7,7 +7,7 @@ const GOOGLE_ANALYTICS_TRACKING_ID = env.GOOGLE_ANALYTICS_TRACKING_ID
 /**
  * Google Adsense Identifier
  */
-export const GOOGLE_ADSENSE_ID = env.GOOGLE_ADSENSE_ID
+const GOOGLE_ADSENSE_ID = env.GOOGLE_ADSENSE_ID
 
 /**
  * Google Adsense Publisher Identifier

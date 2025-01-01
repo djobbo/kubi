@@ -1,7 +1,5 @@
 import { z } from "zod"
 
-export type BrawlhallaID = string | number
-
 export const rankedTiers = [
   "Valhallan",
   "Diamond",

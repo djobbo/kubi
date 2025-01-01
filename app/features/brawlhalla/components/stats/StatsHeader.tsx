@@ -34,7 +34,7 @@ export const StatsHeader = ({
   miscStats,
   bookmark,
 }: StatsHeaderProps) => {
-  const { isLoggedIn, signIn } = useAuth()
+  const { isLoggedIn, logIn } = useAuth()
   const { addBookmark, isBookmarked, deleteBookmark } = useBookmarks()
   const copyToClipboard = useCopyToClipboard()
 
@@ -77,7 +77,7 @@ export const StatsHeader = ({
             </Button>
           )
         ) : (
-          <Button onClick={signIn}>
+          <Button onClick={logIn}>
             <DiscordIcon size="16" className="mr-2" />{" "}
             <Trans>Sign in to add favorites</Trans>
           </Button>

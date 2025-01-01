@@ -1,22 +1,24 @@
-import { useNavigate } from "@tanstack/react-router"
-
+import { submitForm } from "@/helpers/submit-form"
 import { Route } from "@/routes/__root"
+import type { APIRoute as discordAPIRoute } from "@/routes/api/auth/discord"
+import type { APIRoute as logoutAPIRoute } from "@/routes/api/auth/logout"
 
 export const useAuth = () => {
   const loader = Route.useLoaderData()
 
-  // const navigate = useNavigate()
-
   return {
     ...loader.session,
-    isLoggedIn: !!loader.session,
-    signIn: () => {
-      // TODO: "Implement sign in"
-      throw new Error("Not implemented")
-    },
-    signOut: () => {
-      // TODO: Implement sign out
-      throw new Error("Not implemented")
+    isLoggedIn: !!loader.session.user,
+    logIn: () =>
+      submitForm(
+        "GET",
+        "/api/auth/discord" satisfies (typeof discordAPIRoute)["path"],
+      ),
+    logOut: () => {
+      submitForm(
+        "POST",
+        "/api/auth/logout" satisfies (typeof logoutAPIRoute)["path"],
+      )
     },
   }
 }

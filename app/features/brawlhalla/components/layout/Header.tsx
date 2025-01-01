@@ -22,7 +22,7 @@ interface HeaderProps {
 }
 
 export const Header = ({ className }: HeaderProps) => {
-  const { isLoggedIn, signIn, signOut, user } = useAuth()
+  const { isLoggedIn, logIn, logOut, user } = useAuth()
 
   const { openSideNav } = useSideNav()
 
@@ -69,12 +69,12 @@ export const Header = ({ className }: HeaderProps) => {
                   </div>
                 </>
               )}
-              <Button onClick={signOut}>
+              <Button onClick={logOut}>
                 <Trans>Sign out</Trans>
               </Button>
             </>
           ) : (
-            <Button onClick={signIn}>
+            <Button onClick={logIn}>
               <DiscordIcon size="16" className="mr-2" />
               <Trans>Sign in</Trans>
             </Button>

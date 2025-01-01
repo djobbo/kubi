@@ -1,6 +1,5 @@
 import { css } from "@emotion/css"
 import { SiDiscord as DiscordIcon } from "@icons-pack/react-simple-icons"
-import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { ArrowRight } from "lucide-react"
@@ -23,11 +22,11 @@ export const Route = createFileRoute("/")({
 
 const landingClassName = css`
   height: 60vh;
-  min-height: 400px";
+  min-height: 400px;
 `
 
 function Home() {
-  const { isLoggedIn, signIn } = useAuth()
+  const { isLoggedIn, logIn } = useAuth()
   const { bookmarks } = useBookmarks()
 
   return (
@@ -133,7 +132,7 @@ function Home() {
                     clans
                   </Trans>
                 </span>
-                <Button onClick={signIn} className="mt-2">
+                <Button onClick={logIn} className="mt-2">
                   <DiscordIcon size="16" className="mr-2" />
                   <Trans>Sign in</Trans>
                 </Button>

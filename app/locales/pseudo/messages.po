@@ -858,63 +858,63 @@ msgstr ""
 
 #: app/routes/test.tsx:27
 msgid "Regenerate"
-msgstr ""
+msgstr "Regénérer"
 
 #: app/features/brawlhalla/components/stats/StatsHeader.tsx:68
 msgid "Remove Favorite"
-msgstr ""
+msgstr "Enlever des favoris"
 
 #: app/features/brawlhalla/components/layout/ErrorPageContent.tsx:48
 msgid "Report bug"
-msgstr ""
+msgstr "Remonter un bug"
 
 #: app/features/brawlhalla/components/search/Searchbox.tsx:158
 msgid "Search by Brawlhalla ID"
-msgstr ""
+msgstr "Rechercher par ID Brawlhalla"
 
 #: app/features/brawlhalla/components/search/Searchbox.tsx:226
 msgid "Search for a player (must start with exact match)"
-msgstr ""
+msgstr "Rechercher un joueur (doit commencer par une correspondance exacte)"
 
 #: app/features/brawlhalla/components/search/Searchbox.tsx:135
 msgid "Search player by name or brawlhalla id..."
-msgstr ""
+msgstr "Rechercher un joueur par pseudo ou ID Brawlhalla..."
 
 #: app/features/brawlhalla/components/search/SearchButton.tsx:24
 msgid "Search player..."
-msgstr ""
+msgstr "Rechercher un joueur..."
 
 #: app/features/command/components/CommandMenu.tsx:27
 #: app/features/command/components/CommandMenu.tsx:28
 #: app/features/brawlhalla/components/stats/rankings/RankingsLayout.tsx:39
 msgid "Search..."
-msgstr ""
+msgstr "Rechercher..."
 
 #: app/features/brawlhalla/components/stats/StatsHeader.tsx:94
 msgid "Share"
-msgstr ""
+msgstr "Partager"
 
 #: app/features/brawlhalla/components/DiscordCard.tsx:101
 msgid "Share your thoughts"
-msgstr ""
+msgstr "Dites-nous ce que vous pensez"
 
 #: app/routes/index.tsx:138
 #: app/features/brawlhalla/components/layout/Header.tsx:79
 msgid "Sign in"
-msgstr ""
+msgstr "Se connecter"
 
 #: app/features/brawlhalla/components/stats/StatsHeader.tsx:82
 msgid "Sign in to add favorites"
-msgstr ""
+msgstr "Connectez-vous pour ajouter des favoris"
 
 #: app/routes/test.tsx:53
 msgid "Sign in with Discord"
-msgstr ""
+msgstr "Se connecter avec Discord"
 
 #: app/routes/test.tsx:41
 #: app/features/brawlhalla/components/layout/Header.tsx:73
 msgid "Sign out"
-msgstr ""
+msgstr "Se déconnecter"
 
 #: app/routes/index.tsx:63
 msgid "Stay ahead of <0/>the competition"
@@ -922,7 +922,7 @@ msgstr ""
 
 #: app/features/brawlhalla/components/stats/GeneralStats.tsx:65
 msgid "Suicides"
-msgstr ""
+msgstr "Suicides"
 
 #: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/PlayerLegendsTab.tsx:165
 msgid "Sum of of all legends"
