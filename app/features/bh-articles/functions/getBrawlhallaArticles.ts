@@ -2,6 +2,9 @@ import { createServerFn } from "@tanstack/start"
 import { cacheExchange, Client, fetchExchange, gql } from "@urql/core"
 import { z } from "zod"
 
+import { env } from "@/env"
+import { withCache } from "@/features/cache/cache"
+
 import { BRAWLHALLA_GRAPHQL_API_URL } from "../constants"
 
 const getArticleQuery = (withContent?: boolean) => gql`
@@ -131,13 +134,19 @@ export const getBrawlhallaArticles = createServerFn({ method: "GET" })
   .handler(async ({ data: { query, withContent } }) => {
     const { first = 3, category = null, after = null } = query ?? {}
 
-    const result = await client
-      .query(getArticleQuery(withContent), { first, category, after })
-      .toPromise()
+    return withCache(
+      `bh-article-${category}-${first}-${after}`,
+      async () => {
+        const result = await client
+          .query(getArticleQuery(withContent), { first, category, after })
+          .toPromise()
 
-    const articles = articlesSchema.parse(result.data).posts.nodes
+        const articles = articlesSchema.parse(result.data).posts.nodes
 
-    return articles
+        return articles
+      },
+      env.IS_DEV ? 30 * 1000 : 15 * 60 * 1000,
+    )
   })
 
 export type BrawlhallaArticle = z.infer<typeof articleSchema>
