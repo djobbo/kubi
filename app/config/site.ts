@@ -10,11 +10,11 @@ interface SocialLink {
 
 export const siteConfig = (() => {
   return {
-    title: t`Kubi`,
+    title: t`Corehalla`,
     social: [
       {
         title: t`Github`,
-        href: "https://github.com/djobbo/kubi",
+        href: "https://github.com/djobbo/corehalla",
         Icon: SiGithub,
       },
     ] satisfies SocialLink[],

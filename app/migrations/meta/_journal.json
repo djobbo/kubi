@@ -36,6 +36,13 @@
       "when": 1735270281049,
       "tag": "0004_bouncy_shiva",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1735794470994,
+      "tag": "0005_famous_karnak",
+      "breakpoints": true
     }
   ]
 }

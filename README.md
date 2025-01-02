@@ -1,4 +1,4 @@
-# kubi
+# Corehalla
 
 ## Prerequisites
 - Bun

@@ -16,7 +16,7 @@
     "check:types": "bun locales:compile && tsc --noEmit",
     "lint": "eslint . --fix",
     "check:lint": "eslint .",
-    "check:deadcode": "bun locales:compile && dotenv -e .env.ci -- knip-bun",
+    "check:deadcode": "bun locales:compile && dotenv -e .env.example -- knip-bun",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "bun db:generate && bun run ./app/db/migrate.ts",
     "ui": "bunx shadcn@latest",
