@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as TestImport } from './routes/test'
+import { Route as CalcImport } from './routes/calc'
 import { Route as IndexImport } from './routes/index'
 import { Route as socialTwitterImport } from './routes/(social)/twitter'
 import { Route as socialGithubImport } from './routes/(social)/github'
@@ -26,6 +27,12 @@ import { Route as Rankings1v1RegionPageImport } from './routes/rankings/1v1.$reg
 const TestRoute = TestImport.update({
   id: '/test',
   path: '/test',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CalcRoute = CalcImport.update({
+  id: '/calc',
+  path: '/calc',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -86,6 +93,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/calc': {
+      id: '/calc'
+      path: '/calc'
+      fullPath: '/calc'
+      preLoaderRoute: typeof CalcImport
       parentRoute: typeof rootRoute
     }
     '/test': {
@@ -151,6 +165,7 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/calc': typeof CalcRoute
   '/test': typeof TestRoute
   '/discord': typeof socialDiscordRoute
   '/donate': typeof socialDonateRoute
@@ -163,6 +178,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/calc': typeof CalcRoute
   '/test': typeof TestRoute
   '/discord': typeof socialDiscordRoute
   '/donate': typeof socialDonateRoute
@@ -176,6 +192,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/calc': typeof CalcRoute
   '/test': typeof TestRoute
   '/(social)/discord': typeof socialDiscordRoute
   '/(social)/donate': typeof socialDonateRoute
@@ -190,6 +207,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/calc'
     | '/test'
     | '/discord'
     | '/donate'
@@ -201,6 +219,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/calc'
     | '/test'
     | '/discord'
     | '/donate'
@@ -212,6 +231,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/calc'
     | '/test'
     | '/(social)/discord'
     | '/(social)/donate'
@@ -225,6 +245,7 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CalcRoute: typeof CalcRoute
   TestRoute: typeof TestRoute
   socialDiscordRoute: typeof socialDiscordRoute
   socialDonateRoute: typeof socialDonateRoute
@@ -237,6 +258,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CalcRoute: CalcRoute,
   TestRoute: TestRoute,
   socialDiscordRoute: socialDiscordRoute,
   socialDonateRoute: socialDonateRoute,
@@ -258,6 +280,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/calc",
         "/test",
         "/(social)/discord",
         "/(social)/donate",
@@ -270,6 +293,9 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/calc": {
+      "filePath": "calc.tsx"
     },
     "/test": {
       "filePath": "test.tsx"
