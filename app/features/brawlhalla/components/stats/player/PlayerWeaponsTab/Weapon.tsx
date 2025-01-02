@@ -1,9 +1,9 @@
 import { t } from "@lingui/core/macro"
-import type { FullWeapon } from "bhapi/legends"
 import type { JSX } from "react"
 
 import { Card } from "@/components/base/Card"
 import { WeaponIcon } from "@/features/brawlhalla/components/Image"
+import type { FullWeapon } from "@/features/brawlhalla/helpers/parser"
 import { formatTime } from "@/helpers/date"
 
 import { CollapsibleContent } from "../../../layout/CollapsibleContent"

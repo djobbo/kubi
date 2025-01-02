@@ -56,7 +56,7 @@ export const playerStatsSchema = z.strictObject({
   kospikeball: z.number(),
   kosidekick: z.number(),
   kosnowball: z.number(),
-  legends: z.array(legendSchema.optional()),
+  legends: z.array(legendSchema),
   clan: clanSchema.optional(),
 })
 

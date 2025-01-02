@@ -1,8 +1,8 @@
 import { t } from "@lingui/core/macro"
-import type { FullLegend } from "bhapi/legends"
 
 import { Card } from "@/components/base/Card"
-import { Image, WeaponIcon } from "@/features/brawlhalla/components/Image"
+import { WeaponIcon } from "@/features/brawlhalla/components/Image"
+import type { FullLegend } from "@/features/brawlhalla/helpers/parser"
 import { formatTime } from "@/helpers/date"
 
 import { CollapsibleSection } from "../../../layout/CollapsibleSection"

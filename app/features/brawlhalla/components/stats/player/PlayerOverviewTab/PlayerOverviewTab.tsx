@@ -1,11 +1,13 @@
 import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
-import type { FullLegend } from "bhapi/legends"
-import { getWeaponlessData } from "bhapi/legends"
 import { ChartColumnBig, Flame, Hand, Target } from "lucide-react"
 
 import type { PlayerRanked } from "@/features/brawlhalla/api/schema/player-ranked"
 import type { PlayerStats } from "@/features/brawlhalla/api/schema/player-stats"
+import {
+  type FullLegend,
+  getWeaponlessData,
+} from "@/features/brawlhalla/helpers/parser"
 import { formatTime } from "@/helpers/date"
 
 import { CollapsibleSection } from "../../../layout/CollapsibleSection"

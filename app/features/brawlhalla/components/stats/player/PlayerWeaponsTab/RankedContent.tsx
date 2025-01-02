@@ -1,9 +1,12 @@
 import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
-import type { FullLegend, FullWeapon } from "bhapi/legends"
 import { memo } from "react"
 
-import { Image, LegendIcon } from "@/features/brawlhalla/components/Image"
+import { LegendIcon } from "@/features/brawlhalla/components/Image"
+import type {
+  FullLegend,
+  FullWeapon,
+} from "@/features/brawlhalla/helpers/parser"
 import { calculateWinrate } from "@/features/brawlhalla/helpers/winrate"
 
 import { SectionTitle } from "../../../layout/SectionTitle"

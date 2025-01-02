@@ -1,8 +1,8 @@
 import { t } from "@lingui/core/macro"
-import type { FullLegend } from "bhapi/legends"
 
-import { Image, RankedTierImage } from "@/features/brawlhalla/components/Image"
+import { RankedTierImage } from "@/features/brawlhalla/components/Image"
 import { getTierFromRating } from "@/features/brawlhalla/constants/ranked/tiers"
+import type { FullLegend } from "@/features/brawlhalla/helpers/parser"
 import { getLegendEloReset } from "@/features/brawlhalla/helpers/season-reset"
 import { calculateWinrate } from "@/features/brawlhalla/helpers/winrate"
 

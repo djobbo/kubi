@@ -19,6 +19,15 @@ interface MiscStatGroupProps {
   direction?: "row" | "column"
 }
 
+const containerClassName = cva({
+  variants: {
+    direction: {
+      row: { display: "grid" },
+      column: { display: "flex", flexDirection: "column" },
+    },
+  },
+})
+
 export const MiscStatGroup = ({
   fit = "fill",
   className,
@@ -27,23 +36,14 @@ export const MiscStatGroup = ({
   gapClassName = "gap-x-12 gap-y-4",
   direction = "row",
 }: MiscStatGroupProps) => {
-  const containerClassName = cva({
-    variants: {
-      direction: {
-        row: {
-          display: "grid",
-          gridTemplateColumns: `repeat(auto-${fit}, minmax(${minItemWidth}, 1fr)`,
-        },
-        column: { display: "flex", flexDirection: "column" },
-      },
-    },
-  })
-
   const isColumn = direction === "column"
 
   return (
     <div
       className={cn(gapClassName, containerClassName({ direction }), className)}
+      style={{
+        gridTemplateColumns: `repeat(auto-${fit}, minmax(${minItemWidth}, 1fr)`,
+      }}
     >
       {stats.map(({ name, value, desc }) => (
         <div

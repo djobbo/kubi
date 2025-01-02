@@ -1,8 +1,8 @@
 import { t } from "@lingui/core/macro"
-import type { FullLegend } from "bhapi/legends"
 import type { JSX } from "react"
 
-import { Image, LegendIcon } from "@/features/brawlhalla/components/Image"
+import { LegendIcon } from "@/features/brawlhalla/components/Image"
+import type { FullLegend } from "@/features/brawlhalla/helpers/parser"
 import { formatTime } from "@/helpers/date"
 
 import { CollapsibleContent } from "../../../layout/CollapsibleContent"

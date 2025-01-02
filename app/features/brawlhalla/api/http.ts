@@ -1,3 +1,5 @@
+// TODO: remove this file
+
 // export const bhApi = (apiKey: string) => ({
 // ranked: {
 //   singles: (region: string, page: number, name = "") => {

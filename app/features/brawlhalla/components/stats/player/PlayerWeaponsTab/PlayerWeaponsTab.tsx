@@ -1,12 +1,13 @@
 import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
-import type { FullWeapon } from "bhapi/legends"
-import { getWeaponsAccumulativeData } from "bhapi/legends"
 import { ArrowDownWideNarrow, ArrowUpWideNarrow } from "lucide-react"
 import { useMemo } from "react"
 
 import { Select } from "@/components/base/Select"
+import type { FullWeapon } from "@/features/brawlhalla/helpers/parser"
+import { getWeaponsAccumulativeData } from "@/features/brawlhalla/helpers/parser"
 import { calculateWinrate } from "@/features/brawlhalla/helpers/winrate"
+import { formatTime } from "@/helpers/date"
 import { SortDirection, useSortBy } from "@/hooks/useSortBy"
 
 import { Weapon } from "./Weapon"
