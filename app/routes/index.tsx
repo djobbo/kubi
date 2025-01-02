@@ -11,7 +11,6 @@ import { FavoritesGrid } from "@/features/brawlhalla/components/favorites/Favori
 import { LandingArticles } from "@/features/brawlhalla/components/LandingArticles"
 import { SearchButton } from "@/features/brawlhalla/components/search/SearchButton"
 import { WeeklyRotation } from "@/features/brawlhalla/components/WeeklyRotation"
-import { CommandMenu } from "@/features/command/components/CommandMenu"
 import { css } from "@/panda/css"
 import { Button } from "@/ui/components/button"
 import { cn } from "@/ui/lib/utils"

@@ -18,6 +18,7 @@ export default tseslint.config(
       ".output",
       ".vinxi",
       "locales/*.js",
+      "styled-system",
     ],
   },
   {

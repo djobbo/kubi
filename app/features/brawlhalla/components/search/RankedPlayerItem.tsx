@@ -30,8 +30,8 @@ export const RankedPlayerItem = ({ player }: RankedPlayerItemProps) => {
   )
 
   const isFav = isBookmarked({
-    id: player.brawlhalla_id.toString(),
-    type: "player",
+    pageType: "player_stats",
+    pageId: player.brawlhalla_id.toString(),
   })
 
   const { rating, peak_rating, tier } = player

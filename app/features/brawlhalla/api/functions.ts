@@ -12,8 +12,10 @@ import { rankings1v1Mock } from "./mocks/rankings-1v1"
 import { rankings2v2Mock } from "./mocks/rankings-2v2"
 import { brawlhallaIdSchema } from "./schema/brawlhalla-id"
 import { clanSchema } from "./schema/clan"
+import type { PlayerRanked } from "./schema/player-ranked"
 import { playerRankedSchema } from "./schema/player-ranked"
 import { playerStatsSchema } from "./schema/player-stats"
+import type { Ranking1v1, Ranking2v2 } from "./schema/rankings"
 import { ranking1v1Schema, ranking2v2Schema } from "./schema/rankings"
 
 const BH_API_BASE = "https://api.brawlhalla.com"
@@ -81,7 +83,7 @@ export const getPlayerRanked = createServerFn({ method: "GET" })
           `/player/${playerId}/ranked`,
           playerRankedSchema,
           playerRankedMock,
-        ),
+        ) as unknown as Promise<PlayerRanked>, // TODO: Zod issue, it can't infer the type correctly
       env.IS_DEV ? 30 * 1000 : 15 * 60 * 1000,
     )
   })
@@ -114,7 +116,7 @@ export const get1v1Rankings = createServerFn({ method: "GET" })
           `/rankings/1v1/${region.toLowerCase()}/${page}${name ? `?name=${name}` : ""}`,
           z.array(ranking1v1Schema),
           rankings1v1Mock,
-        ),
+        ) as unknown as Promise<Ranking1v1[]>, // TODO: Zod issue, it can't infer the type correctly
       env.IS_DEV ? 30 * 1000 : 5 * 60 * 1000,
     )
   })
@@ -138,7 +140,7 @@ export const get2v2Rankings = createServerFn({ method: "GET" })
           rankings2v2Mock,
         ),
       env.IS_DEV ? 30 * 1000 : 5 * 60 * 1000,
-    )
+    ) as unknown as Promise<Ranking2v2[]> // TODO: Zod issue, it can't infer the type correctly
   })
 
 export const searchPlayer = createServerFn({ method: "GET" })

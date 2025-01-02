@@ -3,7 +3,7 @@ import { Trans } from "@lingui/react/macro"
 import { ChevronsUp } from "lucide-react"
 
 import type { PlayerRanked } from "@/features/brawlhalla/api/schema/player-ranked"
-import { Image, RankedTierImage } from "@/features/brawlhalla/components/Image"
+import { RankedTierImage } from "@/features/brawlhalla/components/Image"
 import { getTierFromRating } from "@/features/brawlhalla/constants/ranked/tiers"
 import {
   getGlory,
@@ -87,7 +87,7 @@ export const PlayerOverviewRankedContent = ({
       <div className="flex items-center gap-4">
         <RankedTierImage
           type="banner"
-          tier={ranked.tier}
+          tier={ranked.tier ?? "Valhallan"}
           alt={ranked.tier ?? t`Valhallan`}
           containerClassName="h-24 w-16"
           className="object-contain object-center"

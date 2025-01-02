@@ -57,7 +57,7 @@ export const FavoritesGrid = ({ bookmarks }: FavoritesGridProps) => {
         if (!bookmarkLinkData) return null
 
         if (bookmark.pageType === "player_stats") {
-          const legendId = bookmark.meta.icon?.legend_id
+          const legendId = bookmark.meta?.icon?.legend_id
           const legend = !!legendId && legendsMap[legendId]
           if (legend)
             icon = (

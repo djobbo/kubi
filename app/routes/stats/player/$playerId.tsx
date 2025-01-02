@@ -94,6 +94,8 @@ export const Route = createFileRoute("/stats/player/$playerId")({
 function RouteComponent() {
   const { player } = Route.useLoaderData()
 
+  const playerName = player.stats.name
+
   const fullLegends = getFullLegends(
     player.stats.legends,
     player.ranked?.legends,
@@ -112,17 +114,17 @@ function RouteComponent() {
     {
       name: t`Account level`,
       value: player.stats.level,
-      desc: t`${player.stats.name}'s account level`,
+      desc: t`${playerName}'s account level`,
     },
     {
       name: t`Account XP`,
       value: player.stats.xp,
-      desc: t`${player.stats.name}'s account XP`,
+      desc: t`${playerName}'s account XP`,
     },
     {
       name: t`Game time`,
       value: formatTime(matchtime),
-      desc: t`Time ${player.stats.name} spent in game`,
+      desc: t`Time ${playerName} spent in game`,
     },
     {
       name: t`Main legends`,
@@ -139,7 +141,7 @@ function RouteComponent() {
           ))}
         </div>
       ),
-      desc: t`${player.stats.name}'s main legends`,
+      desc: t`${playerName}'s main legends`,
     },
     {
       name: t`Main weapons`,
@@ -169,14 +171,14 @@ function RouteComponent() {
             ))}
         </div>
       ),
-      desc: t`${player.stats.name}'s main weapons`,
+      desc: t`${playerName}'s main weapons`,
     },
   ]
 
   return (
     <>
       <StatsHeader
-        name={cleanString(player.stats.name)}
+        name={cleanString(playerName)}
         id={player.stats.brawlhalla_id}
         aliases={player.aliases.slice(0, MAX_SHOWN_ALIASES)}
         miscStats={accountStats}
@@ -190,14 +192,17 @@ function RouteComponent() {
             />
           )
         }
-        favorite={{
-          type: "player",
-          id: player.stats.brawlhalla_id.toString(),
-          name: cleanString(player.stats.name),
+        bookmark={{
+          pageType: "player_stats",
+          pageId: player.stats.brawlhalla_id.toString(),
+          name: cleanString(playerName),
           meta: {
+            type: "player_stats",
             icon: {
-              type: "legend",
-              legend_id: legendsSortedByLevel[0].legend_id,
+              icon: {
+                type: "legend",
+                id: legendsSortedByLevel[0].legend_id,
+              },
             },
           },
         }}

@@ -1,5 +1,5 @@
 import { t } from "@lingui/core/macro"
-import type { JSX } from "react"
+import type { ReactNode } from "react"
 
 import { Card } from "@/components/base/Card"
 import { WeaponIcon } from "@/features/brawlhalla/components/Image"
@@ -26,7 +26,7 @@ interface WeaponProps {
   weapon: Weapon
   matchtime: number
   games: number
-  displayedInfoFn?: (weapon: Weapon) => JSX.Element
+  displayedInfoFn?: (weapon: Weapon) => ReactNode
   rank: number
 }
 

@@ -1,5 +1,5 @@
 import { t } from "@lingui/core/macro"
-import type { JSX } from "react"
+import type { ReactNode } from "react"
 
 import { LegendIcon } from "@/features/brawlhalla/components/Image"
 import type { FullLegend } from "@/features/brawlhalla/helpers/parser"
@@ -16,7 +16,7 @@ interface LegendProps {
   legend: FullLegend
   matchtime: number
   games: number
-  displayedInfoFn?: (legend: FullLegend) => JSX.Element
+  displayedInfoFn?: (legend: FullLegend) => ReactNode
   rank: number
 }
 

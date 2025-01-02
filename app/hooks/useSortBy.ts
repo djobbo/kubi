@@ -1,9 +1,10 @@
+import type { ReactNode } from "react"
 import { useMemo, useState } from "react"
 
 interface CompareFn<ElementType> {
   label: string
   sortFn: (a: ElementType, b: ElementType) => number
-  displayFn?: (element: ElementType) => JSX.Element
+  displayFn?: (element: ElementType) => ReactNode
 }
 
 export enum SortDirection {

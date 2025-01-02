@@ -49,7 +49,8 @@ export const ClanMember = ({ member, clan }: ClanMemberProps) => {
 
   return (
     <Link
-      to={`/stats/player/${member.brawlhalla_id}`}
+      to={`/stats/player/$playerId`}
+      params={{ playerId: member.brawlhalla_id.toString() }}
       key={member.brawlhalla_id}
     >
       <Card

@@ -4,7 +4,6 @@ import type { ReactNode } from "react"
 import { Progress } from "@/components/base/Progress"
 import {
   FlagIcon,
-  Image,
   RankedTierImage,
 } from "@/features/brawlhalla/components/Image"
 import { cn } from "@/ui/lib/utils"

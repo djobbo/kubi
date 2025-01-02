@@ -24,7 +24,7 @@ export const Card = ({
         className,
       )}
     >
-      {title && (
+      {!!title && (
         <p
           className={cn(
             "inline-block uppercase rounded-md text-xs py-1 px-2 bg-bgVar1",

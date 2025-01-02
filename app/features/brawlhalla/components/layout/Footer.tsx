@@ -42,7 +42,7 @@ export const Footer = ({ className }: FooterProps) => {
             Visual assets courtesy of{" "}
             <Link
               className="p-link"
-              to="https://www.bluemammoth.com"
+              href="https://www.bluemammoth.com"
               target="_blank"
             >
               Blue Mammoth Games
@@ -51,7 +51,7 @@ export const Footer = ({ className }: FooterProps) => {
           &{" "}
           <Link
             className="p-link"
-            to="https://www.flaticon.com/fr/packs/square-country-simple-flags"
+            href="https://www.flaticon.com/fr/packs/square-country-simple-flags"
             target="_blank"
           >
             <Trans>Freepik - Flaticon</Trans>

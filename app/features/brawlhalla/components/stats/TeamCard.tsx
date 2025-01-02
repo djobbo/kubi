@@ -43,7 +43,10 @@ export const TeamCard = ({ playerId, team }: TeamCardProps) => {
   const eloResetTier = getTierFromRating(eloReset)
 
   return (
-    <Link to={`/stats/player/${teammate.id}`}>
+    <Link
+      to={`/stats/player/$playerId`}
+      params={{ playerId: teammate.id.toString() }}
+    >
       <Card
         className="relative overflow-hidden z-0 hover:bg-bgVar2 border border-bg"
         title={
@@ -61,8 +64,8 @@ export const TeamCard = ({ playerId, team }: TeamCardProps) => {
       >
         <RankedTierImage
           type="banner"
-          tier={team.tier}
-          alt={team.tier}
+          tier={team.tier ?? "Valhallan"}
+          alt={team.tier ?? t`Valhallan`}
           containerClassName={cn(" w-full", rankedBannerClassName)}
           position="absolute"
           className="object-contain object-center"

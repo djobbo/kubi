@@ -1,5 +1,6 @@
 import { z } from "zod"
 
+import { rankedRegionSchema } from "../../constants/ranked/regions"
 import { rankedTierSchema } from "../../constants/ranked/tiers"
 import { brawlhallaIdSchema } from "./brawlhalla-id"
 
@@ -8,7 +9,7 @@ const legendSchema = z.strictObject({
   legend_name_key: z.string(),
   rating: z.number(),
   peak_rating: z.number(),
-  tier: z.string().nullable(), // 'Valhallan' tier is null
+  tier: rankedTierSchema,
   wins: z.number(),
   games: z.number(),
 })
@@ -18,7 +19,7 @@ const ranked2v2Schema = z.strictObject({
   brawlhalla_id_two: brawlhallaIdSchema,
   rating: z.number(),
   peak_rating: z.number(),
-  tier: rankedTierSchema,
+  tier: rankedTierSchema.nullable(),
   wins: z.number(),
   games: z.number(),
   teamname: z.string(),
@@ -35,15 +36,23 @@ export const playerRankedSchema = z.strictObject({
   "2v2": z.array(ranked2v2Schema),
   rating: z.number(),
   peak_rating: z.number(),
-  tier: rankedTierSchema,
+  tier: rankedTierSchema.nullable(), // 'Valhallan' tier is null
   wins: z.number(),
   games: z.number(),
-  region: z.string(),
-  rotating_ranked: z.strictObject({
-    season: z.number(),
-    queue: z.string(),
-    season_end: z.string(),
-  }),
+  region: rankedRegionSchema,
+  rotating_ranked: z.union([
+    z.array(z.never()),
+    z.strictObject({
+      name: z.string(),
+      brawlhalla_id: z.number(),
+      rating: z.number(),
+      peak_rating: z.number(),
+      tier: rankedTierSchema,
+      wins: z.number(),
+      games: z.number(),
+      region: rankedRegionSchema,
+    }),
+  ]),
 })
 
 export type PlayerRanked = z.infer<typeof playerRankedSchema>

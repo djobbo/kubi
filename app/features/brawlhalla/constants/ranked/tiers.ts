@@ -1,3 +1,6 @@
+// TODO: Add translations
+/* eslint-disable lingui/no-unlocalized-strings */
+
 import { z } from "zod"
 
 export const rankedTiers = [
@@ -36,7 +39,7 @@ export type RankedTier = (typeof rankedTiers)[number]
 export const rankedTierSchema = z.enum(rankedTiers).catch("Tin 0")
 
 const RankedTiers = {
-  Vallhallan: 9999,
+  Valhallan: 9999,
   Diamond: 2000,
   ["Platinum 5"]: 1936,
   ["Platinum 4"]: 1872,
