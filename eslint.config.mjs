@@ -102,6 +102,8 @@ export default tseslint.config(
             "require",
             "envField",
             "setHeader",
+            "css",
+            "defineKeyframes",
           ],
           useTsTypes: true,
           ignoreMethodsOnTypes: ["Map.get", "Map.has", "Set.has"],

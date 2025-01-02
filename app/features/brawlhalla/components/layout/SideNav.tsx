@@ -1,4 +1,3 @@
-import { css } from "@emotion/css"
 import { SiDiscord as DiscordIcon } from "@icons-pack/react-simple-icons"
 import { t } from "@lingui/core/macro"
 import { Link, useRouterState } from "@tanstack/react-router"
@@ -23,6 +22,7 @@ import { Button } from "@/ui/components/button"
 import { cn } from "@/ui/lib/utils"
 
 import { legendsMap } from "../../constants/legends"
+import { css } from '@/panda/css'
 
 interface SideNavIconProps {
   className?: string
@@ -36,13 +36,13 @@ interface SideNavIconProps {
   external?: boolean
 }
 
-const sideNavIconClassName = css`
-  &:hover .remove-btn {
-    display: flex;
-    top: -0.375rem;
-    right: -0.375rem;
-  }
-`
+const sideNavIconClassName = css({
+  "&:hover .remove-btn": {
+    display: "flex",
+    top: "-0.375rem",
+    right: "-0.375rem",
+  },
+})
 
 const SideNavIcon = ({
   className,

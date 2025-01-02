@@ -181,8 +181,9 @@ dist
 # Database
 .db
 
-# lingui
+# Lingui
 **/locales/*/messages.ts
 
-# nixpacks
-.nixpacks
+## Panda
+styled-system
+styled-system-studio

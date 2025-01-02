@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer panda_reset, panda_base, panda_tokens, panda_recipes, panda_utilities; 
+
 @layer base {
   :root {
     --background: 0 0% 100%;

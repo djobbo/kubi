@@ -28,6 +28,9 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
+      "@/panda/*": [
+        "./styled-system/*"
+      ],
       "@/*": [
         "./app/*"
       ],

@@ -1,4 +1,3 @@
-import { css } from "@emotion/css"
 import { t } from "@lingui/core/macro"
 import { Link } from "@tanstack/react-router"
 
@@ -8,6 +7,7 @@ import {
   RankedTierImage,
 } from "@/features/brawlhalla/components/Image"
 import { cleanString } from "@/helpers/cleanString"
+import { css } from "@/panda/css"
 import { cn } from "@/ui/lib/utils"
 
 import type { PlayerRanked } from "../../api/schema/player-ranked"
@@ -24,14 +24,14 @@ interface TeamCardProps {
   team: PlayerRanked["2v2"][number]
 }
 
-const rankedBannerClassName = css`
-  top: 0;
-  right: -1rem;
-  bottom: -2rem;
-  opacity: 0.08;
-  transform: translateX(25%) rotate(15deg);
-  z-index: -1;
-`
+const rankedBannerClassName = css({
+  top: 0,
+  right: "-1rem",
+  bottom: "-2rem",
+  opacity: 0.08,
+  transform: "translateX(25%) rotate(15deg)",
+  zIndex: -1,
+})
 
 export const TeamCard = ({ playerId, team }: TeamCardProps) => {
   const teamData = getPlayerTeam(playerId, team)

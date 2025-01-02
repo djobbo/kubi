@@ -1,4 +1,3 @@
-import { css } from "@emotion/css"
 import { SiDiscord as DiscordIcon } from "@icons-pack/react-simple-icons"
 import { Trans } from "@lingui/react/macro"
 import { createFileRoute, Link } from "@tanstack/react-router"
@@ -13,6 +12,7 @@ import { LandingArticles } from "@/features/brawlhalla/components/LandingArticle
 import { SearchButton } from "@/features/brawlhalla/components/search/SearchButton"
 import { WeeklyRotation } from "@/features/brawlhalla/components/WeeklyRotation"
 import { CommandMenu } from "@/features/command/components/CommandMenu"
+import { css } from "@/panda/css"
 import { Button } from "@/ui/components/button"
 import { cn } from "@/ui/lib/utils"
 
@@ -20,10 +20,12 @@ export const Route = createFileRoute("/")({
   component: Home,
 })
 
-const landingClassName = css`
-  height: 60vh;
-  min-height: 400px;
-`
+const landingClassName = css({
+  height: "60vh",
+  minHeight: "400px",
+})
+
+console.log({ landingClassName })
 
 function Home() {
   const { isLoggedIn, logIn } = useAuth()

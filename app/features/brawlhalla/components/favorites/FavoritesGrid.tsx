@@ -1,4 +1,3 @@
-import { css } from "@emotion/css"
 import { t } from "@lingui/core/macro"
 import { Link } from "@tanstack/react-router"
 import { Shield, X } from "lucide-react"
@@ -8,6 +7,7 @@ import type { Bookmark } from "@/features/bookmarks/schema/bookmarks"
 import { useBookmarks } from "@/features/bookmarks/use-bookmarks"
 import { LegendIcon } from "@/features/brawlhalla/components/Image"
 import { cleanString } from "@/helpers/cleanString"
+import { css } from "@/panda/css"
 import { cn } from "@/ui/lib/utils"
 
 import { legendsMap } from "../../constants/legends"
@@ -16,13 +16,13 @@ interface FavoritesGridProps {
   bookmarks: Bookmark[]
 }
 
-const favoriteClassName = css`
-  &:hover .remove-btn {
-    display: block;
-    top: -0.6rem;
-    right: -0.6rem;
-  }
-`
+const favoriteClassName = css({
+  "&:hover .remove-btn": {
+    display: "block",
+    top: "-0.6rem",
+    right: "-0.6rem",
+  },
+})
 
 const getBookmarkLinkData = (bookmark: Bookmark) => {
   // TODO: icon url

@@ -61,7 +61,7 @@ export const PlayerLegendWeaponDistribution = ({
           >
             <MiscStatGroup
               gapClassName="gap-1"
-              column
+              direction="column"
               stats={[
                 {
                   name: t`KOs`,

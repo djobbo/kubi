@@ -1,7 +1,7 @@
-import { css } from "@emotion/css"
 import type { ReactNode } from "react"
 
 import { FirstTimePopup } from "@/features/brawlhalla/components/FirstTimePopup"
+import { css } from "@/panda/css"
 import { cn } from "@/ui/lib/utils"
 import { colors } from "@/ui/theme"
 
@@ -14,15 +14,11 @@ export interface LayoutProps {
   children: ReactNode
 }
 
-const backgroundContainerClass = css`
-  & > svg {
-    mask-image: linear-gradient(
-      0deg,
-      ${colors.bgVar1}00 0%,
-      ${colors.bgVar1} 40%
-    );
-  }
-`
+const backgroundContainerClass = css({
+  "& > svg": {
+    maskImage: `linear-gradient(0deg, ${colors.bgVar1}00 0%, ${colors.bgVar1} 40%)`,
+  },
+})
 
 export const Layout = ({ children }: LayoutProps) => {
   return (

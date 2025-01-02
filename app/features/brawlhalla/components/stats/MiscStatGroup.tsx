@@ -1,7 +1,7 @@
-import { css } from "@emotion/css"
 import type { ReactNode } from "react"
 
 import { Tooltip } from "@/components/base/Tooltip"
+import { cva } from "@/panda/css"
 import { cn } from "@/ui/lib/utils"
 
 export interface MiscStat {
@@ -16,7 +16,7 @@ interface MiscStatGroupProps {
   minItemWidth?: string
   stats: MiscStat[]
   gapClassName?: string
-  column?: boolean
+  direction?: "row" | "column"
 }
 
 export const MiscStatGroup = ({
@@ -25,28 +25,31 @@ export const MiscStatGroup = ({
   stats,
   minItemWidth = "8rem",
   gapClassName = "gap-x-12 gap-y-4",
-  column,
+  direction = "row",
 }: MiscStatGroupProps) => {
-  const containerClassName = column
-    ? // eslint-disable-next-line lingui/no-unlocalized-strings
-      ["flex flex-col"]
-    : [
-        "grid",
-        css`
-          grid-template-columns: repeat(
-            auto-${fit},
-            minmax(${minItemWidth}, 1fr)
-          );
-        `,
-      ]
+  const containerClassName = cva({
+    variants: {
+      direction: {
+        row: {
+          display: "grid",
+          gridTemplateColumns: `repeat(auto-${fit}, minmax(${minItemWidth}, 1fr)`,
+        },
+        column: { display: "flex", flexDirection: "column" },
+      },
+    },
+  })
+
+  const isColumn = direction === "column"
 
   return (
-    <div className={cn(gapClassName, containerClassName, className)}>
+    <div
+      className={cn(gapClassName, containerClassName({ direction }), className)}
+    >
       {stats.map(({ name, value, desc }) => (
         <div
           key={name}
           className={cn({
-            "flex items-center gap-2": column,
+            "flex items-center gap-2": isColumn,
           })}
         >
           <Tooltip content={desc}>
@@ -54,7 +57,7 @@ export const MiscStatGroup = ({
           </Tooltip>
           <div
             className={cn("font-semibold text-lg", {
-              "mt-2": !column,
+              "mt-2": !isColumn,
             })}
           >
             {value}

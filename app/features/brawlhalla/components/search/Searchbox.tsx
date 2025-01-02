@@ -1,4 +1,3 @@
-import { css } from "@emotion/css"
 import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
 import { queryOptions, useQuery } from "@tanstack/react-query"
@@ -16,6 +15,7 @@ import { Spinner } from "@/components/base/Spinner"
 import { env } from "@/env"
 import { cleanString } from "@/helpers/cleanString"
 import { useDebouncedState } from "@/hooks/useDebouncedState"
+import { css } from "@/panda/css"
 import { cn } from "@/ui/lib/utils"
 import { colors } from "@/ui/theme"
 
@@ -24,9 +24,9 @@ import { MAX_SHOWN_ALIASES } from "../../constants/aliases"
 import { RankedPlayerItem } from "./RankedPlayerItem"
 import { SearchboxItem } from "./SearchboxItem"
 
-const resultsContainerClass = css`
-  max-height: calc(100vh - 14vh - 100px);
-`
+const resultsContainerClass = css({
+  maxHeight: "calc(100vh - 14vh - 100px)",
+})
 
 interface AliasesSubtitleProps {
   immediateSearch: string
