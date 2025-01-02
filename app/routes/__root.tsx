@@ -7,11 +7,9 @@ import {
   Outlet,
   ScrollRestoration,
 } from "@tanstack/react-router"
-import { TanStackRouterDevtools } from "@tanstack/router-devtools"
 import { Meta, Scripts } from "@tanstack/start"
 import { KBarProvider } from "kbar"
-import { type ReactNode, Suspense } from "react"
-import { Toaster } from "react-hot-toast"
+import { lazy, type ReactNode, Suspense } from "react"
 
 import { AnimatedLogo } from "@/components/base/AnimatedLogo"
 import { PageLoader } from "@/components/base/PageLoader"
@@ -22,6 +20,23 @@ import { Searchbox } from "@/features/brawlhalla/components/search/Searchbox"
 import { SideNavProvider } from "@/features/sidenav/sidenav-provider"
 import globalStyles from "@/global.css?url"
 import { seo } from "@/helpers/seo"
+
+const Toaster = lazy(() =>
+  // Lazy load in development
+  import("react-hot-toast").then((res) => ({
+    default: res.Toaster,
+  })),
+)
+
+const TanStackRouterDevtools =
+  process.env.NODE_ENV === "production"
+    ? () => null // Render nothing in production
+    : lazy(() =>
+        // Lazy load in development
+        import("@tanstack/router-devtools").then((res) => ({
+          default: res.TanStackRouterDevtools,
+        })),
+      )
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   {
@@ -53,6 +68,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         ],
         links: [
           { rel: "stylesheet", href: globalStyles },
+          { rel: "preconnect", href: "https://fonts.googleapis.com" },
+          {
+            rel: "preconnect",
+            href: "https://fonts.gstatic.com",
+            crossOrigin: "true",
+          },
+          {
+            rel: "stylesheet",
+            href: "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap",
+          },
           { rel: "icon", type: "image/png", href: "/favicon.png" },
           {
             rel: "apple-touch-icon",
@@ -81,7 +106,9 @@ function RootComponent() {
               <AnimatedLogo size={32} />
             </div>
           </PageLoader>
-          <Toaster />
+          <Suspense>
+            <Toaster />
+          </Suspense>
           <Layout>
             <Outlet />
           </Layout>
