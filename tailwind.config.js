@@ -15,17 +15,17 @@ export default {
     extend: {
       colors: {
         ...colors,
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        border: colors.bg,
+        input: colors.bg,
+        ring: colors.accentAlt,
+        background: colors.bgVar1,
+        foreground: colors.text,
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
+          DEFAULT: colors.bgVar2,
           foreground: "hsl(var(--secondary-foreground))",
         },
         destructive: {
@@ -37,7 +37,7 @@ export default {
           foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
+          DEFAULT: colors.accentOld,
           foreground: "hsl(var(--accent-foreground))",
         },
         popover: {

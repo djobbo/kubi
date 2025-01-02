@@ -1,26 +1,5 @@
-import { defineKeyframes } from "@pandacss/dev"
-
 import { css } from "@/panda/css"
 import { ANIMATED_LOGO_CENTER_ANIMATION_NAME } from "~/panda.config"
-
-export const animatedLogoCenterAnimation = defineKeyframes({
-  [ANIMATED_LOGO_CENTER_ANIMATION_NAME]: {
-    "0%": {
-      opacity: 0.25,
-      transform: "rotate(0deg) scale(0.9)",
-      animationTimingFunction: "ease-in",
-    },
-    "40%": {
-      opacity: 1,
-      transform: "rotate(360deg) scale(1)",
-      animationTimingFunction: "ease-out",
-    },
-    "100%": {
-      opacity: 0.25,
-      transform: "rotate(720deg) scale(0.9)",
-    },
-  },
-})
 
 const centerClass = css({
   transformOrigin: "center",

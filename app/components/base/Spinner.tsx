@@ -1,30 +1,9 @@
-import { defineKeyframes } from "@pandacss/dev"
-
 import { css, cva } from "@/panda/css"
 import { cn } from "@/ui/lib/utils"
 import {
   PUFF_SPINNER_ANIMATION_1_NAME,
   PUFF_SPINNER_ANIMATION_2_NAME,
 } from "~/panda.config"
-
-export const puffSpinnerAnimations = defineKeyframes({
-  [PUFF_SPINNER_ANIMATION_1_NAME]: {
-    "0%": {
-      transform: "scale(0)",
-    },
-    "100%": {
-      transform: "scale(1)",
-    },
-  },
-  [PUFF_SPINNER_ANIMATION_2_NAME]: {
-    "0%": {
-      opacity: 1,
-    },
-    "100%": {
-      opacity: 0,
-    },
-  },
-})
 
 interface SpinnerProps {
   className?: string

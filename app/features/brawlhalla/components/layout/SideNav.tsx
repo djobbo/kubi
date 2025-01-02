@@ -18,11 +18,11 @@ import { useBookmarks } from "@/features/bookmarks/use-bookmarks"
 import { Image } from "@/features/brawlhalla/components/Image"
 import { useSideNav } from "@/features/sidenav/sidenav-provider"
 import { cleanString } from "@/helpers/cleanString"
+import { css } from "@/panda/css"
 import { Button } from "@/ui/components/button"
 import { cn } from "@/ui/lib/utils"
 
 import { legendsMap } from "../../constants/legends"
-import { css } from '@/panda/css'
 
 interface SideNavIconProps {
   className?: string
@@ -204,7 +204,8 @@ export const SideNav = ({ className }: SideNavProps) => {
           transition: "0.15s all ease",
         }}
       >
-        <div className="flex flex-col gap-2 flex-1 p-2">
+        <div className="flex flex-col gap-2 flex-1 px-2 pb-4">
+          <hr className="border-t border-bg rounded-full mx-2" />
           {nav.map((nav) => (
             <SideNavIcon
               key={nav.name}

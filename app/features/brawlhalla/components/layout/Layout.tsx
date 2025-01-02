@@ -30,7 +30,7 @@ export const Layout = ({ children }: LayoutProps) => {
       <aside className="fixed top-16 left-0 bottom-0 w-16 overflow-x-hidden overflow-y-auto">
         <SideNav />
       </aside>
-      <div className="pointer-events-none fixed border border-bg/75 rounded-lg top-16 left-16 bottom-1 right-1" />
+      <div className="pointer-events-none fixed border border-bg/75 rounded-lg top-16 left-16 bottom-1 right-1 z-50" />
       <div className="pointer-events-none fixed border border-bg/75 rounded-lg top-16 left-16 bottom-1 right-1 bg-bgVar1" />
       <div className="relative mt-16 ml-16 mr-1">
         <div

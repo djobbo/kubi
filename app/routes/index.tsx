@@ -25,8 +25,6 @@ const landingClassName = css({
   minHeight: "400px",
 })
 
-console.log({ landingClassName })
-
 function Home() {
   const { isLoggedIn, logIn } = useAuth()
   const { bookmarks } = useBookmarks()
@@ -36,9 +34,9 @@ function Home() {
       <div className="flex flex-col items-center justify-center lg:gap-16 lg:flex-row">
         <div
           className={cn(
-            "relative flex flex-col justify-center items-center lg:items-start",
+            "relative flex flex-col justify-center items-center lg:items-start z-0",
             landingClassName,
-            'after:content[""] after:absolute after:inset-0 after:bg-accentOld after:blur-[256px] after:opacity-[0.15] after:-z-10',
+            'after:content[""] after:absolute after:inset-0 after:bg-accentOld after:blur-[256px] after:opacity-[0.08] after:-z-10',
           )}
         >
           <a
