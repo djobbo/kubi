@@ -57,7 +57,7 @@ export const StatsHeader = ({
         {isLoggedIn ? (
           bookmark && (
             <Button
-              variant={isItemFavorite ? "outline" : "default"}
+              variant={isItemFavorite ? "outline" : "primary"}
               onClick={() => {
                 if (isItemFavorite) return deleteBookmark(bookmark)
                 addBookmark(bookmark)
