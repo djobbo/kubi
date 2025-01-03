@@ -117,7 +117,7 @@ const BookmarkDisplay = ({ bookmark }: BookmarkDisplayProps) => {
         <div className="min-w-0">
           <p className="font-bold truncate">{cleanString(bookmark.name)}</p>
           <p className="text-xs text-textVar1 truncate">
-            {bookmark.pageType} #{bookmark.id}
+            {bookmark.pageType} #{bookmark.pageId}
           </p>
         </div>
       </Link>

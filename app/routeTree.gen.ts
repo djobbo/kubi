@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as TestImport } from './routes/test'
 import { Route as CalcImport } from './routes/calc'
 import { Route as IndexImport } from './routes/index'
+import { Route as meBookmarksImport } from './routes/@me/bookmarks'
 import { Route as socialTwitterImport } from './routes/(social)/twitter'
 import { Route as socialGithubImport } from './routes/(social)/github'
 import { Route as socialDonateImport } from './routes/(social)/donate'
@@ -40,6 +41,12 @@ const CalcRoute = CalcImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const meBookmarksRoute = meBookmarksImport.update({
+  id: '/@me/bookmarks',
+  path: '/@me/bookmarks',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -144,6 +151,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof socialTwitterImport
       parentRoute: typeof rootRoute
     }
+    '/@me/bookmarks': {
+      id: '/@me/bookmarks'
+      path: '/@me/bookmarks'
+      fullPath: '/@me/bookmarks'
+      preLoaderRoute: typeof meBookmarksImport
+      parentRoute: typeof rootRoute
+    }
     '/rankings/1v1/$': {
       id: '/rankings/1v1/$'
       path: '/rankings/1v1/$'
@@ -185,6 +199,7 @@ export interface FileRoutesByFullPath {
   '/donate': typeof socialDonateRoute
   '/github': typeof socialGithubRoute
   '/twitter': typeof socialTwitterRoute
+  '/@me/bookmarks': typeof meBookmarksRoute
   '/rankings/1v1/$': typeof Rankings1v1SplatRoute
   '/rankings/2v2/$': typeof Rankings2v2SplatRoute
   '/stats/clan/$clanId': typeof StatsClanClanIdRoute
@@ -199,6 +214,7 @@ export interface FileRoutesByTo {
   '/donate': typeof socialDonateRoute
   '/github': typeof socialGithubRoute
   '/twitter': typeof socialTwitterRoute
+  '/@me/bookmarks': typeof meBookmarksRoute
   '/rankings/1v1/$': typeof Rankings1v1SplatRoute
   '/rankings/2v2/$': typeof Rankings2v2SplatRoute
   '/stats/clan/$clanId': typeof StatsClanClanIdRoute
@@ -214,6 +230,7 @@ export interface FileRoutesById {
   '/(social)/donate': typeof socialDonateRoute
   '/(social)/github': typeof socialGithubRoute
   '/(social)/twitter': typeof socialTwitterRoute
+  '/@me/bookmarks': typeof meBookmarksRoute
   '/rankings/1v1/$': typeof Rankings1v1SplatRoute
   '/rankings/2v2/$': typeof Rankings2v2SplatRoute
   '/stats/clan/$clanId': typeof StatsClanClanIdRoute
@@ -230,6 +247,7 @@ export interface FileRouteTypes {
     | '/donate'
     | '/github'
     | '/twitter'
+    | '/@me/bookmarks'
     | '/rankings/1v1/$'
     | '/rankings/2v2/$'
     | '/stats/clan/$clanId'
@@ -243,6 +261,7 @@ export interface FileRouteTypes {
     | '/donate'
     | '/github'
     | '/twitter'
+    | '/@me/bookmarks'
     | '/rankings/1v1/$'
     | '/rankings/2v2/$'
     | '/stats/clan/$clanId'
@@ -256,6 +275,7 @@ export interface FileRouteTypes {
     | '/(social)/donate'
     | '/(social)/github'
     | '/(social)/twitter'
+    | '/@me/bookmarks'
     | '/rankings/1v1/$'
     | '/rankings/2v2/$'
     | '/stats/clan/$clanId'
@@ -271,6 +291,7 @@ export interface RootRouteChildren {
   socialDonateRoute: typeof socialDonateRoute
   socialGithubRoute: typeof socialGithubRoute
   socialTwitterRoute: typeof socialTwitterRoute
+  meBookmarksRoute: typeof meBookmarksRoute
   Rankings1v1SplatRoute: typeof Rankings1v1SplatRoute
   Rankings2v2SplatRoute: typeof Rankings2v2SplatRoute
   StatsClanClanIdRoute: typeof StatsClanClanIdRoute
@@ -285,6 +306,7 @@ const rootRouteChildren: RootRouteChildren = {
   socialDonateRoute: socialDonateRoute,
   socialGithubRoute: socialGithubRoute,
   socialTwitterRoute: socialTwitterRoute,
+  meBookmarksRoute: meBookmarksRoute,
   Rankings1v1SplatRoute: Rankings1v1SplatRoute,
   Rankings2v2SplatRoute: Rankings2v2SplatRoute,
   StatsClanClanIdRoute: StatsClanClanIdRoute,
@@ -308,6 +330,7 @@ export const routeTree = rootRoute
         "/(social)/donate",
         "/(social)/github",
         "/(social)/twitter",
+        "/@me/bookmarks",
         "/rankings/1v1/$",
         "/rankings/2v2/$",
         "/stats/clan/$clanId",
@@ -334,6 +357,9 @@ export const routeTree = rootRoute
     },
     "/(social)/twitter": {
       "filePath": "(social)/twitter.tsx"
+    },
+    "/@me/bookmarks": {
+      "filePath": "@me/bookmarks.tsx"
     },
     "/rankings/1v1/$": {
       "filePath": "rankings/1v1.$.tsx"

@@ -3,9 +3,9 @@ import { t } from "@lingui/core/macro"
 import type { ParsedLocation } from "@tanstack/react-router"
 import { Link, useRouterState } from "@tanstack/react-router"
 import {
+  Bookmark,
   BookOpenText,
   ChevronsUp,
-  Heart,
   House,
   Shield,
   UsersRound,
@@ -234,9 +234,9 @@ export const SideNav = ({ className }: SideNavProps) => {
     bookmarks.length > 0
       ? [
           {
-            name: t`Favorites`,
-            icon: <Heart className="w-6 h-6" />,
-            href: "/@me/favorites",
+            name: t`Bookmarks`,
+            icon: <Bookmark className="w-6 h-6" />,
+            href: "/@me/bookmarks",
             exact: false,
           },
         ]
