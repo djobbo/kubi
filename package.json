@@ -102,8 +102,5 @@
     "vinxi": "^0.5.1",
     "zod": "^3.24.1",
     "zustand": "^5.0.2"
-  },
-  "patchedDependencies": {
-    "knip@5.34.1": "patches/knip@5.34.1.patch"
   }
 }
