@@ -102,7 +102,7 @@ export const get1v1Rankings = createServerFn({ method: "GET" })
   .validator(
     z.object({
       region: rankedRegionSchema,
-      page: z.number().optional(),
+      page: z.number().min(0).max(1000).optional().catch(1),
       name: z.string().optional(),
     }),
   )
@@ -125,7 +125,7 @@ export const get2v2Rankings = createServerFn({ method: "GET" })
   .validator(
     z.object({
       region: rankedRegionSchema,
-      page: z.number().optional(),
+      page: z.number().min(0).max(1000).optional().catch(1),
     }),
   )
   .handler(async ({ data: query }) => {

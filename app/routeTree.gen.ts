@@ -20,7 +20,8 @@ import { Route as socialDonateImport } from './routes/(social)/donate'
 import { Route as socialDiscordImport } from './routes/(social)/discord'
 import { Route as StatsPlayerPlayerIdImport } from './routes/stats/player/$playerId'
 import { Route as StatsClanClanIdImport } from './routes/stats/clan/$clanId'
-import { Route as Rankings1v1RegionPageImport } from './routes/rankings/1v1.$region.$page'
+import { Route as Rankings2v2SplatImport } from './routes/rankings/2v2.$'
+import { Route as Rankings1v1SplatImport } from './routes/rankings/1v1.$'
 
 // Create/Update Routes
 
@@ -78,9 +79,15 @@ const StatsClanClanIdRoute = StatsClanClanIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const Rankings1v1RegionPageRoute = Rankings1v1RegionPageImport.update({
-  id: '/rankings/1v1/$region/$page',
-  path: '/rankings/1v1/$region/$page',
+const Rankings2v2SplatRoute = Rankings2v2SplatImport.update({
+  id: '/rankings/2v2/$',
+  path: '/rankings/2v2/$',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const Rankings1v1SplatRoute = Rankings1v1SplatImport.update({
+  id: '/rankings/1v1/$',
+  path: '/rankings/1v1/$',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -137,6 +144,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof socialTwitterImport
       parentRoute: typeof rootRoute
     }
+    '/rankings/1v1/$': {
+      id: '/rankings/1v1/$'
+      path: '/rankings/1v1/$'
+      fullPath: '/rankings/1v1/$'
+      preLoaderRoute: typeof Rankings1v1SplatImport
+      parentRoute: typeof rootRoute
+    }
+    '/rankings/2v2/$': {
+      id: '/rankings/2v2/$'
+      path: '/rankings/2v2/$'
+      fullPath: '/rankings/2v2/$'
+      preLoaderRoute: typeof Rankings2v2SplatImport
+      parentRoute: typeof rootRoute
+    }
     '/stats/clan/$clanId': {
       id: '/stats/clan/$clanId'
       path: '/stats/clan/$clanId'
@@ -149,13 +170,6 @@ declare module '@tanstack/react-router' {
       path: '/stats/player/$playerId'
       fullPath: '/stats/player/$playerId'
       preLoaderRoute: typeof StatsPlayerPlayerIdImport
-      parentRoute: typeof rootRoute
-    }
-    '/rankings/1v1/$region/$page': {
-      id: '/rankings/1v1/$region/$page'
-      path: '/rankings/1v1/$region/$page'
-      fullPath: '/rankings/1v1/$region/$page'
-      preLoaderRoute: typeof Rankings1v1RegionPageImport
       parentRoute: typeof rootRoute
     }
   }
@@ -171,9 +185,10 @@ export interface FileRoutesByFullPath {
   '/donate': typeof socialDonateRoute
   '/github': typeof socialGithubRoute
   '/twitter': typeof socialTwitterRoute
+  '/rankings/1v1/$': typeof Rankings1v1SplatRoute
+  '/rankings/2v2/$': typeof Rankings2v2SplatRoute
   '/stats/clan/$clanId': typeof StatsClanClanIdRoute
   '/stats/player/$playerId': typeof StatsPlayerPlayerIdRoute
-  '/rankings/1v1/$region/$page': typeof Rankings1v1RegionPageRoute
 }
 
 export interface FileRoutesByTo {
@@ -184,9 +199,10 @@ export interface FileRoutesByTo {
   '/donate': typeof socialDonateRoute
   '/github': typeof socialGithubRoute
   '/twitter': typeof socialTwitterRoute
+  '/rankings/1v1/$': typeof Rankings1v1SplatRoute
+  '/rankings/2v2/$': typeof Rankings2v2SplatRoute
   '/stats/clan/$clanId': typeof StatsClanClanIdRoute
   '/stats/player/$playerId': typeof StatsPlayerPlayerIdRoute
-  '/rankings/1v1/$region/$page': typeof Rankings1v1RegionPageRoute
 }
 
 export interface FileRoutesById {
@@ -198,9 +214,10 @@ export interface FileRoutesById {
   '/(social)/donate': typeof socialDonateRoute
   '/(social)/github': typeof socialGithubRoute
   '/(social)/twitter': typeof socialTwitterRoute
+  '/rankings/1v1/$': typeof Rankings1v1SplatRoute
+  '/rankings/2v2/$': typeof Rankings2v2SplatRoute
   '/stats/clan/$clanId': typeof StatsClanClanIdRoute
   '/stats/player/$playerId': typeof StatsPlayerPlayerIdRoute
-  '/rankings/1v1/$region/$page': typeof Rankings1v1RegionPageRoute
 }
 
 export interface FileRouteTypes {
@@ -213,9 +230,10 @@ export interface FileRouteTypes {
     | '/donate'
     | '/github'
     | '/twitter'
+    | '/rankings/1v1/$'
+    | '/rankings/2v2/$'
     | '/stats/clan/$clanId'
     | '/stats/player/$playerId'
-    | '/rankings/1v1/$region/$page'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -225,9 +243,10 @@ export interface FileRouteTypes {
     | '/donate'
     | '/github'
     | '/twitter'
+    | '/rankings/1v1/$'
+    | '/rankings/2v2/$'
     | '/stats/clan/$clanId'
     | '/stats/player/$playerId'
-    | '/rankings/1v1/$region/$page'
   id:
     | '__root__'
     | '/'
@@ -237,9 +256,10 @@ export interface FileRouteTypes {
     | '/(social)/donate'
     | '/(social)/github'
     | '/(social)/twitter'
+    | '/rankings/1v1/$'
+    | '/rankings/2v2/$'
     | '/stats/clan/$clanId'
     | '/stats/player/$playerId'
-    | '/rankings/1v1/$region/$page'
   fileRoutesById: FileRoutesById
 }
 
@@ -251,9 +271,10 @@ export interface RootRouteChildren {
   socialDonateRoute: typeof socialDonateRoute
   socialGithubRoute: typeof socialGithubRoute
   socialTwitterRoute: typeof socialTwitterRoute
+  Rankings1v1SplatRoute: typeof Rankings1v1SplatRoute
+  Rankings2v2SplatRoute: typeof Rankings2v2SplatRoute
   StatsClanClanIdRoute: typeof StatsClanClanIdRoute
   StatsPlayerPlayerIdRoute: typeof StatsPlayerPlayerIdRoute
-  Rankings1v1RegionPageRoute: typeof Rankings1v1RegionPageRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -264,9 +285,10 @@ const rootRouteChildren: RootRouteChildren = {
   socialDonateRoute: socialDonateRoute,
   socialGithubRoute: socialGithubRoute,
   socialTwitterRoute: socialTwitterRoute,
+  Rankings1v1SplatRoute: Rankings1v1SplatRoute,
+  Rankings2v2SplatRoute: Rankings2v2SplatRoute,
   StatsClanClanIdRoute: StatsClanClanIdRoute,
   StatsPlayerPlayerIdRoute: StatsPlayerPlayerIdRoute,
-  Rankings1v1RegionPageRoute: Rankings1v1RegionPageRoute,
 }
 
 export const routeTree = rootRoute
@@ -286,9 +308,10 @@ export const routeTree = rootRoute
         "/(social)/donate",
         "/(social)/github",
         "/(social)/twitter",
+        "/rankings/1v1/$",
+        "/rankings/2v2/$",
         "/stats/clan/$clanId",
-        "/stats/player/$playerId",
-        "/rankings/1v1/$region/$page"
+        "/stats/player/$playerId"
       ]
     },
     "/": {
@@ -312,14 +335,17 @@ export const routeTree = rootRoute
     "/(social)/twitter": {
       "filePath": "(social)/twitter.tsx"
     },
+    "/rankings/1v1/$": {
+      "filePath": "rankings/1v1.$.tsx"
+    },
+    "/rankings/2v2/$": {
+      "filePath": "rankings/2v2.$.tsx"
+    },
     "/stats/clan/$clanId": {
       "filePath": "stats/clan/$clanId.tsx"
     },
     "/stats/player/$playerId": {
       "filePath": "stats/player/$playerId.tsx"
-    },
-    "/rankings/1v1/$region/$page": {
-      "filePath": "rankings/1v1.$region.$page.tsx"
     }
   }
 }

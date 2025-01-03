@@ -10,9 +10,8 @@ import { RankingsTableItem } from "@/features/brawlhalla/components/stats/Rankin
 import { legendsMap } from "@/features/brawlhalla/constants/legends"
 import { cleanString } from "@/helpers/cleanString"
 import { seo } from "@/helpers/seo"
-import { useDebouncedState } from "@/hooks/useDebouncedState"
 
-export const Route = createFileRoute("/rankings/1v1/$region/$page")({
+export const Route = createFileRoute("/rankings/1v1/$")({
   component: RouteComponent,
   validateSearch: (search) =>
     z
@@ -21,7 +20,8 @@ export const Route = createFileRoute("/rankings/1v1/$region/$page")({
       })
       .parse(search),
   loaderDeps: ({ search: { player } }) => ({ player }),
-  loader: async ({ params: { region, page }, deps: { player } }) => {
+  loader: async ({ params: { _splat }, deps: { player } }) => {
+    const [region, page = "1"] = _splat?.split("/") ?? []
     const rankings = await get1v1Rankings({
       data: {
         region,
@@ -33,14 +33,17 @@ export const Route = createFileRoute("/rankings/1v1/$region/$page")({
     return {
       rankings,
       player,
+      region,
+      page,
     }
   },
-  head: ({ params, loaderData }) => {
-    const { region, page } = params
-    const search = loaderData?.player
+  head: ({ loaderData }) => {
+    if (!loaderData) return {}
+
+    const { region, page, player } = loaderData
 
     const formatedRegion = region === "all" ? t`Global` : region.toUpperCase()
-    const formatedSearch = search ? ` - ${search}` : ""
+    const formatedSearch = player ? ` - ${player}` : ""
 
     return {
       meta: seo({
@@ -56,20 +59,23 @@ export const Route = createFileRoute("/rankings/1v1/$region/$page")({
 })
 
 function RouteComponent() {
-  const { region, page } = Route.useParams()
-  const { player } = Route.useSearch()
-  const [search, setSearch, immediateSearch] = useDebouncedState(
-    player ?? "",
-    500,
-  )
-  const { rankings } = Route.useLoaderData()
+  const {
+    //  player,
+    region,
+    page,
+    rankings,
+  } = Route.useLoaderData()
+  // const [search, setSearch, immediateSearch] = useDebouncedState(
+  //   player ?? "",
+  //   500,
+  // )
 
   return (
     <RankingsLayout
       brackets={[
-        { page: "1v1" },
-        { page: "2v2" },
-        // { page: "switchcraft", label: "Switchcraft" },
+        { page: "1v1", label: t`1v1` },
+        { page: "2v2", label: t`2v2` },
+        { page: "rotating", label: t`Rotating` },
         { page: "power/1v1", label: t`Power 1v1` },
         { page: "power/2v2", label: t`Power 2v2` },
         { page: "clans", label: t`Clans` },
@@ -89,10 +95,11 @@ function RouteComponent() {
       ]}
       currentRegion={region}
       currentPage={page}
-      hasPagination={!search}
-      hasSearch
-      search={immediateSearch}
-      setSearch={setSearch}
+      // hasPagination={!search}
+      // hasSearch
+      // search={immediateSearch}
+      // setSearch={setSearch}
+      hasPagination
       searchPlaceholder={t`Search player...`}
       searchSubtitle={t`Search must start with exact match. Only players that have completed their 10 placement matches are shown.`}
     >
@@ -125,9 +132,9 @@ function RouteComponent() {
 
       <div className="rounded-lg overflow-hidden border border-bg mb-4 flex flex-col">
         {rankings
-          ?.filter((player) =>
-            player.name.toLowerCase().startsWith(immediateSearch),
-          )
+          // .filter((player) =>
+          //   player.name.toLowerCase().startsWith(immediateSearch),
+          // )
           .map((player, i) => {
             const legend = legendsMap[player.best_legend]
 
@@ -137,7 +144,7 @@ function RouteComponent() {
                 index={i}
                 content={
                   <Link
-                    to={`/stats/player/$playerId`}
+                    to="/stats/player/$playerId"
                     params={{ playerId: player.brawlhalla_id.toString() }}
                     className="flex flex-1 items-center gap-2 md:gap-3"
                   >
