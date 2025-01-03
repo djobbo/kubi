@@ -2,7 +2,7 @@ import { Trans } from "@lingui/react/macro"
 import { Star, StarOff } from "lucide-react"
 
 import { useAuth } from "@/features/auth/use-auth"
-import { useBookmarks } from "@/features/bookmarks/use-bookmarks"
+import { useBookmark } from "@/features/bookmarks/hooks/use-bookmark"
 import { LegendIcon } from "@/features/brawlhalla/components/Image"
 import { cleanString } from "@/helpers/cleanString"
 
@@ -16,9 +16,22 @@ interface RankedPlayerItemProps {
 
 export const RankedPlayerItem = ({ player }: RankedPlayerItemProps) => {
   const { isLoggedIn } = useAuth()
-  const { addBookmark, isBookmarked, deleteBookmark } = useBookmarks()
-
   const legend = legendsMap[player.best_legend]
+
+  const { isBookmarked, toggleBookmark } = useBookmark({
+    pageType: "player_stats",
+    pageId: player.brawlhalla_id.toString(),
+    name: player.name,
+    meta: {
+      version: "1",
+      data: {
+        icon: {
+          type: "legend",
+          id: legend?.legend_id,
+        },
+      },
+    },
+  })
 
   const icon = legend && (
     <LegendIcon
@@ -28,11 +41,6 @@ export const RankedPlayerItem = ({ player }: RankedPlayerItemProps) => {
       className="object-contain object-center"
     />
   )
-
-  const isFav = isBookmarked({
-    pageType: "player_stats",
-    pageId: player.brawlhalla_id.toString(),
-  })
 
   const { rating, peak_rating, tier } = player
 
@@ -57,30 +65,10 @@ export const RankedPlayerItem = ({ player }: RankedPlayerItemProps) => {
               e.preventDefault()
               e.stopPropagation()
 
-              if (isFav) {
-                deleteBookmark({
-                  id: player.brawlhalla_id.toString(),
-                  type: "player",
-                  name: player.name,
-                })
-
-                return
-              }
-
-              addBookmark({
-                id: player.brawlhalla_id.toString(),
-                name: player.name,
-                type: "player",
-                meta: {
-                  icon: {
-                    legend_id: legend?.legend_id,
-                    type: "legend",
-                  },
-                },
-              })
+              toggleBookmark(!isBookmarked)
             }}
           >
-            {isFav ? <StarOff size={16} /> : <Star size={16} />}
+            {isBookmarked ? <StarOff size={16} /> : <Star size={16} />}
           </button>
         )
       }

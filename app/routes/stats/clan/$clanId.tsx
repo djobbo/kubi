@@ -91,7 +91,12 @@ function RouteComponent() {
           pageType: "clan_stats",
           pageId: clan.clan_id.toString(),
           name: cleanString(clan.clan_name),
-          meta: { type: "clan_stats" },
+          meta: {
+            version: "1",
+            data: {
+              icon: null,
+            },
+          },
         }}
       />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">

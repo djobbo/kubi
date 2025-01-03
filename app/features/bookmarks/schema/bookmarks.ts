@@ -13,28 +13,29 @@ export const pageTypeSchema = z.enum(pageTypes)
 
 export const pageTypeEnum = bookmarksSchema.enum("page_type", pageTypes)
 
-export const playerStatsMetaSchema = z.object({
-  icon: z.union([
-    z.object({
-      type: z.literal("legend"),
-      id: z.number(),
+// TODO: add union if more than one meta schema is allowed
+// const metaSchema = z.union([playerStatsMetaSchema]).nullable()
+const metaV1Schema = z
+  .object({
+    version: z.literal("1"),
+    data: z.object({
+      icon: z
+        .union([
+          z.object({
+            type: z.literal("legend"),
+            id: z.number().optional(),
+          }),
+          z.object({
+            type: z.literal("url"),
+            url: z.string(),
+          }),
+        ])
+        .nullable(),
     }),
-    z.object({
-      type: z.literal("url"),
-      url: z.string(),
-    }),
-  ]),
-})
+  })
+  .nullable()
 
-const metaSchema = z.union([
-  z.object({
-    type: z.literal("player_stats"),
-    icon: playerStatsMetaSchema,
-  }),
-  z.object({
-    type: z.literal("clan_stats"),
-  }),
-])
+const metaSchema = metaV1Schema
 
 type Meta = z.infer<typeof metaSchema>
 
@@ -67,3 +68,5 @@ export const bookmarksInsertSchema = createInsertSchema(bookmarksTable, {
   meta: metaSchema,
   userId: z.string().optional(),
 })
+
+export type NewBookmark = z.infer<typeof bookmarksInsertSchema>

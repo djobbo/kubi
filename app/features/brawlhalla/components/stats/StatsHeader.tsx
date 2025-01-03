@@ -5,10 +5,10 @@ import { ExternalLink, UserRoundMinus, UserRoundPlus } from "lucide-react"
 import type { ReactNode } from "react"
 import toast from "react-hot-toast"
 
-import type { Bookmark } from "@/db/schema"
+import type { NewBookmark } from "@/db/schema"
 import { AdsenseStatsHeader } from "@/features/analytics/components/adsense"
 import { useAuth } from "@/features/auth/use-auth"
-import { useBookmarks } from "@/features/bookmarks/use-bookmarks"
+import { useBookmark } from "@/features/bookmarks/hooks/use-bookmark"
 import { cleanString } from "@/helpers/cleanString"
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard"
 import { Button } from "@/ui/components/button"
@@ -23,7 +23,7 @@ interface StatsHeaderProps {
   icon?: ReactNode
   aliases?: string[]
   miscStats?: MiscStat[]
-  bookmark?: Bookmark
+  bookmark: NewBookmark
 }
 
 export const StatsHeader = ({
@@ -35,10 +35,8 @@ export const StatsHeader = ({
   bookmark,
 }: StatsHeaderProps) => {
   const { isLoggedIn, logIn } = useAuth()
-  const { addBookmark, isBookmarked, deleteBookmark } = useBookmarks()
+  const { isBookmarked, toggleBookmark } = useBookmark(bookmark)
   const copyToClipboard = useCopyToClipboard()
-
-  const isItemFavorite = bookmark && isBookmarked(bookmark)
 
   return (
     <>
@@ -55,27 +53,24 @@ export const StatsHeader = ({
       </div>
       <div className="flex flex-col sm:flex-row justify-end py-2 gap-2">
         {isLoggedIn ? (
-          bookmark && (
-            <Button
-              variant={isItemFavorite ? "outline" : "primary"}
-              onClick={() => {
-                if (isItemFavorite) return deleteBookmark(bookmark)
-                addBookmark(bookmark)
-              }}
-            >
-              {isItemFavorite ? (
-                <>
-                  <Trans>Remove Favorite</Trans>
-                  <UserRoundMinus className="ml-2 w-4 h-4" />
-                </>
-              ) : (
-                <>
-                  <Trans>Add favorite</Trans>
-                  <UserRoundPlus className="ml-2 w-4 h-4" />
-                </>
-              )}
-            </Button>
-          )
+          <Button
+            variant={isBookmarked ? "outline" : "primary"}
+            onClick={() => {
+              toggleBookmark(!isBookmarked)
+            }}
+          >
+            {isBookmarked ? (
+              <>
+                <Trans>Remove Favorite</Trans>
+                <UserRoundMinus className="ml-2 w-4 h-4" />
+              </>
+            ) : (
+              <>
+                <Trans>Add favorite</Trans>
+                <UserRoundPlus className="ml-2 w-4 h-4" />
+              </>
+            )}
+          </Button>
         ) : (
           <Button onClick={logIn}>
             <DiscordIcon size="16" className="mr-2" />{" "}

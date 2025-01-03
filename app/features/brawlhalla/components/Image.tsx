@@ -32,10 +32,14 @@ type LegendIconProps = ImagePropsWithoutSrc & {
   legendNameKey: LegendNameKey | (string & {})
 }
 
+export const getLegendIconSrc = (
+  legendNameKey: LegendIconProps["legendNameKey"],
+) => `/assets/images/legends/icons/${legendNameKey}.png`
+
 export const LegendIcon = ({ legendNameKey, ...props }: LegendIconProps) => {
   return (
     <Image
-      src={`/assets/images/legends/icons/${legendNameKey}.png`}
+      src={getLegendIconSrc(legendNameKey)}
       alt={legendNameKey}
       {...props}
     />

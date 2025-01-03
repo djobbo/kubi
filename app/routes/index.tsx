@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react"
 import { Suspense } from "react"
 
 import { useAuth } from "@/features/auth/use-auth"
-import { useBookmarks } from "@/features/bookmarks/use-bookmarks"
+import { useBookmarks } from "@/features/bookmarks/hooks/use-bookmarks"
 import { DiscordCard } from "@/features/brawlhalla/components/DiscordCard"
 import { FavoritesGrid } from "@/features/brawlhalla/components/favorites/FavoritesGrid"
 import { LandingArticles } from "@/features/brawlhalla/components/LandingArticles"
@@ -26,7 +26,7 @@ const landingClassName = css({
 
 function Home() {
   const { isLoggedIn, logIn } = useAuth()
-  const { bookmarks } = useBookmarks()
+  const bookmarks = useBookmarks()
   const navigate = useNavigate()
 
   return (

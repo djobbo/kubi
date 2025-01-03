@@ -1,5 +1,6 @@
 import { SiDiscord as DiscordIcon } from "@icons-pack/react-simple-icons"
 import { t } from "@lingui/core/macro"
+import type { ParsedLocation } from "@tanstack/react-router"
 import { Link, useRouterState } from "@tanstack/react-router"
 import {
   BookOpenText,
@@ -14,8 +15,10 @@ import {
 import type { ReactNode } from "react"
 
 import { Tooltip } from "@/components/base/Tooltip"
-import { useBookmarks } from "@/features/bookmarks/use-bookmarks"
-import { Image } from "@/features/brawlhalla/components/Image"
+import type { NewBookmark } from "@/db/schema"
+import { useBookmark } from "@/features/bookmarks/hooks/use-bookmark"
+import { useBookmarks } from "@/features/bookmarks/hooks/use-bookmarks"
+import { getLegendIconSrc, Image } from "@/features/brawlhalla/components/Image"
 import { useSideNav } from "@/features/sidenav/sidenav-provider"
 import { cleanString } from "@/helpers/cleanString"
 import { css } from "@/panda/css"
@@ -26,7 +29,7 @@ import { legendsMap } from "../../constants/legends"
 
 interface SideNavIconProps {
   className?: string
-  image?: string
+  image?: string | null
   name: string
   content?: ReactNode
   href: string
@@ -66,9 +69,7 @@ const SideNavIcon = ({
             to={href}
             className={cn(className, "w-full h-12")}
             target={external ? "_blank" : undefined}
-            onClick={() => {
-              closeSideNav()
-            }}
+            onClick={closeSideNav}
           >
             {image && (
               <Image
@@ -94,7 +95,7 @@ const SideNavIcon = ({
           <button
             type="button"
             className="items-center justify-center hidden remove-btn absolute w-4 h-4 p-0.5 rounded-full overflow-hidden shadow-md bg-accentOld hover:bg-text hover:text-bgVar2"
-            onClick={() => onRemove()}
+            onClick={onRemove}
           >
             <X size={12} />
           </button>
@@ -153,20 +154,90 @@ const getDefaultNav = (): {
   },
 ]
 
+interface BookmarkDisplayProps {
+  bookmark: NewBookmark
+  searchParams: URLSearchParams
+  location: ParsedLocation
+}
+
+const BookmarkDisplay = ({
+  bookmark,
+  searchParams,
+  location,
+}: BookmarkDisplayProps) => {
+  const { deleteBookmark } = useBookmark(bookmark)
+  const { pathname } = location
+
+  switch (bookmark.pageType) {
+    case "player_stats": {
+      const playerId = searchParams.get("playerId")
+      const meta = bookmark.meta
+      if (!(meta && "icon" in meta.data)) break
+
+      // const legendId = meta?.icon?.legend_id
+      // const legend = !!legendId && legendsMap[legendId]
+
+      let image: string | null = null
+      switch (meta.data.icon?.type) {
+        case "legend": {
+          const legendId = meta.data.icon.id
+          if (!legendId) break
+
+          const legend = legendsMap[legendId]
+          if (!legend) break
+
+          image = getLegendIconSrc(legend.legend_name_key)
+          break
+        }
+        case "url": {
+          image = meta.data.icon.url
+          break
+        }
+      }
+
+      return (
+        <SideNavIcon
+          key={bookmark.id}
+          href={`/stats/player/${bookmark.id}`}
+          name={cleanString(bookmark.name)}
+          image={image}
+          // TODO: add route match helper
+          active={pathname.startsWith(`/stats/player/${playerId}`)}
+          onRemove={deleteBookmark}
+        />
+      )
+    }
+    case "clan_stats": {
+      const clanId = searchParams.get("clanId")
+
+      return (
+        <SideNavIcon
+          key={bookmark.id}
+          href={`/stats/clan/${bookmark.id}`}
+          name={cleanString(bookmark.name)}
+          // TODO: add route match helper
+          active={pathname.startsWith(`/stats/clan/${clanId}`)}
+          onRemove={deleteBookmark}
+        />
+      )
+    }
+    default:
+      return null
+  }
+}
+
 interface SideNavProps {
   className?: string
 }
 
 export const SideNav = ({ className }: SideNavProps) => {
-  const { bookmarks, deleteBookmark } = useBookmarks()
+  const bookmarks = useBookmarks()
   const router = useRouterState()
 
   const { isSideNavOpen, closeSideNav } = useSideNav()
 
   const { pathname } = router.location
   const searchParams = new URLSearchParams(router.location.search)
-  const playerId = searchParams.get("playerId")
-  const clanId = searchParams.get("clanId")
 
   const nav = getDefaultNav().concat(
     bookmarks.length > 0
@@ -213,6 +284,7 @@ export const SideNav = ({ className }: SideNavProps) => {
               content={nav.icon}
               href={nav.href}
               active={
+                // TODO: add route match helper
                 nav.exact
                   ? pathname === nav.href
                   : pathname.startsWith(nav.href)
@@ -226,47 +298,14 @@ export const SideNav = ({ className }: SideNavProps) => {
             })}
           />
           {bookmarks.map((bookmark) => {
-            switch (bookmark.pageType) {
-              case "player_stats": {
-                const meta = bookmark.meta
-                const legendId = meta?.icon?.legend_id
-                const legend = !!legendId && legendsMap[legendId]
-                return (
-                  <SideNavIcon
-                    key={bookmark.id}
-                    href={`/stats/player/${bookmark.id}`}
-                    name={cleanString(bookmark.name)}
-                    {...(legend && {
-                      image: `/images/icons/roster/legends/${legend.legend_name_key}.png`,
-                    })}
-                    active={
-                      pathname === "/stats/player/[playerId]" &&
-                      playerId === bookmark.id.toString()
-                    }
-                    onRemove={() => {
-                      deleteBookmark(bookmark)
-                    }}
-                  />
-                )
-              }
-              case "clan_stats":
-                return (
-                  <SideNavIcon
-                    key={bookmark.id}
-                    href={`/stats/clan/${bookmark.id}`}
-                    name={cleanString(bookmark.name)}
-                    active={
-                      pathname === "/stats/clan/[clanId]" &&
-                      clanId === bookmark.id.toString()
-                    }
-                    onRemove={() => {
-                      deleteBookmark(bookmark)
-                    }}
-                  />
-                )
-              default:
-                return null
-            }
+            return (
+              <BookmarkDisplay
+                key={bookmark.id}
+                bookmark={bookmark}
+                searchParams={searchParams}
+                location={router.location}
+              />
+            )
           })}
         </div>
       </div>

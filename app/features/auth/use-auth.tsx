@@ -1,10 +1,10 @@
 import { submitForm } from "@/helpers/submit-form"
-import { Route } from "@/routes/__root"
+import { useRootContext } from "@/hooks/useRootContext"
 import type { APIRoute as discordAPIRoute } from "@/routes/api/auth/discord"
 import type { APIRoute as logoutAPIRoute } from "@/routes/api/auth/logout"
 
 export const useAuth = () => {
-  const loader = Route.useLoaderData()
+  const loader = useRootContext()
 
   return {
     ...loader.session,

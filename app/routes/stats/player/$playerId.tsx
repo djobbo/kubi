@@ -197,8 +197,8 @@ function RouteComponent() {
           pageId: player.stats.brawlhalla_id.toString(),
           name: cleanString(playerName),
           meta: {
-            type: "player_stats",
-            icon: {
+            version: "1",
+            data: {
               icon: {
                 type: "legend",
                 id: legendsSortedByLevel[0].legend_id,
