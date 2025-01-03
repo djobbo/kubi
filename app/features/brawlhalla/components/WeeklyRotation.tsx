@@ -4,7 +4,7 @@ import { CircleHelp } from "lucide-react"
 
 import { Tooltip } from "@/components/base/Tooltip"
 import { getWeeklyRotation } from "@/features/bh-articles/functions/getWeeklyRotation"
-import { Image, LegendIcon } from "@/features/brawlhalla/components/Image"
+import { LegendIcon } from "@/features/brawlhalla/components/Image"
 
 const useWeeklyRotation = () => {
   const { data: weeklyRotation } = useSuspenseQuery({
