@@ -23,13 +23,20 @@ export const getBookmarks = createServerFn({ method: "GET" })
   .handler(async ({ data: { query } }) => {
     const { page = 1, limit = 10, pageType = [] } = query ?? {}
 
-    const bookmarks = await db
+    const bookmarksQuery = db
       .select()
       .from(bookmarksTable)
-      .where(inArray(bookmarksTable.pageType, pageType))
       .orderBy(desc(bookmarksTable.createdAt))
       .limit(limit)
       .offset((page - 1) * limit)
+
+    if (pageType.length <= 0) {
+      const bookmarks = await bookmarksQuery.execute()
+      return bookmarks
+    }
+
+    const bookmarks = await bookmarksQuery //
+      .where(inArray(bookmarksTable.pageType, pageType))
       .execute()
 
     return bookmarks

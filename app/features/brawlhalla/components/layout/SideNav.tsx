@@ -156,21 +156,15 @@ const getDefaultNav = (): {
 
 interface BookmarkDisplayProps {
   bookmark: NewBookmark
-  searchParams: URLSearchParams
   location: ParsedLocation
 }
 
-const BookmarkDisplay = ({
-  bookmark,
-  searchParams,
-  location,
-}: BookmarkDisplayProps) => {
+const BookmarkDisplay = ({ bookmark, location }: BookmarkDisplayProps) => {
   const { deleteBookmark } = useBookmark(bookmark)
   const { pathname } = location
 
   switch (bookmark.pageType) {
     case "player_stats": {
-      const playerId = searchParams.get("playerId")
       const meta = bookmark.meta
       if (!(meta && "icon" in meta.data)) break
 
@@ -198,25 +192,23 @@ const BookmarkDisplay = ({
       return (
         <SideNavIcon
           key={bookmark.id}
-          href={`/stats/player/${bookmark.id}`}
+          href={`/stats/player/${bookmark.pageId}`}
           name={cleanString(bookmark.name)}
           image={image}
           // TODO: add route match helper
-          active={pathname.startsWith(`/stats/player/${playerId}`)}
+          active={pathname.startsWith(`/stats/player/${bookmark.pageId}`)}
           onRemove={deleteBookmark}
         />
       )
     }
     case "clan_stats": {
-      const clanId = searchParams.get("clanId")
-
       return (
         <SideNavIcon
           key={bookmark.id}
           href={`/stats/clan/${bookmark.id}`}
           name={cleanString(bookmark.name)}
           // TODO: add route match helper
-          active={pathname.startsWith(`/stats/clan/${clanId}`)}
+          active={pathname.startsWith(`/stats/clan/${bookmark.pageId}`)}
           onRemove={deleteBookmark}
         />
       )
@@ -237,7 +229,6 @@ export const SideNav = ({ className }: SideNavProps) => {
   const { isSideNavOpen, closeSideNav } = useSideNav()
 
   const { pathname } = router.location
-  const searchParams = new URLSearchParams(router.location.search)
 
   const nav = getDefaultNav().concat(
     bookmarks.length > 0
@@ -293,7 +284,7 @@ export const SideNav = ({ className }: SideNavProps) => {
             />
           ))}
           <hr
-            className={cn("border-b border-bg rounded-full mx-2", {
+            className={cn("border-t border-bg rounded-full mx-2", {
               hidden: bookmarks.length <= 0,
             })}
           />
@@ -302,7 +293,6 @@ export const SideNav = ({ className }: SideNavProps) => {
               <BookmarkDisplay
                 key={bookmark.id}
                 bookmark={bookmark}
-                searchParams={searchParams}
                 location={router.location}
               />
             )

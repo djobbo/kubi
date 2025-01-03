@@ -38,6 +38,7 @@ export const useToggleBookmark = (bookmark: NewBookmark) => {
         bookmark.pageId,
         bookmark.pageType,
       ])
+
       queryClient.setQueryData(
         [
           "is-bookmarked",
@@ -46,7 +47,7 @@ export const useToggleBookmark = (bookmark: NewBookmark) => {
           bookmark.pageId,
           bookmark.pageType,
         ],
-        true,
+        isBookmarked,
       )
 
       return { previousIsBookmarked, isBookmarked }
@@ -72,6 +73,9 @@ export const useToggleBookmark = (bookmark: NewBookmark) => {
           bookmark.pageId,
           bookmark.pageType,
         ],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ["bookmarks"],
       })
     },
   })

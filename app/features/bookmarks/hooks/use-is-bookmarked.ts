@@ -1,7 +1,6 @@
-import { queryOptions } from "@tanstack/react-query"
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
 
 import { useAuth } from "@/features/auth/use-auth"
-import { useLazyQuery } from "@/hooks/use-lazy-query"
 
 import { checkBookmarked } from "../functions/check-bookmarked"
 import type { NewBookmark } from "../schema"
@@ -11,7 +10,7 @@ export const useIsBookmarked = (
   initialValue?: boolean,
 ) => {
   const { isLoggedIn, user } = useAuth()
-  const { data: isBookmarked = false } = useLazyQuery(
+  const { data: isBookmarked = false } = useSuspenseQuery(
     queryOptions({
       queryKey: [
         "is-bookmarked",
@@ -33,7 +32,7 @@ export const useIsBookmarked = (
         })
         return isBookmarked
       },
-      initialData: initialValue,
+      ...(initialValue !== undefined && { initialData: initialValue }),
     }),
   )
 

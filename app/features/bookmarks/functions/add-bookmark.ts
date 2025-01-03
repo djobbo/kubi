@@ -16,11 +16,26 @@ export const addBookmark = createServerFn({ method: "POST" })
       throw new Error("Unauthorized")
     }
 
+    const newBookmark = {
+      ...bookmark,
+      userId: user.id,
+    }
+
     const bookmarkData = await db
       .insert(bookmarksTable)
-      .values({ ...bookmark, userId: user.id })
+      .values(newBookmark)
       .returning()
+      .onConflictDoUpdate({
+        set: {
+          name: newBookmark.name,
+        },
+        target: [
+          bookmarksTable.userId,
+          bookmarksTable.pageId,
+          bookmarksTable.pageType,
+        ],
+      })
       .execute()
 
-    return bookmarkData
+    return bookmarkData[0] ?? newBookmark
   })

@@ -22,7 +22,7 @@ export const checkBookmarked = createServerFn({ method: "GET" })
       throw new Error("Unauthorized")
     }
 
-    const dbBookmark = await db
+    const bookmarks = await db
       .select()
       .from(bookmarksTable)
       .where(
@@ -34,5 +34,5 @@ export const checkBookmarked = createServerFn({ method: "GET" })
       )
       .execute()
 
-    return !!dbBookmark
+    return bookmarks.length > 0
   })
