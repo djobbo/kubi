@@ -1,6 +1,6 @@
 import { SiDiscord as DiscordIcon } from "@icons-pack/react-simple-icons"
 import { Trans } from "@lingui/react/macro"
-import { createFileRoute, Link } from "@tanstack/react-router"
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
 import { ArrowRight } from "lucide-react"
 import { Suspense } from "react"
 
@@ -27,6 +27,7 @@ const landingClassName = css({
 function Home() {
   const { isLoggedIn, logIn } = useAuth()
   const { bookmarks } = useBookmarks()
+  const navigate = useNavigate()
 
   return (
     <>
@@ -80,7 +81,7 @@ function Home() {
             <span className="text-textVar1 text-sm sm:text-base">or</span>
             <div className="flex items-center gap-2">
               <Button asChild className="whitespace-nowrap font-semibold">
-                <Link to="/rankings">
+                <Link to="/rankings/1v1/$">
                   <Trans>View rankings</Trans>
                 </Link>
               </Button>
@@ -89,7 +90,7 @@ function Home() {
                 variant="outline"
                 className="whitespace-nowrap font-semibold"
               >
-                <Link to="/rankings/2v2">
+                <Link to="/rankings/2v2/$">
                   <Trans>2v2</Trans>
                 </Link>
               </Button>
@@ -119,7 +120,11 @@ function Home() {
                   You don&apos;t have any favorites yet, you can a player or a
                   clan as favorite when visiting their profile page.
                 </Trans>
-                <Button as="a" href="/rankings">
+                <Button
+                  onClick={() => {
+                    navigate({ to: "/rankings/1v1/$" })
+                  }}
+                >
                   <Trans>View rankings</Trans>
                 </Button>
               </>
