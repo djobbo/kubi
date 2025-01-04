@@ -9,6 +9,7 @@ import {
 import { createFileRoute } from "@tanstack/react-router"
 import { z } from "zod"
 
+import { getAliases } from "@/features/aliases/functions/get-aliases"
 import {
   getPlayerRanked,
   getPlayerStats,
@@ -59,9 +60,10 @@ export const Route = createFileRoute("/stats/player/$playerId")({
   loader: async ({ params: { playerId } }) => {
     const id = z.coerce.number().parse(playerId)
 
-    const [stats, ranked] = await Promise.all([
+    const [stats, ranked, aliases] = await Promise.all([
       getPlayerStats({ data: id }),
       getPlayerRanked({ data: id }),
+      getAliases({ data: { query: { playerId, limit: 5 } } }),
     ] as const)
 
     return {
@@ -69,7 +71,7 @@ export const Route = createFileRoute("/stats/player/$playerId")({
         id,
         stats,
         ranked,
-        aliases: [],
+        aliases,
       },
     }
   },
@@ -94,7 +96,7 @@ export const Route = createFileRoute("/stats/player/$playerId")({
 function RouteComponent() {
   const { player } = Route.useLoaderData()
 
-  const playerName = player.stats.name
+  const playerName = cleanString(player.stats.name)
 
   const fullLegends = getFullLegends(
     player.stats.legends,
@@ -180,7 +182,12 @@ function RouteComponent() {
       <StatsHeader
         name={cleanString(playerName)}
         id={player.stats.brawlhalla_id}
-        aliases={player.aliases.slice(0, MAX_SHOWN_ALIASES)}
+        aliases={player.aliases
+          .map((alias) => alias.alias)
+          .filter(
+            (alias) => alias !== playerName && alias !== player.stats.name,
+          )
+          .slice(0, MAX_SHOWN_ALIASES)}
         miscStats={accountStats}
         icon={
           player.ranked?.region && (

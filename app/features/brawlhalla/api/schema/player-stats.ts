@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { brawlhallaIdSchema } from "./brawlhalla-id"
+import { brawlhallaIdSchema, brawlhallaNameSchema } from "./brawlhalla-id"
 
 const legendSchema = z.strictObject({
   legend_id: z.number(),
@@ -40,7 +40,7 @@ const clanSchema = z.strictObject({
 
 export const playerStatsSchema = z.strictObject({
   brawlhalla_id: brawlhallaIdSchema,
-  name: z.string(),
+  name: brawlhallaNameSchema,
   xp: z.number(),
   level: z.number(),
   xp_percentage: z.number(),

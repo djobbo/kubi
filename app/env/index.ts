@@ -18,6 +18,11 @@ const IS_PROD = NODE_ENV === "production"
 export const env = {
   IS_DEV,
   IS_PROD,
+  SERVICE_API_KEY: envField(
+    "Service API Key",
+    metaEnv.SERVICE_API_KEY,
+    z.string().min(1),
+  ),
   DATABASE_URL: envField(
     "Database URL",
     metaEnv.DATABASE_URL,

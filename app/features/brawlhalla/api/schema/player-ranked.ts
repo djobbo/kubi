@@ -2,7 +2,7 @@ import { z } from "zod"
 
 import { rankedRegionSchema } from "../../constants/ranked/regions"
 import { rankedTierSchema } from "../../constants/ranked/tiers"
-import { brawlhallaIdSchema } from "./brawlhalla-id"
+import { brawlhallaIdSchema, brawlhallaNameSchema } from "./brawlhalla-id"
 
 const legendSchema = z.strictObject({
   legend_id: z.number(),
@@ -22,13 +22,13 @@ const ranked2v2Schema = z.strictObject({
   tier: rankedTierSchema.nullable(),
   wins: z.number(),
   games: z.number(),
-  teamname: z.string(),
+  teamname: brawlhallaNameSchema,
   region: z.number(),
   global_rank: z.number(),
 })
 
 export const playerRankedSchema = z.strictObject({
-  name: z.string(),
+  name: brawlhallaNameSchema,
   brawlhalla_id: brawlhallaIdSchema,
   global_rank: z.number(),
   region_rank: z.number(),
@@ -43,7 +43,7 @@ export const playerRankedSchema = z.strictObject({
   rotating_ranked: z.union([
     z.array(z.never()),
     z.strictObject({
-      name: z.string(),
+      name: brawlhallaNameSchema,
       brawlhalla_id: z.number(),
       rating: z.number(),
       peak_rating: z.number(),

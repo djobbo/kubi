@@ -2,9 +2,14 @@ import { createServerFn } from "@tanstack/start"
 import { z } from "zod"
 
 import { env } from "@/env"
+import { addOrUpdateAliases } from "@/features/aliases/functions/add-update-aliases"
+import { getAliases } from "@/features/aliases/functions/get-aliases"
+import { searchAliases } from "@/features/aliases/functions/search-aliases"
 import { withCache } from "@/features/cache/cache"
 
+import { MAX_SHOWN_ALIASES } from "../constants/aliases"
 import { rankedRegionSchema } from "../constants/ranked/regions"
+import { getTeamPlayers } from "../helpers/teamPlayers"
 import { clanMock } from "./mocks/clan"
 import { playerRankedMock } from "./mocks/player-ranked"
 import { playerStatsMock } from "./mocks/player-stats"
@@ -61,7 +66,7 @@ const getBhApi = async <T>(
 export const getPlayerStats = createServerFn({ method: "GET" })
   .validator(brawlhallaIdSchema)
   .handler(async ({ data: playerId }) => {
-    return withCache(
+    const playerStats = await withCache(
       `player-stats-${playerId}`,
       () =>
         getBhApi(
@@ -71,12 +76,30 @@ export const getPlayerStats = createServerFn({ method: "GET" })
         ),
       env.IS_DEV ? 30 * 1000 : 15 * 60 * 1000,
     )
+
+    try {
+      await addOrUpdateAliases({
+        data: {
+          serviceApiKey: env.SERVICE_API_KEY,
+          aliases: [
+            {
+              playerId: playerId.toString(),
+              alias: playerStats.name,
+            },
+          ],
+        },
+      })
+    } catch (e) {
+      console.error("Failed to add alias - playerStats", e)
+    }
+
+    return playerStats
   })
 
 export const getPlayerRanked = createServerFn({ method: "GET" })
   .validator(brawlhallaIdSchema)
   .handler(async ({ data: playerId }) => {
-    return withCache(
+    const playerRanked = await withCache(
       `player-ranked-${playerId}`,
       () =>
         getBhApi(
@@ -86,6 +109,43 @@ export const getPlayerRanked = createServerFn({ method: "GET" })
         ) as unknown as Promise<PlayerRanked>, // TODO: Zod issue, it can't infer the type correctly
       env.IS_DEV ? 30 * 1000 : 15 * 60 * 1000,
     )
+
+    try {
+      await addOrUpdateAliases({
+        data: {
+          serviceApiKey: env.SERVICE_API_KEY,
+          aliases: [
+            {
+              playerId: playerId.toString(),
+              alias: playerRanked.name,
+            },
+            ...playerRanked["2v2"]
+              .map((team) => {
+                const players = getTeamPlayers(team)
+                if (!players) return null
+                const [player1, player2] = players
+
+                return [
+                  {
+                    playerId: player1.id.toString(),
+                    alias: player1.name,
+                  },
+                  {
+                    playerId: player2.id.toString(),
+                    alias: player2.name,
+                  },
+                ]
+              })
+              .flat()
+              .filter((player) => player !== null),
+          ],
+        },
+      })
+    } catch (e) {
+      console.error("Failed to add aliases - playerRanked", e)
+    }
+
+    return playerRanked
   })
 
 export const getClan = createServerFn({ method: "GET" })
@@ -109,7 +169,7 @@ export const get1v1Rankings = createServerFn({ method: "GET" })
   .handler(async ({ data: query }) => {
     const { region = "all", page = 1, name } = query
 
-    return withCache(
+    const rankings = await withCache(
       `ranked-1v1-${region}-${page}-${name}`,
       () =>
         getBhApi(
@@ -119,6 +179,22 @@ export const get1v1Rankings = createServerFn({ method: "GET" })
         ) as unknown as Promise<Ranking1v1[]>, // TODO: Zod issue, it can't infer the type correctly
       env.IS_DEV ? 30 * 1000 : 5 * 60 * 1000,
     )
+
+    try {
+      await addOrUpdateAliases({
+        data: {
+          serviceApiKey: env.SERVICE_API_KEY,
+          aliases: rankings.map((ranking) => ({
+            playerId: ranking.brawlhalla_id.toString(),
+            alias: ranking.name,
+          })),
+        },
+      })
+    } catch (e) {
+      console.error("Failed to add aliases - 1v1 rankings", e)
+    }
+
+    return rankings
   })
 
 export const get2v2Rankings = createServerFn({ method: "GET" })
@@ -131,16 +207,47 @@ export const get2v2Rankings = createServerFn({ method: "GET" })
   .handler(async ({ data: query }) => {
     const { region = "all", page = 1 } = query
 
-    return withCache(
+    const rankings = await withCache(
       `ranked-2v2-${region}-${page}`,
       () =>
         getBhApi(
           `/rankings/2v2/${region.toLowerCase()}/${page}`,
           z.array(ranking2v2Schema),
           rankings2v2Mock,
-        ),
+        ) as unknown as Promise<Ranking2v2[]>, // TODO: Zod issue, it can't infer the type correctly
       env.IS_DEV ? 30 * 1000 : 5 * 60 * 1000,
-    ) as unknown as Promise<Ranking2v2[]> // TODO: Zod issue, it can't infer the type correctly
+    )
+
+    try {
+      await addOrUpdateAliases({
+        data: {
+          serviceApiKey: env.SERVICE_API_KEY,
+          aliases: rankings
+            .map((ranking) => {
+              const players = getTeamPlayers(ranking)
+              if (!players) return null
+              const [player1, player2] = players
+
+              return [
+                {
+                  playerId: player1.id.toString(),
+                  alias: player1.name,
+                },
+                {
+                  playerId: player2.id.toString(),
+                  alias: player2.name,
+                },
+              ]
+            })
+            .flat()
+            .filter((player) => player !== null),
+        },
+      })
+    } catch (e) {
+      console.error("Failed to add aliases - 2v2 rankings", e)
+    }
+
+    return rankings
   })
 
 export const searchPlayer = createServerFn({ method: "GET" })
@@ -157,20 +264,35 @@ export const searchPlayer = createServerFn({ method: "GET" })
       data: { region: "all", page: 1, name },
     })
 
-    // TODO: search aliases in db
-    const aliases = []
+    const aliases = await searchAliases({
+      data: { query: { player: name, limit: 5 } },
+    })
 
     const isPotentialBrawlhallaId = z
       .string()
       .regex(/^[0-9]+$/)
       .safeParse(name).success
 
-    // TODO: search aliases in db
-    const potentialBrawlhallaIdPlayer = isPotentialBrawlhallaId ? null : null
+    const potentialBrawlhallaIdAliases = isPotentialBrawlhallaId
+      ? await getAliases({
+          data: {
+            query: {
+              playerId: name,
+              limit: MAX_SHOWN_ALIASES,
+            },
+          },
+        })
+      : null
+
+    console.log({
+      rankings,
+      aliases,
+      potentialBrawlhallaIdAliases,
+    })
 
     return {
       rankings,
       aliases,
-      potentialBrawlhallaIdPlayer,
+      potentialBrawlhallaIdAliases,
     }
   })
