@@ -152,8 +152,6 @@ const migrateBookmarks = async (offset: number, limit: number) => {
   console.log("Migrated bookmarks", { offset, limit })
 }
 
-await migrateBookmarks(0, 20)
-
 export const migrateAllBookmarks = async (maxBookmarks: number) => {
   console.time("Migrate all bookmarks")
 
