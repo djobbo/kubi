@@ -284,12 +284,6 @@ export const searchPlayer = createServerFn({ method: "GET" })
         })
       : null
 
-    console.log({
-      rankings,
-      aliases,
-      potentialBrawlhallaIdAliases,
-    })
-
     return {
       rankings,
       aliases,
