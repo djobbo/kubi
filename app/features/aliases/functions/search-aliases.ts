@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/start"
-import { and, desc, eq, ilike } from "drizzle-orm"
+import { and, desc, eq, ilike, inArray } from "drizzle-orm"
 import { z } from "zod"
 
 import { db } from "@/db"
@@ -43,5 +43,27 @@ export const searchAliases = createServerFn({ method: "GET" })
       .offset((page - 1) * limit)
       .execute()
 
-    return aliases
+    const allAliases = await db
+      .select()
+      .from(aliasesTable)
+      .where(
+        inArray(
+          aliasesTable.playerId,
+          aliases.map((alias) => alias.playerId),
+        ),
+      )
+      .execute()
+
+    const players = aliases.map((alias) => {
+      const otherAliases = allAliases
+        .filter((a) => a.playerId === alias.playerId)
+        .map((a) => a.alias)
+
+      return {
+        ...alias,
+        otherAliases,
+      }
+    })
+
+    return players
   })

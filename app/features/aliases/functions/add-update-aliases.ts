@@ -9,9 +9,15 @@ import { cleanString } from "@/helpers/cleanString"
 import type { NewAlias } from "../schema"
 import { aliasesInsertSchema, aliasesTable } from "../schema"
 
-export const dedupeAliases = (aliases: NewAlias[]) =>
+export const dedupeAndCleanAliases = (aliases: NewAlias[]) =>
   aliases.reduce((acc, alias) => {
-    const cleanAlias = cleanString(alias.alias.trim())
+    let cleanAlias = cleanString(alias.alias.trim())
+
+    // Strip the •2 suffix from the alias (suffix added when 2 players play on the same machine)
+    if (cleanAlias.endsWith("•2")) {
+      cleanAlias = cleanAlias.slice(0, -2)
+    }
+
     if (cleanAlias.length < 1) {
       return acc
     }
@@ -28,9 +34,7 @@ export const addOrUpdateAliases = createServerFn({ method: "POST" })
   .middleware([serviceAuthenticationMiddleware])
   .validator(z.object({ aliases: z.array(aliasesInsertSchema) }))
   .handler(async ({ data: { aliases } }) => {
-    const dedupedAliases = dedupeAliases(aliases)
-
-    console.log("dedupedAliases", dedupedAliases)
+    const dedupedAliases = dedupeAndCleanAliases(aliases)
 
     const aliasesData = await db
       .insert(aliasesTable)

@@ -19,11 +19,14 @@ interface FavoritesGridProps {
   bookmarks: Bookmark[]
 }
 
-const favoriteClassName = css({
-  "&:hover .remove-btn": {
-    display: "block",
+const bookmarkWithRemoveButtonClass = css({
+  "& .remove-btn": {
+    display: "none",
     top: "-0.6rem",
     right: "-0.6rem",
+  },
+  "&:hover .remove-btn": {
+    display: "flex",
   },
 })
 
@@ -106,7 +109,10 @@ const BookmarkDisplay = ({ bookmark }: BookmarkDisplayProps) => {
 
   return (
     <div
-      className={cn("relative rounded-lg hover:bg-bgVar2", favoriteClassName)}
+      className={cn(
+        "relative rounded-lg hover:bg-bgVar2",
+        bookmarkWithRemoveButtonClass,
+      )}
       key={`${bookmark.pageType}/${bookmark.id}`}
     >
       <Link
@@ -123,10 +129,10 @@ const BookmarkDisplay = ({ bookmark }: BookmarkDisplayProps) => {
       </Link>
       <button
         type="button"
-        className="hidden remove-btn absolute w-5 h-5 p-0.5 rounded-full overflow-hidden shadow-md bg-accentOld hover:bg-text hover:text-bgVar2"
+        className="remove-btn w-5 h-5 absolute rounded-full overflow-hidden shadow-md bg-accentOld hover:bg-text hover:text-bgVar2 items-center justify-center"
         onClick={() => deleteBookmark()}
       >
-        <X />
+        <X className="w-4 h-4" />
       </button>
     </div>
   )

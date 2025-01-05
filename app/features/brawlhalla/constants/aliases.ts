@@ -1,1 +1,1 @@
-export const MAX_SHOWN_ALIASES = 5
+export const MAX_SHOWN_ALIASES = 20

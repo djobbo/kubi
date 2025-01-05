@@ -190,19 +190,18 @@ export const Searchbox = () => {
                         <p className={categoryTitleClassName}>
                           <Trans>Other players with similar names</Trans>
                         </p>
-                        {aliases.map(({ playerId, alias }) => (
+                        {aliases.map(({ playerId, alias, otherAliases }) => (
                           <SearchboxItem
                             key={`alias-${playerId}-${alias}`}
                             icon={<UserRound className="w-8 h-8" />}
                             href={`/stats/player/${playerId}`}
                             title={cleanString(alias)}
-                            // TODO: add subtitle
-                            // subtitle={
-                            //   <AliasesSubtitle
-                            //     immediateSearch={immediateSearch}
-                            //     aliases={otherAliases}
-                            //   />
-                            // }
+                            subtitle={
+                              <AliasesSubtitle
+                                immediateSearch={immediateSearch}
+                                aliases={otherAliases}
+                              />
+                            }
                           />
                         ))}
                       </>

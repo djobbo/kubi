@@ -40,10 +40,13 @@ interface SideNavIconProps {
 }
 
 const sideNavIconClassName = css({
-  "&:hover .remove-btn": {
-    display: "flex",
+  "& .remove-btn": {
+    display: "none",
     top: "-0.375rem",
     right: "-0.375rem",
+  },
+  "&:hover .remove-btn": {
+    display: "flex",
   },
 })
 
@@ -94,7 +97,7 @@ const SideNavIcon = ({
         {onRemove && (
           <button
             type="button"
-            className="items-center justify-center hidden remove-btn absolute w-4 h-4 p-0.5 rounded-full overflow-hidden shadow-md bg-accentOld hover:bg-text hover:text-bgVar2"
+            className="items-center justify-center remove-btn absolute w-4 h-4 p-0.5 rounded-full overflow-hidden shadow-md bg-accentOld hover:bg-text hover:text-bgVar2"
             onClick={onRemove}
           >
             <X size={12} />
