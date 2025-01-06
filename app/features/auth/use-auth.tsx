@@ -8,7 +8,7 @@ export const useAuth = () => {
 
   return {
     ...loader.session,
-    isLoggedIn: !!loader.session.user,
+    isLoggedIn: !!loader.session?.user,
     logIn: () =>
       submitForm(
         "GET",
