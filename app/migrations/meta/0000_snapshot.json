@@ -1,17 +1,91 @@
 {
-  "id": "c03e39df-3387-454d-b41b-a91faaa4d284",
+  "id": "c51bef40-680f-4fd4-81bd-580639f7edc2",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "auth.oauth_account": {
+    "app-aliases.aliases": {
+      "name": "aliases",
+      "schema": "app-aliases",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "alias": {
+          "name": "alias",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "player_id": {
+          "name": "player_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "public": {
+          "name": "public",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        }
+      },
+      "indexes": {
+        "unique_alias": {
+          "name": "unique_alias",
+          "columns": [
+            {
+              "expression": "player_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "alias",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "app-auth.oauth_account": {
       "name": "oauth_account",
-      "schema": "auth",
+      "schema": "app-auth",
       "columns": {
         "provider_id": {
           "name": "provider_id",
           "type": "oauth_provider",
-          "typeSchema": "auth",
+          "typeSchema": "app-auth",
           "primaryKey": false,
           "notNull": false
         },
@@ -34,7 +108,7 @@
           "name": "oauth_account_user_id_user_id_fk",
           "tableFrom": "oauth_account",
           "tableTo": "user",
-          "schemaTo": "auth",
+          "schemaTo": "app-auth",
           "columnsFrom": [
             "user_id"
           ],
@@ -54,11 +128,14 @@
           ]
         }
       },
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "auth.session": {
+    "app-auth.session": {
       "name": "session",
-      "schema": "auth",
+      "schema": "app-auth",
       "columns": {
         "id": {
           "name": "id",
@@ -85,7 +162,7 @@
           "name": "session_user_id_user_id_fk",
           "tableFrom": "session",
           "tableTo": "user",
-          "schemaTo": "auth",
+          "schemaTo": "app-auth",
           "columnsFrom": [
             "user_id"
           ],
@@ -97,11 +174,14 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
-    "auth.user": {
+    "app-auth.user": {
       "name": "user",
-      "schema": "auth",
+      "schema": "app-auth",
       "columns": {
         "id": {
           "name": "id",
@@ -150,22 +230,184 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "app-bookmarks.bookmarks": {
+      "name": "bookmarks",
+      "schema": "app-bookmarks",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "page_type": {
+          "name": "page_type",
+          "type": "page_type",
+          "typeSchema": "app-bookmarks",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "page_id": {
+          "name": "page_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "meta": {
+          "name": "meta",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "unique_bookmark": {
+          "name": "unique_bookmark",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "page_type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "page_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "bookmarks_user_id_user_id_fk": {
+          "name": "bookmarks_user_id_user_id_fk",
+          "tableFrom": "bookmarks",
+          "tableTo": "user",
+          "schemaTo": "app-auth",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "app-cache.api-cache": {
+      "name": "api-cache",
+      "schema": "app-cache",
+      "columns": {
+        "cacheName": {
+          "name": "cacheName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cacheId": {
+          "name": "cacheId",
+          "type": "varchar(256)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "data": {
+          "name": "data",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "version": {
+          "name": "version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     }
   },
   "enums": {
-    "auth.oauth_provider": {
+    "app-auth.oauth_provider": {
       "name": "oauth_provider",
-      "schema": "auth",
+      "schema": "app-auth",
       "values": [
         "discord"
+      ]
+    },
+    "app-bookmarks.page_type": {
+      "name": "page_type",
+      "schema": "app-bookmarks",
+      "values": [
+        "player_stats",
+        "clan_stats"
       ]
     }
   },
   "schemas": {
-    "auth": "auth"
+    "app-aliases": "app-aliases",
+    "app-auth": "app-auth",
+    "app-bookmarks": "app-bookmarks",
+    "app-cache": "app-cache"
   },
   "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
   "_meta": {
     "columns": {},
     "schemas": {},

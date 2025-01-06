@@ -5,50 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1726771208974,
-      "tag": "0000_worried_speedball",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1735182360572,
-      "tag": "0001_secret_speed_demon",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1735182563535,
-      "tag": "0002_little_revanche",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1735263393750,
-      "tag": "0003_happy_jack_power",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1735270281049,
-      "tag": "0004_bouncy_shiva",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1735794470994,
-      "tag": "0005_famous_karnak",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1736016364274,
-      "tag": "0006_clumsy_warlock",
+      "when": 1736147665533,
+      "tag": "0000_massive_khan",
       "breakpoints": true
     }
   ]
