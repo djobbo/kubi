@@ -47,31 +47,31 @@ msgstr "{clan_name} Stats - Stats du clan Brawlhalla • Corehalla"
 msgid "{hours}h {minutes}m {seconds}s"
 msgstr "{hours}h {minutes}m {seconds}s"
 
-#: app/routes/stats/player/$playerId.tsx:87
+#: app/routes/stats/player/$playerId.tsx:89
 msgid "{name} - Player Stats • Corehalla"
 msgstr "{name} - Stats du joueur • Corehalla"
 
-#: app/routes/stats/player/$playerId.tsx:88
+#: app/routes/stats/player/$playerId.tsx:90
 msgid "{name} Stats - Brawlhalla Player Stats • Corehalla"
 msgstr "{name} Stats - Stats du joueur Brawlhalla • Corehalla"
 
-#: app/routes/stats/player/$playerId.tsx:117
+#: app/routes/stats/player/$playerId.tsx:119
 msgid "{playerName}'s account level"
 msgstr ""
 
-#: app/routes/stats/player/$playerId.tsx:122
+#: app/routes/stats/player/$playerId.tsx:124
 msgid "{playerName}'s account XP"
 msgstr ""
 
-#: app/routes/stats/player/$playerId.tsx:144
+#: app/routes/stats/player/$playerId.tsx:146
 msgid "{playerName}'s main legends"
 msgstr ""
 
-#: app/routes/stats/player/$playerId.tsx:174
+#: app/routes/stats/player/$playerId.tsx:176
 msgid "{playerName}'s main weapons"
 msgstr ""
 
-#: app/features/brawlhalla/components/search/RankedPlayerItem.tsx:45
+#: app/features/brawlhalla/components/search/RankedPlayerItem.tsx:53
 msgid "{rating} / {peak_rating} peak ({tier})"
 msgstr "{rating} / {peak_rating} max ({tier})"
 
@@ -100,6 +100,11 @@ msgstr "1 Suicide toutes les"
 msgid "1 Team KO every"
 msgstr "1 KO d'équipe toutes les"
 
+#: app/routes/rankings/2v2.$.tsx:53
+#: app/routes/rankings/1v1.$.tsx:76
+msgid "1v1"
+msgstr ""
+
 #: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/RankedContent.tsx:32
 msgid "1v1 Games"
 msgstr "Parties 1v1"
@@ -118,20 +123,22 @@ msgstr "Défaites en classé 1v1 cette saison"
 msgid "1v1 Ranked wins this season"
 msgstr "Victoires classées 1v1 cette saison"
 
-#: app/features/brawlhalla/components/layout/SideNav.tsx:121
+#: app/features/brawlhalla/components/layout/SideNav.tsx:125
 #: app/features/brawlhalla/components/layout/AppNav.tsx:9
 msgid "1v1 Rankings"
 msgstr "Classement 1v1"
 
-#: app/routes/index.tsx:93
+#: app/routes/index.tsx:94
+#: app/routes/rankings/2v2.$.tsx:54
+#: app/routes/rankings/1v1.$.tsx:77
 msgid "2v2"
 msgstr "2v2"
 
-#: app/routes/stats/player/$playerId.tsx:217
+#: app/routes/stats/player/$playerId.tsx:224
 msgid "2v2 Ranked"
 msgstr ""
 
-#: app/features/brawlhalla/components/layout/SideNav.tsx:127
+#: app/features/brawlhalla/components/layout/SideNav.tsx:131
 #: app/features/brawlhalla/components/layout/AppNav.tsx:14
 msgid "2v2 Rankings"
 msgstr "Classement 2v2"
@@ -140,19 +147,20 @@ msgstr "Classement 2v2"
 msgid "7k+ discord members, and growing!"
 msgstr "Plus de 7000 membres sur Discord, et ça continue de monter !"
 
-#: app/routes/stats/player/$playerId.tsx:115
+#: app/routes/stats/player/$playerId.tsx:117
 msgid "Account level"
 msgstr ""
 
-#: app/routes/stats/player/$playerId.tsx:120
+#: app/routes/stats/player/$playerId.tsx:122
 msgid "Account XP"
 msgstr ""
 
-#: app/features/brawlhalla/components/stats/StatsHeader.tsx:73
+#: app/features/brawlhalla/components/stats/StatsHeader.tsx:69
 msgid "Add favorite"
 msgstr "Ajouter aux favoris"
 
-#: app/routes/rankings/1v1.$region.$page.tsx:84
+#: app/routes/rankings/2v2.$.tsx:67
+#: app/routes/rankings/1v1.$.tsx:90
 msgid "AUS"
 msgstr ""
 
@@ -334,9 +342,22 @@ msgstr ""
 msgid "Best Rating"
 msgstr ""
 
-#: app/routes/rankings/1v1.$region.$page.tsx:47
-#: app/routes/rankings/1v1.$region.$page.tsx:50
+#: app/routes/@me/bookmarks.tsx:24
+#: app/features/brawlhalla/components/layout/SideNav.tsx:240
+msgid "Bookmarks"
+msgstr ""
+
+#: app/routes/rankings/2v2.$.tsx:41
+msgid "Brawhalla {formatedRegion} 2v2 Rankings - Page {page} • Corehalla"
+msgstr ""
+
+#: app/routes/rankings/1v1.$.tsx:50
+#: app/routes/rankings/1v1.$.tsx:53
 msgid "Brawlhalla {formatedRegion} 1v1 Rankings - Page {page}{formatedSearch} • Corehalla"
+msgstr ""
+
+#: app/routes/rankings/2v2.$.tsx:40
+msgid "Brawlhalla {formatedRegion} 2v2 Rankings - Page {page} • Corehalla"
 msgstr ""
 
 #: app/features/brawlhalla/components/layout/Footer.tsx:67
@@ -351,12 +372,13 @@ msgstr ""
 msgid "Bring me home"
 msgstr ""
 
-#: app/routes/rankings/1v1.$region.$page.tsx:83
+#: app/routes/rankings/2v2.$.tsx:66
+#: app/routes/rankings/1v1.$.tsx:89
 msgid "BRZ"
 msgstr ""
 
 #: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/ClanContent.tsx:31
-#: app/features/brawlhalla/components/favorites/FavoritesGrid.tsx:40
+#: app/features/brawlhalla/components/favorites/FavoritesGrid.tsx:46
 msgid "Clan"
 msgstr ""
 
@@ -364,8 +386,10 @@ msgstr ""
 msgid "Clan XP"
 msgstr ""
 
-#: app/routes/rankings/1v1.$region.$page.tsx:75
-#: app/features/brawlhalla/components/layout/SideNav.tsx:138
+#: app/routes/rankings/2v2.$.tsx:58
+#: app/routes/rankings/1v1.$.tsx:81
+#: app/routes/@me/bookmarks.tsx:31
+#: app/features/brawlhalla/components/layout/SideNav.tsx:142
 #: app/features/brawlhalla/components/layout/AppNav.tsx:24
 msgid "Clans"
 msgstr ""
@@ -383,7 +407,7 @@ msgstr ""
 msgid "Contribution"
 msgstr ""
 
-#: app/features/brawlhalla/components/stats/StatsHeader.tsx:89
+#: app/features/brawlhalla/components/stats/StatsHeader.tsx:84
 msgid "Copied link to clipboard!"
 msgstr ""
 
@@ -478,7 +502,7 @@ msgstr ""
 msgid "Date when {memberName} joined the clan"
 msgstr ""
 
-#: app/routes/index.tsx:51
+#: app/routes/index.tsx:52
 #: app/features/brawlhalla/components/layout/Footer.tsx:16
 msgid "Discord"
 msgstr ""
@@ -487,7 +511,7 @@ msgstr ""
 msgid "Discord header image"
 msgstr ""
 
-#: app/features/brawlhalla/components/layout/SideNav.tsx:143
+#: app/features/brawlhalla/components/layout/SideNav.tsx:147
 msgid "Discord Server"
 msgstr ""
 
@@ -508,7 +532,8 @@ msgstr ""
 msgid "DPS (Taken)"
 msgstr ""
 
-#: app/routes/rankings/1v1.$region.$page.tsx:122
+#: app/routes/rankings/2v2.$.tsx:103
+#: app/routes/rankings/1v1.$.tsx:129
 #: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/PlayerLegendsTab.tsx:105
 #: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:74
 msgid "Elo"
@@ -534,16 +559,13 @@ msgstr ""
 msgid "Elo Squash Calculator"
 msgstr ""
 
-#: app/routes/rankings/1v1.$region.$page.tsx:81
+#: app/routes/rankings/2v2.$.tsx:64
+#: app/routes/rankings/1v1.$.tsx:87
 msgid "EU"
 msgstr ""
 
 #: app/features/brawlhalla/components/stats/GeneralStats.tsx:60
 msgid "Falls"
-msgstr ""
-
-#: app/features/brawlhalla/components/layout/SideNav.tsx:175
-msgid "Favorites"
 msgstr ""
 
 #: app/features/brawlhalla/components/WeeklyRotation.tsx:48
@@ -567,11 +589,12 @@ msgstr ""
 msgid "Gadgets KOs"
 msgstr ""
 
-#: app/routes/stats/player/$playerId.tsx:125
+#: app/routes/stats/player/$playerId.tsx:127
 msgid "Game time"
 msgstr ""
 
-#: app/routes/rankings/1v1.$region.$page.tsx:113
+#: app/routes/rankings/2v2.$.tsx:94
+#: app/routes/rankings/1v1.$.tsx:120
 #: app/features/brawlhalla/components/stats/TeamCard.tsx:84
 #: app/features/brawlhalla/components/stats/GeneralStats.tsx:47
 #: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:129
@@ -596,8 +619,10 @@ msgstr ""
 msgid "Github"
 msgstr "Github"
 
-#: app/routes/rankings/1v1.$region.$page.tsx:42
-#: app/routes/rankings/1v1.$region.$page.tsx:79
+#: app/routes/rankings/2v2.$.tsx:36
+#: app/routes/rankings/2v2.$.tsx:62
+#: app/routes/rankings/1v1.$.tsx:45
+#: app/routes/rankings/1v1.$.tsx:85
 msgid "Global"
 msgstr ""
 
@@ -640,7 +665,7 @@ msgstr "Revenir en arrière"
 msgid "Hello World"
 msgstr "Bonjour, Monde"
 
-#: app/routes/index.tsx:129
+#: app/routes/index.tsx:134
 msgid "Here you'll be able to see your favorite players and clans"
 msgstr ""
 
@@ -652,7 +677,7 @@ msgstr ""
 msgid "Highest peak elo"
 msgstr ""
 
-#: app/features/brawlhalla/components/layout/SideNav.tsx:115
+#: app/features/brawlhalla/components/layout/SideNav.tsx:119
 #: app/config/nav.ts:23
 #: app/components/NotFound.tsx:18
 #: app/components/DefaultCatchBoundary.tsx:38
@@ -667,7 +692,7 @@ msgstr ""
 msgid "I understand 💪"
 msgstr ""
 
-#: app/features/brawlhalla/components/search/Searchbox.tsx:243
+#: app/features/brawlhalla/components/search/Searchbox.tsx:240
 msgid "If you're having trouble finding a player by name, trying using their brawlhalla id instead."
 msgstr ""
 
@@ -675,7 +700,7 @@ msgstr ""
 msgid "Improve your Brawlhalla Game, and find your place among the Elite with our in-depth Player and Clan stats tracking and live leaderboards."
 msgstr ""
 
-#: app/routes/index.tsx:72
+#: app/routes/index.tsx:73
 msgid "Improve your Brawlhalla Game, and find your place among the Elite with our in-depth stats tracking and live leaderboards."
 msgstr ""
 
@@ -683,11 +708,11 @@ msgstr ""
 msgid "Join"
 msgstr ""
 
-#: app/features/brawlhalla/components/search/Searchbox.tsx:248
+#: app/features/brawlhalla/components/search/Searchbox.tsx:245
 msgid "Join our <0>Discord</0> if you need help."
 msgstr ""
 
-#: app/routes/index.tsx:48
+#: app/routes/index.tsx:49
 msgid "Join our community"
 msgstr ""
 
@@ -703,7 +728,8 @@ msgstr ""
 msgid "Joined on"
 msgstr ""
 
-#: app/routes/rankings/1v1.$region.$page.tsx:86
+#: app/routes/rankings/2v2.$.tsx:69
+#: app/routes/rankings/1v1.$.tsx:92
 msgid "JPN"
 msgstr ""
 
@@ -772,7 +798,7 @@ msgstr ""
 msgid "Legend/Team Rating Squash:"
 msgstr ""
 
-#: app/routes/stats/player/$playerId.tsx:221
+#: app/routes/stats/player/$playerId.tsx:228
 msgid "Legends"
 msgstr ""
 
@@ -814,8 +840,8 @@ msgstr "Liens"
 msgid "Loading..."
 msgstr ""
 
-#: app/routes/index.tsx:145
-#: app/routes/index.tsx:155
+#: app/routes/index.tsx:150
+#: app/routes/index.tsx:160
 msgid "Loading<0>...</0>"
 msgstr ""
 
@@ -826,11 +852,11 @@ msgstr ""
 msgid "Losses"
 msgstr ""
 
-#: app/routes/stats/player/$playerId.tsx:130
+#: app/routes/stats/player/$playerId.tsx:132
 msgid "Main legends"
 msgstr ""
 
-#: app/routes/stats/player/$playerId.tsx:147
+#: app/routes/stats/player/$playerId.tsx:149
 msgid "Main weapons"
 msgstr ""
 
@@ -839,7 +865,8 @@ msgstr ""
 msgid "Matchtime"
 msgstr ""
 
-#: app/routes/rankings/1v1.$region.$page.tsx:88
+#: app/routes/rankings/2v2.$.tsx:71
+#: app/routes/rankings/1v1.$.tsx:94
 msgid "ME"
 msgstr ""
 
@@ -855,7 +882,7 @@ msgstr ""
 msgid "N/A (not enough games)"
 msgstr ""
 
-#: app/routes/rankings/1v1.$region.$page.tsx:110
+#: app/routes/rankings/1v1.$.tsx:117
 #: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/PlayerWeaponsTab.tsx:52
 #: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/PlayerLegendsTab.tsx:52
 msgid "Name"
@@ -865,7 +892,7 @@ msgstr ""
 msgid "New Season Glory / ELO Reset Calculator"
 msgstr ""
 
-#: app/features/brawlhalla/components/search/Searchbox.tsx:222
+#: app/features/brawlhalla/components/search/Searchbox.tsx:219
 msgid "No players found"
 msgstr ""
 
@@ -887,7 +914,7 @@ msgstr ""
 msgid "Number of teammates this season"
 msgstr ""
 
-#: app/features/brawlhalla/components/search/Searchbox.tsx:231
+#: app/features/brawlhalla/components/search/Searchbox.tsx:228
 msgid "Only players that have completed their 10 placement matches are shown."
 msgstr ""
 
@@ -895,11 +922,11 @@ msgstr ""
 msgid "Oops, something went wrong"
 msgstr ""
 
-#: app/features/brawlhalla/components/search/Searchbox.tsx:192
+#: app/features/brawlhalla/components/search/Searchbox.tsx:191
 msgid "Other players with similar names"
 msgstr ""
 
-#: app/routes/stats/player/$playerId.tsx:213
+#: app/routes/stats/player/$playerId.tsx:220
 msgid "Overview"
 msgstr ""
 
@@ -932,31 +959,46 @@ msgstr ""
 msgid "Played in ranked"
 msgstr ""
 
-#: app/features/brawlhalla/components/favorites/FavoritesGrid.tsx:34
+#: app/features/brawlhalla/components/favorites/FavoritesGrid.tsx:40
 msgid "Player"
 msgstr ""
 
-#: app/features/brawlhalla/components/layout/SideNav.tsx:76
+#: app/features/brawlhalla/components/layout/SideNav.tsx:80
 msgid "player {cleanName} icon"
 msgstr ""
 
-#: app/features/brawlhalla/components/favorites/FavoritesGrid.tsx:66
+#: app/features/brawlhalla/components/favorites/FavoritesGrid.tsx:85
+#: app/features/brawlhalla/components/favorites/FavoritesGrid.tsx:96
 msgid "player {favoriteName} icon"
+msgstr ""
+
+#: app/routes/rankings/2v2.$.tsx:88
+msgid "Player 1"
+msgstr ""
+
+#: app/routes/rankings/2v2.$.tsx:91
+msgid "Player 2"
 msgstr ""
 
 #: app/features/brawlhalla/components/search/Searchbox.tsx:163
 msgid "Player#{search}"
 msgstr ""
 
-#: app/routes/rankings/1v1.$region.$page.tsx:73
+#: app/routes/@me/bookmarks.tsx:27
+msgid "Players"
+msgstr ""
+
+#: app/routes/rankings/2v2.$.tsx:56
+#: app/routes/rankings/1v1.$.tsx:79
 msgid "Power 1v1"
 msgstr ""
 
-#: app/routes/rankings/1v1.$region.$page.tsx:74
+#: app/routes/rankings/2v2.$.tsx:57
+#: app/routes/rankings/1v1.$.tsx:80
 msgid "Power 2v2"
 msgstr ""
 
-#: app/features/brawlhalla/components/layout/SideNav.tsx:133
+#: app/features/brawlhalla/components/layout/SideNav.tsx:137
 #: app/features/brawlhalla/components/layout/AppNav.tsx:19
 msgid "Power Rankings"
 msgstr ""
@@ -965,11 +1007,12 @@ msgstr ""
 msgid "Question of the day"
 msgstr ""
 
-#: app/routes/rankings/1v1.$region.$page.tsx:101
+#: app/routes/rankings/2v2.$.tsx:79
+#: app/routes/rankings/1v1.$.tsx:108
 msgid "Rank"
 msgstr ""
 
-#: app/features/brawlhalla/components/search/Searchbox.tsx:179
+#: app/features/brawlhalla/components/search/Searchbox.tsx:178
 msgid "Ranked players"
 msgstr ""
 
@@ -989,15 +1032,16 @@ msgstr ""
 msgid "Regenerate"
 msgstr "Regénérer"
 
-#: app/routes/rankings/1v1.$region.$page.tsx:107
+#: app/routes/rankings/2v2.$.tsx:85
+#: app/routes/rankings/1v1.$.tsx:114
 msgid "Region"
 msgstr ""
 
-#: app/routes/stats/player/$playerId.tsx:189
+#: app/routes/stats/player/$playerId.tsx:196
 msgid "Region Flag"
 msgstr ""
 
-#: app/features/brawlhalla/components/stats/StatsHeader.tsx:68
+#: app/features/brawlhalla/components/stats/StatsHeader.tsx:64
 msgid "Remove Favorite"
 msgstr ""
 
@@ -1005,11 +1049,18 @@ msgstr ""
 msgid "Report bug"
 msgstr ""
 
-#: app/routes/rankings/1v1.$region.$page.tsx:87
+#: app/routes/rankings/2v2.$.tsx:55
+#: app/routes/rankings/1v1.$.tsx:78
+msgid "Rotating"
+msgstr ""
+
+#: app/routes/rankings/2v2.$.tsx:70
+#: app/routes/rankings/1v1.$.tsx:93
 msgid "SA"
 msgstr ""
 
-#: app/routes/rankings/1v1.$region.$page.tsx:82
+#: app/routes/rankings/2v2.$.tsx:65
+#: app/routes/rankings/1v1.$.tsx:88
 msgid "SEA"
 msgstr ""
 
@@ -1017,11 +1068,11 @@ msgstr ""
 msgid "Search by Brawlhalla ID"
 msgstr ""
 
-#: app/features/brawlhalla/components/search/Searchbox.tsx:226
+#: app/features/brawlhalla/components/search/Searchbox.tsx:223
 msgid "Search for a player (must start with exact match)"
 msgstr ""
 
-#: app/routes/rankings/1v1.$region.$page.tsx:97
+#: app/routes/rankings/1v1.$.tsx:104
 msgid "Search must start with exact match. Only players that have completed their 10 placement matches are shown."
 msgstr ""
 
@@ -1029,7 +1080,7 @@ msgstr ""
 msgid "Search player by name or brawlhalla id..."
 msgstr ""
 
-#: app/routes/rankings/1v1.$region.$page.tsx:96
+#: app/routes/rankings/1v1.$.tsx:103
 #: app/features/brawlhalla/components/search/SearchButton.tsx:24
 msgid "Search player..."
 msgstr ""
@@ -1040,7 +1091,7 @@ msgstr ""
 msgid "Search..."
 msgstr "Rechercher..."
 
-#: app/features/brawlhalla/components/stats/StatsHeader.tsx:94
+#: app/features/brawlhalla/components/stats/StatsHeader.tsx:89
 msgid "Share"
 msgstr ""
 
@@ -1048,12 +1099,12 @@ msgstr ""
 msgid "Share your thoughts"
 msgstr ""
 
-#: app/routes/index.tsx:136
+#: app/routes/index.tsx:141
 #: app/features/brawlhalla/components/layout/Header.tsx:79
 msgid "Sign in"
 msgstr ""
 
-#: app/features/brawlhalla/components/stats/StatsHeader.tsx:82
+#: app/features/brawlhalla/components/stats/StatsHeader.tsx:77
 msgid "Sign in to add favorites"
 msgstr ""
 
@@ -1066,7 +1117,7 @@ msgstr "Se connecter avec Discord"
 msgid "Sign out"
 msgstr "Se déconnecter"
 
-#: app/routes/index.tsx:61
+#: app/routes/index.tsx:62
 msgid "Stay ahead of <0/>the competition"
 msgstr ""
 
@@ -1107,11 +1158,12 @@ msgstr ""
 msgid "Throw KOs"
 msgstr ""
 
-#: app/routes/rankings/1v1.$region.$page.tsx:104
+#: app/routes/rankings/2v2.$.tsx:82
+#: app/routes/rankings/1v1.$.tsx:111
 msgid "Tier"
 msgstr ""
 
-#: app/routes/stats/player/$playerId.tsx:127
+#: app/routes/stats/player/$playerId.tsx:129
 msgid "Time {playerName} spent in game"
 msgstr ""
 
@@ -1254,11 +1306,13 @@ msgstr ""
 msgid "Unarmed KOs"
 msgstr ""
 
-#: app/routes/rankings/1v1.$region.$page.tsx:80
+#: app/routes/rankings/2v2.$.tsx:63
+#: app/routes/rankings/1v1.$.tsx:86
 msgid "US-E"
 msgstr ""
 
-#: app/routes/rankings/1v1.$region.$page.tsx:85
+#: app/routes/rankings/2v2.$.tsx:68
+#: app/routes/rankings/1v1.$.tsx:91
 msgid "US-W"
 msgstr ""
 
@@ -1285,8 +1339,8 @@ msgstr ""
 msgid "Valhallan"
 msgstr ""
 
-#: app/routes/index.tsx:84
-#: app/routes/index.tsx:123
+#: app/routes/index.tsx:85
+#: app/routes/index.tsx:128
 msgid "View rankings"
 msgstr ""
 
@@ -1294,7 +1348,8 @@ msgstr ""
 msgid "Visual assets courtesy of <0>Blue Mammoth Games</0>"
 msgstr ""
 
-#: app/routes/rankings/1v1.$region.$page.tsx:116
+#: app/routes/rankings/2v2.$.tsx:97
+#: app/routes/rankings/1v1.$.tsx:123
 msgid "W/L"
 msgstr ""
 
@@ -1314,7 +1369,7 @@ msgstr ""
 msgid "Weapon xp"
 msgstr ""
 
-#: app/routes/stats/player/$playerId.tsx:224
+#: app/routes/stats/player/$playerId.tsx:231
 msgid "Weapons"
 msgstr ""
 
@@ -1330,11 +1385,12 @@ msgstr "Bienvenue, {username}"
 msgid "Which weapon(s) do you enjoy playing the most? and which one(s) you dislike playing?"
 msgstr ""
 
-#: app/features/brawlhalla/components/layout/SideNav.tsx:149
+#: app/features/brawlhalla/components/layout/SideNav.tsx:153
 msgid "Wiki"
 msgstr ""
 
-#: app/routes/rankings/1v1.$region.$page.tsx:119
+#: app/routes/rankings/2v2.$.tsx:100
+#: app/routes/rankings/1v1.$.tsx:126
 #: app/features/brawlhalla/components/stats/TeamCard.tsx:89
 #: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/RankedContent.tsx:91
 #: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/PlayerWeaponsTab.tsx:88
@@ -1387,7 +1443,7 @@ msgstr ""
 msgid "XP earned with this legend"
 msgstr ""
 
-#: app/routes/index.tsx:118
+#: app/routes/index.tsx:119
 msgid "You don't have any favorites yet, you can a player or a clan as favorite when visiting their profile page."
 msgstr ""
 
