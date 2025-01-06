@@ -21,6 +21,7 @@ import { Route as socialDonateImport } from './routes/(social)/donate'
 import { Route as socialDiscordImport } from './routes/(social)/discord'
 import { Route as StatsPlayerPlayerIdImport } from './routes/stats/player/$playerId'
 import { Route as StatsClanClanIdImport } from './routes/stats/clan/$clanId'
+import { Route as RankingsClansSplatImport } from './routes/rankings/clans.$'
 import { Route as Rankings2v2SplatImport } from './routes/rankings/2v2.$'
 import { Route as Rankings1v1SplatImport } from './routes/rankings/1v1.$'
 
@@ -83,6 +84,12 @@ const StatsPlayerPlayerIdRoute = StatsPlayerPlayerIdImport.update({
 const StatsClanClanIdRoute = StatsClanClanIdImport.update({
   id: '/stats/clan/$clanId',
   path: '/stats/clan/$clanId',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const RankingsClansSplatRoute = RankingsClansSplatImport.update({
+  id: '/rankings/clans/$',
+  path: '/rankings/clans/$',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -172,6 +179,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Rankings2v2SplatImport
       parentRoute: typeof rootRoute
     }
+    '/rankings/clans/$': {
+      id: '/rankings/clans/$'
+      path: '/rankings/clans/$'
+      fullPath: '/rankings/clans/$'
+      preLoaderRoute: typeof RankingsClansSplatImport
+      parentRoute: typeof rootRoute
+    }
     '/stats/clan/$clanId': {
       id: '/stats/clan/$clanId'
       path: '/stats/clan/$clanId'
@@ -202,6 +216,7 @@ export interface FileRoutesByFullPath {
   '/@me/bookmarks': typeof meBookmarksRoute
   '/rankings/1v1/$': typeof Rankings1v1SplatRoute
   '/rankings/2v2/$': typeof Rankings2v2SplatRoute
+  '/rankings/clans/$': typeof RankingsClansSplatRoute
   '/stats/clan/$clanId': typeof StatsClanClanIdRoute
   '/stats/player/$playerId': typeof StatsPlayerPlayerIdRoute
 }
@@ -217,6 +232,7 @@ export interface FileRoutesByTo {
   '/@me/bookmarks': typeof meBookmarksRoute
   '/rankings/1v1/$': typeof Rankings1v1SplatRoute
   '/rankings/2v2/$': typeof Rankings2v2SplatRoute
+  '/rankings/clans/$': typeof RankingsClansSplatRoute
   '/stats/clan/$clanId': typeof StatsClanClanIdRoute
   '/stats/player/$playerId': typeof StatsPlayerPlayerIdRoute
 }
@@ -233,6 +249,7 @@ export interface FileRoutesById {
   '/@me/bookmarks': typeof meBookmarksRoute
   '/rankings/1v1/$': typeof Rankings1v1SplatRoute
   '/rankings/2v2/$': typeof Rankings2v2SplatRoute
+  '/rankings/clans/$': typeof RankingsClansSplatRoute
   '/stats/clan/$clanId': typeof StatsClanClanIdRoute
   '/stats/player/$playerId': typeof StatsPlayerPlayerIdRoute
 }
@@ -250,6 +267,7 @@ export interface FileRouteTypes {
     | '/@me/bookmarks'
     | '/rankings/1v1/$'
     | '/rankings/2v2/$'
+    | '/rankings/clans/$'
     | '/stats/clan/$clanId'
     | '/stats/player/$playerId'
   fileRoutesByTo: FileRoutesByTo
@@ -264,6 +282,7 @@ export interface FileRouteTypes {
     | '/@me/bookmarks'
     | '/rankings/1v1/$'
     | '/rankings/2v2/$'
+    | '/rankings/clans/$'
     | '/stats/clan/$clanId'
     | '/stats/player/$playerId'
   id:
@@ -278,6 +297,7 @@ export interface FileRouteTypes {
     | '/@me/bookmarks'
     | '/rankings/1v1/$'
     | '/rankings/2v2/$'
+    | '/rankings/clans/$'
     | '/stats/clan/$clanId'
     | '/stats/player/$playerId'
   fileRoutesById: FileRoutesById
@@ -294,6 +314,7 @@ export interface RootRouteChildren {
   meBookmarksRoute: typeof meBookmarksRoute
   Rankings1v1SplatRoute: typeof Rankings1v1SplatRoute
   Rankings2v2SplatRoute: typeof Rankings2v2SplatRoute
+  RankingsClansSplatRoute: typeof RankingsClansSplatRoute
   StatsClanClanIdRoute: typeof StatsClanClanIdRoute
   StatsPlayerPlayerIdRoute: typeof StatsPlayerPlayerIdRoute
 }
@@ -309,6 +330,7 @@ const rootRouteChildren: RootRouteChildren = {
   meBookmarksRoute: meBookmarksRoute,
   Rankings1v1SplatRoute: Rankings1v1SplatRoute,
   Rankings2v2SplatRoute: Rankings2v2SplatRoute,
+  RankingsClansSplatRoute: RankingsClansSplatRoute,
   StatsClanClanIdRoute: StatsClanClanIdRoute,
   StatsPlayerPlayerIdRoute: StatsPlayerPlayerIdRoute,
 }
@@ -333,6 +355,7 @@ export const routeTree = rootRoute
         "/@me/bookmarks",
         "/rankings/1v1/$",
         "/rankings/2v2/$",
+        "/rankings/clans/$",
         "/stats/clan/$clanId",
         "/stats/player/$playerId"
       ]
@@ -366,6 +389,9 @@ export const routeTree = rootRoute
     },
     "/rankings/2v2/$": {
       "filePath": "rankings/2v2.$.tsx"
+    },
+    "/rankings/clans/$": {
+      "filePath": "rankings/clans.$.tsx"
     },
     "/stats/clan/$clanId": {
       "filePath": "stats/clan/$clanId.tsx"

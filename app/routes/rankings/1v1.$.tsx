@@ -25,7 +25,7 @@ export const Route = createFileRoute("/rankings/1v1/$")({
     const rankings = await get1v1Rankings({
       data: {
         region,
-        page: z.coerce.number().parse(page),
+        page: z.coerce.number().min(1).max(1000).catch(1).parse(page),
         name: player,
       },
     })

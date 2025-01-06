@@ -171,9 +171,6 @@ const BookmarkDisplay = ({ bookmark, location }: BookmarkDisplayProps) => {
       const meta = bookmark.meta
       if (!(meta && "icon" in meta.data)) break
 
-      // const legendId = meta?.icon?.legend_id
-      // const legend = !!legendId && legendsMap[legendId]
-
       let image: string | null = null
       switch (meta.data.icon?.type) {
         case "legend": {
