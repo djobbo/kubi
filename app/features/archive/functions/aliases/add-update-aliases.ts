@@ -6,8 +6,8 @@ import { db } from "@/db"
 import { serviceAuthenticationMiddleware } from "@/features/auth/functions/serviceAuthenticationMiddleware"
 import { cleanString } from "@/helpers/cleanString"
 
-import type { NewAlias } from "../schema"
-import { aliasesInsertSchema, aliasesTable } from "../schema"
+import type { NewAlias } from "../../schema"
+import { aliasesInsertSchema, aliasesTable } from "../../schema"
 
 export const dedupeAndCleanAliases = (aliases: NewAlias[]) =>
   aliases.reduce((acc, alias) => {

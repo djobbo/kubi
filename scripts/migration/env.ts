@@ -2,20 +2,26 @@ import { z } from "zod"
 
 import { envField } from "@/env/envField"
 
-export const SUPABASE_URL = envField(
-  "SUPABASE_URL",
-  process.env.SUPABASE_URL,
+export const MIGRATION_SUPABASE_URL = envField(
+  "MIGRATION_SUPABASE_URL",
+  process.env.MIGRATION_SUPABASE_URL,
   z.string().min(1),
 )
 
-export const SUPABASE_SERVICE_KEY = envField(
-  "SUPABASE_SERVICE_KEY",
-  process.env.SUPABASE_SERVICE_KEY,
+export const MIGRATION_SUPABASE_SERVICE_KEY = envField(
+  "MIGRATION_SUPABASE_SERVICE_KEY",
+  process.env.MIGRATION_SUPABASE_SERVICE_KEY,
   z.string().min(1),
 )
 
-export const SUPABASE_DATABASE_URL = envField(
-  "SUPABASE_DATABASE_URL",
-  process.env.SUPABASE_DATABASE_URL,
+export const MIGRATION_SUPABASE_DATABASE_URL = envField(
+  "MIGRATION_SUPABASE_DATABASE_URL",
+  process.env.MIGRATION_SUPABASE_DATABASE_URL,
+  z.string().min(1),
+)
+
+export const MIGRATION_DATABASE_URL = envField(
+  "MIGRATION_DATABASE_URL",
+  process.env.MIGRATION_DATABASE_URL,
   z.string().min(1),
 )

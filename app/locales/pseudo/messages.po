@@ -43,7 +43,7 @@ msgstr ""
 msgid "{clan_name} Stats - Brawlhalla Clan Stats • Corehalla"
 msgstr ""
 
-#: app/helpers/date.ts:39
+#: app/helpers/date.ts:48
 msgid "{hours}h {minutes}m {seconds}s"
 msgstr ""
 

@@ -40,7 +40,7 @@
     "@tanstack/eslint-plugin-router": "^1.92.7",
     "@types/bun": "latest",
     "@types/eslint__js": "^8.42.3",
-    "@types/react": "^19.0.2",
+    "@types/react": "^19.0.3",
     "@types/react-dom": "^19.0.2",
     "@vite-pwa/assets-generator": "^0.2.6",
     "autoprefixer": "^10.4.20",

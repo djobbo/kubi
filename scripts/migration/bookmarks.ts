@@ -2,15 +2,15 @@ import { sql as drizzleSql } from "drizzle-orm"
 import postgres from "postgres"
 import { z } from "zod"
 
-import { db } from "@/db"
 import type { NewBookmark } from "@/db/schema"
 import { bookmarksTable, usersTable } from "@/db/schema"
 import { PRE_MIGRATION_DISCORD_USER_ID_PREFIX } from "@/features/bookmarks/constants"
 
 import { supabase } from "./client"
-import { SUPABASE_DATABASE_URL } from "./env"
+import { migrationDb } from "./db"
+import { MIGRATION_SUPABASE_DATABASE_URL } from "./env"
 
-const sql = postgres(SUPABASE_DATABASE_URL)
+const sql = postgres(MIGRATION_SUPABASE_DATABASE_URL)
 
 const migrateBookmarks = async (offset: number, limit: number) => {
   console.time("Migrate bookmarks")
@@ -127,13 +127,13 @@ const migrateBookmarks = async (offset: number, limit: number) => {
 
   try {
     // Insert temporary user to avoid foreign key constraint
-    await db
+    await migrationDb
       .insert(usersTable)
       .values(tempUsers)
       .onConflictDoNothing()
       .execute()
 
-    await db
+    await migrationDb
       .insert(bookmarksTable)
       .values(migratedBookmarks)
       .onConflictDoUpdate({

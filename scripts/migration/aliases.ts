@@ -1,10 +1,10 @@
 import { sql } from "drizzle-orm"
 
-import { db } from "@/db"
 import type { NewAlias } from "@/db/schema"
 import { aliasesTable } from "@/db/schema"
 
 import { supabase } from "./client"
+import { migrationDb } from "./db"
 
 const migrateAliases = async (offset: number, limit: number) => {
   console.time("Migrate aliases")
@@ -28,7 +28,7 @@ const migrateAliases = async (offset: number, limit: number) => {
   })
 
   try {
-    await db
+    await migrationDb
       .insert(aliasesTable)
       .values(migratedAliases)
       .onConflictDoUpdate({

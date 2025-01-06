@@ -2,10 +2,13 @@ import { createServerFn } from "@tanstack/start"
 import { z } from "zod"
 
 import { env } from "@/env"
-import { addOrUpdateAliases } from "@/features/aliases/functions/add-update-aliases"
-import { getAliases } from "@/features/aliases/functions/get-aliases"
-import { searchAliases } from "@/features/aliases/functions/search-aliases"
+import { addOrUpdateAliases } from "@/features/archive/functions/aliases/add-update-aliases"
+import { getAliases } from "@/features/archive/functions/aliases/get-aliases"
+import { searchAliases } from "@/features/archive/functions/aliases/search-aliases"
+import { addOrUpdateClans } from "@/features/archive/functions/clans/add-update-clans"
 import { withCache } from "@/features/cache/cache"
+import { cleanString } from "@/helpers/cleanString"
+import { formatUnixTime, getDateFromUnixTime } from "@/helpers/date"
 
 import { MAX_SHOWN_ALIASES } from "../constants/aliases"
 import { rankedRegionSchema } from "../constants/ranked/regions"
@@ -78,7 +81,7 @@ export const getPlayerStats = createServerFn({ method: "GET" })
     )
 
     try {
-      await addOrUpdateAliases({
+      const updateAliasesQuery = addOrUpdateAliases({
         data: {
           serviceApiKey: env.SERVICE_API_KEY,
           aliases: [
@@ -89,6 +92,26 @@ export const getPlayerStats = createServerFn({ method: "GET" })
           ],
         },
       })
+
+      const updateClansQuery = playerStats.clan
+        ? addOrUpdateClans({
+            data: {
+              serviceApiKey: env.SERVICE_API_KEY,
+              clans: [
+                {
+                  id: playerStats.clan.clan_id.toString(),
+                  name: cleanString(playerStats.clan.clan_name.trim()),
+                  xp: z.coerce
+                    .number()
+                    .catch(0)
+                    .parse(playerStats.clan.clan_xp),
+                },
+              ],
+            },
+          })
+        : null
+
+      await Promise.all([updateAliasesQuery, updateClansQuery])
     } catch (e) {
       console.error("Failed to add alias - playerStats", e)
     }
@@ -151,11 +174,45 @@ export const getPlayerRanked = createServerFn({ method: "GET" })
 export const getClan = createServerFn({ method: "GET" })
   .validator(brawlhallaIdSchema)
   .handler(async ({ data: clanId }) => {
-    return withCache(
+    const clan = await withCache(
       `clan-stats-${clanId}`,
       () => getBhApi(`/clan/${clanId}`, clanSchema, clanMock),
       env.IS_DEV ? 30 * 1000 : 15 * 60 * 1000,
     )
+
+    try {
+      const updateAliasesQuery = addOrUpdateAliases({
+        data: {
+          serviceApiKey: env.SERVICE_API_KEY,
+          aliases: clan.clan.map((player) => {
+            return {
+              playerId: player.brawlhalla_id.toString(),
+              alias: player.name,
+            }
+          }),
+        },
+      })
+
+      const updateClansQuery = addOrUpdateClans({
+        data: {
+          serviceApiKey: env.SERVICE_API_KEY,
+          clans: [
+            {
+              id: clan.clan_id.toString(),
+              name: clan.clan_name,
+              xp: z.coerce.number().catch(0).parse(clan.clan_xp),
+              createdAt: getDateFromUnixTime(clan.clan_create_date),
+            },
+          ],
+        },
+      })
+
+      await Promise.all([updateAliasesQuery, updateClansQuery])
+    } catch (e) {
+      console.error("Failed to update aliases or clans - clan", e)
+    }
+
+    return clan
   })
 
 export const get1v1Rankings = createServerFn({ method: "GET" })

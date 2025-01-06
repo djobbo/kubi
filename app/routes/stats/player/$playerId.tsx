@@ -9,7 +9,7 @@ import {
 import { createFileRoute } from "@tanstack/react-router"
 import { z } from "zod"
 
-import { getAliases } from "@/features/aliases/functions/get-aliases"
+import { getAliases } from "@/features/archive/functions/aliases/get-aliases"
 import {
   getPlayerRanked,
   getPlayerStats,
@@ -186,8 +186,7 @@ function RouteComponent() {
           .map((alias) => alias.alias)
           .filter(
             (alias) => alias !== playerName && alias !== player.stats.name,
-          )
-          .slice(0, MAX_SHOWN_ALIASES)}
+          )}
         miscStats={accountStats}
         icon={
           player.ranked?.region && (

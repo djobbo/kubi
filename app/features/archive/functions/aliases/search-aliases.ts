@@ -4,7 +4,7 @@ import { z } from "zod"
 
 import { db } from "@/db"
 
-import { aliasesTable } from "../schema/aliases"
+import { aliasesTable } from "../../schema/aliases"
 
 const aliasesQuerySchema = z.object({
   player: z.string(),

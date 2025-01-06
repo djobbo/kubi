@@ -9,9 +9,9 @@ import {
 import { createInsertSchema } from "drizzle-zod"
 import type { z } from "zod"
 
-import { aliasesSchema } from "./schema"
+import { archiveSchema } from "./schema"
 
-export const aliasesTable = aliasesSchema.table(
+export const aliasesTable = archiveSchema.table(
   "aliases",
   {
     id: serial("id").primaryKey(),

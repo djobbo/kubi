@@ -14,6 +14,7 @@ import { useCopyToClipboard } from "@/hooks/useCopyToClipboard"
 import { Button } from "@/ui/components/button"
 import { cn } from "@/ui/lib/utils"
 
+import { MAX_SHOWN_ALIASES } from "../../constants/aliases"
 import type { MiscStat } from "./MiscStatGroup"
 import { MiscStatGroup } from "./MiscStatGroup"
 
@@ -101,9 +102,9 @@ export const StatsHeader = ({
         </h1>
         <span className="text-xs font-bold mt-1 text-textVar1">#{id}</span>
       </div>
-      {!!aliases && aliases.length > 1 && (
+      {!!aliases && aliases.length > 0 && (
         <div className="flex flex-wrap gap-2 mt-4 justify-center">
-          {aliases.map((alias) => (
+          {aliases.slice(0, MAX_SHOWN_ALIASES).map((alias) => (
             <p key={alias} className={cn("rounded-lg py-0.5 px-3 bg-bg")}>
               {cleanString(alias)}
             </p>

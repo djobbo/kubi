@@ -1,12 +1,20 @@
-import { t } from "@lingui/core/macro"
+// TODO: remove dayjs
 import { unix } from "dayjs"
 
 /**
  * @error returns different dates in client or ssr mode
  * @issue https://github.com/iamkun/dayjs/issues/1690
  */
-export const getDateFromUnixTime = (unixTime: number, template?: string) =>
-  unix(unixTime).format(template)
+export const getDateStringFromUnixTime = (
+  unixTime: number,
+  template?: string,
+) => unix(unixTime).format(template)
+
+/**
+ * @error returns different dates in client or ssr mode
+ * @issue https://github.com/iamkun/dayjs/issues/1690
+ */
+export const getDateFromUnixTime = (unixTime: number) => unix(unixTime).toDate()
 
 interface HMSTime {
   hours: number
@@ -36,9 +44,10 @@ export const getHMSStringFromSeconds = (
 export const formatTime = (seconds: number) =>
   getHMSStringFromSeconds(
     seconds,
-    ({ hours, minutes, seconds }) => t`${hours}h ${minutes}m ${seconds}s`,
+    // eslint-disable-next-line lingui/no-unlocalized-strings
+    ({ hours, minutes, seconds }) => `${hours}h ${minutes}m ${seconds}s`,
   )
 
 export const formatUnixTime = (unixTime: number) =>
   // eslint-disable-next-line lingui/no-unlocalized-strings
-  getDateFromUnixTime(unixTime, "MMM DD, YYYY")
+  getDateStringFromUnixTime(unixTime, "MMM DD, YYYY")
