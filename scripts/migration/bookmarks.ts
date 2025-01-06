@@ -15,6 +15,10 @@ const sql = postgres(SUPABASE_DATABASE_URL)
 const migrateBookmarks = async (offset: number, limit: number) => {
   console.time("Migrate bookmarks")
 
+  // To migrate a single user's bookmarks, add the following WHERE clause:
+  // WHERE
+  //   u.raw_user_meta_data->>'provider_id' = 'DISCORD_USER_ID'
+
   const rawBookmarks = await sql`
     SELECT
         to_jsonb(uf.*) AS favorite_data,
