@@ -1,6 +1,8 @@
+import { i18n } from "@lingui/core"
 import { t } from "@lingui/core/macro"
+import { I18nProvider } from "@lingui/react"
 import { Trans } from "@lingui/react/macro"
-import type { QueryClient } from "@tanstack/react-query"
+import { type QueryClient, queryOptions, useQuery } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import {
   createRootRouteWithContext,
@@ -22,7 +24,6 @@ import { SideNavProvider } from "@/features/sidenav/sidenav-provider"
 import globalStyles from "@/global.css?url"
 import { seo } from "@/helpers/seo"
 import { activateLocale } from "@/locales/activate"
-import linguiConfig from "~/lingui.config"
 
 const Toaster = lazy(() =>
   // Lazy load in development
@@ -54,9 +55,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       const session = await getSession()
       return { session }
     },
-    loader: async ({ context: { session }, deps: { lang } }) => {
-      activateLocale(lang ?? linguiConfig.sourceLocale)
-
+    loader: async ({ context: { session } }) => {
       return {
         session,
       }
@@ -133,20 +132,25 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: { children: ReactNode }) {
+  const { lang } = Route.useSearch()
+  activateLocale(lang)
+
   return (
-    <html>
-      <head>
-        <Meta />
-      </head>
-      <body className="dark">
-        {children}
-        <ScrollRestoration />
-        <ReactQueryDevtools buttonPosition="bottom-left" />
-        <Suspense>
-          <TanStackRouterDevtools position="bottom-right" />
-        </Suspense>
-        <Scripts />
-      </body>
-    </html>
+    <I18nProvider i18n={i18n}>
+      <html>
+        <head>
+          <Meta />
+        </head>
+        <body className="dark">
+          {children}
+          <ScrollRestoration />
+          <ReactQueryDevtools buttonPosition="bottom-left" />
+          <Suspense>
+            <TanStackRouterDevtools position="bottom-right" />
+          </Suspense>
+          <Scripts />
+        </body>
+      </html>
+    </I18nProvider>
   )
 }
