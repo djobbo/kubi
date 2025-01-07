@@ -25,7 +25,6 @@ import { PlayerLegendsTab } from "@/features/brawlhalla/components/stats/player/
 import { PlayerOverviewTab } from "@/features/brawlhalla/components/stats/player/PlayerOverviewTab"
 import { PlayerWeaponsTab } from "@/features/brawlhalla/components/stats/player/PlayerWeaponsTab"
 import { StatsHeader } from "@/features/brawlhalla/components/stats/StatsHeader"
-import { MAX_SHOWN_ALIASES } from "@/features/brawlhalla/constants/aliases"
 import {
   getFullLegends,
   getFullWeapons,

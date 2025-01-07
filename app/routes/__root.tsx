@@ -2,7 +2,7 @@ import { i18n } from "@lingui/core"
 import { t } from "@lingui/core/macro"
 import { I18nProvider } from "@lingui/react"
 import { Trans } from "@lingui/react/macro"
-import { type QueryClient, queryOptions, useQuery } from "@tanstack/react-query"
+import { type QueryClient } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import {
   createRootRouteWithContext,
