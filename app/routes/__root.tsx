@@ -55,13 +55,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       const session = await getSession()
       return { session }
     },
-    loader: async ({ context: { session } }) => {
+    loader: async ({ context: { session }, deps: { lang } }) => {
       return {
+        lang,
         session,
       }
     },
     component: RootComponent,
-    head: () => {
+    head: ({ loaderData }) => {
+      const { lang } = loaderData ?? {}
+      activateLocale(lang)
+
       return {
         meta: [
           { charSet: "utf-8" },
@@ -132,7 +136,7 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: { children: ReactNode }) {
-  const { lang } = Route.useSearch()
+  const { lang } = Route.useLoaderData()
   activateLocale(lang)
 
   return (

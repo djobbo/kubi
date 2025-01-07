@@ -28,6 +28,8 @@ bun dev
         - Zustand (Client State)
     - Routing
         - Tanstack Router
+    - Internationalization
+        - LinguiJS
 
 - Backend
     - Backend for Frontend

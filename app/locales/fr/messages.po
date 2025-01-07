@@ -43,27 +43,27 @@ msgstr "{clan_name} - Stats du clan • Corehalla"
 msgid "{clan_name} Stats - Brawlhalla Clan Stats • Corehalla"
 msgstr "{clan_name} Stats - Stats du clan Brawlhalla • Corehalla"
 
-#: app/routes/stats/player/$playerId.tsx:89
+#: app/routes/stats/player/$playerId.tsx:88
 msgid "{name} - Player Stats • Corehalla"
 msgstr "{name} - Stats du joueur • Corehalla"
 
-#: app/routes/stats/player/$playerId.tsx:90
+#: app/routes/stats/player/$playerId.tsx:89
 msgid "{name} Stats - Brawlhalla Player Stats • Corehalla"
 msgstr "{name} Stats - Stats du joueur Brawlhalla • Corehalla"
 
-#: app/routes/stats/player/$playerId.tsx:119
+#: app/routes/stats/player/$playerId.tsx:118
 msgid "{playerName}'s account level"
 msgstr ""
 
-#: app/routes/stats/player/$playerId.tsx:124
+#: app/routes/stats/player/$playerId.tsx:123
 msgid "{playerName}'s account XP"
 msgstr ""
 
-#: app/routes/stats/player/$playerId.tsx:146
+#: app/routes/stats/player/$playerId.tsx:145
 msgid "{playerName}'s main legends"
 msgstr ""
 
-#: app/routes/stats/player/$playerId.tsx:176
+#: app/routes/stats/player/$playerId.tsx:175
 msgid "{playerName}'s main weapons"
 msgstr ""
 
@@ -132,7 +132,7 @@ msgstr "Classement 1v1"
 msgid "2v2"
 msgstr "2v2"
 
-#: app/routes/stats/player/$playerId.tsx:223
+#: app/routes/stats/player/$playerId.tsx:222
 msgid "2v2 Ranked"
 msgstr ""
 
@@ -145,11 +145,11 @@ msgstr "Classement 2v2"
 msgid "7k+ discord members, and growing!"
 msgstr "Plus de 7000 membres sur Discord, et ça continue de monter !"
 
-#: app/routes/stats/player/$playerId.tsx:117
+#: app/routes/stats/player/$playerId.tsx:116
 msgid "Account level"
 msgstr ""
 
-#: app/routes/stats/player/$playerId.tsx:122
+#: app/routes/stats/player/$playerId.tsx:121
 msgid "Account XP"
 msgstr ""
 
@@ -351,12 +351,12 @@ msgstr ""
 
 #: app/routes/rankings/1v1.$.tsx:50
 #: app/routes/rankings/1v1.$.tsx:53
-msgid "Brawlhalla {formatedRegion} 1v1 Rankings - Page {page}{formatedSearch} • Corehalla"
-msgstr ""
+msgid "Brawlhalla {formatedRegion} 1v1 Rankings - Page {page} {formatedSearch} • Corehalla"
+msgstr "Classement 1v1 Brawlhalla {formatedRegion} - Page {page} {formatedSearch} • Corehalla"
 
 #: app/routes/rankings/2v2.$.tsx:40
 msgid "Brawlhalla {formatedRegion} 2v2 Rankings - Page {page} • Corehalla"
-msgstr ""
+msgstr "Classements 2v2 Brawlhalla {formatedRegion} - Page {page} {formatedSearch} • Corehalla"
 
 #: app/features/brawlhalla/components/layout/Footer.tsx:67
 msgid "Brawlhalla and Blue Mammoth Games are trademarks of <0>Blue Mammoth Games</0>"
@@ -594,7 +594,7 @@ msgstr ""
 msgid "Gadgets KOs"
 msgstr ""
 
-#: app/routes/stats/player/$playerId.tsx:127
+#: app/routes/stats/player/$playerId.tsx:126
 msgid "Game time"
 msgstr ""
 
@@ -701,7 +701,7 @@ msgstr ""
 msgid "If you're having trouble finding a player by name, trying using their brawlhalla id instead."
 msgstr ""
 
-#: app/routes/__root.tsx:77
+#: app/routes/__root.tsx:81
 msgid "Improve your Brawlhalla Game, and find your place among the Elite with our in-depth Player and Clan stats tracking and live leaderboards."
 msgstr ""
 
@@ -803,7 +803,7 @@ msgstr ""
 msgid "Legend/Team Rating Squash:"
 msgstr ""
 
-#: app/routes/stats/player/$playerId.tsx:227
+#: app/routes/stats/player/$playerId.tsx:226
 msgid "Legends"
 msgstr ""
 
@@ -841,7 +841,7 @@ msgstr ""
 msgid "Links"
 msgstr "Liens"
 
-#: app/routes/__root.tsx:116
+#: app/routes/__root.tsx:120
 msgid "Loading..."
 msgstr ""
 
@@ -857,11 +857,11 @@ msgstr ""
 msgid "Losses"
 msgstr ""
 
-#: app/routes/stats/player/$playerId.tsx:132
+#: app/routes/stats/player/$playerId.tsx:131
 msgid "Main legends"
 msgstr ""
 
-#: app/routes/stats/player/$playerId.tsx:149
+#: app/routes/stats/player/$playerId.tsx:148
 msgid "Main weapons"
 msgstr ""
 
@@ -936,7 +936,7 @@ msgstr ""
 msgid "Other players with similar names"
 msgstr ""
 
-#: app/routes/stats/player/$playerId.tsx:219
+#: app/routes/stats/player/$playerId.tsx:218
 msgid "Overview"
 msgstr ""
 
@@ -1050,7 +1050,7 @@ msgstr "Regénérer"
 msgid "Region"
 msgstr ""
 
-#: app/routes/stats/player/$playerId.tsx:195
+#: app/routes/stats/player/$playerId.tsx:194
 msgid "Region Flag"
 msgstr ""
 
@@ -1185,7 +1185,7 @@ msgstr ""
 msgid "Tier"
 msgstr ""
 
-#: app/routes/stats/player/$playerId.tsx:129
+#: app/routes/stats/player/$playerId.tsx:128
 msgid "Time {playerName} spent in game"
 msgstr ""
 
@@ -1303,9 +1303,9 @@ msgstr ""
 msgid "Total wins"
 msgstr ""
 
-#: app/routes/__root.tsx:76
+#: app/routes/__root.tsx:80
 msgid "Track your Brawlhalla stats, view rankings, and more! • Corehalla"
-msgstr ""
+msgstr "Suivez vos statistiques de Brawlhalla, consultez les classements, et bien plus encore! • Corehalla"
 
 #: app/components/DefaultCatchBoundary.tsx:33
 msgid "Try Again"
@@ -1391,7 +1391,7 @@ msgstr ""
 msgid "Weapon xp"
 msgstr ""
 
-#: app/routes/stats/player/$playerId.tsx:230
+#: app/routes/stats/player/$playerId.tsx:229
 msgid "Weapons"
 msgstr ""
 

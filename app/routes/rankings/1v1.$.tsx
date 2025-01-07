@@ -47,10 +47,10 @@ export const Route = createFileRoute("/rankings/1v1/$")({
 
     return {
       meta: seo({
-        title: t`Brawlhalla ${formatedRegion} 1v1 Rankings - Page ${page}${
+        title: t`Brawlhalla ${formatedRegion} 1v1 Rankings - Page ${page} ${
           formatedSearch
         } • Corehalla`,
-        description: t`Brawlhalla ${formatedRegion} 1v1 Rankings - Page ${page}${
+        description: t`Brawlhalla ${formatedRegion} 1v1 Rankings - Page ${page} ${
           formatedSearch
         } • Corehalla`,
       }),
