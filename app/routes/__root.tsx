@@ -20,10 +20,11 @@ import { getSession } from "@/features/auth/functions/getSession"
 import { BackToTopButton } from "@/features/brawlhalla/components/BackToTopButton"
 import { Layout } from "@/features/brawlhalla/components/layout/Layout"
 import { Searchbox } from "@/features/brawlhalla/components/search/Searchbox"
-import { SideNavProvider } from "@/features/sidenav/sidenav-provider"
+import { SideNavProvider } from "@/features/sidebar/sidenav-provider"
 import globalStyles from "@/global.css?url"
 import { seo } from "@/helpers/seo"
 import { activateLocale } from "@/locales/activate"
+import { SidebarProvider } from "@/ui/components/sidebar"
 
 const Toaster = lazy(() =>
   // Lazy load in development
@@ -111,26 +112,28 @@ function RootComponent() {
     <RootDocument>
       {/* TODO: GAscripts */}
       {/* <GAScripts /> */}
-      <KBarProvider actions={[]} options={{}}>
-        <SideNavProvider>
-          <PageLoader>
-            <div className="flex items-center gap-4">
-              <span className="text-sm">
-                <Trans>Loading...</Trans>
-              </span>
-              <AnimatedLogo size={32} />
-            </div>
-          </PageLoader>
-          <Suspense>
-            <Toaster />
-          </Suspense>
-          <Layout>
-            <Outlet />
-          </Layout>
-          <Searchbox />
-          <BackToTopButton />
-        </SideNavProvider>
-      </KBarProvider>
+      <SidebarProvider>
+        <KBarProvider actions={[]} options={{}}>
+          <SideNavProvider>
+            <PageLoader>
+              <div className="flex items-center gap-4">
+                <span className="text-sm">
+                  <Trans>Loading...</Trans>
+                </span>
+                <AnimatedLogo size={32} />
+              </div>
+            </PageLoader>
+            <Suspense>
+              <Toaster />
+            </Suspense>
+            <Layout>
+              <Outlet />
+            </Layout>
+            <Searchbox />
+            <BackToTopButton />
+          </SideNavProvider>
+        </KBarProvider>
+      </SidebarProvider>
     </RootDocument>
   )
 }

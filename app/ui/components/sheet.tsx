@@ -1,12 +1,7 @@
-import { Trans } from "@lingui/react/macro"
 import * as SheetPrimitive from "@radix-ui/react-dialog"
 import { cva, type VariantProps } from "class-variance-authority"
 import { XIcon } from "lucide-react"
-import type {
-  ComponentPropsWithoutRef,
-  ElementRef,
-  HTMLAttributes,
-} from "react"
+import * as React from "react"
 
 import { cn } from "@/ui/lib/utils"
 
@@ -22,8 +17,8 @@ const SheetOverlay = ({
   ref,
   className,
   ...props
-}: ComponentPropsWithoutRef<typeof SheetPrimitive.Overlay> & {
-  ref?: React.RefObject<ElementRef<typeof SheetPrimitive.Overlay>>
+}: React.ComponentPropsWithoutRef<typeof SheetPrimitive.Overlay> & {
+  ref?: React.RefObject<React.ElementRef<typeof SheetPrimitive.Overlay>>
 }) => (
   <SheetPrimitive.Overlay
     className={cn(
@@ -49,12 +44,14 @@ const sheetVariants = cva(
           "inset-y-0 right-0 h-full w-3/4 border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm",
       },
     },
-    defaultVariants: { side: "right" },
+    defaultVariants: {
+      side: "right",
+    },
   },
 )
 
 interface SheetContentProps
-  extends ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,
+  extends React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,
     VariantProps<typeof sheetVariants> {}
 
 const SheetContent = ({
@@ -64,7 +61,7 @@ const SheetContent = ({
   children,
   ...props
 }: SheetContentProps & {
-  ref?: React.RefObject<ElementRef<typeof SheetPrimitive.Content>>
+  ref?: React.RefObject<React.ElementRef<typeof SheetPrimitive.Content>>
 }) => (
   <SheetPortal>
     <SheetOverlay />
@@ -75,9 +72,7 @@ const SheetContent = ({
     >
       <SheetPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
         <XIcon className="h-4 w-4" />
-        <span className="sr-only">
-          <Trans>Close</Trans>
-        </span>
+        <span className="sr-only">Close</span>
       </SheetPrimitive.Close>
       {children}
     </SheetPrimitive.Content>
@@ -88,7 +83,7 @@ SheetContent.displayName = SheetPrimitive.Content.displayName
 const SheetHeader = ({
   className,
   ...props
-}: HTMLAttributes<HTMLDivElement>) => (
+}: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
       "flex flex-col space-y-2 text-center sm:text-left",
@@ -102,7 +97,7 @@ SheetHeader.displayName = "SheetHeader"
 const SheetFooter = ({
   className,
   ...props
-}: HTMLAttributes<HTMLDivElement>) => (
+}: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
       "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
@@ -117,8 +112,8 @@ const SheetTitle = ({
   ref,
   className,
   ...props
-}: ComponentPropsWithoutRef<typeof SheetPrimitive.Title> & {
-  ref: React.RefObject<ElementRef<typeof SheetPrimitive.Title>>
+}: React.ComponentPropsWithoutRef<typeof SheetPrimitive.Title> & {
+  ref?: React.RefObject<React.ElementRef<typeof SheetPrimitive.Title>>
 }) => (
   <SheetPrimitive.Title
     ref={ref}
@@ -132,8 +127,8 @@ const SheetDescription = ({
   ref,
   className,
   ...props
-}: ComponentPropsWithoutRef<typeof SheetPrimitive.Description> & {
-  ref: React.RefObject<ElementRef<typeof SheetPrimitive.Description>>
+}: React.ComponentPropsWithoutRef<typeof SheetPrimitive.Description> & {
+  ref?: React.RefObject<React.ElementRef<typeof SheetPrimitive.Description>>
 }) => (
   <SheetPrimitive.Description
     ref={ref}

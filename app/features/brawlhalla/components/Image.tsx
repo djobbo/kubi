@@ -88,7 +88,7 @@ type FlagIconProps = ImagePropsWithoutSrc & {
 export const FlagIcon = ({ region, ...props }: FlagIconProps) => {
   return (
     <Image
-      src={`/assets/images/flags/${region}.png`}
+      src={`/assets/images/flags/${region.toLowerCase()}.png`}
       alt={region.toLowerCase()}
       {...props}
     />

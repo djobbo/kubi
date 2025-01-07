@@ -6,12 +6,11 @@ import {
 import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
 import { Link } from "@tanstack/react-router"
-import { Menu } from "lucide-react"
 
 import { useAuth } from "@/features/auth/use-auth"
 import { Image } from "@/features/brawlhalla/components/Image"
-import { useSideNav } from "@/features/sidenav/sidenav-provider"
 import { Button } from "@/ui/components/button"
+import { SidebarTrigger } from "@/ui/components/sidebar"
 import { cn } from "@/ui/lib/utils"
 
 import { SearchButton, SearchButtonIcon } from "../search/SearchButton"
@@ -24,8 +23,6 @@ interface HeaderProps {
 export const Header = ({ className }: HeaderProps) => {
   const { isLoggedIn, logIn, logOut, user } = useAuth()
 
-  const { openSideNav } = useSideNav()
-
   return (
     <>
       <AlertBar />
@@ -35,24 +32,7 @@ export const Header = ({ className }: HeaderProps) => {
           "flex items-center justify-between h-16 px-4 gap-8",
         )}
       >
-        <div className="flex items-center gap-4">
-          <button
-            type="button"
-            className="block sm:hidden"
-            onClick={() => {
-              openSideNav()
-            }}
-          >
-            <Menu size={24} />
-          </button>
-          <Link to="/" className="flex items-center w-32 h-8 overflow-hidden">
-            <Image
-              src="/assets/images/brand/logos/logo-text.png"
-              alt={t`Corehalla logo`}
-              className="object-contain object-center"
-            />
-          </Link>
-        </div>
+        <SidebarTrigger className="-ml-1" />
         <SearchButton className="hidden sm:flex mr-2 flex-1 max-w-96" />
         <div className="flex items-center gap-2">
           {isLoggedIn ? (
