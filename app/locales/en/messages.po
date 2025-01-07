@@ -701,7 +701,7 @@ msgstr "I understand 💪"
 msgid "If you're having trouble finding a player by name, trying using their brawlhalla id instead."
 msgstr "If you're having trouble finding a player by name, trying using their brawlhalla id instead."
 
-#: app/routes/__root.tsx:81
+#: app/routes/__root.tsx:80
 msgid "Improve your Brawlhalla Game, and find your place among the Elite with our in-depth Player and Clan stats tracking and live leaderboards."
 msgstr "Improve your Brawlhalla Game, and find your place among the Elite with our in-depth Player and Clan stats tracking and live leaderboards."
 
@@ -841,7 +841,7 @@ msgstr "Level / XP"
 msgid "Links"
 msgstr "Links"
 
-#: app/routes/__root.tsx:120
+#: app/routes/__root.tsx:119
 msgid "Loading..."
 msgstr "Loading..."
 
@@ -1303,7 +1303,7 @@ msgstr "Total losses"
 msgid "Total wins"
 msgstr "Total wins"
 
-#: app/routes/__root.tsx:80
+#: app/routes/__root.tsx:79
 msgid "Track your Brawlhalla stats, view rankings, and more! • Corehalla"
 msgstr "Track your Brawlhalla stats, view rankings, and more! • Corehalla"
 
