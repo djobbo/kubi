@@ -1,11 +1,17 @@
 import type { LinguiConfig } from "@lingui/conf"
 
-const config: LinguiConfig = {
-  locales: ["en", "fr", "pseudo"],
-  sourceLocale: "en",
-  pseudoLocale: "pseudo",
+enum Locales {
+  EN = "en",
+  FR = "fr",
+  Pseudo = "pseudo",
+}
+
+const config = {
+  locales: [Locales.EN, Locales.FR, Locales.Pseudo],
+  sourceLocale: Locales.EN,
+  pseudoLocale: Locales.Pseudo,
   fallbackLocales: {
-    default: "en",
+    default: Locales.EN,
   },
   catalogs: [
     {
@@ -15,6 +21,6 @@ const config: LinguiConfig = {
   ],
   format: "po",
   compileNamespace: "ts",
-}
+} as const satisfies LinguiConfig
 
 export default config

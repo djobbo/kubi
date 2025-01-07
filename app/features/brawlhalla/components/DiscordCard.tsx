@@ -75,9 +75,9 @@ export const DiscordCard = () => {
             src="/assets/images/brand/logos/logo-animated.gif"
             alt={t`Corehalla animated logo`}
             className="object-cover object-center"
-            containerClassName="w-20 h-20 rounded-3xl -mt-10 ml-6 border-8 border-bgVar2 overflow-hidden"
+            containerClassName="w-20 h-20 flex-shrink-0 rounded-3xl -mt-10 ml-6 border-8 border-bgVar2 overflow-hidden"
           />
-          <span className="text-sm ml-2 mt-2 text-textVar1 text-center">
+          <span className="text-sm mx-2 mt-2 text-textVar1">
             <Trans>7k+ discord members, and growing!</Trans>
           </span>
         </div>

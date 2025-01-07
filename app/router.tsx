@@ -6,10 +6,10 @@ import { routerWithQueryClient } from "@tanstack/react-router-with-query"
 
 import { DefaultCatchBoundary } from "@/components/DefaultCatchBoundary"
 import { NotFound } from "@/components/NotFound"
-import { activate as activateLocales } from "@/locales/activate"
+import { loadLocales } from "@/locales/activate"
 import { routeTree } from "@/routeTree.gen"
 
-activateLocales("en")
+loadLocales()
 
 export function createRouter() {
   const queryClient = new QueryClient()

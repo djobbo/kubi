@@ -510,7 +510,7 @@ msgstr ""
 #: app/routes/index.tsx:52
 #: app/features/brawlhalla/components/layout/Footer.tsx:16
 msgid "Discord"
-msgstr ""
+msgstr "Discord"
 
 #: app/features/brawlhalla/components/DiscordCard.tsx:69
 msgid "Discord header image"
@@ -518,11 +518,11 @@ msgstr ""
 
 #: app/features/brawlhalla/components/layout/SideNav.tsx:147
 msgid "Discord Server"
-msgstr ""
+msgstr "Serveur Discord"
 
 #: app/features/brawlhalla/components/DiscordCard.tsx:114
 msgid "Donate"
-msgstr ""
+msgstr "Faîtes un don"
 
 #: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:93
 #: app/features/brawlhalla/components/stats/player/PlayerLegendsTab/WeaponDistribution.tsx:124
@@ -711,27 +711,27 @@ msgstr ""
 
 #: app/features/brawlhalla/components/DiscordCard.tsx:109
 msgid "Join"
-msgstr ""
+msgstr "Rejoindre"
 
 #: app/features/brawlhalla/components/search/Searchbox.tsx:245
 msgid "Join our <0>Discord</0> if you need help."
-msgstr ""
+msgstr "Rejoignez notre <0>Discord</0> si vous avez besoin d'aide."
 
 #: app/routes/index.tsx:49
 msgid "Join our community"
-msgstr ""
+msgstr "Rejoignez notre communauté"
 
 #: app/features/brawlhalla/components/layout/Footer.tsx:78
 msgid "Join the community:"
-msgstr ""
+msgstr "Rejoignez la communauté:"
 
 #: app/features/brawlhalla/components/FirstTimePopup.tsx:31
 msgid "Join us:"
-msgstr ""
+msgstr "Rejoignez-nous:"
 
 #: app/features/brawlhalla/components/stats/clan/ClanMember.tsx:33
 msgid "Joined on"
-msgstr ""
+msgstr "A rejoint le"
 
 #: app/routes/rankings/2v2.$.tsx:69
 #: app/routes/rankings/1v1.$.tsx:92
@@ -1115,7 +1115,7 @@ msgstr "Rechercher..."
 
 #: app/features/brawlhalla/components/stats/StatsHeader.tsx:90
 msgid "Share"
-msgstr ""
+msgstr "Partager"
 
 #: app/features/brawlhalla/components/DiscordCard.tsx:101
 msgid "Share your thoughts"
@@ -1124,11 +1124,11 @@ msgstr ""
 #: app/routes/index.tsx:141
 #: app/features/brawlhalla/components/layout/Header.tsx:79
 msgid "Sign in"
-msgstr ""
+msgstr "Se connecter"
 
 #: app/features/brawlhalla/components/stats/StatsHeader.tsx:78
 msgid "Sign in to add favorites"
-msgstr ""
+msgstr "Connectez-vous pour ajouter des favoris"
 
 #: app/routes/test.tsx:53
 msgid "Sign in with Discord"
@@ -1141,7 +1141,7 @@ msgstr "Se déconnecter"
 
 #: app/routes/index.tsx:62
 msgid "Stay ahead of <0/>the competition"
-msgstr ""
+msgstr "Restez en avance <0/>sur la concurrence"
 
 #: app/features/brawlhalla/components/stats/GeneralStats.tsx:65
 msgid "Suicides"

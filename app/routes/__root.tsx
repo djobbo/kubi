@@ -10,6 +10,7 @@ import {
 import { Meta, Scripts } from "@tanstack/start"
 import { KBarProvider } from "kbar"
 import { lazy, type ReactNode, Suspense } from "react"
+import { z } from "zod"
 
 import { AnimatedLogo } from "@/components/base/AnimatedLogo"
 import { PageLoader } from "@/components/base/PageLoader"
@@ -20,6 +21,8 @@ import { Searchbox } from "@/features/brawlhalla/components/search/Searchbox"
 import { SideNavProvider } from "@/features/sidenav/sidenav-provider"
 import globalStyles from "@/global.css?url"
 import { seo } from "@/helpers/seo"
+import { activateLocale } from "@/locales/activate"
+import linguiConfig from "~/lingui.config"
 
 const Toaster = lazy(() =>
   // Lazy load in development
@@ -40,11 +43,20 @@ const TanStackRouterDevtools =
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   {
+    validateSearch: (search) =>
+      z
+        .object({
+          lang: z.string().optional(),
+        })
+        .parse(search),
+    loaderDeps: ({ search: { lang } }) => ({ lang }),
     beforeLoad: async () => {
       const session = await getSession()
       return { session }
     },
-    loader: async ({ context: { session } }) => {
+    loader: async ({ context: { session }, deps: { lang } }) => {
+      activateLocale(lang ?? linguiConfig.sourceLocale)
+
       return {
         session,
       }
