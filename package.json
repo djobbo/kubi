@@ -35,7 +35,7 @@
     "@lingui/conf": "^5.1.2",
     "@lingui/vite-plugin": "^5.1.2",
     "@pandacss/dev": "^0.51.1",
-    "@supabase/supabase-js": "^2.47.10",
+    "@supabase/supabase-js": "^2.47.11",
     "@tanstack/eslint-plugin-query": "^5.62.16",
     "@tanstack/eslint-plugin-router": "^1.92.7",
     "@types/bun": "latest",
@@ -106,6 +106,6 @@
     "tailwindcss-animate": "^1.0.7",
     "vinxi": "^0.5.1",
     "zod": "^3.24.1",
-    "zustand": "^5.0.2"
+    "zustand": "^5.0.3"
   }
 }
