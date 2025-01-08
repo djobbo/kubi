@@ -122,6 +122,7 @@ msgstr "1v1 Ranked wins this season"
 
 #: app/features/brawlhalla/components/layout/SideNav.tsx:125
 #: app/features/brawlhalla/components/layout/AppNav.tsx:9
+#: app/config/nav.ts:51
 msgid "1v1 Rankings"
 msgstr "1v1 Rankings"
 
@@ -138,6 +139,7 @@ msgstr "2v2 Ranked"
 
 #: app/features/brawlhalla/components/layout/SideNav.tsx:131
 #: app/features/brawlhalla/components/layout/AppNav.tsx:14
+#: app/config/nav.ts:57
 msgid "2v2 Rankings"
 msgstr "2v2 Rankings"
 
@@ -156,6 +158,12 @@ msgstr "Account XP"
 #: app/features/brawlhalla/components/stats/StatsHeader.tsx:70
 msgid "Add favorite"
 msgstr "Add favorite"
+
+#: app/features/sidebar/components/bookmarks.tsx:137
+#: app/features/sidebar/components/bookmarks.tsx:141
+#: app/features/sidebar/components/bookmarks.tsx:187
+msgid "All Bookmarks"
+msgstr "All Bookmarks"
 
 #: app/routes/rankings/2v2.$.tsx:67
 #: app/routes/rankings/1v1.$.tsx:90
@@ -341,6 +349,8 @@ msgid "Best Rating"
 msgstr "Best Rating"
 
 #: app/routes/@me/bookmarks.tsx:24
+#: app/features/sidebar/components/user.tsx:99
+#: app/features/sidebar/components/bookmarks.tsx:132
 #: app/features/brawlhalla/components/layout/SideNav.tsx:237
 msgid "Bookmarks"
 msgstr "Bookmarks"
@@ -364,8 +374,8 @@ msgstr "Brawlhalla and Blue Mammoth Games are trademarks of <0>Blue Mammoth Game
 
 #: app/routes/rankings/clans.$.tsx:52
 #: app/routes/rankings/clans.$.tsx:55
-msgid "Brawlhalla Clan Rankings - Page {page}{formatedSearch} • Corehalla"
-msgstr "Brawlhalla Clan Rankings - Page {page}{formatedSearch} • Corehalla"
+msgid "Brawlhalla Clan Rankings - Page {page} {formatedSearch} • Corehalla"
+msgstr "Brawlhalla Clan Rankings - Page {page} {formatedSearch} • Corehalla"
 
 #: app/features/brawlhalla/components/layout/alerts.tsx:7
 msgid "Brawlhalla maintenance ongoing. More info <0>here</0> !"
@@ -395,10 +405,10 @@ msgstr "Clan XP"
 #: app/routes/@me/bookmarks.tsx:31
 #: app/features/brawlhalla/components/layout/SideNav.tsx:142
 #: app/features/brawlhalla/components/layout/AppNav.tsx:24
+#: app/config/nav.ts:63
 msgid "Clans"
 msgstr "Clans"
 
-#: app/ui/components/sheet.tsx:79
 #: app/ui/components/dialog.tsx:56
 msgid "Close"
 msgstr "Close"
@@ -426,10 +436,6 @@ msgstr "Corehalla animated logo"
 #: app/features/brawlhalla/components/layout/Footer.tsx:61
 msgid "Corehalla is neither associated nor endorsed by Blue Mammoth Games and doesn't reflect the views or opinions of Blue Mammoth Games or anyone officially involved in developing Brawlhalla."
 msgstr "Corehalla is neither associated nor endorsed by Blue Mammoth Games and doesn't reflect the views or opinions of Blue Mammoth Games or anyone officially involved in developing Brawlhalla."
-
-#: app/features/brawlhalla/components/layout/Header.tsx:51
-msgid "Corehalla logo"
-msgstr "Corehalla logo"
 
 #: app/routes/stats/clan/$clanId.tsx:54
 #: app/routes/rankings/clans.$.tsx:102
@@ -517,6 +523,7 @@ msgid "Discord header image"
 msgstr "Discord header image"
 
 #: app/features/brawlhalla/components/layout/SideNav.tsx:147
+#: app/config/nav.ts:91
 msgid "Discord Server"
 msgstr "Discord Server"
 
@@ -682,8 +689,13 @@ msgstr "Highest elo"
 msgid "Highest peak elo"
 msgstr "Highest peak elo"
 
+#: app/features/sidebar/components/user.tsx:104
+msgid "History"
+msgstr "History"
+
 #: app/features/brawlhalla/components/layout/SideNav.tsx:119
-#: app/config/nav.ts:23
+#: app/config/nav.ts:31
+#: app/config/nav.ts:45
 #: app/components/NotFound.tsx:18
 #: app/components/DefaultCatchBoundary.tsx:38
 msgid "Home"
@@ -701,7 +713,7 @@ msgstr "I understand 💪"
 msgid "If you're having trouble finding a player by name, trying using their brawlhalla id instead."
 msgstr "If you're having trouble finding a player by name, trying using their brawlhalla id instead."
 
-#: app/routes/__root.tsx:80
+#: app/routes/__root.tsx:81
 msgid "Improve your Brawlhalla Game, and find your place among the Elite with our in-depth Player and Clan stats tracking and live leaderboards."
 msgstr "Improve your Brawlhalla Game, and find your place among the Elite with our in-depth Player and Clan stats tracking and live leaderboards."
 
@@ -841,7 +853,7 @@ msgstr "Level / XP"
 msgid "Links"
 msgstr "Links"
 
-#: app/routes/__root.tsx:119
+#: app/routes/__root.tsx:121
 msgid "Loading..."
 msgstr "Loading..."
 
@@ -973,6 +985,8 @@ msgstr "Played in ranked"
 msgid "Player"
 msgstr "Player"
 
+#: app/features/sidebar/components/bookmarks.tsx:80
+#: app/features/sidebar/components/bookmarks.tsx:94
 #: app/features/brawlhalla/components/layout/SideNav.tsx:80
 msgid "player {cleanName} icon"
 msgstr "player {cleanName} icon"
@@ -1122,7 +1136,7 @@ msgid "Share your thoughts"
 msgstr "Share your thoughts"
 
 #: app/routes/index.tsx:141
-#: app/features/brawlhalla/components/layout/Header.tsx:79
+#: app/features/brawlhalla/components/layout/Header.tsx:59
 msgid "Sign in"
 msgstr "Sign in"
 
@@ -1135,7 +1149,8 @@ msgid "Sign in with Discord"
 msgstr "Sign in with Discord"
 
 #: app/routes/test.tsx:41
-#: app/features/brawlhalla/components/layout/Header.tsx:73
+#: app/features/sidebar/components/user.tsx:111
+#: app/features/brawlhalla/components/layout/Header.tsx:53
 msgid "Sign out"
 msgstr "Sign out"
 
@@ -1303,7 +1318,7 @@ msgstr "Total losses"
 msgid "Total wins"
 msgstr "Total wins"
 
-#: app/routes/__root.tsx:79
+#: app/routes/__root.tsx:80
 msgid "Track your Brawlhalla stats, view rankings, and more! • Corehalla"
 msgstr "Track your Brawlhalla stats, view rankings, and more! • Corehalla"
 
@@ -1351,7 +1366,7 @@ msgstr "Usage rate of this legend (percentage of total games)"
 msgid "User"
 msgstr "User"
 
-#: app/features/brawlhalla/components/layout/Header.tsx:65
+#: app/features/brawlhalla/components/layout/Header.tsx:45
 msgid "User avatar"
 msgstr "User avatar"
 
@@ -1408,6 +1423,7 @@ msgid "Which weapon(s) do you enjoy playing the most? and which one(s) you disli
 msgstr "Which weapon(s) do you enjoy playing the most? and which one(s) you dislike playing?"
 
 #: app/features/brawlhalla/components/layout/SideNav.tsx:153
+#: app/config/nav.ts:98
 msgid "Wiki"
 msgstr "Wiki"
 

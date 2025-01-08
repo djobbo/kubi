@@ -49,10 +49,10 @@ export const Route = createFileRoute("/rankings/clans/$")({
 
     return {
       meta: seo({
-        title: t`Brawlhalla Clan Rankings - Page ${page}${
+        title: t`Brawlhalla Clan Rankings - Page ${page} ${
           formatedSearch
         } • Corehalla`,
-        description: t`Brawlhalla Clan Rankings - Page ${page}${
+        description: t`Brawlhalla Clan Rankings - Page ${page} ${
           formatedSearch
         } • Corehalla`,
       }),
