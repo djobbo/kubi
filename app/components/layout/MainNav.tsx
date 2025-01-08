@@ -18,12 +18,12 @@ export function MainNav() {
         </span>
       </Link>
       <nav className="flex items-center gap-4 text-sm lg:gap-6">
-        {navConfig.main.map((link) => (
+        {navConfig().main.map((link) => (
           <Link
             to={link.to}
             className={cn(
               "transition-colors hover:text-foreground/80",
-              link.isActive(pathname, link.to)
+              link.isActive(pathname)
                 ? "text-foreground"
                 : "text-foreground/60",
             )}

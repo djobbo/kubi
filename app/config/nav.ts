@@ -23,7 +23,7 @@ interface SidebarLink extends NavLink {
   items?: NavLink[]
 }
 
-export const navConfig = (() =>
+export const navConfig = () =>
   ({
     main: [
       {
@@ -101,4 +101,4 @@ export const navConfig = (() =>
         target: "_blank",
       },
     ] satisfies SidebarLink[],
-  }) as const)()
+  }) as const

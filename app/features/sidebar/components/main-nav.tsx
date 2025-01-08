@@ -24,7 +24,7 @@ export const MainNav = () => {
   return (
     <SidebarGroup>
       <SidebarMenu>
-        {navConfig.sidebar.map((item) => {
+        {navConfig().sidebar.map((item) => {
           const isActive = item.isActive?.(router.location.pathname) ?? false
 
           if (!item.items) {
