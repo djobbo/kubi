@@ -29,7 +29,7 @@ export const Header = ({ className }: HeaderProps) => {
       <div
         className={cn(
           className,
-          "flex items-center justify-between h-16 px-4 gap-8",
+          "flex items-center justify-between h-[--header-height] px-4 gap-8",
         )}
       >
         <SidebarTrigger className="-ml-1" />

@@ -6,6 +6,7 @@ import {
   Folder,
   Forward,
   MoreHorizontal,
+  ShieldIcon,
   Trash2,
 } from "lucide-react"
 
@@ -55,10 +56,11 @@ const getBookmarkIconUrl = (bookmark: Bookmark) => {
 }
 
 interface NavBookmarkProps {
+  isCollapsed?: boolean
   bookmark: Bookmark
 }
 
-const NavBookmark = ({ bookmark, ...props }: NavBookmarkProps) => {
+const NavBookmark = ({ bookmark, isCollapsed, ...props }: NavBookmarkProps) => {
   const cleanName = cleanString(bookmark.name)
 
   if (bookmark.pageType === "player_stats") {
@@ -70,14 +72,32 @@ const NavBookmark = ({ bookmark, ...props }: NavBookmarkProps) => {
         to={`/stats/player/$playerId`}
         params={{ playerId: bookmark.pageId }}
       >
-        <Image
-          src={image}
-          alt={t`player ${cleanName} icon`}
-          Container="span"
-          containerClassName="w-4 h-4 text-xs z-0 opacity-50 rounded-md overflow-hidden"
-          className="object-contain object-center"
-        />
-        <span className="truncate">{bookmark.name}</span>
+        {isCollapsed ? (
+          <div className="relative flex items-center justify-center">
+            {image && (
+              <Image
+                src={image}
+                alt={t`player ${cleanName} icon`}
+                containerClassName="w-6 h-6 text-xs z-0 opacity-50 rounded-md overflow-hidden top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                position="absolute"
+                className="object-contain object-center"
+              />
+            )}
+            <span className="truncate relative font-semibold text-xs">
+              {cleanName.slice(0, 3).toUpperCase()}
+            </span>
+          </div>
+        ) : (
+          <>
+            <Image
+              src={image}
+              alt={t`player ${cleanName} icon`}
+              containerClassName="inline-block w-4 h-4 text-xs z-0 rounded-md overflow-hidden shrink-0"
+              className="object-contain object-center"
+            />
+            <span className="truncate">{cleanName}</span>
+          </>
+        )}
       </Link>
     )
   }
@@ -89,8 +109,8 @@ const NavBookmark = ({ bookmark, ...props }: NavBookmarkProps) => {
         to={`/stats/clan/$clanId`}
         params={{ clanId: bookmark.pageId }}
       >
-        <BookmarkIcon />
-        <span className="truncate">{bookmark.name}</span>
+        <ShieldIcon />
+        <span className="truncate">{cleanName}</span>
       </Link>
     )
   }
@@ -101,15 +121,33 @@ const NavBookmark = ({ bookmark, ...props }: NavBookmarkProps) => {
 export const NavBookmarks = () => {
   const { isMobile } = useSidebar()
   const bookmarks = useBookmarks()
+  const sidebar = useSidebar()
+  const isCollapsed = sidebar.state === "collapsed"
 
   return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Bookmarks</SidebarGroupLabel>
+    <SidebarGroup
+    // className="group-data-[collapsible=icon]:hidden"
+    >
+      <SidebarGroupLabel>
+        <Trans>Bookmarks</Trans>
+      </SidebarGroupLabel>
       <SidebarMenu>
+        {isCollapsed && (
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild tooltip={t`All Bookmarks`}>
+              <Link to="/@me/bookmarks">
+                <BookmarkIcon />
+                <span>
+                  <Trans>All Bookmarks</Trans>
+                </span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        )}
         {bookmarks.map((item) => (
           <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton asChild>
-              <NavBookmark bookmark={item} />
+            <SidebarMenuButton asChild tooltip={item.name}>
+              <NavBookmark bookmark={item} isCollapsed={isCollapsed} />
             </SidebarMenuButton>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -140,16 +178,18 @@ export const NavBookmarks = () => {
             </DropdownMenu>
           </SidebarMenuItem>
         ))}
-        <SidebarMenuItem>
-          <SidebarMenuButton className="text-sidebar-foreground/70" asChild>
-            <Link to="/@me/bookmarks">
-              <MoreHorizontal className="text-sidebar-foreground/70" />
-              <span>
-                <Trans>All Bookmarks</Trans>
-              </span>
-            </Link>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
+        {!isCollapsed && (
+          <SidebarMenuItem>
+            <SidebarMenuButton className="text-sidebar-foreground/70" asChild>
+              <Link to="/@me/bookmarks">
+                <MoreHorizontal className="text-sidebar-foreground/70" />
+                <span>
+                  <Trans>All Bookmarks</Trans>
+                </span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        )}
       </SidebarMenu>
     </SidebarGroup>
   )
