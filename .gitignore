@@ -184,6 +184,9 @@ dist
 # Lingui
 **/locales/*/messages.ts
 
-## Panda
+# Panda
 styled-system
 styled-system-studio
+
+# Nixpacks
+.nixpacks
