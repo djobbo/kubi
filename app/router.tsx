@@ -16,7 +16,7 @@ export function createRouter() {
       defaultPreload: "intent",
       defaultErrorComponent: DefaultCatchBoundary,
       defaultNotFoundComponent: NotFound,
-      defaultPreloadDelay: 500,
+      defaultPreloadDelay: 1000,
     }),
     queryClient,
   )

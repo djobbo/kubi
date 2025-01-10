@@ -42,11 +42,15 @@ export const RankingsLayout = ({
   defaultBracket = "1v1",
 }: RankingsLayoutProps) => {
   const region = regions
-    ? regions.map(({ page }) => page).includes(currentRegion ?? "")
-      ? currentRegion
-      : defaultRegion
+    ? regions
+        .map(({ page }) => page.toLowerCase())
+        .includes(currentRegion?.toLowerCase() ?? "")
+      ? currentRegion?.toLowerCase()
+      : defaultRegion.toLowerCase()
     : null
-  const bracket = brackets.map(({ page }) => page).includes(currentBracket)
+  const bracket = brackets
+    .map(({ page }) => page.toLowerCase())
+    .includes(currentBracket.toLowerCase())
     ? currentBracket
     : defaultBracket
   const pagination =

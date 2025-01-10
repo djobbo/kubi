@@ -8,14 +8,24 @@ import { searchAliases } from "@/features/archive/functions/aliases/search-alias
 import { addOrUpdateClans } from "@/features/archive/functions/clans/add-update-clans"
 import { withCache } from "@/features/cache/cache"
 import { cleanString } from "@/helpers/cleanString"
-import { formatUnixTime, getDateFromUnixTime } from "@/helpers/date"
+import { getDateFromUnixTime } from "@/helpers/date"
 
 import { MAX_SHOWN_ALIASES } from "../constants/aliases"
+import {
+  powerRankedGameModeMap,
+  powerRankedGameModeSchema,
+} from "../constants/power/game-mode"
+import {
+  powerRankedOrderBySchema,
+  powerRankedOrderSchema,
+} from "../constants/power/order-by"
+import { powerRankedRegionSchema } from "../constants/power/regions"
 import { rankedRegionSchema } from "../constants/ranked/regions"
 import { getTeamPlayers } from "../helpers/teamPlayers"
 import { clanMock } from "./mocks/clan"
 import { playerRankedMock } from "./mocks/player-ranked"
 import { playerStatsMock } from "./mocks/player-stats"
+import { powerRankingsMock } from "./mocks/power-rankings"
 import { rankings1v1Mock } from "./mocks/rankings-1v1"
 import { rankings2v2Mock } from "./mocks/rankings-2v2"
 import { brawlhallaIdSchema } from "./schema/brawlhalla-id"
@@ -23,23 +33,28 @@ import { clanSchema } from "./schema/clan"
 import type { PlayerRanked } from "./schema/player-ranked"
 import { playerRankedSchema } from "./schema/player-ranked"
 import { playerStatsSchema } from "./schema/player-stats"
+import { powerRankingsSchema } from "./schema/power-rankings"
 import type { Ranking1v1, Ranking2v2 } from "./schema/rankings"
 import { ranking1v1Schema, ranking2v2Schema } from "./schema/rankings"
 
-const BH_API_BASE = "https://api.brawlhalla.com"
+const BRAWLHALLA_API_BASE = "https://api.brawlhalla.com"
+const BRAWLTOOLS_API_BASE = "https://api.brawltools.com"
 
-const getBhApi = async <T>(
-  path: string,
-  schema: z.ZodType<T>,
-  mock?: T,
-): Promise<T> => {
-  const url = new URL(path, BH_API_BASE)
+const fetchApi = async <T>(props: {
+  baseUrl: string
+  path: string
+  schema: z.ZodType<T>
+  mock?: T
+  init?: RequestInit
+}): Promise<T> => {
+  const { baseUrl, path, schema, mock, init } = props
+  const url = new URL(path, baseUrl)
 
   url.searchParams.append("api_key", env.BRAWLHALLA_API_KEY)
 
   if (env.IS_DEV && mock) return mock
 
-  const response = await fetch(url)
+  const response = await fetch(url, init)
 
   if (!response.ok) {
     console.error("Brawlhalla API - Fetch Error", {
@@ -72,11 +87,12 @@ export const getPlayerStats = createServerFn({ method: "GET" })
     const playerStats = await withCache(
       `player-stats-${playerId}`,
       () =>
-        getBhApi(
-          `/player/${playerId}/stats`,
-          playerStatsSchema,
-          playerStatsMock,
-        ),
+        fetchApi({
+          baseUrl: BRAWLTOOLS_API_BASE,
+          path: `/player/${playerId}/stats`,
+          schema: playerStatsSchema,
+          mock: playerStatsMock,
+        }),
       env.IS_DEV ? 30 * 1000 : 15 * 60 * 1000,
     )
 
@@ -125,11 +141,12 @@ export const getPlayerRanked = createServerFn({ method: "GET" })
     const playerRanked = await withCache(
       `player-ranked-${playerId}`,
       () =>
-        getBhApi(
-          `/player/${playerId}/ranked`,
-          playerRankedSchema,
-          playerRankedMock,
-        ) as unknown as Promise<PlayerRanked>, // TODO: Zod issue, it can't infer the type correctly
+        fetchApi({
+          baseUrl: BRAWLHALLA_API_BASE,
+          path: `/player/${playerId}/ranked`,
+          schema: playerRankedSchema,
+          mock: playerRankedMock,
+        }) as unknown as Promise<PlayerRanked>, // TODO: Zod issue, it can't infer the type correctly
       env.IS_DEV ? 30 * 1000 : 15 * 60 * 1000,
     )
 
@@ -176,7 +193,13 @@ export const getClan = createServerFn({ method: "GET" })
   .handler(async ({ data: clanId }) => {
     const clan = await withCache(
       `clan-stats-${clanId}`,
-      () => getBhApi(`/clan/${clanId}`, clanSchema, clanMock),
+      () =>
+        fetchApi({
+          baseUrl: BRAWLHALLA_API_BASE,
+          path: `/clan/${clanId}`,
+          schema: clanSchema,
+          mock: clanMock,
+        }),
       env.IS_DEV ? 30 * 1000 : 15 * 60 * 1000,
     )
 
@@ -219,7 +242,7 @@ export const get1v1Rankings = createServerFn({ method: "GET" })
   .validator(
     z.object({
       region: rankedRegionSchema,
-      page: z.number().min(0).max(1000).optional().catch(1),
+      page: z.number().min(0).max(1000).default(1).catch(1),
       name: z.string().optional(),
     }),
   )
@@ -229,11 +252,12 @@ export const get1v1Rankings = createServerFn({ method: "GET" })
     const rankings = await withCache(
       `ranked-1v1-${region}-${page}-${name}`,
       () =>
-        getBhApi(
-          `/rankings/1v1/${region.toLowerCase()}/${page}${name ? `?name=${name}` : ""}`,
-          z.array(ranking1v1Schema),
-          rankings1v1Mock,
-        ) as unknown as Promise<Ranking1v1[]>, // TODO: Zod issue, it can't infer the type correctly
+        fetchApi({
+          baseUrl: BRAWLHALLA_API_BASE,
+          path: `/rankings/1v1/${region.toLowerCase()}/${page}${name ? `?name=${name}` : ""}`,
+          schema: z.array(ranking1v1Schema),
+          mock: rankings1v1Mock,
+        }) as unknown as Promise<Ranking1v1[]>, // TODO: Zod issue, it can't infer the type correctly
       env.IS_DEV ? 30 * 1000 : 5 * 60 * 1000,
     )
 
@@ -258,7 +282,7 @@ export const get2v2Rankings = createServerFn({ method: "GET" })
   .validator(
     z.object({
       region: rankedRegionSchema,
-      page: z.number().min(0).max(1000).optional().catch(1),
+      page: z.number().min(0).max(1000).default(1).catch(1),
     }),
   )
   .handler(async ({ data: query }) => {
@@ -267,11 +291,12 @@ export const get2v2Rankings = createServerFn({ method: "GET" })
     const rankings = await withCache(
       `ranked-2v2-${region}-${page}`,
       () =>
-        getBhApi(
-          `/rankings/2v2/${region.toLowerCase()}/${page}`,
-          z.array(ranking2v2Schema),
-          rankings2v2Mock,
-        ) as unknown as Promise<Ranking2v2[]>, // TODO: Zod issue, it can't infer the type correctly
+        fetchApi({
+          baseUrl: BRAWLHALLA_API_BASE,
+          path: `/rankings/2v2/${region.toLowerCase()}/${page}`,
+          schema: z.array(ranking2v2Schema),
+          mock: rankings2v2Mock,
+        }) as unknown as Promise<Ranking2v2[]>, // TODO: Zod issue, it can't infer the type correctly
       env.IS_DEV ? 30 * 1000 : 5 * 60 * 1000,
     )
 
@@ -345,5 +370,57 @@ export const searchPlayer = createServerFn({ method: "GET" })
       rankings,
       aliases,
       potentialBrawlhallaIdAliases,
+    }
+  })
+
+export const getPowerRankings = createServerFn({ method: "GET" })
+  .validator(
+    z.object({
+      region: powerRankedRegionSchema.transform((region) =>
+        region.toUpperCase(),
+      ),
+      page: z.number().min(0).max(1000).default(1).catch(1),
+      orderBy: powerRankedOrderBySchema,
+      order: powerRankedOrderSchema,
+      gameMode: powerRankedGameModeSchema,
+      player: z.string().optional(),
+    }),
+  )
+  .handler(async ({ data: query }) => {
+    const { region, page, orderBy, order, gameMode, player } = query
+
+    const rankings = await withCache(
+      `power-${gameMode}-${region}-${page}-${orderBy}-${order}`,
+      () =>
+        fetchApi({
+          baseUrl: BRAWLTOOLS_API_BASE,
+          path: "/pr",
+          schema: powerRankingsSchema,
+          mock: powerRankingsMock,
+          init: {
+            body: JSON.stringify({
+              gameMode: powerRankedGameModeMap[gameMode],
+              orderBy: `${orderBy} ${order}`,
+              page,
+              region,
+              query: null,
+              maxResults: 25,
+            }),
+            method: "POST",
+          },
+        }),
+      env.IS_DEV ? 30 * 1000 : 24 * 60 * 60 * 1000,
+    )
+
+    return {
+      rankings: rankings.prPlayers,
+      updatedAt: rankings.lastUpdated,
+      totalPage: rankings.totalPages,
+      region,
+      page,
+      orderBy,
+      order,
+      gameMode,
+      player,
     }
   })

@@ -112,7 +112,7 @@ function RootComponent() {
     <RootDocument>
       {/* TODO: GAscripts */}
       {/* <GAScripts /> */}
-      <SidebarProvider>
+      <SidebarProvider defaultOpen={false}>
         <KBarProvider actions={[]} options={{}}>
           <SideNavProvider>
             <PageLoader>

@@ -21,6 +21,7 @@ import { Route as socialDonateImport } from './routes/(social)/donate'
 import { Route as socialDiscordImport } from './routes/(social)/discord'
 import { Route as StatsPlayerPlayerIdImport } from './routes/stats/player/$playerId'
 import { Route as StatsClanClanIdImport } from './routes/stats/clan/$clanId'
+import { Route as RankingsPowerSplatImport } from './routes/rankings/power.$'
 import { Route as RankingsClansSplatImport } from './routes/rankings/clans.$'
 import { Route as Rankings2v2SplatImport } from './routes/rankings/2v2.$'
 import { Route as Rankings1v1SplatImport } from './routes/rankings/1v1.$'
@@ -84,6 +85,12 @@ const StatsPlayerPlayerIdRoute = StatsPlayerPlayerIdImport.update({
 const StatsClanClanIdRoute = StatsClanClanIdImport.update({
   id: '/stats/clan/$clanId',
   path: '/stats/clan/$clanId',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const RankingsPowerSplatRoute = RankingsPowerSplatImport.update({
+  id: '/rankings/power/$',
+  path: '/rankings/power/$',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -186,6 +193,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RankingsClansSplatImport
       parentRoute: typeof rootRoute
     }
+    '/rankings/power/$': {
+      id: '/rankings/power/$'
+      path: '/rankings/power/$'
+      fullPath: '/rankings/power/$'
+      preLoaderRoute: typeof RankingsPowerSplatImport
+      parentRoute: typeof rootRoute
+    }
     '/stats/clan/$clanId': {
       id: '/stats/clan/$clanId'
       path: '/stats/clan/$clanId'
@@ -217,6 +231,7 @@ export interface FileRoutesByFullPath {
   '/rankings/1v1/$': typeof Rankings1v1SplatRoute
   '/rankings/2v2/$': typeof Rankings2v2SplatRoute
   '/rankings/clans/$': typeof RankingsClansSplatRoute
+  '/rankings/power/$': typeof RankingsPowerSplatRoute
   '/stats/clan/$clanId': typeof StatsClanClanIdRoute
   '/stats/player/$playerId': typeof StatsPlayerPlayerIdRoute
 }
@@ -233,6 +248,7 @@ export interface FileRoutesByTo {
   '/rankings/1v1/$': typeof Rankings1v1SplatRoute
   '/rankings/2v2/$': typeof Rankings2v2SplatRoute
   '/rankings/clans/$': typeof RankingsClansSplatRoute
+  '/rankings/power/$': typeof RankingsPowerSplatRoute
   '/stats/clan/$clanId': typeof StatsClanClanIdRoute
   '/stats/player/$playerId': typeof StatsPlayerPlayerIdRoute
 }
@@ -250,6 +266,7 @@ export interface FileRoutesById {
   '/rankings/1v1/$': typeof Rankings1v1SplatRoute
   '/rankings/2v2/$': typeof Rankings2v2SplatRoute
   '/rankings/clans/$': typeof RankingsClansSplatRoute
+  '/rankings/power/$': typeof RankingsPowerSplatRoute
   '/stats/clan/$clanId': typeof StatsClanClanIdRoute
   '/stats/player/$playerId': typeof StatsPlayerPlayerIdRoute
 }
@@ -268,6 +285,7 @@ export interface FileRouteTypes {
     | '/rankings/1v1/$'
     | '/rankings/2v2/$'
     | '/rankings/clans/$'
+    | '/rankings/power/$'
     | '/stats/clan/$clanId'
     | '/stats/player/$playerId'
   fileRoutesByTo: FileRoutesByTo
@@ -283,6 +301,7 @@ export interface FileRouteTypes {
     | '/rankings/1v1/$'
     | '/rankings/2v2/$'
     | '/rankings/clans/$'
+    | '/rankings/power/$'
     | '/stats/clan/$clanId'
     | '/stats/player/$playerId'
   id:
@@ -298,6 +317,7 @@ export interface FileRouteTypes {
     | '/rankings/1v1/$'
     | '/rankings/2v2/$'
     | '/rankings/clans/$'
+    | '/rankings/power/$'
     | '/stats/clan/$clanId'
     | '/stats/player/$playerId'
   fileRoutesById: FileRoutesById
@@ -315,6 +335,7 @@ export interface RootRouteChildren {
   Rankings1v1SplatRoute: typeof Rankings1v1SplatRoute
   Rankings2v2SplatRoute: typeof Rankings2v2SplatRoute
   RankingsClansSplatRoute: typeof RankingsClansSplatRoute
+  RankingsPowerSplatRoute: typeof RankingsPowerSplatRoute
   StatsClanClanIdRoute: typeof StatsClanClanIdRoute
   StatsPlayerPlayerIdRoute: typeof StatsPlayerPlayerIdRoute
 }
@@ -331,6 +352,7 @@ const rootRouteChildren: RootRouteChildren = {
   Rankings1v1SplatRoute: Rankings1v1SplatRoute,
   Rankings2v2SplatRoute: Rankings2v2SplatRoute,
   RankingsClansSplatRoute: RankingsClansSplatRoute,
+  RankingsPowerSplatRoute: RankingsPowerSplatRoute,
   StatsClanClanIdRoute: StatsClanClanIdRoute,
   StatsPlayerPlayerIdRoute: StatsPlayerPlayerIdRoute,
 }
@@ -356,6 +378,7 @@ export const routeTree = rootRoute
         "/rankings/1v1/$",
         "/rankings/2v2/$",
         "/rankings/clans/$",
+        "/rankings/power/$",
         "/stats/clan/$clanId",
         "/stats/player/$playerId"
       ]
@@ -392,6 +415,9 @@ export const routeTree = rootRoute
     },
     "/rankings/clans/$": {
       "filePath": "rankings/clans.$.tsx"
+    },
+    "/rankings/power/$": {
+      "filePath": "rankings/power.$.tsx"
     },
     "/stats/clan/$clanId": {
       "filePath": "stats/clan/$clanId.tsx"

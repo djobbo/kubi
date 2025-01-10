@@ -1,117 +1,45 @@
+import { t } from "@lingui/core/macro"
+import { Link } from "@tanstack/react-router"
 import * as React from "react"
 
+import { Image } from "@/features/brawlhalla/components/Image"
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
+  useSidebar,
 } from "@/ui/components/sidebar"
+import { cn } from "@/ui/lib/utils"
 
 import { NavBookmarks } from "./bookmarks"
 import { MainNav } from "./main-nav"
 import { NavUser } from "./user"
 
-// const nav = [
-//   {
-//     title: "Rankings",
-//     url: "#",
-//     icon: SquareTerminal,
-//     isActive: true,
-//     items: [
-//       {
-//         title: "History",
-//         url: "#",
-//       },
-//       {
-//         title: "Starred",
-//         url: "#",
-//       },
-//       {
-//         title: "Settings",
-//         url: "#",
-//       },
-//     ],
-//   },
-//   {
-//     title: "Models",
-//     url: "#",
-//     icon: Bot,
-//     items: [
-//       {
-//         title: "Genesis",
-//         url: "#",
-//       },
-//       {
-//         title: "Explorer",
-//         url: "#",
-//       },
-//       {
-//         title: "Quantum",
-//         url: "#",
-//       },
-//     ],
-//   },
-//   {
-//     title: "Documentation",
-//     url: "#",
-//     icon: BookOpen,
-//     items: [
-//       {
-//         title: "Introduction",
-//         url: "#",
-//       },
-//       {
-//         title: "Get Started",
-//         url: "#",
-//       },
-//       {
-//         title: "Tutorials",
-//         url: "#",
-//       },
-//       {
-//         title: "Changelog",
-//         url: "#",
-//       },
-//     ],
-//   },
-//   {
-//     title: "Settings",
-//     url: "#",
-//     icon: Settings2,
-//     items: [
-//       {
-//         title: "General",
-//         url: "#",
-//       },
-//       {
-//         title: "Team",
-//         url: "#",
-//       },
-//       {
-//         title: "Billing",
-//         url: "#",
-//       },
-//       {
-//         title: "Limits",
-//         url: "#",
-//       },
-//     ],
-//   },
-// ]
-
 export const AppSidebar = ({
   ...props
 }: React.ComponentProps<typeof Sidebar>) => {
+  const sidebar = useSidebar()
+
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader className="flex h-12 justify-center p-4">
-        {/* <Link to="/" className="flex items-center w-32 h-8 overflow-hidden">
-          <Image
-            src="/assets/images/brand/logos/logo-text.png"
-            alt={t`Corehalla logo`}
-            className="object-contain object-center"
-          />
-        </Link> */}
+      <SidebarHeader className="h-12">
+        <Link
+          to="/"
+          className={cn("flex items-center h-full", {
+            "justify-center": sidebar.state === "collapsed",
+          })}
+        >
+          {sidebar.state === "expanded" ? (
+            <Image
+              src="/assets/images/brand/logos/logo-text.png"
+              alt={t`Corehalla logo`}
+              className="object-contain object-center h-6"
+            />
+          ) : (
+            <>CH</>
+          )}
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         <MainNav />

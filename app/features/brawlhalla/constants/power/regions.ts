@@ -1,13 +1,26 @@
 import { z } from "zod"
 
-export const powerRankedRegions = ["na", "eu", "sa", "sea", "aus"] as const
-const upperCasePowerRankedRegions = powerRankedRegions.map(
+enum PowerRankingsRegion {
+  NA = "NA",
+  EU = "EU",
+  SA = "SA",
+  SEA = "SEA",
+}
+
+export const powerRankedRegions = [
+  PowerRankingsRegion.NA,
+  PowerRankingsRegion.EU,
+  PowerRankingsRegion.SA,
+  PowerRankingsRegion.SEA,
+] as const
+const lowerCasePowerRankedRegions = powerRankedRegions.map(
   (region) =>
-    region.toUpperCase() as Uppercase<(typeof powerRankedRegions)[number]>,
+    region.toLowerCase() as Lowercase<(typeof powerRankedRegions)[number]>,
 )
 
 export const powerRankedRegionSchema = z
-  .enum([...powerRankedRegions, ...upperCasePowerRankedRegions])
-  .catch("na")
+  .enum([...powerRankedRegions, ...lowerCasePowerRankedRegions])
+  .default(PowerRankingsRegion.NA)
+  .catch(PowerRankingsRegion.NA)
 
 export type PowerRankedRegion = z.infer<typeof powerRankedRegionSchema>

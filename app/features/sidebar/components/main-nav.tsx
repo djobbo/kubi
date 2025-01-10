@@ -13,6 +13,9 @@ import {
   SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   useSidebar,
 } from "@/ui/components/sidebar"
 import { cn } from "@/ui/lib/utils"
@@ -68,17 +71,17 @@ export const MainNav = () => {
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   {/* TODO: Implement SidebarMenuSub when needed */}
-                  {/* <SidebarMenuSub>
+                  <SidebarMenuSub>
                     {item.items?.map((subItem) => (
                       <SidebarMenuSubItem key={subItem.title}>
                         <SidebarMenuSubButton asChild>
-                          <a href={subItem.url}>
+                          <Link to={subItem.to} params={subItem.toParams}>
                             <span>{subItem.title}</span>
-                          </a>
+                          </Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}
-                  </SidebarMenuSub> */}
+                  </SidebarMenuSub>
                 </CollapsibleContent>
               </SidebarMenuItem>
             </Collapsible>

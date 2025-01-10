@@ -7,6 +7,7 @@ import {
   HomeIcon,
   ShieldIcon,
   UsersRoundIcon,
+  ZapIcon,
 } from "lucide-react"
 
 import type { FileRouteTypes } from "@/routeTree.gen"
@@ -64,25 +65,31 @@ export const navConfig = () =>
         Icon: ShieldIcon,
         isActive: (pathname) => pathname.startsWith("/rankings/clans"),
       },
+      {
+        to: "/rankings/power/$",
+        title: t`Power rankings`,
+        Icon: ZapIcon,
+        isActive: (pathname) => pathname.startsWith("/rankings/power"),
+      },
       // {
       //   to: "/rankings/power/$",
       //   title: t`Power rankings`,
       //   Icon: ZapIcon,
-      //   isActive: (pathname, to) => pathname === to,
+      //   isActive: (pathname) => pathname.startsWith("/rankings/power"),
       //   items: [
       //     {
       //       to: "/rankings/power/$",
-      //       params:{{ _splat: '1v1'}},
-      //       title: "1v1 Power Rankings",
+      //       toParams: { _splat: "1v1" },
+      //       title: t`1v1 Power Rankings`,
       //       Icon: SparkleIcon,
-      //       isActive: (pathname, to) => pathname.startsWith(to),
+      //       isActive: (pathname) => pathname.startsWith("/rankings/power/1v1"),
       //     },
       //     {
       //       to: "/rankings/power/$",
-      //       params:{{ _splat: '2v2'}},
-      //       title: "2v2 Power Rankings",
+      //       toParams: { _splat: "2v2" },
+      //       title: t`2v2 Power Rankings`,
       //       Icon: SparkleIcon,
-      //       isActive: (pathname, to) => pathname.startsWith(to),
+      //       isActive: (pathname) => pathname.startsWith("/rankings/power/2v2"),
       //     },
       //   ],
       // },
