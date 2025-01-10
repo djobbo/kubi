@@ -35,6 +35,10 @@ msgstr "{0}%"
 msgid "{0}% winrate"
 msgstr "{0}% de victoires"
 
+#: app/routes/rankings/power.$.tsx:138
+msgid "{bronzeMedalistsCount} players {formattedSearch} have a bronze medal"
+msgstr ""
+
 #: app/routes/stats/clan/$clanId.tsx:33
 msgid "{clan_name} - Clan Stats • Corehalla"
 msgstr "{clan_name} - Stats du clan • Corehalla"
@@ -42,6 +46,10 @@ msgstr "{clan_name} - Stats du clan • Corehalla"
 #: app/routes/stats/clan/$clanId.tsx:34
 msgid "{clan_name} Stats - Brawlhalla Clan Stats • Corehalla"
 msgstr "{clan_name} Stats - Stats du clan Brawlhalla • Corehalla"
+
+#: app/routes/rankings/power.$.tsx:128
+msgid "{goldMedalistsCount} players {formattedSearch} have a gold medal"
+msgstr ""
 
 #: app/routes/stats/player/$playerId.tsx:88
 msgid "{name} - Player Stats • Corehalla"
@@ -67,13 +75,33 @@ msgstr ""
 msgid "{playerName}'s main weapons"
 msgstr ""
 
+#: app/routes/rankings/power.$.tsx:143
+msgid "{podiumedPlayersCount} players {formattedSearch} have a podium"
+msgstr ""
+
 #: app/features/brawlhalla/components/search/RankedPlayerItem.tsx:53
 msgid "{rating} / {peak_rating} peak ({tier})"
 msgstr "{rating} / {peak_rating} max ({tier})"
 
+#: app/routes/rankings/power.$.tsx:133
+msgid "{silverMedalistsCount} players {formattedSearch} have a silver medal"
+msgstr ""
+
 #: app/features/brawlhalla/components/layout/ErrorPageContent.tsx:31
 msgid "{statusCode} Error"
 msgstr "Erreur {statusCode}"
+
+#: app/routes/rankings/power.$.tsx:153
+msgid "{t32FinalistsCount} players {formattedSearch} have a top 32 finish"
+msgstr ""
+
+#: app/routes/rankings/power.$.tsx:148
+msgid "{t8FinalistsCount} players {formattedSearch} have a top 8 finish"
+msgstr ""
+
+#: app/routes/rankings/power.$.tsx:123
+msgid "{totalPlayers} players {formattedSearch} are currently power ranked"
+msgstr ""
 
 #: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/Weapon.tsx:75
 msgid "{weaponName} usage rate (percentage of total games)"
@@ -96,6 +124,7 @@ msgstr "1 Suicide toutes les"
 msgid "1 Team KO every"
 msgstr "1 KO d'équipe toutes les"
 
+#: app/routes/rankings/power.$.tsx:160
 #: app/routes/rankings/clans.$.tsx:75
 #: app/routes/rankings/2v2.$.tsx:53
 #: app/routes/rankings/1v1.$.tsx:76
@@ -122,11 +151,12 @@ msgstr "Victoires classées 1v1 cette saison"
 
 #: app/features/brawlhalla/components/layout/SideNav.tsx:125
 #: app/features/brawlhalla/components/layout/AppNav.tsx:9
-#: app/config/nav.ts:51
+#: app/config/nav.ts:52
 msgid "1v1 Rankings"
 msgstr "Classement 1v1"
 
 #: app/routes/index.tsx:94
+#: app/routes/rankings/power.$.tsx:161
 #: app/routes/rankings/clans.$.tsx:76
 #: app/routes/rankings/2v2.$.tsx:54
 #: app/routes/rankings/1v1.$.tsx:77
@@ -139,7 +169,7 @@ msgstr ""
 
 #: app/features/brawlhalla/components/layout/SideNav.tsx:131
 #: app/features/brawlhalla/components/layout/AppNav.tsx:14
-#: app/config/nav.ts:57
+#: app/config/nav.ts:58
 msgid "2v2 Rankings"
 msgstr "Classement 2v2"
 
@@ -368,6 +398,11 @@ msgstr "Classement 1v1 Brawlhalla {formatedRegion} - Page {page} {formatedSearch
 msgid "Brawlhalla {formatedRegion} 2v2 Rankings - Page {page} • Corehalla"
 msgstr "Classements 2v2 Brawlhalla {formatedRegion} - Page {page} {formatedSearch} • Corehalla"
 
+#: app/routes/rankings/power.$.tsx:62
+#: app/routes/rankings/power.$.tsx:65
+msgid "Brawlhalla {formattedRegion} {gameMode} Power Rankings Rankings - Page {page} {formattedSearch} • Corehalla"
+msgstr ""
+
 #: app/features/brawlhalla/components/layout/Footer.tsx:67
 msgid "Brawlhalla and Blue Mammoth Games are trademarks of <0>Blue Mammoth Games</0>"
 msgstr ""
@@ -385,6 +420,14 @@ msgstr ""
 msgid "Bring me home"
 msgstr "Retour à l'accueil"
 
+#: app/routes/rankings/power.$.tsx:206
+msgid "Bronze"
+msgstr ""
+
+#: app/routes/rankings/power.$.tsx:136
+msgid "Bronze medalists"
+msgstr ""
+
 #: app/routes/rankings/2v2.$.tsx:66
 #: app/routes/rankings/1v1.$.tsx:89
 msgid "BRZ"
@@ -399,13 +442,14 @@ msgstr "Clan"
 msgid "Clan XP"
 msgstr "Expérience du clan"
 
+#: app/routes/rankings/power.$.tsx:165
 #: app/routes/rankings/clans.$.tsx:80
 #: app/routes/rankings/2v2.$.tsx:58
 #: app/routes/rankings/1v1.$.tsx:81
 #: app/routes/@me/bookmarks.tsx:31
 #: app/features/brawlhalla/components/layout/SideNav.tsx:142
 #: app/features/brawlhalla/components/layout/AppNav.tsx:24
-#: app/config/nav.ts:63
+#: app/config/nav.ts:64
 msgid "Clans"
 msgstr "Clans"
 
@@ -435,6 +479,10 @@ msgstr ""
 
 #: app/features/brawlhalla/components/layout/Footer.tsx:61
 msgid "Corehalla is neither associated nor endorsed by Blue Mammoth Games and doesn't reflect the views or opinions of Blue Mammoth Games or anyone officially involved in developing Brawlhalla."
+msgstr ""
+
+#: app/features/sidebar/components/app-sidebar.tsx:36
+msgid "Corehalla logo"
 msgstr ""
 
 #: app/routes/stats/clan/$clanId.tsx:54
@@ -523,9 +571,13 @@ msgid "Discord header image"
 msgstr ""
 
 #: app/features/brawlhalla/components/layout/SideNav.tsx:147
-#: app/config/nav.ts:91
+#: app/config/nav.ts:98
 msgid "Discord Server"
 msgstr "Serveur Discord"
+
+#: app/routes/rankings/power.$.tsx:245
+msgid "do better >:)"
+msgstr ""
 
 #: app/features/brawlhalla/components/DiscordCard.tsx:114
 msgid "Donate"
@@ -542,6 +594,10 @@ msgstr ""
 
 #: app/features/brawlhalla/components/stats/GeneralStats.tsx:103
 msgid "DPS (Taken)"
+msgstr ""
+
+#: app/routes/rankings/power.$.tsx:197
+msgid "Earnings"
 msgstr ""
 
 #: app/routes/rankings/2v2.$.tsx:103
@@ -673,6 +729,14 @@ msgstr ""
 msgid "Go back"
 msgstr "Revenir en arrière"
 
+#: app/routes/rankings/power.$.tsx:200
+msgid "Gold"
+msgstr ""
+
+#: app/routes/rankings/power.$.tsx:126
+msgid "Gold medalists"
+msgstr ""
+
 #: app/features/command/components/CommandMenu.tsx:94
 msgid "Hello World"
 msgstr "Bonjour, Monde"
@@ -694,8 +758,8 @@ msgid "History"
 msgstr "Historique"
 
 #: app/features/brawlhalla/components/layout/SideNav.tsx:119
-#: app/config/nav.ts:31
-#: app/config/nav.ts:45
+#: app/config/nav.ts:32
+#: app/config/nav.ts:46
 #: app/components/NotFound.tsx:18
 #: app/components/DefaultCatchBoundary.tsx:38
 msgid "Home"
@@ -903,6 +967,7 @@ msgstr "N/A"
 msgid "N/A (not enough games)"
 msgstr "N/A (pas assez de parties)"
 
+#: app/routes/rankings/power.$.tsx:194
 #: app/routes/rankings/clans.$.tsx:99
 #: app/routes/rankings/1v1.$.tsx:117
 #: app/features/brawlhalla/components/stats/player/PlayerWeaponsTab/PlayerWeaponsTab.tsx:52
@@ -917,6 +982,10 @@ msgstr "Gloire de la nouvelle saison / Calculateur de réinitialisation de l'ELO
 #: app/features/brawlhalla/components/search/Searchbox.tsx:219
 msgid "No players found"
 msgstr "Pas de joueurs trouvés"
+
+#: app/routes/rankings/power.$.tsx:247
+msgid "No results found in {gameMode} {formattedRegion} Power Rankings"
+msgstr ""
 
 #: app/features/command/components/CommandMenu.tsx:84
 msgid "No results found."
@@ -1012,16 +1081,30 @@ msgstr ""
 msgid "Players"
 msgstr ""
 
+#: app/routes/rankings/power.$.tsx:121
+msgid "Players ranked"
+msgstr ""
+
+#: app/routes/rankings/power.$.tsx:141
+msgid "Podiumed players"
+msgstr ""
+
+#: app/routes/rankings/power.$.tsx:163
 #: app/routes/rankings/clans.$.tsx:78
 #: app/routes/rankings/2v2.$.tsx:56
 #: app/routes/rankings/1v1.$.tsx:79
 msgid "Power 1v1"
 msgstr ""
 
+#: app/routes/rankings/power.$.tsx:164
 #: app/routes/rankings/clans.$.tsx:79
 #: app/routes/rankings/2v2.$.tsx:57
 #: app/routes/rankings/1v1.$.tsx:80
 msgid "Power 2v2"
+msgstr ""
+
+#: app/config/nav.ts:70
+msgid "Power rankings"
 msgstr ""
 
 #: app/features/brawlhalla/components/layout/SideNav.tsx:137
@@ -1033,6 +1116,7 @@ msgstr ""
 msgid "Question of the day"
 msgstr ""
 
+#: app/routes/rankings/power.$.tsx:191
 #: app/routes/rankings/clans.$.tsx:95
 #: app/routes/rankings/2v2.$.tsx:79
 #: app/routes/rankings/1v1.$.tsx:108
@@ -1076,6 +1160,7 @@ msgstr ""
 msgid "Report bug"
 msgstr ""
 
+#: app/routes/rankings/power.$.tsx:162
 #: app/routes/rankings/clans.$.tsx:77
 #: app/routes/rankings/2v2.$.tsx:55
 #: app/routes/rankings/1v1.$.tsx:78
@@ -1116,6 +1201,7 @@ msgstr "La recherche doit commencer par une correspondance exacte. Seuls les jou
 msgid "Search player by name or brawlhalla id..."
 msgstr "Rechercher un joueur par nom ou identifiant Brawlhalla..."
 
+#: app/routes/rankings/power.$.tsx:179
 #: app/routes/rankings/1v1.$.tsx:103
 #: app/features/brawlhalla/components/search/SearchButton.tsx:24
 msgid "Search player..."
@@ -1153,6 +1239,18 @@ msgstr "Se connecter avec Discord"
 #: app/features/brawlhalla/components/layout/Header.tsx:53
 msgid "Sign out"
 msgstr "Se déconnecter"
+
+#: app/routes/rankings/power.$.tsx:203
+msgid "Silver"
+msgstr ""
+
+#: app/routes/rankings/power.$.tsx:131
+msgid "Silver medalists"
+msgstr ""
+
+#: app/routes/rankings/power.$.tsx:117
+msgid "starting with {search}"
+msgstr ""
 
 #: app/routes/index.tsx:62
 msgid "Stay ahead of <0/>the competition"
@@ -1278,6 +1376,22 @@ msgstr ""
 #: app/components/layout/MobileNav.tsx:54
 msgid "Toggle Menu"
 msgstr "Basculer le menu"
+
+#: app/routes/rankings/power.$.tsx:212
+msgid "Top 32"
+msgstr ""
+
+#: app/routes/rankings/power.$.tsx:151
+msgid "Top 32 finalists"
+msgstr ""
+
+#: app/routes/rankings/power.$.tsx:209
+msgid "Top 8"
+msgstr ""
+
+#: app/routes/rankings/power.$.tsx:146
+msgid "Top 8 finalists"
+msgstr ""
 
 #: app/features/brawlhalla/components/stats/player/Player2v2Tab/Player2v2Tab.tsx:90
 msgid "Total games"
@@ -1423,7 +1537,7 @@ msgid "Which weapon(s) do you enjoy playing the most? and which one(s) you disli
 msgstr ""
 
 #: app/features/brawlhalla/components/layout/SideNav.tsx:153
-#: app/config/nav.ts:98
+#: app/config/nav.ts:105
 msgid "Wiki"
 msgstr ""
 
