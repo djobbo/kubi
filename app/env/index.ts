@@ -72,6 +72,12 @@ export const env = {
     z.string().min(1),
     "client",
   ),
+  BRAWLHALLA_WIKI_URL: envField(
+    "Brawlhalla Wiki URL",
+    metaEnv.VITE_BRAWLHALLA_WIKI_URL,
+    z.string().min(1),
+    "client",
+  ),
   GOOGLE_ANALYTICS_TRACKING_ID: envField(
     "Google Analytics Tracking ID",
     metaEnv.VITE_GOOGLE_ANALYTICS_TRACKING_ID,

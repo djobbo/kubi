@@ -15,6 +15,7 @@ import { Route as TestImport } from './routes/test'
 import { Route as CalcImport } from './routes/calc'
 import { Route as IndexImport } from './routes/index'
 import { Route as meBookmarksImport } from './routes/@me/bookmarks'
+import { Route as socialWikiImport } from './routes/(social)/wiki'
 import { Route as socialTwitterImport } from './routes/(social)/twitter'
 import { Route as socialGithubImport } from './routes/(social)/github'
 import { Route as socialDonateImport } from './routes/(social)/donate'
@@ -49,6 +50,12 @@ const IndexRoute = IndexImport.update({
 const meBookmarksRoute = meBookmarksImport.update({
   id: '/@me/bookmarks',
   path: '/@me/bookmarks',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const socialWikiRoute = socialWikiImport.update({
+  id: '/(social)/wiki',
+  path: '/wiki',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -165,6 +172,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof socialTwitterImport
       parentRoute: typeof rootRoute
     }
+    '/(social)/wiki': {
+      id: '/(social)/wiki'
+      path: '/wiki'
+      fullPath: '/wiki'
+      preLoaderRoute: typeof socialWikiImport
+      parentRoute: typeof rootRoute
+    }
     '/@me/bookmarks': {
       id: '/@me/bookmarks'
       path: '/@me/bookmarks'
@@ -227,6 +241,7 @@ export interface FileRoutesByFullPath {
   '/donate': typeof socialDonateRoute
   '/github': typeof socialGithubRoute
   '/twitter': typeof socialTwitterRoute
+  '/wiki': typeof socialWikiRoute
   '/@me/bookmarks': typeof meBookmarksRoute
   '/rankings/1v1/$': typeof Rankings1v1SplatRoute
   '/rankings/2v2/$': typeof Rankings2v2SplatRoute
@@ -244,6 +259,7 @@ export interface FileRoutesByTo {
   '/donate': typeof socialDonateRoute
   '/github': typeof socialGithubRoute
   '/twitter': typeof socialTwitterRoute
+  '/wiki': typeof socialWikiRoute
   '/@me/bookmarks': typeof meBookmarksRoute
   '/rankings/1v1/$': typeof Rankings1v1SplatRoute
   '/rankings/2v2/$': typeof Rankings2v2SplatRoute
@@ -262,6 +278,7 @@ export interface FileRoutesById {
   '/(social)/donate': typeof socialDonateRoute
   '/(social)/github': typeof socialGithubRoute
   '/(social)/twitter': typeof socialTwitterRoute
+  '/(social)/wiki': typeof socialWikiRoute
   '/@me/bookmarks': typeof meBookmarksRoute
   '/rankings/1v1/$': typeof Rankings1v1SplatRoute
   '/rankings/2v2/$': typeof Rankings2v2SplatRoute
@@ -281,6 +298,7 @@ export interface FileRouteTypes {
     | '/donate'
     | '/github'
     | '/twitter'
+    | '/wiki'
     | '/@me/bookmarks'
     | '/rankings/1v1/$'
     | '/rankings/2v2/$'
@@ -297,6 +315,7 @@ export interface FileRouteTypes {
     | '/donate'
     | '/github'
     | '/twitter'
+    | '/wiki'
     | '/@me/bookmarks'
     | '/rankings/1v1/$'
     | '/rankings/2v2/$'
@@ -313,6 +332,7 @@ export interface FileRouteTypes {
     | '/(social)/donate'
     | '/(social)/github'
     | '/(social)/twitter'
+    | '/(social)/wiki'
     | '/@me/bookmarks'
     | '/rankings/1v1/$'
     | '/rankings/2v2/$'
@@ -331,6 +351,7 @@ export interface RootRouteChildren {
   socialDonateRoute: typeof socialDonateRoute
   socialGithubRoute: typeof socialGithubRoute
   socialTwitterRoute: typeof socialTwitterRoute
+  socialWikiRoute: typeof socialWikiRoute
   meBookmarksRoute: typeof meBookmarksRoute
   Rankings1v1SplatRoute: typeof Rankings1v1SplatRoute
   Rankings2v2SplatRoute: typeof Rankings2v2SplatRoute
@@ -348,6 +369,7 @@ const rootRouteChildren: RootRouteChildren = {
   socialDonateRoute: socialDonateRoute,
   socialGithubRoute: socialGithubRoute,
   socialTwitterRoute: socialTwitterRoute,
+  socialWikiRoute: socialWikiRoute,
   meBookmarksRoute: meBookmarksRoute,
   Rankings1v1SplatRoute: Rankings1v1SplatRoute,
   Rankings2v2SplatRoute: Rankings2v2SplatRoute,
@@ -374,6 +396,7 @@ export const routeTree = rootRoute
         "/(social)/donate",
         "/(social)/github",
         "/(social)/twitter",
+        "/(social)/wiki",
         "/@me/bookmarks",
         "/rankings/1v1/$",
         "/rankings/2v2/$",
@@ -403,6 +426,9 @@ export const routeTree = rootRoute
     },
     "/(social)/twitter": {
       "filePath": "(social)/twitter.tsx"
+    },
+    "/(social)/wiki": {
+      "filePath": "(social)/wiki.tsx"
     },
     "/@me/bookmarks": {
       "filePath": "@me/bookmarks.tsx"
