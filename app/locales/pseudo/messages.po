@@ -433,6 +433,19 @@ msgstr ""
 msgid "BRZ"
 msgstr ""
 
+#: app/features/games/cupcakes/components/CupcakeItems.tsx:51
+msgid "Buy ({price})"
+msgstr ""
+
+#: app/routes/games/cupcakes.tsx:44
+msgid "Cassidy's Cupcakes"
+msgstr ""
+
+#: app/routes/games/cupcakes.tsx:18
+#: app/routes/games/cupcakes.tsx:19
+msgid "Cassidy's Cupcakes • Corehalla"
+msgstr ""
+
 #: app/features/brawlhalla/components/stats/player/PlayerOverviewTab/ClanContent.tsx:31
 #: app/features/brawlhalla/components/favorites/FavoritesGrid.tsx:46
 msgid "Clan"
@@ -488,6 +501,11 @@ msgstr ""
 #: app/routes/stats/clan/$clanId.tsx:54
 #: app/routes/rankings/clans.$.tsx:102
 msgid "Created on"
+msgstr ""
+
+#: app/features/games/cupcakes/components/FloatingCupcakes.tsx:25
+#: app/features/games/cupcakes/components/CupcakeUpgrade.tsx:44
+msgid "Cupcake"
 msgstr ""
 
 #: app/features/brawlhalla/components/stats/GeneralStats.tsx:81
@@ -1601,4 +1619,8 @@ msgstr ""
 
 #: app/routes/calc.tsx:91
 msgid "You gotta play at least 10 ranked games!"
+msgstr ""
+
+#: app/routes/games/cupcakes.tsx:47
+msgid "You have <0>{formattedCupcakes}</0> cupcakes"
 msgstr ""
