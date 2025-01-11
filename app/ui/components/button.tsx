@@ -51,6 +51,7 @@ const Button = ({
   variant,
   size,
   asChild = false,
+  type = "button",
   ...props
 }: ButtonProps & { ref?: RefObject<HTMLButtonElement> }) => {
   const Comp = asChild ? Slot : "button"
@@ -58,6 +59,7 @@ const Button = ({
     <Comp
       className={cn(buttonVariants({ variant, size, className }))}
       ref={ref}
+      type={type}
       {...props}
     />
   )

@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as TestImport } from './routes/test'
 import { Route as CalcImport } from './routes/calc'
 import { Route as IndexImport } from './routes/index'
+import { Route as GamesCupcakesImport } from './routes/games/cupcakes'
 import { Route as meBookmarksImport } from './routes/@me/bookmarks'
 import { Route as socialWikiImport } from './routes/(social)/wiki'
 import { Route as socialTwitterImport } from './routes/(social)/twitter'
@@ -44,6 +45,12 @@ const CalcRoute = CalcImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const GamesCupcakesRoute = GamesCupcakesImport.update({
+  id: '/games/cupcakes',
+  path: '/games/cupcakes',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -186,6 +193,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof meBookmarksImport
       parentRoute: typeof rootRoute
     }
+    '/games/cupcakes': {
+      id: '/games/cupcakes'
+      path: '/games/cupcakes'
+      fullPath: '/games/cupcakes'
+      preLoaderRoute: typeof GamesCupcakesImport
+      parentRoute: typeof rootRoute
+    }
     '/rankings/1v1/$': {
       id: '/rankings/1v1/$'
       path: '/rankings/1v1/$'
@@ -243,6 +257,7 @@ export interface FileRoutesByFullPath {
   '/twitter': typeof socialTwitterRoute
   '/wiki': typeof socialWikiRoute
   '/@me/bookmarks': typeof meBookmarksRoute
+  '/games/cupcakes': typeof GamesCupcakesRoute
   '/rankings/1v1/$': typeof Rankings1v1SplatRoute
   '/rankings/2v2/$': typeof Rankings2v2SplatRoute
   '/rankings/clans/$': typeof RankingsClansSplatRoute
@@ -261,6 +276,7 @@ export interface FileRoutesByTo {
   '/twitter': typeof socialTwitterRoute
   '/wiki': typeof socialWikiRoute
   '/@me/bookmarks': typeof meBookmarksRoute
+  '/games/cupcakes': typeof GamesCupcakesRoute
   '/rankings/1v1/$': typeof Rankings1v1SplatRoute
   '/rankings/2v2/$': typeof Rankings2v2SplatRoute
   '/rankings/clans/$': typeof RankingsClansSplatRoute
@@ -280,6 +296,7 @@ export interface FileRoutesById {
   '/(social)/twitter': typeof socialTwitterRoute
   '/(social)/wiki': typeof socialWikiRoute
   '/@me/bookmarks': typeof meBookmarksRoute
+  '/games/cupcakes': typeof GamesCupcakesRoute
   '/rankings/1v1/$': typeof Rankings1v1SplatRoute
   '/rankings/2v2/$': typeof Rankings2v2SplatRoute
   '/rankings/clans/$': typeof RankingsClansSplatRoute
@@ -300,6 +317,7 @@ export interface FileRouteTypes {
     | '/twitter'
     | '/wiki'
     | '/@me/bookmarks'
+    | '/games/cupcakes'
     | '/rankings/1v1/$'
     | '/rankings/2v2/$'
     | '/rankings/clans/$'
@@ -317,6 +335,7 @@ export interface FileRouteTypes {
     | '/twitter'
     | '/wiki'
     | '/@me/bookmarks'
+    | '/games/cupcakes'
     | '/rankings/1v1/$'
     | '/rankings/2v2/$'
     | '/rankings/clans/$'
@@ -334,6 +353,7 @@ export interface FileRouteTypes {
     | '/(social)/twitter'
     | '/(social)/wiki'
     | '/@me/bookmarks'
+    | '/games/cupcakes'
     | '/rankings/1v1/$'
     | '/rankings/2v2/$'
     | '/rankings/clans/$'
@@ -353,6 +373,7 @@ export interface RootRouteChildren {
   socialTwitterRoute: typeof socialTwitterRoute
   socialWikiRoute: typeof socialWikiRoute
   meBookmarksRoute: typeof meBookmarksRoute
+  GamesCupcakesRoute: typeof GamesCupcakesRoute
   Rankings1v1SplatRoute: typeof Rankings1v1SplatRoute
   Rankings2v2SplatRoute: typeof Rankings2v2SplatRoute
   RankingsClansSplatRoute: typeof RankingsClansSplatRoute
@@ -371,6 +392,7 @@ const rootRouteChildren: RootRouteChildren = {
   socialTwitterRoute: socialTwitterRoute,
   socialWikiRoute: socialWikiRoute,
   meBookmarksRoute: meBookmarksRoute,
+  GamesCupcakesRoute: GamesCupcakesRoute,
   Rankings1v1SplatRoute: Rankings1v1SplatRoute,
   Rankings2v2SplatRoute: Rankings2v2SplatRoute,
   RankingsClansSplatRoute: RankingsClansSplatRoute,
@@ -398,6 +420,7 @@ export const routeTree = rootRoute
         "/(social)/twitter",
         "/(social)/wiki",
         "/@me/bookmarks",
+        "/games/cupcakes",
         "/rankings/1v1/$",
         "/rankings/2v2/$",
         "/rankings/clans/$",
@@ -432,6 +455,9 @@ export const routeTree = rootRoute
     },
     "/@me/bookmarks": {
       "filePath": "@me/bookmarks.tsx"
+    },
+    "/games/cupcakes": {
+      "filePath": "games/cupcakes.tsx"
     },
     "/rankings/1v1/$": {
       "filePath": "rankings/1v1.$.tsx"
