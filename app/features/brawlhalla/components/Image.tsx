@@ -26,7 +26,7 @@ export const Image = ({
   )
 }
 
-type ImagePropsWithoutSrc = Omit<ImageProps, "src">
+export type ImagePropsWithoutSrc = Omit<ImageProps, "src">
 
 type LegendIconProps = ImagePropsWithoutSrc & {
   legendNameKey: LegendNameKey | (string & {})
