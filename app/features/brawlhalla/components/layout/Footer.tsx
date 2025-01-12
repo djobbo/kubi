@@ -40,22 +40,24 @@ export const Footer = ({ className }: FooterProps) => {
         <span className="block max-w-screen-sm mx-auto">
           <Trans>
             Visual assets courtesy of{" "}
-            <Link
+            <a
               className="p-link"
               href="https://www.bluemammoth.com"
+              rel="noreferrer noopener"
               target="_blank"
             >
               Blue Mammoth Games
-            </Link>
+            </a>
           </Trans>{" "}
           &{" "}
-          <Link
+          <a
             className="p-link"
             href="https://www.flaticon.com/fr/packs/square-country-simple-flags"
+            rel="noreferrer noopener"
             target="_blank"
           >
             <Trans>Freepik - Flaticon</Trans>
-          </Link>
+          </a>
           .
           <br />
           <Trans>
@@ -66,7 +68,12 @@ export const Footer = ({ className }: FooterProps) => {
           <br />
           <Trans>
             Brawlhalla and Blue Mammoth Games are trademarks of{" "}
-            <a className="p-link" href="https://www.bluemammoth.com">
+            <a
+              className="p-link"
+              href="https://www.bluemammoth.com"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
               Blue Mammoth Games
             </a>
           </Trans>

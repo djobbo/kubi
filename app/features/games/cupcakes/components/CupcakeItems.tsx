@@ -1,4 +1,5 @@
 import { Trans } from "@lingui/react/macro"
+import type { CSSProperties } from "react"
 
 import { Button } from "@/ui/components/button"
 
@@ -22,9 +23,11 @@ const CupcakeProgress = ({ item }: CupcakeItemProps) => {
   return (
     <div
       className="cupcake-progress w-64 h-8 relative bg-amber-200 rounded-lg overflow-hidden after:rounded-lg"
-      style={{
-        "--interval": `${item.interval}s`,
-      }}
+      style={
+        {
+          "--interval": `${item.interval}s`,
+        } as CSSProperties
+      }
     />
   )
 }

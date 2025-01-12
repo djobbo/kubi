@@ -71,7 +71,7 @@ export const alerts = {
         The Brawlhalla Wiki has officially migrated to its new home at wiki.gg!
         Explore the latest updates and resources by visiting{" "}
         <Link
-          href="https://brawlhalla.wiki.gg"
+          to="/wiki"
           target="_blank"
           className="text-accentAlt font-semibold hover:text-text"
         >

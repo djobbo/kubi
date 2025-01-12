@@ -46,7 +46,7 @@ export const APIRoute = createAPIFileRoute("/api/auth/callback/discord")({
     }
 
     try {
-      const tokens = await discord.validateAuthorizationCode(code)
+      const tokens = await discord.validateAuthorizationCode(code, null)
       const accessToken = tokens.accessToken()
       // TODO: use discord.js
       const discordUserResponse = await fetch(

@@ -16,10 +16,9 @@ bun dev
 ```
 
 ## Technologies
-- Frontend
+- Frontend (Typescript)
     - Logic & Templating
         - Typescript
-        - React
     - Styling
         - TailwindCSS
         - PandaCSS
@@ -31,13 +30,15 @@ bun dev
     - Internationalization
         - LinguiJS
 
-- Backend
+- Backend (Typescript)
     - Backend for Frontend
         - Tanstack Start (Server Functions)
+    - Auth
+        - Artic (OAuth2)
 
-- Database
-    - Postgres
-    - Drizzle ORM
+- Database (Postgres)
+    - ORM
+        - Drizzle ORM
 
 - Build Tools
     - Vite

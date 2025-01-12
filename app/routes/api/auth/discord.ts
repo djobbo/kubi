@@ -14,7 +14,7 @@ export const APIRoute = createAPIFileRoute("/api/auth/discord")({
   GET: async () => {
     const state = generateState()
 
-    const url = discord.createAuthorizationURL(state, [
+    const url = discord.createAuthorizationURL(state, null, [
       "identify",
       "email",
       "guilds",

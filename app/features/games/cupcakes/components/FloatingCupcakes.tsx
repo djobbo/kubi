@@ -1,4 +1,5 @@
 import { t } from "@lingui/core/macro"
+import type { CSSProperties } from "react"
 
 import { Image } from "@/features/brawlhalla/components/Image"
 
@@ -12,12 +13,14 @@ export const FloatingCupcakes = () => {
     <div
       key={cupcake.id}
       className="absolute pointer-events-none text-amber-600 font-bold animate-cupcake-float flex flex-col items-center justify-center"
-      style={{
-        left: `${cupcake.position.x}px`,
-        top: `${cupcake.position.y}px`,
-        "--direction-x": `${cupcake.direction.x * FLOATING_CUPCAKE_SPEED_MULTIPLIER}px`,
-        "--direction-y": `${cupcake.direction.y * FLOATING_CUPCAKE_SPEED_MULTIPLIER}px`,
-      }}
+      style={
+        {
+          left: `${cupcake.position.x}px`,
+          top: `${cupcake.position.y}px`,
+          "--direction-x": `${cupcake.direction.x * FLOATING_CUPCAKE_SPEED_MULTIPLIER}px`,
+          "--direction-y": `${cupcake.direction.y * FLOATING_CUPCAKE_SPEED_MULTIPLIER}px`,
+        } as CSSProperties
+      }
     >
       +{cupcake.value}
       <Image
