@@ -139,7 +139,7 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: { children: ReactNode }) {
-  const { lang } = Route.useLoaderData()
+  const { lang } = Route.useSearch()
   activateLocale(lang)
 
   return (
