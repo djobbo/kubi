@@ -5,7 +5,7 @@ import { arrayToMap } from "@/helpers/arrayToMap"
 
 import type { Weapon } from "./weapons"
 
-export interface Legend {
+export interface LegendType {
   legend_id: number
   legend_name_key: string
   bio_name: string
@@ -787,7 +787,9 @@ export const legends = [
     defense: "6",
     speed: "4",
   },
-] as const satisfies Legend[]
+] as const satisfies LegendType[]
+
+export type Legend = (typeof legends)[number]
 
 export type LegendNameKey = (typeof legends)[number]["legend_name_key"]
 

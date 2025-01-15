@@ -8,7 +8,7 @@ import { Trans } from "@lingui/react/macro"
 import { Link } from "@tanstack/react-router"
 
 import { useAuth } from "@/features/auth/use-auth"
-import { Image } from "@/features/brawlhalla/components/Image"
+import { UnsafeImage } from "@/features/brawlhalla/components/Image"
 import { Button } from "@/ui/components/button"
 import { SidebarTrigger } from "@/ui/components/sidebar"
 import { cn } from "@/ui/lib/utils"
@@ -40,7 +40,7 @@ export const Header = ({ className }: HeaderProps) => {
               {user?.avatarUrl && (
                 <>
                   <div className="relative ">
-                    <Image
+                    <UnsafeImage
                       src={user.avatarUrl}
                       alt={user.name ?? t`User avatar`}
                       containerClassName="rounded-lg w-8 h-8 overflow-hidden"

@@ -12,8 +12,10 @@ import {
 
 import type { Bookmark } from "@/db/schema"
 import { useBookmarks } from "@/features/bookmarks/hooks/use-bookmarks"
-import { getLegendIconSrc } from "@/features/brawlhalla/components/Image"
-import { Image } from "@/features/brawlhalla/components/Image"
+import {
+  getLegendIconSrc,
+  UnsafeImage,
+} from "@/features/brawlhalla/components/Image"
 import { legendsMap } from "@/features/brawlhalla/constants/legends"
 import { cleanString } from "@/helpers/cleanString"
 import {
@@ -42,7 +44,7 @@ const getBookmarkIconUrl = (bookmark: Bookmark) => {
       const legendId = meta.data.icon.id
       if (!legendId) break
 
-      const legend = legendsMap[legendId]
+      const legend = legendsMap[legendId as keyof typeof legendsMap]
       if (!legend) break
 
       return getLegendIconSrc(legend.legend_name_key)
@@ -75,7 +77,7 @@ const NavBookmark = ({ bookmark, isCollapsed, ...props }: NavBookmarkProps) => {
         {isCollapsed ? (
           <div className="relative flex items-center justify-center">
             {image && (
-              <Image
+              <UnsafeImage
                 src={image}
                 alt={t`player ${cleanName} icon`}
                 containerClassName="w-6 h-6 text-xs z-0 opacity-50 rounded-md overflow-hidden top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
@@ -88,15 +90,17 @@ const NavBookmark = ({ bookmark, isCollapsed, ...props }: NavBookmarkProps) => {
             </span>
           </div>
         ) : (
-          <>
-            <Image
-              src={image}
-              alt={t`player ${cleanName} icon`}
-              containerClassName="inline-block w-4 h-4 text-xs z-0 rounded-md overflow-hidden shrink-0"
-              className="object-contain object-center"
-            />
-            <span className="truncate">{cleanName}</span>
-          </>
+          image && (
+            <>
+              <UnsafeImage
+                src={image}
+                alt={t`player ${cleanName} icon`}
+                containerClassName="inline-block w-4 h-4 text-xs z-0 rounded-md overflow-hidden shrink-0"
+                className="object-contain object-center"
+              />
+              <span className="truncate">{cleanName}</span>
+            </>
+          )
         )}
       </Link>
     )

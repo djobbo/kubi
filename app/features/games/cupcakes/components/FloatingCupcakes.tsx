@@ -1,7 +1,7 @@
 import { t } from "@lingui/core/macro"
 import type { CSSProperties } from "react"
 
-import { Image } from "@/features/brawlhalla/components/Image"
+import { SafeImage } from "@/features/brawlhalla/components/Image"
 
 import { FLOATING_CUPCAKE_SPEED_MULTIPLIER } from "../contants"
 import { useCupcakesStore } from "../store"
@@ -23,7 +23,7 @@ export const FloatingCupcakes = () => {
       }
     >
       +{cupcake.value}
-      <Image
+      <SafeImage
         src="/assets/images/games/cupcakes/cupcake.svg"
         alt={t`Cupcake`}
         containerClassName="w-6 h-6"

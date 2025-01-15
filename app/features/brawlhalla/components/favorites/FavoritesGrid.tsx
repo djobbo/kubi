@@ -8,7 +8,7 @@ import type {
   Bookmark,
   NewBookmark,
 } from "@/features/bookmarks/schema/bookmarks"
-import { Image, LegendIcon } from "@/features/brawlhalla/components/Image"
+import { LegendIcon, UnsafeImage } from "@/features/brawlhalla/components/Image"
 import { cleanString } from "@/helpers/cleanString"
 import { css } from "@/panda/css"
 import { cn } from "@/ui/lib/utils"
@@ -76,7 +76,9 @@ const BookmarkDisplay = ({ bookmark }: BookmarkDisplayProps) => {
 
         switch (playerIcon.type) {
           case "legend": {
-            const legend = playerIcon.id ? legendsMap[playerIcon.id] : null
+            const legend = playerIcon.id
+              ? legendsMap[playerIcon.id as keyof typeof legendsMap]
+              : null
             if (!legend) break
 
             icon = (
@@ -91,7 +93,7 @@ const BookmarkDisplay = ({ bookmark }: BookmarkDisplayProps) => {
           }
           case "url": {
             icon = (
-              <Image
+              <UnsafeImage
                 src={playerIcon.url}
                 alt={t`player ${favoriteName} icon`}
                 containerClassName="w-8 h-8"

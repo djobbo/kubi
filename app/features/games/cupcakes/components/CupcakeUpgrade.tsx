@@ -1,6 +1,6 @@
 import { t } from "@lingui/core/macro"
 
-import { Image } from "@/features/brawlhalla/components/Image"
+import { SafeImage } from "@/features/brawlhalla/components/Image"
 import { Button } from "@/ui/components/button"
 import { cn } from "@/ui/lib/utils"
 
@@ -39,7 +39,7 @@ export const CupcakeUpgrade = ({
         >
           <span className="flex items-center">
             {upgrade.price}
-            <Image
+            <SafeImage
               src="/assets/images/games/cupcakes/cupcake.svg"
               alt={t`Cupcake`}
               containerClassName="w-4 h-4"

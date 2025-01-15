@@ -1,5 +1,5 @@
 import type { BrawlhallaArticle } from "@/features/bh-articles/functions/getBrawlhallaArticles"
-import { Image } from "@/features/brawlhalla/components/Image"
+import { UnsafeImage } from "@/features/brawlhalla/components/Image"
 
 interface ArticlePreviewProps {
   article: BrawlhallaArticle
@@ -20,7 +20,7 @@ export const ArticlePreview = ({ article }: ArticlePreviewProps) => {
         target="_blank"
         rel="noreferrer"
       >
-        <Image
+        <UnsafeImage
           src={featuredImage.sourceUrl}
           alt={title}
           className="object-cover object-center"

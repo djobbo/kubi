@@ -18,7 +18,10 @@ import { Tooltip } from "@/components/base/Tooltip"
 import type { NewBookmark } from "@/db/schema"
 import { useBookmark } from "@/features/bookmarks/hooks/use-bookmark"
 import { useBookmarks } from "@/features/bookmarks/hooks/use-bookmarks"
-import { getLegendIconSrc, Image } from "@/features/brawlhalla/components/Image"
+import {
+  getLegendIconSrc,
+  UnsafeImage,
+} from "@/features/brawlhalla/components/Image"
 import { useSideNav } from "@/features/sidebar/sidenav-provider"
 import { cleanString } from "@/helpers/cleanString"
 import { css } from "@/panda/css"
@@ -75,7 +78,7 @@ const SideNavIcon = ({
             onClick={closeSideNav}
           >
             {image && (
-              <Image
+              <UnsafeImage
                 src={image}
                 alt={t`player ${cleanName} icon`}
                 Container="span"
@@ -177,7 +180,7 @@ const BookmarkDisplay = ({ bookmark, location }: BookmarkDisplayProps) => {
           const legendId = meta.data.icon.id
           if (!legendId) break
 
-          const legend = legendsMap[legendId]
+          const legend = legendsMap[legendId as keyof typeof legendsMap]
           if (!legend) break
 
           image = getLegendIconSrc(legend.legend_name_key)

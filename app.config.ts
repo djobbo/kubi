@@ -4,6 +4,8 @@ import react from "@vitejs/plugin-react"
 import { VitePWA } from "vite-plugin-pwa"
 import tsConfigPaths from "vite-tsconfig-paths"
 
+import { safeAssetsPlugin } from "./plugins/safe-assets-plugin"
+
 const pwaConfig = VitePWA({
   injectRegister: "auto",
   registerType: "autoUpdate",
@@ -46,6 +48,9 @@ export default defineConfig({
       ...lingui(),
       tsConfigPaths({ projects: ["./tsconfig.json"] }),
       ...pwaConfig,
+      safeAssetsPlugin({
+        outputFile: "app/assetsTree.gen.ts",
+      }),
     ],
   },
   react: {

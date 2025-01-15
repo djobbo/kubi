@@ -2,7 +2,7 @@ import { t } from "@lingui/core/macro"
 import { Link } from "@tanstack/react-router"
 import * as React from "react"
 
-import { Image } from "@/features/brawlhalla/components/Image"
+import { SafeImage } from "@/features/brawlhalla/components/Image"
 import {
   Sidebar,
   SidebarContent,
@@ -31,7 +31,7 @@ export const AppSidebar = ({
           })}
         >
           {sidebar.state === "expanded" ? (
-            <Image
+            <SafeImage
               src="/assets/images/brand/logos/logo-text.png"
               alt={t`Corehalla logo`}
               className="object-contain object-center h-6"

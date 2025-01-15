@@ -8,7 +8,7 @@ import { Link } from "@tanstack/react-router"
 import { ArrowRight } from "lucide-react"
 import { useEffect, useRef } from "react"
 
-import { Image } from "@/features/brawlhalla/components/Image"
+import { SafeImage } from "@/features/brawlhalla/components/Image"
 import { clamp } from "@/helpers/math"
 import { Button } from "@/ui/components/button"
 
@@ -64,14 +64,14 @@ export const DiscordCard = () => {
         ref={cardRef}
         className="bg-bgVar2/50 border border-bg/75 rounded-2xl w-96 overflow-hidden"
       >
-        <Image
+        <SafeImage
           src="/assets/images/brand/backgrounds/background-text.jpg"
           alt={t`Discord header image`}
           className="object-cover object-center w-full h-full"
           containerClassName="w-full h-32"
         />
         <div className="flex">
-          <Image
+          <SafeImage
             src="/assets/images/brand/logos/logo-animated.gif"
             alt={t`Corehalla animated logo`}
             className="object-cover object-center"

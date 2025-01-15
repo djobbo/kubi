@@ -4,6 +4,7 @@ import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod"
 
 import { usersTable } from "@/features/auth/schema/users"
+import { legendsMap } from "@/features/brawlhalla/constants/legends"
 
 import { bookmarksSchema } from "./schema"
 

@@ -6,14 +6,14 @@ import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
 import { useNavigate } from "@tanstack/react-router"
 
-import { Image } from "@/features/brawlhalla/components/Image"
+import { SafeImage } from "@/features/brawlhalla/components/Image"
 import { Button } from "@/ui/components/button"
 
 import { SectionTitle } from "./SectionTitle"
 
 interface ErrorPageContentProps {
   title?: string
-  statusCode?: number
+  statusCode?: 404 | 500
 }
 
 export const ErrorPageContent = ({
@@ -26,8 +26,8 @@ export const ErrorPageContent = ({
     <div>
       <SectionTitle className="text-center">{title}</SectionTitle>
       {!!statusCode && (
-        <Image
-          src={`assets/images/errors/error-${statusCode}.png`}
+        <SafeImage
+          src={`/assets/images/errors/error-${statusCode}.png`}
           alt={t`${statusCode} Error`}
           containerClassName="w-full h-full min-h-[240px] md:min-h-[400px]"
           className="object-contain object-center"
