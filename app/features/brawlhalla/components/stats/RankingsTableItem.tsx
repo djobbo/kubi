@@ -4,7 +4,7 @@ import type { ReactNode } from "react"
 import { Progress } from "@/components/base/Progress"
 import {
   FlagIcon,
-  RankedTierImage,
+  RankedTierIcon,
 } from "@/features/brawlhalla/components/Image"
 import { cn } from "@/ui/lib/utils"
 
@@ -52,8 +52,7 @@ export const RankingsTableItem = ({
             {rank} -
           </span>
           {content}
-          <RankedTierImage
-            type="icon"
+          <RankedTierIcon
             tier={tier}
             alt={tier}
             containerClassName="w-6 h-6 rounded-md overflow-hidden"
@@ -113,8 +112,7 @@ export const RankingsTableItem = ({
           {rank}
         </p>
         <p className="w-8 h-full flex items-center justify-center text-xs">
-          <RankedTierImage
-            type="icon"
+          <RankedTierIcon
             tier={tier}
             alt={region}
             containerClassName="w-8 h-8 rounded-md overflow-hidden"

@@ -3,7 +3,6 @@ import { Trans } from "@lingui/react/macro"
 import { ChevronsUp } from "lucide-react"
 
 import type { PlayerRanked } from "@/features/brawlhalla/api/schema/player-ranked"
-import { RankedTierImage } from "@/features/brawlhalla/components/Image"
 import { getTierFromRating } from "@/features/brawlhalla/constants/ranked/tiers"
 import {
   getGlory,
@@ -11,6 +10,7 @@ import {
 } from "@/features/brawlhalla/helpers/season-reset"
 import { calculateWinrate } from "@/features/brawlhalla/helpers/winrate"
 
+import { RankedTierBanner } from "../../../Image"
 import { CollapsibleSection } from "../../../layout/CollapsibleSection"
 import type { MiscStat } from "../../MiscStatGroup"
 import { MiscStatGroup } from "../../MiscStatGroup"
@@ -85,8 +85,7 @@ export const PlayerOverviewRankedContent = ({
       }
     >
       <div className="flex items-center gap-4">
-        <RankedTierImage
-          type="banner"
+        <RankedTierBanner
           tier={ranked.tier ?? "Valhallan"}
           alt={ranked.tier ?? t`Valhallan`}
           containerClassName="h-24 w-16"

@@ -4,7 +4,7 @@ import { Link } from "@tanstack/react-router"
 import { Card } from "@/components/base/Card"
 import {
   FlagIcon,
-  RankedTierImage,
+  RankedTierBanner,
 } from "@/features/brawlhalla/components/Image"
 import { cleanString } from "@/helpers/cleanString"
 import { css } from "@/panda/css"
@@ -62,8 +62,7 @@ export const TeamCard = ({ playerId, team }: TeamCardProps) => {
           </span>
         }
       >
-        <RankedTierImage
-          type="banner"
+        <RankedTierBanner
           tier={team.tier ?? "Valhallan"}
           alt={team.tier ?? t`Valhallan`}
           containerClassName={cn(" w-full", rankedBannerClassName)}

@@ -4,12 +4,12 @@ import path from "node:path"
 import type { PluginOption } from "vite"
 
 interface Config {
-  onInit: boolean
+  runOnInit: boolean
   outputFile: string
 }
 
 const defaultConfig: Config = {
-  onInit: true,
+  runOnInit: true,
   outputFile: "assets.gen.ts",
 }
 
@@ -98,7 +98,7 @@ export const assetsTree = ${JSON.stringify(assetsTree, null, 2)} as const;
     },
 
     buildStart() {
-      if (!options.onInit) return
+      if (!options.runOnInit) return
       generate()
     },
 
