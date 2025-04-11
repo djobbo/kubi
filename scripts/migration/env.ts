@@ -22,6 +22,6 @@ export const MIGRATION_SUPABASE_DATABASE_URL = envField(
 
 export const MIGRATION_DATABASE_URL = envField(
   "MIGRATION_DATABASE_URL",
-  process.env.MIGRATION_DATABASE_URL,
+  process.env.DATABASE_URL,
   z.string().min(1),
 )

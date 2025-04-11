@@ -6,8 +6,13 @@ import {
 import { eq } from "drizzle-orm"
 
 import { db } from "@/db"
-import type { User } from "@/db/schema"
-import { type Session, sessionsTable, usersTable } from "@/db/schema"
+import type { OAuthAccount, User } from "@/db/schema"
+import {
+  oauthAccountsTable,
+  type Session,
+  sessionsTable,
+  usersTable,
+} from "@/db/schema"
 
 export const generateSessionToken = (): string => {
   const bytes = new Uint8Array(20)
@@ -40,13 +45,20 @@ export const validateSessionToken = async (
     .innerJoin(usersTable, eq(sessionsTable.userId, usersTable.id))
     .where(eq(sessionsTable.id, sessionId))
   if (result.length < 1) {
-    return { session: null, user: null }
+    return { session: null, user: null, oauth: null }
   }
   const { user, session } = result[0]
   if (Date.now() >= session.expiresAt.getTime()) {
     await db.delete(sessionsTable).where(eq(sessionsTable.id, session.id))
-    return { session: null, user: null }
+    return { session: null, user: null, oauth: null }
   }
+
+  const oauth = await db
+    .select()
+    .from(oauthAccountsTable)
+    .where(eq(oauthAccountsTable.userId, user.id))
+    .execute()
+
   if (Date.now() >= session.expiresAt.getTime() - 1000 * 60 * 60 * 24 * 15) {
     session.expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)
     await db
@@ -56,7 +68,7 @@ export const validateSessionToken = async (
       })
       .where(eq(sessionsTable.id, session.id))
   }
-  return { session, user }
+  return { session, user, oauth }
 }
 
 export const invalidateSession = async (sessionId: string): Promise<void> => {
@@ -64,5 +76,5 @@ export const invalidateSession = async (sessionId: string): Promise<void> => {
 }
 
 export type SessionValidationResult =
-  | { session: Session; user: User }
-  | { session: null; user: null }
+  | { session: Session; user: User; oauth: OAuthAccount[] }
+  | { session: null; user: null; oauth: null }

@@ -4,11 +4,11 @@ import type { APIRoute as discordAPIRoute } from "@/routes/api/auth/discord"
 import type { APIRoute as logoutAPIRoute } from "@/routes/api/auth/logout"
 
 export const useAuth = () => {
-  const loader = useRootContext()
+  const rootContext = useRootContext()
 
   return {
-    ...loader.session,
-    isLoggedIn: !!loader.session?.user,
+    ...rootContext.session,
+    isLoggedIn: !!rootContext.session?.user,
     logIn: () =>
       submitForm(
         "GET",

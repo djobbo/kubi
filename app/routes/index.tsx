@@ -1,4 +1,5 @@
 import { SiDiscord as DiscordIcon } from "@icons-pack/react-simple-icons"
+import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
 import { ArrowRight } from "lucide-react"
@@ -43,7 +44,7 @@ function Home() {
             href="/discord"
             target="_blank"
             className="flex items-center gap-2 pl-3 pr-2 py-1 bg-bgVar1/75 rounded-full border border-bg text-sm hover:bg-bgVar2"
-            aria-label='Join our "Corehalla" Discord server'
+            aria-label={t`Join Corehalla's Discord server`}
           >
             <span className="border-r border-r-bg pr-2">
               <Trans>Join our community</Trans>

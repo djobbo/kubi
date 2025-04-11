@@ -10,6 +10,7 @@ import {
   usersTable,
 } from "@/db/schema"
 import { getSession } from "@/features/auth/functions/getSession"
+import { getOldUserBookmarks } from "~/scripts/migration/bookmarks"
 
 import { getTempUserId } from "../migration"
 import { bookmarksTable, pageTypeSchema } from "../schema/bookmarks"
@@ -22,7 +23,10 @@ const bookmarksQuerySchema = z.object({
 
 export type BookmarksQuery = z.infer<typeof bookmarksQuerySchema>
 
-const migrateLegacyBookmarks = async (user: User) => {
+/**
+ * Migrate temporary bookmarks to the current user (from bulk migration)
+ */
+const migrateTempBookmarks = async (user: User) => {
   const oauthData = await db
     .select()
     .from(oauthAccountsTable)
@@ -43,9 +47,9 @@ const migrateLegacyBookmarks = async (user: User) => {
   const tempUserId = getTempUserId(discordOauthData.providerUserId)
 
   const tempBookmarks = await db
-    .delete(bookmarksTable)
+    .select()
+    .from(bookmarksTable)
     .where(eq(bookmarksTable.userId, tempUserId))
-    .returning()
     .execute()
 
   if (tempBookmarks.length <= 0) {
@@ -58,12 +62,41 @@ const migrateLegacyBookmarks = async (user: User) => {
     .onConflictDoNothing()
     .execute()
 
+  // delete temporary bookmarks
+  await db
+    .delete(bookmarksTable)
+    .where(eq(bookmarksTable.userId, tempUserId))
+    .execute()
+
   // try deleting temporary user
   try {
     await db.delete(usersTable).where(eq(usersTable.id, tempUserId)).execute()
   } catch (error) {
     console.error("Failed to delete temporary user", error, { tempUserId })
   }
+}
+
+/**
+ * Migrate legacy bookmarks to the current user directly from the old database
+ */
+const migrateLegacyBookmarks = async (user: User, discordId: string) => {
+  console.log("Migrating legacy bookmarks")
+  const oldBookmarks = await getOldUserBookmarks(user.id, discordId)
+
+  if (oldBookmarks.length <= 0) {
+    return
+  }
+
+  await db
+    .insert(bookmarksTable)
+    .values(
+      oldBookmarks.map((bookmark) => ({
+        ...bookmark,
+        userId: user.id,
+      })),
+    )
+    .onConflictDoNothing()
+    .execute()
 }
 
 export const getBookmarks = createServerFn({ method: "GET" })
@@ -74,7 +107,7 @@ export const getBookmarks = createServerFn({ method: "GET" })
   )
   .handler(async ({ data: { query } }) => {
     // TODO: CRSF protection
-    const { user } = await getSession()
+    const { user, oauth } = await getSession()
 
     if (!user) {
       throw new Error("Unauthorized")
@@ -82,8 +115,19 @@ export const getBookmarks = createServerFn({ method: "GET" })
 
     const { page = 1, limit = 10, pageType = [] } = query ?? {}
 
-    // TODO: check if migration is needed
-    await migrateLegacyBookmarks(user)
+    try {
+      const discordId = oauth?.find(
+        (o) => o.providerId === DISCORD_PROVIDER_ID,
+      )?.providerUserId
+
+      if (discordId) {
+        await migrateLegacyBookmarks(user, discordId)
+      }
+      // TODO: check if migration is needed
+      await migrateTempBookmarks(user)
+    } catch (error) {
+      console.error("Failed to migrate legacy bookmarks", error)
+    }
 
     const bookmarks = await db
       .select()
@@ -101,5 +145,6 @@ export const getBookmarks = createServerFn({ method: "GET" })
       .offset((page - 1) * limit)
       .execute()
 
+    console.log("Bookmarks", bookmarks)
     return bookmarks
   })

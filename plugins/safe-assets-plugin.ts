@@ -91,7 +91,7 @@ export const assetsTree = ${JSON.stringify(assetsTree, null, 2)} as const;
   }
 
   return {
-    name: "vite-plugin-watch",
+    name: "vite-safe-assets-plugin",
 
     configResolved(config) {
       publicDir = config.publicDir

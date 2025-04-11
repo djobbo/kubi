@@ -12,7 +12,11 @@ import {
   discord,
   DISCORD_OAUTH_STATE_COOKIE_NAME,
 } from "@/features/auth/providers"
-import { oauthAccountsTable, usersTable } from "@/features/auth/schema"
+import {
+  DISCORD_PROVIDER_ID,
+  oauthAccountsTable,
+  usersTable,
+} from "@/features/auth/schema"
 
 const discordUserResponseSchema = z.object({
   id: z.string(),
@@ -59,7 +63,7 @@ export const APIRoute = createAPIFileRoute("/api/auth/callback/discord")({
 
       const existingUser = await db.query.oauthAccountsTable.findFirst({
         where: and(
-          eq(oauthAccountsTable.providerId, "discord"),
+          eq(oauthAccountsTable.providerId, DISCORD_PROVIDER_ID),
           eq(oauthAccountsTable.providerUserId, discordUser.id),
         ),
       })
@@ -79,6 +83,7 @@ export const APIRoute = createAPIFileRoute("/api/auth/callback/discord")({
           .onConflictDoUpdate({
             target: [usersTable.id],
             set: {
+              name: discordUser.username,
               avatarUrl: getAvatarUrl(discordUser),
             },
           })
@@ -102,7 +107,7 @@ export const APIRoute = createAPIFileRoute("/api/auth/callback/discord")({
         })
 
         await tx.insert(oauthAccountsTable).values({
-          providerId: "discord",
+          providerId: DISCORD_PROVIDER_ID,
           providerUserId: discordUser.id,
           userId,
         })
@@ -119,8 +124,6 @@ export const APIRoute = createAPIFileRoute("/api/auth/callback/discord")({
         },
       })
     } catch (e) {
-      // eslint-disable-next-line no-console
-      console.log(e)
       // the specific error message depends on the provider
       if (e instanceof OAuth2RequestError) {
         // invalid code

@@ -1,3 +1,4 @@
+import type { InferSelectModel } from "drizzle-orm"
 import { primaryKey, text } from "drizzle-orm/pg-core"
 
 import { authSchema } from "@/features/auth/schema/schema"
@@ -24,3 +25,5 @@ export const oauthAccountsTable = authSchema.table(
     }),
   }),
 )
+
+export type OAuthAccount = InferSelectModel<typeof oauthAccountsTable>
