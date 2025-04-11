@@ -1,4 +1,4 @@
-import { createServerFn } from "@tanstack/start"
+import { createServerFn } from "@tanstack/react-start"
 import { and, desc, eq, inArray } from "drizzle-orm"
 import { z } from "zod"
 
@@ -145,6 +145,5 @@ export const getBookmarks = createServerFn({ method: "GET" })
       .offset((page - 1) * limit)
       .execute()
 
-    console.log("Bookmarks", bookmarks)
     return bookmarks
   })

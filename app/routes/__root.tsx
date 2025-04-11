@@ -9,7 +9,7 @@ import {
   Outlet,
   ScrollRestoration,
 } from "@tanstack/react-router"
-import { Meta, Scripts } from "@tanstack/start"
+import { Meta, Scripts } from "@tanstack/react-start"
 import { KBarProvider } from "kbar"
 import { lazy, type ReactNode, Suspense } from "react"
 import { z } from "zod"

@@ -1,4 +1,4 @@
-import { createServerFn } from "@tanstack/start"
+import { createServerFn } from "@tanstack/react-start"
 import { load as loadHtml } from "cheerio"
 
 import { legends } from "@/features/brawlhalla/constants/legends"

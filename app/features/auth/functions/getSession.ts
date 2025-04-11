@@ -1,4 +1,4 @@
-import { createServerFn } from "@tanstack/start"
+import { createServerFn } from "@tanstack/react-start"
 import { parseCookies } from "vinxi/http"
 
 import type { SessionValidationResult } from "../api"

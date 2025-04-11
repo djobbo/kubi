@@ -1,5 +1,5 @@
 import { lingui } from "@lingui/vite-plugin"
-import { defineConfig } from "@tanstack/start/config"
+import { defineConfig } from "@tanstack/react-start/config"
 import react from "@vitejs/plugin-react"
 import { VitePWA } from "vite-plugin-pwa"
 import tsConfigPaths from "vite-tsconfig-paths"

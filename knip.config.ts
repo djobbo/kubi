@@ -2,7 +2,7 @@ import type { KnipConfig } from "knip"
 
 export default {
   entry: [
-    // @tanstack/start
+    // @tanstack/react-start
     "app.config.ts",
     "eslint.config.mjs",
     "app/client.tsx",

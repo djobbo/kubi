@@ -1,4 +1,4 @@
-import { createAPIFileRoute } from "@tanstack/start/api"
+import { createAPIFileRoute } from "@tanstack/react-start/api"
 import { parseCookies, setHeader } from "vinxi/http"
 
 import { invalidateSession, validateSessionToken } from "@/features/auth/api"

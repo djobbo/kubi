@@ -1,4 +1,4 @@
-import { createMiddleware } from "@tanstack/start"
+import { createMiddleware } from "@tanstack/react-start"
 import { z } from "zod"
 
 import { env } from "@/env"
