@@ -7,7 +7,7 @@ import { deleteBookmark } from "../functions/delete-bookmark"
 import type { NewBookmark } from "../schema"
 
 export const useToggleBookmark = (bookmark: NewBookmark) => {
-  const { isLoggedIn, user } = useAuth()
+  const { isLoggedIn, session } = useAuth()
   const queryClient = useQueryClient()
 
   const toggleBookmarkMutation = useMutation({
@@ -25,7 +25,7 @@ export const useToggleBookmark = (bookmark: NewBookmark) => {
         queryKey: [
           "is-bookmarked",
           isLoggedIn,
-          user?.id,
+          session?.user.id,
           bookmark.pageId,
           bookmark.pageType,
         ],
@@ -34,7 +34,7 @@ export const useToggleBookmark = (bookmark: NewBookmark) => {
       const previousIsBookmarked = queryClient.getQueryData([
         "is-bookmarked",
         isLoggedIn,
-        user?.id,
+        session?.user.id,
         bookmark.pageId,
         bookmark.pageType,
       ])
@@ -43,7 +43,7 @@ export const useToggleBookmark = (bookmark: NewBookmark) => {
         [
           "is-bookmarked",
           isLoggedIn,
-          user?.id,
+          session?.user.id,
           bookmark.pageId,
           bookmark.pageType,
         ],
@@ -57,7 +57,7 @@ export const useToggleBookmark = (bookmark: NewBookmark) => {
         [
           "is-bookmarked",
           isLoggedIn,
-          user?.id,
+          session?.user.id,
           bookmark.pageId,
           bookmark.pageType,
         ],
@@ -69,7 +69,7 @@ export const useToggleBookmark = (bookmark: NewBookmark) => {
         queryKey: [
           "is-bookmarked",
           isLoggedIn,
-          user?.id,
+          session?.user.id,
           bookmark.pageId,
           bookmark.pageType,
         ],

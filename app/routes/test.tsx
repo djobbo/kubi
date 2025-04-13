@@ -11,7 +11,7 @@ export const Route = createFileRoute("/test")({
 
 function Home() {
   const router = useRouter()
-  const { user } = useAuth()
+  const user = useAuth().session?.user
 
   const username = user?.name ?? t`User`
 

@@ -45,12 +45,12 @@ export const validateSessionToken = async (
     .innerJoin(usersTable, eq(sessionsTable.userId, usersTable.id))
     .where(eq(sessionsTable.id, sessionId))
   if (result.length < 1) {
-    return { session: null, user: null, oauth: null }
+    return null
   }
   const { user, session } = result[0]
   if (Date.now() >= session.expiresAt.getTime()) {
     await db.delete(sessionsTable).where(eq(sessionsTable.id, session.id))
-    return { session: null, user: null, oauth: null }
+    return null
   }
 
   const oauth = await db
@@ -75,6 +75,8 @@ export const invalidateSession = async (sessionId: string): Promise<void> => {
   await db.delete(sessionsTable).where(eq(sessionsTable.id, sessionId))
 }
 
-export type SessionValidationResult =
-  | { session: Session; user: User; oauth: OAuthAccount[] }
-  | { session: null; user: null; oauth: null }
+export type SessionValidationResult = {
+  session: Session
+  user: User
+  oauth: OAuthAccount[]
+} | null

@@ -16,11 +16,12 @@ export const deleteBookmark = createServerFn({ method: "POST" })
   .validator(z.object({ bookmark: bookmarksDeleteQuerySchema }))
   .handler(async ({ data: { bookmark } }) => {
     // TODO: CRSF protection
-    const { user } = await getSession()
-
-    if (!user) {
+    const session = await getSession()
+    if (!session) {
       throw new Error("Unauthorized")
     }
+
+    const { user } = session
 
     await db
       .delete(bookmarksTable)

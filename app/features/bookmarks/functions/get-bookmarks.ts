@@ -107,12 +107,12 @@ export const getBookmarks = createServerFn({ method: "GET" })
   )
   .handler(async ({ data: { query } }) => {
     // TODO: CRSF protection
-    const { user, oauth } = await getSession()
-
-    if (!user) {
+    const session = await getSession()
+    if (!session) {
       throw new Error("Unauthorized")
     }
 
+    const { user, oauth } = session
     const { page = 1, limit = 10, pageType = [] } = query ?? {}
 
     try {

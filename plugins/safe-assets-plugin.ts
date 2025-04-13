@@ -30,7 +30,9 @@ interface AssetsTree {
   [key: string]: string | AssetsTree
 }
 
-export const safeAssetsPlugin = (config?: Partial<Config>): PluginOption => {
+export default function safeAssetsPlugin(
+  config?: Partial<Config>,
+): PluginOption {
   let abortController: AbortController | null = null
   let publicDir: string
   const options: Config = {
@@ -39,6 +41,13 @@ export const safeAssetsPlugin = (config?: Partial<Config>): PluginOption => {
   }
 
   const generate = async () => {
+    if (!publicDir) {
+      console.error(
+        "Public directory not found, skipping safe assets generation",
+      )
+      return
+    }
+
     if (abortController) {
       abortController.abort()
     }

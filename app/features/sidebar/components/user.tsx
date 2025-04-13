@@ -27,11 +27,13 @@ import {
 
 export const NavUser = () => {
   const { isMobile } = useSidebar()
-  const { user, logOut } = useAuth()
+  const { session, logOut } = useAuth()
 
-  if (!user) {
+  if (!session) {
     return null
   }
+
+  const { user } = session
 
   const userInitials =
     user.name

@@ -21,7 +21,7 @@ interface HeaderProps {
 }
 
 export const Header = ({ className }: HeaderProps) => {
-  const { isLoggedIn, logIn, logOut, user } = useAuth()
+  const { isLoggedIn, logIn, logOut, session } = useAuth()
 
   return (
     <>
@@ -37,12 +37,12 @@ export const Header = ({ className }: HeaderProps) => {
         <div className="flex items-center gap-2">
           {isLoggedIn ? (
             <>
-              {user?.avatarUrl && (
+              {session?.user.avatarUrl && (
                 <>
                   <div className="relative ">
                     <UnsafeImage
-                      src={user.avatarUrl}
-                      alt={user.name ?? t`User avatar`}
+                      src={session.user.avatarUrl}
+                      alt={session.user.name ?? t`User avatar`}
                       containerClassName="rounded-lg w-8 h-8 overflow-hidden"
                       className="object-cover object-center"
                     />

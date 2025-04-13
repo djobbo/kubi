@@ -9,16 +9,16 @@ export const getSession = createServerFn({ method: "GET" }).handler(
   async (): Promise<SessionValidationResult> => {
     const sessionId = parseCookies()[AUTH_COOKIE_NAME]
     if (!sessionId) {
-      return { session: null, user: null, oauth: null }
+      return null
     }
 
-    const { session, user, oauth } = await validateSessionToken(sessionId)
+    const session = await validateSessionToken(sessionId)
 
     if (!session) {
       deleteSessionTokenCookie()
-      return { session: null, user: null, oauth: null }
+      return null
     }
 
-    return { session, user, oauth }
+    return session
   },
 )

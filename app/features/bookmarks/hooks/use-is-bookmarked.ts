@@ -9,13 +9,13 @@ export const useIsBookmarked = (
   bookmark: NewBookmark,
   initialValue?: boolean,
 ) => {
-  const { isLoggedIn, user } = useAuth()
+  const { isLoggedIn, session } = useAuth()
   const { data: isBookmarked = false } = useSuspenseQuery(
     queryOptions({
       queryKey: [
         "is-bookmarked",
         isLoggedIn,
-        user?.id,
+        session?.user.id,
         bookmark.pageId,
         bookmark.pageType,
       ],
