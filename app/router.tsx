@@ -21,6 +21,7 @@ export function createRouter() {
       routeTree,
       context: { queryClient, session: null },
       defaultPreload: "intent",
+      defaultPreloadDelay: 300,
       // react-query will handle data fetching & caching
       // https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#passing-all-loader-events-to-an-external-cache
       defaultPreloadStaleTime: 0,

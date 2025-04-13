@@ -65,7 +65,7 @@ const AliasesSubtitle = ({
   )
 }
 
-export const usePlayerSearch = (name: string) => {
+export const usePlayerSearch = (name: string, enabled: boolean) => {
   return useQuery(
     queryOptions({
       queryKey: ["player-search", name],
@@ -76,6 +76,7 @@ export const usePlayerSearch = (name: string) => {
 
         return search
       },
+      enabled,
     }),
   )
 }
@@ -84,7 +85,8 @@ export const Searchbox = () => {
   const [search, setSearch, immediateSearch, isDebouncingSearch] =
     useDebouncedState("", env.IS_DEV ? 250 : 750)
 
-  const playerSearchQuery = usePlayerSearch(search)
+  const enableSearch = search.length > 2
+  const playerSearchQuery = usePlayerSearch(search, enableSearch)
 
   const { data, isLoading } = playerSearchQuery
   const {
@@ -213,15 +215,15 @@ export const Searchbox = () => {
                     <p className="text-center text-sm mx-4">
                       {!!immediateSearch &&
                         !isLoading &&
-                        !isDebouncingSearch && (
-                          <>
-                            <span className="block text-lg font-semibold mb-2 text-text">
-                              <Trans>No players found</Trans>
-                            </span>
-                          </>
+                        !isDebouncingSearch &&
+                        enableSearch && (
+                          <span className="block text-lg font-semibold mb-2 text-text">
+                            <Trans>No players found</Trans>
+                          </span>
                         )}
                       <Trans>
-                        Search for a player (must start with exact match)
+                        Search for a player (must start with exact match, with
+                        at least 3 characters)
                       </Trans>
                       <br />
                       <span className="text-xs text-textVar1">
