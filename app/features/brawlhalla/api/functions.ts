@@ -88,7 +88,7 @@ export const getPlayerStats = createServerFn({ method: "GET" })
       `player-stats-${playerId}`,
       () =>
         fetchApi({
-          baseUrl: BRAWLTOOLS_API_BASE,
+          baseUrl: BRAWLHALLA_API_BASE,
           path: `/player/${playerId}/stats`,
           schema: playerStatsSchema,
           mock: playerStatsMock,
