@@ -181,6 +181,7 @@ export const safeAssets = [
   "/assets/images/flags/brz.png",
   "/assets/images/flags/sa.png",
   "/assets/images/flags/us-w.png",
+  "/assets/images/grain.png",
   "/robots.txt",
   "/favicon.png"
 ] as const;
@@ -397,7 +398,8 @@ export const assetsTree = {
         "brz.png": "/assets/images/flags/brz.png",
         "sa.png": "/assets/images/flags/sa.png",
         "us-w.png": "/assets/images/flags/us-w.png"
-      }
+      },
+      "grain.png": "/assets/images/grain.png"
     }
   },
   "robots.txt": "/robots.txt",

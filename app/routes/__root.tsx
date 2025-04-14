@@ -8,7 +8,6 @@ import {
   createRootRouteWithContext,
   HeadContent,
   Outlet,
-  ScriptOnce,
   Scripts,
 } from "@tanstack/react-router"
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools"
@@ -154,7 +153,17 @@ function RootDocument({ children }: { readonly children: ReactNode }) {
 
           <ReactQueryDevtools buttonPosition="bottom-left" />
           <TanStackRouterDevtools position="bottom-right" />
-
+          {/* <div style="background-image:url('https://framerusercontent.com/images/rR6HYXBrMmX4cRpXfXUOvpvpB0.png');opacity:0.06;border-radius:0" /> */}
+          <div
+            style={{
+              opacity: 0.02,
+              backgroundSize: "128px",
+              backgroundRepeat: "repeat",
+              backgroundImage: "url(/assets/images/grain.png)",
+              zIndex: 999,
+            }}
+            className="fixed inset-0 w-full h-full pointer-events-none"
+          />
           <Scripts />
         </body>
       </html>
