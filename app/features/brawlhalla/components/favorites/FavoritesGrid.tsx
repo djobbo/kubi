@@ -112,7 +112,7 @@ const BookmarkDisplay = ({ bookmark }: BookmarkDisplayProps) => {
   return (
     <div
       className={cn(
-        "relative rounded-lg hover:bg-bgVar2",
+        "relative rounded-lg hover:bg-secondary",
         bookmarkWithRemoveButtonClass,
       )}
       key={`${bookmark.pageType}/${bookmark.id}`}
@@ -124,14 +124,14 @@ const BookmarkDisplay = ({ bookmark }: BookmarkDisplayProps) => {
         {icon}
         <div className="min-w-0">
           <p className="font-bold truncate">{cleanString(bookmark.name)}</p>
-          <p className="text-xs text-textVar1 truncate">
+          <p className="text-xs text-muted-foreground truncate">
             {bookmark.pageType} #{bookmark.pageId}
           </p>
         </div>
       </Link>
       <button
         type="button"
-        className="remove-btn w-5 h-5 absolute rounded-full overflow-hidden shadow-md bg-accentOld hover:bg-text hover:text-bgVar2 items-center justify-center"
+        className="remove-btn w-5 h-5 absolute rounded-full overflow-hidden shadow-md bg-accent-foreground hover:bg-foreground hover:text-secondary items-center justify-center"
         onClick={() => deleteBookmark()}
       >
         <X className="w-4 h-4" />

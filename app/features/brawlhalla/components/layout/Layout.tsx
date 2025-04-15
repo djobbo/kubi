@@ -17,7 +17,7 @@ export interface LayoutProps {
 
 const backgroundContainerClass = css({
   "& > svg": {
-    maskImage: `linear-gradient(0deg, ${colors.bgVar1}00 0%, ${colors.bgVar1} 40%)`,
+    maskImage: `linear-gradient(0deg, ${colors.background}00 0%, ${colors.background} 40%)`,
   },
 })
 
@@ -28,45 +28,45 @@ export const Layout = ({ children }: LayoutProps) => {
     <>
       <header
         className={cn(
-          "fixed top-0 right-0 h-[--header-height] bg-bgVar2 z-10",
+          "fixed top-0 right-0 left-0 h-[--header-height] bg-secondary z-10",
           "duration-100 transition-[left,right,width] ease-linear",
           {
-            "left-[--sidebar-width]": sidebar.state === "expanded",
-            "left-[--sidebar-width-icon]": sidebar.state === "collapsed",
+            "md:left-[--sidebar-width]": sidebar.state === "expanded",
+            "md:left-[--sidebar-width-icon]": sidebar.state === "collapsed",
           },
         )}
       >
         <Header />
       </header>
-      <div className="fixed bottom-0 left-0 right-0 h-1 bg-bgVar2 z-10" />
+      <div className="fixed bottom-0 left-0 right-0 h-1 bg-secondary z-10" />
       <AppSidebar />
       <div
         className={cn(
-          "pointer-events-none fixed border border-bg/75 rounded-lg top-[--header-height] bottom-1 right-1 z-50",
+          "pointer-events-none fixed border border-border/75 rounded-lg top-[--header-height] bottom-1 right-1 z-50",
           "duration-100 transition-[left,right,width] ease-linear",
           {
-            "left-[--sidebar-width]": sidebar.state === "expanded",
-            "left-[--sidebar-width-icon]": sidebar.state === "collapsed",
+            "md:left-[--sidebar-width]": sidebar.state === "expanded",
+            "md:left-[--sidebar-width-icon]": sidebar.state === "collapsed",
           },
         )}
       />
       <div
         className={cn(
-          "pointer-events-none fixed border-4 border-bgVar2 rounded-xl top-[--header-height] bottom-1 -m-1 right-1 z-2",
+          "pointer-events-none fixed border-4 border-secondary rounded-xl top-[--header-height] bottom-1 -m-1 right-1 z-2",
           "duration-100 transition-[left,right,width] ease-linear",
           {
-            "left-[--sidebar-width]": sidebar.state === "expanded",
-            "left-[--sidebar-width-icon]": sidebar.state === "collapsed",
+            "md:left-[--sidebar-width]": sidebar.state === "expanded",
+            "md:left-[--sidebar-width-icon]": sidebar.state === "collapsed",
           },
         )}
       />
       <div
         className={cn(
-          "pointer-events-none fixed border border-bg/75 rounded-lg top-[--header-height] bottom-1 right-1 bg-bgVar1",
+          "pointer-events-none fixed border border-border/75 rounded-lg top-[--header-height] bottom-1 right-1 bg-background",
           "duration-100 transition-[left,right,width] ease-linear",
           {
-            "left-[--sidebar-width]": sidebar.state === "expanded",
-            "left-[--sidebar-width-icon]": sidebar.state === "collapsed",
+            "md:left-[--sidebar-width]": sidebar.state === "expanded",
+            "md:left-[--sidebar-width-icon]": sidebar.state === "collapsed",
           },
         )}
       />

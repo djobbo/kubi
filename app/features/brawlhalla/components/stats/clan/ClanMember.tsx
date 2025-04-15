@@ -59,10 +59,10 @@ export const ClanMember = ({ member, clan }: ClanMemberProps) => {
           <span className="flex items-center gap-1">
             <Icon size={12} />
             {cleanString(member.name)}
-            <span className="text-xs text-textVar1">({member.rank})</span>
+            <span className="text-xs text-muted-foreground">({member.rank})</span>
           </span>
         }
-        className="hover:bg-bgVar2"
+        className="hover:bg-secondary"
       >
         <MiscStatGroup
           className="mt-4 justify-items-center text-center"

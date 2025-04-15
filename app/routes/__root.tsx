@@ -104,69 +104,69 @@ export const Route = createRootRouteWithContext<{
 
 function RootComponent() {
   return (
-    <RootDocument>
-      {/* TODO: GAscripts */}
-      {/* <GAScripts /> */}
-      <SidebarProvider defaultOpen={false}>
-        <KBarProvider actions={[]} options={{}}>
-          <SideNavProvider>
-            <PageLoader>
-              <div className="flex items-center gap-4">
-                <span className="text-sm">
-                  <Trans>Loading...</Trans>
-                </span>
-                <AnimatedLogo size={32} />
-              </div>
-            </PageLoader>
-            <Suspense>
-              <Toaster />
-            </Suspense>
-            <Layout>
-              <Outlet />
-            </Layout>
-            <Searchbox />
-            <BackToTopButton />
-          </SideNavProvider>
-        </KBarProvider>
-      </SidebarProvider>
-    </RootDocument>
+    <I18nProvider i18n={i18n}>
+      <RootDocument>
+        {/* TODO: GAscripts */}
+        {/* <GAScripts /> */}
+        <SidebarProvider>
+          <KBarProvider actions={[]} options={{}}>
+            <SideNavProvider>
+              <PageLoader>
+                <div className="flex items-center gap-4">
+                  <span className="text-sm">
+                    <Trans>Loading...</Trans>
+                  </span>
+                  <AnimatedLogo size={32} />
+                </div>
+              </PageLoader>
+              <Suspense>
+                <Toaster />
+              </Suspense>
+              <Layout>
+                <Outlet />
+              </Layout>
+              <Searchbox />
+              <BackToTopButton />
+            </SideNavProvider>
+          </KBarProvider>
+        </SidebarProvider>
+      </RootDocument>
+    </I18nProvider>
   )
 }
 
 function RootDocument({ children }: { readonly children: ReactNode }) {
   return (
-    <I18nProvider i18n={i18n}>
-      {/* suppress since we're updating the "dark" class in a custom script below */}
-      <html suppressHydrationWarning>
-        <head>
-          <HeadContent />
-        </head>
-        <body className="dark">
-          {/* <ScriptOnce>
+    // suppress since we're updating the "dark" class in a custom script below
+    <html suppressHydrationWarning>
+      <head>
+        <HeadContent />
+      </head>
+      <body className="dark">
+        {/* <ScriptOnce>
             {`document.documentElement.classList.toggle(
             'dark',
             localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
             )`}
           </ScriptOnce> */}
 
-          {children}
+        {children}
 
-          <ReactQueryDevtools buttonPosition="bottom-left" />
-          <TanStackRouterDevtools position="bottom-right" />
-          {/* <div style="background-image:url('https://framerusercontent.com/images/rR6HYXBrMmX4cRpXfXUOvpvpB0.png');opacity:0.06;border-radius:0" /> */}
-          <div
-            style={{
-              opacity: 0.02,
-              backgroundSize: "128px",
-              backgroundRepeat: "repeat",
-              backgroundImage: "url(/assets/images/grain.png)",
-              zIndex: 999,
-            }}
-            className="fixed inset-0 w-full h-full pointer-events-none"
-          />
-          <Scripts />
-        </body>
-      </html>
-    </I18nProvider>
+        <ReactQueryDevtools buttonPosition="bottom-left" />
+        <TanStackRouterDevtools position="bottom-right" />
+        {/* <div style="background-image:url('https://framerusercontent.com/images/rR6HYXBrMmX4cRpXfXUOvpvpB0.png');opacity:0.06;border-radius:0" /> */}
+        <div
+          style={{
+            opacity: 0.02,
+            backgroundSize: "128px",
+            backgroundRepeat: "repeat",
+            backgroundImage: "url(/assets/images/grain.png)",
+            zIndex: 999,
+          }}
+          className="fixed inset-0 w-full h-full pointer-events-none"
+        />
+        <Scripts />
+      </body>
+    </html>
   )
 }

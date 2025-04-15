@@ -103,7 +103,7 @@ function RouteComponent() {
           <Trans>Elo</Trans>
         </p>
       </div>
-      <div className="rounded-lg overflow-hidden border border-bg mb-4 flex flex-col">
+      <div className="rounded-lg overflow-hidden border border-border mb-4 flex flex-col">
         {rankings.map((team, i) => {
           const players = getTeamPlayers(team)
           if (!players) return null

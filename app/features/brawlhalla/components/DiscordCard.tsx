@@ -62,7 +62,7 @@ export const DiscordCard = () => {
     >
       <div
         ref={cardRef}
-        className="bg-bgVar2/50 border border-bg/75 rounded-2xl w-96 overflow-hidden"
+        className="bg-secondary/50 border border-border/75 rounded-2xl w-96 overflow-hidden"
       >
         <SafeImage
           src="/assets/images/brand/backgrounds/background-text.jpg"
@@ -75,15 +75,15 @@ export const DiscordCard = () => {
             src="/assets/images/brand/logos/logo-animated.gif"
             alt={t`Corehalla animated logo`}
             className="object-cover object-center"
-            containerClassName="w-20 h-20 flex-shrink-0 rounded-3xl -mt-10 ml-6 border-8 border-bgVar2 overflow-hidden"
+            containerClassName="w-20 h-20 flex-shrink-0 rounded-3xl -mt-10 ml-6 border-8 border-secondary overflow-hidden"
           />
-          <span className="text-sm mx-2 mt-2 text-textVar1">
+          <span className="text-sm mx-2 mt-2 text-muted-foreground">
             <Trans>7k+ discord members, and growing!</Trans>
           </span>
         </div>
         <div className="h-64 flex flex-col justify-between">
           <div className="p-6 flex flex-col gap-2 text-sm">
-            <p className="uppercase text-textVar1 font-semibold">
+            <p className="uppercase text-muted-foreground font-semibold">
               <Trans>Question of the day</Trans>
             </p>
             <p>
@@ -97,7 +97,7 @@ export const DiscordCard = () => {
               target="_blank"
               aria-label="Join our Discord server to share your thoughts"
             >
-              <span className="flex justify-end items-center gap-1 font-semibold bg-gradient-to-l from-accentOld to-accentVar1 bg-clip-text text-fill-none">
+              <span className="flex justify-end items-center gap-1 font-semibold bg-gradient-to-l from-accent-foreground to-accent-secondary-foreground bg-clip-text text-fill-none">
                 <Trans>Share your thoughts</Trans>
                 <ArrowRight className="w-4 h-4" />
               </span>
@@ -110,7 +110,7 @@ export const DiscordCard = () => {
               </Link>
             </Button>
             <Button asChild variant="outline">
-              <Link to="/donate" target="_blank" className="bg-accentAlt">
+              <Link to="/donate" target="_blank" className="bg-ring">
                 <KofiIcon size="16" className="mr-2" /> <Trans>Donate</Trans>
               </Link>
             </Button>

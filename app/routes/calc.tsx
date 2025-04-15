@@ -18,7 +18,7 @@ export const Route = createFileRoute("/calc")({
 })
 
 const inputClassName =
-  "w-full px-4 py-2 border bg-bgVar2 border-bg rounded-lg block mb-4"
+  "w-full px-4 py-2 border bg-secondary border-border rounded-lg block mb-4"
 const resultClassName = "text-xl font-semibold block text-center"
 
 function RouteComponent() {

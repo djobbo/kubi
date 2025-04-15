@@ -32,7 +32,7 @@ export const Header = ({ className }: HeaderProps) => {
           "flex items-center justify-between h-[--header-height] px-4 gap-8",
         )}
       >
-        <SidebarTrigger className="-ml-1" />
+        <SidebarTrigger />
         <SearchButton className="hidden sm:flex mr-2 flex-1 max-w-96" />
         <div className="flex items-center gap-2">
           {isLoggedIn ? (
@@ -62,21 +62,21 @@ export const Header = ({ className }: HeaderProps) => {
           <SearchButtonIcon className="block sm:hidden px-2" size={22} />
           <div className="hidden md:flex items-center gap-1 ml-2">
             <Link
-              className="text-textVar1 hover:text-text"
+              className="text-muted-foreground hover:text-foreground"
               to="/discord"
               target="_blank"
             >
               <DiscordIcon size="16" className="mr-2" />
             </Link>
             <Link
-              className="text-textVar1 hover:text-text"
+              className="text-muted-foreground hover:text-foreground"
               to="/twitter"
               target="_blank"
             >
               <TwitterIcon size="16" className="mr-2" />
             </Link>
             <Link
-              className="text-textVar1 hover:text-text"
+              className="text-muted-foreground hover:text-foreground"
               to="/github"
               target="_blank"
             >

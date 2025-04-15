@@ -36,7 +36,7 @@ export const Footer = ({ className }: FooterProps) => {
 
   return (
     <footer className={className}>
-      <p className="text-center text-xs border-t border-bg py-8">
+      <p className="text-center text-xs border-t border-border py-8">
         <span className="block max-w-screen-sm mx-auto">
           <Trans>
             Visual assets courtesy of{" "}
@@ -80,7 +80,7 @@ export const Footer = ({ className }: FooterProps) => {
           .
         </span>
       </p>
-      <div className="max-w-screen-lg mx-auto flex flex-col justify-center items-center border-t p-12 border-bg">
+      <div className="max-w-screen-lg mx-auto flex flex-col justify-center items-center border-t p-12 border-border">
         <span className="text-sm">
           <Trans>Join the community:</Trans>
         </span>
@@ -90,14 +90,14 @@ export const Footer = ({ className }: FooterProps) => {
               <Link
                 to={href}
                 target="_blank"
-                className="text-textVar1 hover:text-text"
+                className="text-muted-foreground hover:text-foreground"
               >
                 <Icon size={32} />
               </Link>
             </Tooltip>
           ))}
         </div>
-        <p className="mr-1 text-xs text-textVar1 mt-8">
+        <p className="mr-1 text-xs text-muted-foreground mt-8">
           <Trans>© 2018-{currentYear} Corehalla</Trans>
         </p>
       </div>

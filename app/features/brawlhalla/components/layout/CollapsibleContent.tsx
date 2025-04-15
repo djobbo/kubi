@@ -24,7 +24,7 @@ export const CollapsibleContent = ({
   trigger,
   children,
   hasArrow = true,
-  arrowClassName = "text-textVar1",
+  arrowClassName = "text-muted-foreground",
   defaultOpen = false,
   closingArrow,
 }: CollapsibleContentProps) => {
@@ -53,7 +53,7 @@ export const CollapsibleContent = ({
         {closingArrow && (
           <button
             type="button"
-            className="w-full flex items-center justify-center mt-4 text-textVar1"
+            className="w-full flex items-center justify-center mt-4 text-muted-foreground"
             onClick={() => setOpen(false)}
           >
             <ChevronUp />

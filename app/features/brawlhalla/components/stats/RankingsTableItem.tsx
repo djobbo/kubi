@@ -34,21 +34,21 @@ export const RankingsTableItem = ({
       <div
         className={cn(
           "block md:hidden",
-          "px-4 py-2 w-full h-full items-center gap-4 hover:bg-bg",
+          "px-4 py-2 w-full h-full items-center gap-4 hover:bg-border",
           {
-            "bg-bgVar2": index % 2 === 0,
-            "bg-bgVar1": index % 2 === 1,
+            "bg-secondary": index % 2 === 0,
+            "bg-background": index % 2 === 1,
           },
           className,
         )}
       >
         <div
-          className={cn("flex border-b border-textVar1 py-1", {
-            "border-bgVar1": index % 2 === 0,
-            "border-bgVar2": index % 2 === 1,
+          className={cn("flex border-b border-muted-foreground py-1", {
+            "border-background": index % 2 === 0,
+            "border-secondary": index % 2 === 1,
           })}
         >
-          <span className="text-lg font-semibold text-textVar1 mr-2">
+          <span className="text-lg font-semibold text-muted-foreground mr-2">
             {rank} -
           </span>
           {content}
@@ -69,8 +69,8 @@ export const RankingsTableItem = ({
             />
             {rating}
             <span>/</span>
-            <span className="text-textVar1 text-sm">{peak_rating}</span>
-            <span className="ml-2 text-xs font-normal uppercase text-textVar1">
+            <span className="text-muted-foreground text-sm">{peak_rating}</span>
+            <span className="ml-2 text-xs font-normal uppercase text-muted-foreground">
               <Trans>peak ({tier})</Trans>
             </span>
           </p>
@@ -82,14 +82,14 @@ export const RankingsTableItem = ({
           <div className="flex justify-between font-bold text-sm mt-2">
             <span>
               {wins}W{" "}
-              <span className="text-xs text-textVar1">
+              <span className="text-xs text-muted-foreground">
                 ({calculateWinrate(wins, games).toFixed(2)}
                 %)
               </span>
             </span>
             <span>
               {games - wins}L{" "}
-              <span className="text-xs text-textVar1">
+              <span className="text-xs text-muted-foreground">
                 ({calculateWinrate(games - wins, games).toFixed(2)}
                 %)
               </span>
@@ -100,10 +100,10 @@ export const RankingsTableItem = ({
       <div
         className={cn(
           "hidden md:flex",
-          "py-1 w-full h-full items-center gap-4 hover:bg-bg",
+          "py-1 w-full h-full items-center gap-4 hover:bg-border",
           {
-            "bg-bgVar2": index % 2 === 0,
-            "bg-bgVar1": index % 2 === 1,
+            "bg-secondary": index % 2 === 0,
+            "bg-background": index % 2 === 1,
           },
           className,
         )}
@@ -141,7 +141,9 @@ export const RankingsTableItem = ({
         <div className="w-40 flex items-center justify-start">
           <p>
             <span className="text-xl font-bold">{rating}</span>{" "}
-            <span className="text-textVar1 text-sm">/ {peak_rating} peak</span>
+            <span className="text-muted-foreground text-sm">
+              / {peak_rating} peak
+            </span>
           </p>
         </div>
       </div>

@@ -124,16 +124,17 @@ export const Searchbox = () => {
     aliases.length > 0 ||
     !!potentialBrawlhallaIdAliases
 
-  const categoryTitleClassName = "text-xs font-semibold text-textVar1 px-4 py-2"
+  const categoryTitleClassName =
+    "text-xs font-semibold text-muted-foreground px-4 py-2"
 
   return (
     <KBarPortal>
-      <KBarPositioner className="z-20 bg-bgVar2/50">
+      <KBarPositioner className="z-20 bg-secondary/50">
         <KBarAnimator className="w-full max-w-screen-md">
-          <div className="rounded-lg overflow-hidden mx-auto bg-bgVar2/[0.98] border border-bg">
+          <div className="rounded-lg overflow-hidden mx-auto bg-secondary/[0.98] border border-border">
             <div className="relative">
               <KBarSearch
-                className="p-4 w-full bg-bgVar2 text-text outline-none border-b border-b-bg"
+                className="p-4 w-full bg-secondary text-foreground outline-none border-b border-b-border"
                 defaultPlaceholder={t`Search player by name or brawlhalla id...`}
                 onChange={(e) => {
                   setSearch(e.target.value)
@@ -145,7 +146,7 @@ export const Searchbox = () => {
                   <Spinner
                     className="absolute top-1/2 -translate-x-1/2 right-2"
                     size="2rem"
-                    color={colors.bg}
+                    color={colors.border}
                   />
                 )}
             </div>
@@ -217,7 +218,7 @@ export const Searchbox = () => {
                         !isLoading &&
                         !isDebouncingSearch &&
                         enableSearch && (
-                          <span className="block text-lg font-semibold mb-2 text-text">
+                          <span className="block text-lg font-semibold mb-2 text-foreground">
                             <Trans>No players found</Trans>
                           </span>
                         )}
@@ -226,7 +227,7 @@ export const Searchbox = () => {
                         at least 3 characters)
                       </Trans>
                       <br />
-                      <span className="text-xs text-textVar1">
+                      <span className="text-xs text-muted-foreground">
                         <Trans>
                           Only players that have completed their 10 placement
                           matches are shown.
@@ -238,7 +239,7 @@ export const Searchbox = () => {
                 )}
               </div>
             </div>
-            <p className="text-center text-xs text-textVar1 italic p-2 border-t border-bg">
+            <p className="text-center text-xs text-muted-foreground italic p-2 border-t border-border">
               <Trans>
                 If you{"'"}re having trouble finding a player by name, trying
                 using their brawlhalla id instead.
@@ -250,7 +251,7 @@ export const Searchbox = () => {
                   href="/discord"
                   target="_blank"
                   rel="noreferrer"
-                  className="text-textVar1 underline"
+                  className="text-muted-foreground underline"
                 >
                   Discord
                 </a>{" "}

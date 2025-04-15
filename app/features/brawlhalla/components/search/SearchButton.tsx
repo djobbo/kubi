@@ -23,7 +23,7 @@ export const SearchButton = ({ className }: SearchButtonProps) => {
         <Search className="w-4 h-4" />
         <Trans>Search player...</Trans>
       </span>
-      <span className="hidden md:flex items-center gap-1 text-textVar1">
+      <span className="hidden md:flex items-center gap-1 text-muted-foreground">
         <CommandShortcut>/</CommandShortcut>
       </span>
     </Button>

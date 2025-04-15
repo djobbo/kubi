@@ -61,10 +61,10 @@ export const Paginator = ({
               key={page}
               to={getPageHref(page)}
               className={cn(
-                "p-2 h-8 flex items-center justify-center text-sm rounded-lg border-bg whitespace-nowrap",
+                "p-2 h-8 flex items-center justify-center text-sm rounded-lg border-border whitespace-nowrap",
                 {
-                  "bg-accentOld": page === currentPage,
-                  "bg-bgVar2": page !== currentPage,
+                  "bg-accent-foreground": page === currentPage,
+                  "bg-secondary": page !== currentPage,
                 },
               )}
             >

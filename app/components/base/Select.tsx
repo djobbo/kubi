@@ -37,7 +37,7 @@ export const Select = <T extends string>({
       {label && (
         <label
           htmlFor={selectId}
-          className="relative sm:absolute inline-block sm:block text-sm font-medium text-textVar1 sm:left-0 sm:-top-[1.75rem]"
+          className="relative sm:absolute inline-block sm:block text-sm font-medium text-muted-foreground sm:left-0 sm:-top-[1.75rem]"
         >
           {label}
         </label>
@@ -51,29 +51,30 @@ export const Select = <T extends string>({
         styles={{
           singleValue: (styles) => ({
             ...styles,
-            color: colors.text.toString(),
+            color: colors.foreground.toString(),
           }),
           control: (styles) => ({
             ...styles,
-            backgroundColor: colors.bgVar2.toString(),
+            color: colors.foreground.toString(),
+            backgroundColor: colors.secondary.toString(),
             borderRadius: "0.5rem",
             // eslint-disable-next-line lingui/no-unlocalized-strings
-            border: `thin solid ${colors.bg}`,
+            border: `thin solid ${colors.border}`,
             cursor: "pointer",
             // eslint-disable-next-line lingui/no-unlocalized-strings
             padding: "0.25rem 0.5rem",
           }),
           menu: (styles) => ({
             ...styles,
-            backgroundColor: colors.bg.toString(),
+            backgroundColor: colors.border.toString(),
           }),
           option: (styles) => ({
             ...styles,
-            color: colors.text.toString(),
-            backgroundColor: colors.bg.toString(),
+            color: colors.foreground.toString(),
+            backgroundColor: colors.border.toString(),
             cursor: "pointer",
             ":hover": {
-              backgroundColor: colors.bgVar1.toString(),
+              backgroundColor: colors.background.toString(),
             },
           }),
         }}

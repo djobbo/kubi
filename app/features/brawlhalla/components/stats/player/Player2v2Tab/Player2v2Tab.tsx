@@ -152,7 +152,7 @@ export const Player2v2Tab = ({ ranked }: Player2v2TabProps) => {
         <button
           type="button"
           onClick={changeTeamSortDirection}
-          className="flex items-center hover:text-accentOld"
+          className="flex items-center hover:text-accent-foreground"
         >
           {teamSortDirection === SortDirection.Ascending ? (
             <ArrowUpWideNarrow className="w-6 h-6" />

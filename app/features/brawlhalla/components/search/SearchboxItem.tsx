@@ -25,14 +25,14 @@ export const SearchboxItem = ({
     <Link
       to={href}
       onClick={() => toggle()}
-      className="px-4 py-3 w-full flex items-center justify-between gap-8 border-b cursor-pointer border-bgVar2 hover:bg-bg/75"
+      className="px-4 py-3 w-full flex items-center justify-between gap-8 border-b cursor-pointer border-secondary hover:bg-border/75"
     >
       <div className="min-w-0 flex items-center flex-1">
         {icon}
         <div className="ml-4 min-w-0 flex-1">
           <p className="truncate">{title}</p>
           {!!subtitle && (
-            <p className="text-xs text-textVar1 truncate">{subtitle}</p>
+            <p className="text-xs text-muted-foreground truncate">{subtitle}</p>
           )}
         </div>
       </div>

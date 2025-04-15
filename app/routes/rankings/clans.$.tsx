@@ -104,7 +104,7 @@ function RouteComponent() {
         <p className="w-20 pl-1 text-center">XP</p>
       </div>
 
-      <div className="rounded-lg overflow-hidden border border-bg mb-4 flex flex-col">
+      <div className="rounded-lg overflow-hidden border border-border mb-4 flex flex-col">
         {rankings
           .filter((clan) => clan.name.toLowerCase().startsWith(immediateSearch))
           .map((clan, i) => {
@@ -112,8 +112,8 @@ function RouteComponent() {
               <div
                 key={clan.id}
                 className={cn(
-                  "px-4 py-2 w-full h-full flex items-center gap-4 hover:bg-bg",
-                  { "bg-bgVar2": i % 2 === 0 },
+                  "px-4 py-2 w-full h-full flex items-center gap-4 hover:bg-border",
+                  { "bg-secondary": i % 2 === 0 },
                 )}
               >
                 {showClanRank && (

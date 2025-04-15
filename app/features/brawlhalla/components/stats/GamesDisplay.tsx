@@ -24,7 +24,7 @@ export const GamesDisplay = ({
     <div className={cn("flex flex-col", className)}>
       <p className="text-5xl font-bold">
         {mainContent ?? games}
-        <span className="ml-2 text-xs font-normal uppercase text-textVar1">
+        <span className="ml-2 text-xs font-normal uppercase text-muted-foreground">
           {description ?? "games"}
         </span>
       </p>
@@ -36,13 +36,13 @@ export const GamesDisplay = ({
       <div className="flex justify-between font-bold text-md mt-2">
         <span>
           {wins}W{" "}
-          <span className="text-xs text-textVar1">
+          <span className="text-xs text-muted-foreground">
             ({calculateWinrate(wins, games).toFixed(2)}%)
           </span>
         </span>
         <span>
           {games - wins}L{" "}
-          <span className="text-xs text-textVar1">
+          <span className="text-xs text-muted-foreground">
             ({calculateWinrate(games - wins, games).toFixed(2)}%)
           </span>
         </span>

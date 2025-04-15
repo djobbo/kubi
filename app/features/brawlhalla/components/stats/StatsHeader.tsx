@@ -100,12 +100,12 @@ export const StatsHeader = ({
           {icon}
           {name}
         </h1>
-        <span className="text-xs font-bold mt-1 text-textVar1">#{id}</span>
+        <span className="text-xs font-bold mt-1 text-muted-foreground">#{id}</span>
       </div>
       {!!aliases && aliases.length > 0 && (
         <div className="flex flex-wrap gap-2 mt-4 justify-center">
           {aliases.slice(0, MAX_SHOWN_ALIASES).map((alias) => (
-            <p key={alias} className={cn("rounded-lg py-0.5 px-3 bg-bg")}>
+            <p key={alias} className={cn("rounded-lg py-0.5 px-3 bg-border")}>
               {cleanString(alias)}
             </p>
           ))}

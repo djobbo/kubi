@@ -130,7 +130,7 @@ function RouteComponent() {
         </p>
       </div>
 
-      <div className="rounded-lg overflow-hidden border border-bg mb-4 flex flex-col">
+      <div className="rounded-lg overflow-hidden border border-border mb-4 flex flex-col">
         {rankings
           // .filter((player) =>
           //   player.name.toLowerCase().startsWith(immediateSearch),

@@ -14,7 +14,7 @@ export const AlertBar = () => {
   if (!alertContent) return null
 
   return (
-    <div className="w-full text-sm bg-bg py-2 px-4 flex justify-center items-center gap-2">
+    <div className="w-full text-sm bg-border py-2 px-4 flex justify-center items-center gap-2">
       <Info size={16} /> {alertContent}
     </div>
   )

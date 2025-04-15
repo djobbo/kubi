@@ -136,7 +136,7 @@ export const PlayerOverviewTab = ({
       <CollapsibleSection
         trigger={
           <>
-            <ChartColumnBig size={20} className="fill-accentVar1" />
+            <ChartColumnBig size={20} className="fill-accent-secondary-foreground" />
             <Trans>General Stats</Trans>
           </>
         }
@@ -157,7 +157,7 @@ export const PlayerOverviewTab = ({
       <CollapsibleSection
         trigger={
           <>
-            <Hand size={20} className="fill-accentVar1" />
+            <Hand size={20} className="fill-accent-secondary-foreground" />
             <Trans>Unarmed</Trans>
           </>
         }
@@ -167,7 +167,7 @@ export const PlayerOverviewTab = ({
       <CollapsibleSection
         trigger={
           <>
-            <Target size={20} className="stroke-accentVar1" />
+            <Target size={20} className="stroke-accent-secondary-foreground" />
             <Trans>Weapon Throws</Trans>
           </>
         }
@@ -177,7 +177,7 @@ export const PlayerOverviewTab = ({
       <CollapsibleSection
         trigger={
           <>
-            <Flame size={20} className="fill-accentVar1" />
+            <Flame size={20} className="fill-accent-secondary-foreground" />
             <Trans>Gadgets</Trans>
           </>
         }

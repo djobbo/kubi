@@ -100,7 +100,7 @@ const SideNavIcon = ({
         {onRemove && (
           <button
             type="button"
-            className="items-center justify-center remove-btn absolute w-4 h-4 p-0.5 rounded-full overflow-hidden shadow-md bg-accentOld hover:bg-text hover:text-bgVar2"
+            className="items-center justify-center remove-btn absolute w-4 h-4 p-0.5 rounded-full overflow-hidden shadow-md bg-accent-foreground hover:bg-foreground hover:text-secondary"
             onClick={onRemove}
           >
             <X size={12} />
@@ -251,7 +251,7 @@ export const SideNav = ({ className }: SideNavProps) => {
       <button
         type="button"
         className={cn(
-          "fixed w-full h-full inset-0 bg-bgVar2 opacity-50 cursor-default",
+          "fixed w-full h-full inset-0 bg-secondary opacity-50 cursor-default",
           {
             hidden: !isSideNavOpen,
           },
@@ -270,7 +270,7 @@ export const SideNav = ({ className }: SideNavProps) => {
         }}
       >
         <div className="flex flex-col gap-2 flex-1 px-2 pb-4">
-          <hr className="border-t border-bg rounded-full mx-2" />
+          <hr className="border-t border-border rounded-full mx-2" />
           {nav.map((nav) => (
             <SideNavIcon
               key={nav.name}
@@ -287,7 +287,7 @@ export const SideNav = ({ className }: SideNavProps) => {
             />
           ))}
           <hr
-            className={cn("border-t border-bg rounded-full mx-2", {
+            className={cn("border-t border-border rounded-full mx-2", {
               hidden: bookmarks.length <= 0,
             })}
           />

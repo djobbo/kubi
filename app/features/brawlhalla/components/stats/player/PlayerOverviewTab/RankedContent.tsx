@@ -79,7 +79,7 @@ export const PlayerOverviewRankedContent = ({
     <CollapsibleSection
       trigger={
         <>
-          <ChevronsUp size={20} className="fill-accentVar1" />
+          <ChevronsUp size={20} className="fill-accent-secondary-foreground" />
           <Trans>Ranked Season</Trans>
         </>
       }

@@ -41,13 +41,13 @@ const tabClassName = cn(
   "px-6 py-4 uppercase text-xs border-b-2 z-10 whitespace-nowrap",
   css({
     borderColor: "transparent",
-    color: colors.textVar1,
+    color: colors.muted,
     '&[data-state="active"]': {
-      borderColor: colors.accentOld,
+      borderColor: colors.accent,
       color: colors.text,
     },
     "&:hover": {
-      backgroundColor: colors.bgVar2,
+      backgroundColor: colors.secondary,
       borderColor: colors.text,
       color: colors.text,
     },
@@ -213,7 +213,7 @@ function RouteComponent() {
         }}
       />
       <Tabs defaultValue="overview">
-        <TabsList className="relative flex mt-8 before:absolute before:inset-x-0 before:bottom-0 before:h-0.5 before:bg-bgVar1 overflow-x-scroll">
+        <TabsList className="relative flex mt-8 before:absolute before:inset-x-0 before:bottom-0 before:h-0.5 before:bg-background overflow-x-scroll">
           <TabsTrigger value="overview" className={tabClassName}>
             <Trans>Overview</Trans>
           </TabsTrigger>

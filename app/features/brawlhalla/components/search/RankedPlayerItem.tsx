@@ -37,7 +37,7 @@ export const RankedPlayerItem = ({ player }: RankedPlayerItemProps) => {
     <LegendIcon
       legendNameKey={legend.legend_name_key}
       alt={legend.bio_name}
-      containerClassName="w-8 h-8 rounded-lg overflow-hidden border border-textVar1"
+      containerClassName="w-8 h-8 rounded-lg overflow-hidden border border-muted-foreground"
       className="object-contain object-center"
     />
   )

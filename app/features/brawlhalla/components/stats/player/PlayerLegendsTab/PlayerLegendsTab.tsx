@@ -206,7 +206,7 @@ export const PlayerLegendsTab = ({
           <button
             type="button"
             onClick={changeLegendSortDirection}
-            className="flex items-center hover:text-accentOld"
+            className="flex items-center hover:text-accent-foreground"
           >
             {legendSortDirection === SortDirection.Ascending ? (
               <ArrowUpWideNarrow className="w-6 h-6" />

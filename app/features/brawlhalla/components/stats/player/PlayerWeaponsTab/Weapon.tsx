@@ -104,13 +104,13 @@ export const Weapon = ({
   return (
     <CollapsibleContent
       key={weapon.weapon}
-      className="shadow-md border rounded-lg border-bg"
+      className="shadow-md border rounded-lg border-border"
       triggerClassName="w-full p-4 flex justify-start items-center gap-2"
       contentClassName="px-4 pb-4"
       trigger={
         <span className="flex items-center justify-between w-full">
           <span className="flex items-center gap-2">
-            <span className="text-sm text-textVar1">{rank}</span>
+            <span className="text-sm text-muted-foreground">{rank}</span>
             <WeaponIcon
               weapon={weapon.weapon}
               alt={weapon.weapon}
@@ -120,7 +120,7 @@ export const Weapon = ({
             />
             {weapon.weapon}
           </span>
-          <span className="text-sm text-textVar1">
+          <span className="text-sm text-muted-foreground">
             {displayedInfoFn?.(weapon)}
           </span>
         </span>

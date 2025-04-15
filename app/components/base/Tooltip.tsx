@@ -40,11 +40,11 @@ export const Tooltip = ({
             align={align}
             className={cn(
               className,
-              "px-4 py-2 bg-bgVar2 border border-bg rounded-lg shadow-md hidden hashover:block z-50",
+              "px-4 py-2 bg-secondary border border-border rounded-lg shadow-md hidden hashover:block z-50",
             )}
           >
             {content}
-            <Arrow className="mb-2 fill-bg" />
+            <Arrow className="mb-2 fill-border" />
           </Content>
         </Portal>
       </Root>

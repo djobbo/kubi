@@ -21,14 +21,14 @@ export const CollapsibleSection = ({
     <CollapsibleContent
       className={cn("w-full", className)}
       triggerClassName={cn(
-        "w-full text-left border-b border-bg my-4",
+        "w-full text-left border-b border-border my-4",
         triggerClassName,
       )}
       trigger={(open) => (
         <SectionTitle
           customMargin
           className={cn("mt-0 flex items-center gap-2", {
-            "text-textVar1": !open,
+            "text-muted-foreground": !open,
           })}
         >
           {trigger}

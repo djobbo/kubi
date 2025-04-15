@@ -42,7 +42,7 @@ const CupcakeItem = ({ item }: CupcakeItemProps) => {
       <h2 className="flex gap-2">
         <ItemIcon
           itemId={item.id}
-          containerClassName="w-8 h-8 bg-bg p-1 rounded-full"
+          containerClassName="w-8 h-8 bg-border p-1 rounded-full"
           className="object-contain object-center"
         />
         {item.name} ({item.count})

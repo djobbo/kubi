@@ -30,7 +30,7 @@ export const ArticlePreview = ({ article }: ArticlePreviewProps) => {
         {categories.map((category) => (
           <span
             key={category.slug}
-            className="px-2 py-1 text-xs rounded-md bg-bgVar2 text-textVar1"
+            className="px-2 py-1 text-xs rounded-md bg-secondary text-muted-foreground"
           >
             {category.name}
           </span>

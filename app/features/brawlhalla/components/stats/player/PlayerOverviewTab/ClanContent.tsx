@@ -27,7 +27,7 @@ export const PlayerOverviewClanContent = ({
     <CollapsibleSection
       trigger={
         <>
-          <Shield size={20} className="fill-accentVar1" />
+          <Shield size={20} className="fill-accent-secondary-foreground" />
           <Trans>Clan</Trans>
         </>
       }
@@ -40,7 +40,7 @@ export const PlayerOverviewClanContent = ({
         >
           {cleanString(clan.clan_name)}
         </Link>
-        <span className="inline-block text-xs font-bold ml-2 text-textVar1">
+        <span className="inline-block text-xs font-bold ml-2 text-muted-foreground">
           #{clan.clan_id}
         </span>
       </p>

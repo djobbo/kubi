@@ -20,14 +20,14 @@ export const Card = ({
   return (
     <div
       className={cn(
-        "rounded-lg p-4 w-full bg-bgVar2/50 border border-bg/75 shadow-md",
+        "rounded-lg p-4 w-full bg-secondary/50 border border-border/75 shadow-md",
         className,
       )}
     >
       {!!title && (
         <p
           className={cn(
-            "inline-block uppercase rounded-md text-xs py-1 px-2 bg-bgVar1",
+            "inline-block uppercase rounded-md text-xs py-1 px-2 bg-background",
             titleClassName,
           )}
         >

@@ -12,12 +12,13 @@ export const ProgressCard = ({ title, bars }: ProgressCardProps) => {
       {bars.map(({ title, value, progress }) => (
         <div className="mt-3" key={title}>
           <p className="font-bold">
-            {value} <span className="text-sm text-textVar1">{title}</span>
+            {value}{" "}
+            <span className="text-sm text-muted-foreground">{title}</span>
           </p>
           <Progress
             value={progress}
-            className="h-1 rounded-full mt-2 overflow-hidden mt-1 bg-bgVar1"
-            indicatorClassName="h-2 bg-gradient-to-r from-accentOld to-accentVar1"
+            className="h-1 rounded-full mt-2 overflow-hidden bg-background"
+            indicatorClassName="h-2 bg-gradient-to-r from-accent-foreground to-accent-secondary-foreground"
           />
         </div>
       ))}

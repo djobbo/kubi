@@ -53,7 +53,7 @@ export const MiscStatGroup = ({
           })}
         >
           <Tooltip content={desc}>
-            <p className="text-sm text-textVar1">{name}</p>
+            <p className="text-sm text-muted-foreground">{name}</p>
           </Tooltip>
           <div
             className={cn("font-semibold text-lg", {

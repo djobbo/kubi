@@ -9,7 +9,7 @@ export const alerts = {
         <Link
           to="/discord"
           target="_blank"
-          className="text-accentAlt font-semibold hover:text-text"
+          className="text-ring font-semibold hover:text-foreground"
         >
           here
         </Link>{" "}
@@ -25,7 +25,7 @@ export const alerts = {
         <Link
           to="/discord"
           target="_blank"
-          className="text-accentAlt font-semibold hover:text-text"
+          className="text-ring font-semibold hover:text-foreground"
         >
           here
         </Link>{" "}
@@ -41,7 +41,7 @@ export const alerts = {
         <Link
           to="/discord"
           target="_blank"
-          className="text-accentAlt font-semibold hover:text-text"
+          className="text-ring font-semibold hover:text-foreground"
         >
           here
         </Link>{" "}
@@ -57,7 +57,7 @@ export const alerts = {
         <Link
           to="/discord"
           target="_blank"
-          className="text-accentAlt font-semibold hover:text-text"
+          className="text-ring font-semibold hover:text-foreground"
         >
           Discord
         </Link>{" "}
@@ -73,7 +73,7 @@ export const alerts = {
         <Link
           to="/wiki"
           target="_blank"
-          className="text-accentAlt font-semibold hover:text-text"
+          className="text-ring font-semibold hover:text-foreground"
         >
           brawlhalla.wiki.gg
         </Link>{" "}

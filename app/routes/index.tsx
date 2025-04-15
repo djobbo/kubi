@@ -37,19 +37,19 @@ function Home() {
           className={cn(
             "relative flex flex-col justify-center items-center lg:items-start z-0",
             landingClassName,
-            'after:content[""] after:absolute after:inset-0 after:bg-accentOld after:blur-[256px] after:opacity-[0.08] after:-z-10',
+            'after:content[""] after:absolute after:inset-0 after:bg-accent-foreground after:blur-[256px] after:opacity-[0.08] after:-z-10',
           )}
         >
           <a
             href="/discord"
             target="_blank"
-            className="flex items-center gap-2 pl-3 pr-2 py-1 bg-bgVar1/75 rounded-full border border-bg text-sm hover:bg-bgVar2"
+            className="flex items-center gap-2 pl-3 pr-2 py-1 bg-background/75 rounded-full border border-border text-sm hover:bg-secondary"
             aria-label={t`Join Corehalla's Discord server`}
           >
-            <span className="border-r border-r-bg pr-2">
+            <span className="border-r border-r-border pr-2">
               <Trans>Join our community</Trans>
             </span>
-            <span className="flex items-center gap-1 font-semibold text-center bg-gradient-to-l from-accentOld to-accentVar1 bg-clip-text text-fill-none">
+            <span className="flex items-center gap-1 font-semibold text-center bg-gradient-to-l from-accent-foreground to-accent-secondary-foreground bg-clip-text text-fill-none">
               <Trans>Discord</Trans>
               <ArrowRight className="w-4 h-4" />
             </span>
@@ -67,7 +67,7 @@ function Home() {
           </h1>
           <p
             className={cn(
-              "text-center text-sm sm:text-base mt-3 text-textVar1 max-w-xl ",
+              "text-center text-sm sm:text-base mt-3 text-muted-foreground max-w-xl ",
               "lg:text-start",
             )}
           >
@@ -79,7 +79,9 @@ function Home() {
           <div className="mt-8 flex items-center gap-3 sm:gap-6 flex-col sm:flex-row">
             <SearchButton />
             {/* <CommandMenu title={t`Search player...`} /> */}
-            <span className="text-textVar1 text-sm sm:text-base">or</span>
+            <span className="text-muted-foreground text-sm sm:text-base">
+              or
+            </span>
             <div className="flex items-center gap-2">
               <Button asChild className="whitespace-nowrap font-semibold">
                 <Link to="/rankings/1v1/$">
@@ -104,13 +106,13 @@ function Home() {
             href="/discord"
             target="_blank"
             aria-label="Discord server link"
-            className="block text-sm mt-2 text-textVar1 text-center"
+            className="block text-sm mt-2 text-muted-foreground text-center"
           >
             corehalla.com/discord
           </a>
         </div>
       </div>
-      <div className="border border-bg border-dashed p-4 rounded-lg my-16">
+      <div className="border border-border border-dashed p-4 rounded-lg my-16">
         {bookmarks.length > 0 ? (
           <FavoritesGrid bookmarks={bookmarks} />
         ) : (
@@ -131,7 +133,7 @@ function Home() {
               </>
             ) : (
               <>
-                <span className="text-textVar1">
+                <span className="text-muted-foreground">
                   <Trans>
                     Here you{"'"}ll be able to see your favorite players and
                     clans

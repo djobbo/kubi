@@ -213,13 +213,13 @@ function RouteComponent() {
         </p>
       </div>
       {filteredlPowerRankings.length > 0 ? (
-        <div className="rounded-lg overflow-hidden border border-bg mb-4">
+        <div className="rounded-lg overflow-hidden border border-border mb-4">
           {filteredlPowerRankings.map((player, i) => (
             <div
               className={cn(
-                "py-1 w-full h-full flex items-center gap-4 hover:bg-bg",
+                "py-1 w-full h-full flex items-center gap-4 hover:bg-border",
                 {
-                  "bg-bgVar2": i % 2 === 0,
+                  "bg-secondary": i % 2 === 0,
                 },
               )}
               key={`${gameMode}-${region}-${player.powerRanking}-${player.playerId}`}
@@ -243,7 +243,7 @@ function RouteComponent() {
         </div>
       ) : (
         <Tooltip content={t`do better >:)`}>
-          <div className="p-4 text-center text-textVar1">
+          <div className="p-4 text-center text-muted-foreground">
             <Trans>
               No results found in {gameMode} {formattedRegion} Power Rankings
             </Trans>

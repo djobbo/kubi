@@ -68,7 +68,7 @@ export const PlayerLegendWeaponDistribution = ({
                   value: (
                     <>
                       {weapon.kos}{" "}
-                      <span className="text-xs text-textVar1">
+                      <span className="text-xs text-muted-foreground">
                         (
                         {legend.stats
                           ? `${((weapon.kos / legend.stats?.kos) * 100).toFixed(
@@ -86,7 +86,7 @@ export const PlayerLegendWeaponDistribution = ({
                   value: (
                     <>
                       {weapon.damage}{" "}
-                      <span className="text-xs text-textVar1">
+                      <span className="text-xs text-muted-foreground">
                         (
                         {legend.stats
                           ? `${(
@@ -106,7 +106,7 @@ export const PlayerLegendWeaponDistribution = ({
                   value: (
                     <>
                       {formatTime(weapon.timeheld)}{" "}
-                      <span className="text-xs text-textVar1">
+                      <span className="text-xs text-muted-foreground">
                         (
                         {legend.stats
                           ? `${(
@@ -145,7 +145,7 @@ export const PlayerLegendWeaponDistribution = ({
             value: legend.stats ? (
               <>
                 {legend.stats.kothrownitem}{" "}
-                <span className="text-xs text-textVar1">
+                <span className="text-xs text-muted-foreground">
                   (
                   {(
                     (legend.stats.kothrownitem / legend.stats.kos) *
@@ -164,7 +164,7 @@ export const PlayerLegendWeaponDistribution = ({
             value: legend.stats ? (
               <>
                 {legend.stats.damagethrownitem}{" "}
-                <span className="text-xs text-textVar1">
+                <span className="text-xs text-muted-foreground">
                   (
                   {(
                     (parseInt(legend.stats.damagethrownitem) /
@@ -184,7 +184,7 @@ export const PlayerLegendWeaponDistribution = ({
             value: legend.stats ? (
               <>
                 {legend.stats.kogadgets}{" "}
-                <span className="text-xs text-textVar1">
+                <span className="text-xs text-muted-foreground">
                   (
                   {((legend.stats.kogadgets / legend.stats.kos) * 100).toFixed(
                     2,
@@ -202,7 +202,7 @@ export const PlayerLegendWeaponDistribution = ({
             value: legend.stats ? (
               <>
                 {legend.stats.damagegadgets}{" "}
-                <span className="text-xs text-textVar1">
+                <span className="text-xs text-muted-foreground">
                   (
                   {(
                     (parseInt(legend.stats.damagegadgets) /

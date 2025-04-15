@@ -114,7 +114,7 @@ export const PlayerWeaponsTab = ({
         <button
           type="button"
           onClick={changeWeaponSortDirection}
-          className="flex items-center hover:text-accentOld"
+          className="flex items-center hover:text-accent-foreground"
         >
           {weaponSortDirection === SortDirection.Ascending ? (
             <ArrowUpWideNarrow className="w-6 h-6" />

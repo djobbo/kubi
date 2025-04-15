@@ -48,7 +48,7 @@ export const TeamCard = ({ playerId, team }: TeamCardProps) => {
       params={{ playerId: teammate.id.toString() }}
     >
       <Card
-        className="relative overflow-hidden z-0 hover:bg-bgVar2 border border-bg"
+        className="relative overflow-hidden z-0 hover:bg-secondary border border-border"
         title={
           <span className="flex items-center">
             <FlagIcon

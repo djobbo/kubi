@@ -96,7 +96,7 @@ export const RankingsLayout = ({
               setSearch?.(e.target.value)
             }}
             className={cn(
-              "w-full mt-4 px-4 py-2 border bg-bgVar2 border-bg rounded-lg",
+              "w-full mt-4 px-4 py-2 border bg-secondary border-border rounded-lg",
               searchClassName,
             )}
             placeholder={searchPlaceholder}
