@@ -155,7 +155,7 @@ msgstr "Victoires classées 1v1 cette saison"
 msgid "1v1 Rankings"
 msgstr "Classement 1v1"
 
-#: app/routes/index.tsx:95
+#: app/routes/index.tsx:97
 #: app/routes/rankings/power.$.tsx:161
 #: app/routes/rankings/clans.$.tsx:76
 #: app/routes/rankings/2v2.$.tsx:54
@@ -379,7 +379,7 @@ msgid "Best Rating"
 msgstr ""
 
 #: app/routes/@me/bookmarks.tsx:24
-#: app/features/sidebar/components/user.tsx:99
+#: app/features/sidebar/components/user.tsx:101
 #: app/features/sidebar/components/bookmarks.tsx:136
 #: app/features/brawlhalla/components/layout/SideNav.tsx:240
 msgid "Bookmarks"
@@ -759,7 +759,7 @@ msgstr ""
 msgid "Hello World"
 msgstr "Bonjour, Monde"
 
-#: app/routes/index.tsx:135
+#: app/routes/index.tsx:137
 msgid "Here you'll be able to see your favorite players and clans"
 msgstr ""
 
@@ -771,7 +771,7 @@ msgstr ""
 msgid "Highest peak elo"
 msgstr "Elo maximal le plus élevé"
 
-#: app/features/sidebar/components/user.tsx:104
+#: app/features/sidebar/components/user.tsx:106
 msgid "History"
 msgstr "Historique"
 
@@ -791,11 +791,11 @@ msgstr "J'ai joué 10 parties classées (ou plus)."
 msgid "I understand 💪"
 msgstr "J'ai compris 💪"
 
-#: app/features/brawlhalla/components/search/Searchbox.tsx:240
+#: app/features/brawlhalla/components/search/Searchbox.tsx:243
 msgid "If you're having trouble finding a player by name, trying using their brawlhalla id instead."
 msgstr "Si vous avez du mal à trouver un joueur par son nom, essayez d'utiliser son identifiant Brawlhalla à la place."
 
-#: app/routes/__root.tsx:81
+#: app/routes/__root.tsx:76
 msgid "Improve your Brawlhalla Game, and find your place among the Elite with our in-depth Player and Clan stats tracking and live leaderboards."
 msgstr "Devenez meilleur à Brawlhalla, et trouvez votre place parmi les meilleurs avec nos statistiques détaillées de joueurs et de clans et nos classements en direct."
 
@@ -811,7 +811,7 @@ msgstr "Rejoindre"
 msgid "Join Corehalla's Discord server"
 msgstr ""
 
-#: app/features/brawlhalla/components/search/Searchbox.tsx:245
+#: app/features/brawlhalla/components/search/Searchbox.tsx:248
 msgid "Join our <0>Discord</0> if you need help."
 msgstr "Rejoignez notre <0>Discord</0> si vous avez besoin d'aide."
 
@@ -939,12 +939,12 @@ msgstr "Niveau / XP"
 msgid "Links"
 msgstr "Liens"
 
-#: app/routes/__root.tsx:121
+#: app/routes/__root.tsx:117
 msgid "Loading..."
 msgstr "Chargement..."
 
-#: app/routes/index.tsx:151
-#: app/routes/index.tsx:161
+#: app/routes/index.tsx:153
+#: app/routes/index.tsx:163
 msgid "Loading<0>...</0>"
 msgstr "Chargement<0>...</0>"
 
@@ -1001,7 +1001,7 @@ msgstr "Nom"
 msgid "New Season Glory / ELO Reset Calculator"
 msgstr "Gloire de la nouvelle saison / Calculateur de réinitialisation de l'ELO"
 
-#: app/features/brawlhalla/components/search/Searchbox.tsx:219
+#: app/features/brawlhalla/components/search/Searchbox.tsx:222
 msgid "No players found"
 msgstr "Pas de joueurs trouvés"
 
@@ -1027,7 +1027,7 @@ msgstr "Nombre de membres dans {clanName}"
 msgid "Number of teammates this season"
 msgstr "Nombre de coéquipiers cette saison"
 
-#: app/features/brawlhalla/components/search/Searchbox.tsx:228
+#: app/features/brawlhalla/components/search/Searchbox.tsx:231
 msgid "Only players that have completed their 10 placement matches are shown."
 msgstr "Seuls les joueurs ayant terminé leurs 10 parties de placement sont affichés."
 
@@ -1035,7 +1035,7 @@ msgstr "Seuls les joueurs ayant terminé leurs 10 parties de placement sont affi
 msgid "Oops, something went wrong"
 msgstr "Aïe, quelque chose s'est mal passé"
 
-#: app/features/brawlhalla/components/search/Searchbox.tsx:191
+#: app/features/brawlhalla/components/search/Searchbox.tsx:194
 msgid "Other players with similar names"
 msgstr "Autres joueurs avec des noms similaires"
 
@@ -1095,7 +1095,7 @@ msgstr "Joueur 1"
 msgid "Player 2"
 msgstr "Joueur 2"
 
-#: app/features/brawlhalla/components/search/Searchbox.tsx:163
+#: app/features/brawlhalla/components/search/Searchbox.tsx:166
 msgid "Player#{search}"
 msgstr ""
 
@@ -1145,7 +1145,7 @@ msgstr ""
 msgid "Rank"
 msgstr ""
 
-#: app/features/brawlhalla/components/search/Searchbox.tsx:178
+#: app/features/brawlhalla/components/search/Searchbox.tsx:181
 msgid "Ranked players"
 msgstr ""
 
@@ -1199,7 +1199,7 @@ msgstr "SA"
 msgid "SEA"
 msgstr "SEA"
 
-#: app/features/brawlhalla/components/search/Searchbox.tsx:158
+#: app/features/brawlhalla/components/search/Searchbox.tsx:161
 msgid "Search by Brawlhalla ID"
 msgstr "Rechercher par identifiant Brawlhalla"
 
@@ -1211,15 +1211,15 @@ msgstr ""
 msgid "Search clan..."
 msgstr "Rechercher un clan..."
 
-#: app/features/brawlhalla/components/search/Searchbox.tsx:223
-msgid "Search for a player (must start with exact match)"
-msgstr "Rechercher un joueur (doit commencer par une correspondance exacte)"
+#: app/features/brawlhalla/components/search/Searchbox.tsx:225
+msgid "Search for a player (must start with exact match, with at least 3 characters)"
+msgstr ""
 
 #: app/routes/rankings/1v1.$.tsx:104
 msgid "Search must start with exact match. Only players that have completed their 10 placement matches are shown."
 msgstr "La recherche doit commencer par une correspondance exacte. Seuls les joueurs ayant terminé leurs 10 parties de placement sont affichés."
 
-#: app/features/brawlhalla/components/search/Searchbox.tsx:135
+#: app/features/brawlhalla/components/search/Searchbox.tsx:138
 msgid "Search player by name or brawlhalla id..."
 msgstr "Rechercher un joueur par nom ou identifiant Brawlhalla..."
 
@@ -1243,7 +1243,7 @@ msgstr "Partager"
 msgid "Share your thoughts"
 msgstr "Partagez vos idées"
 
-#: app/routes/index.tsx:142
+#: app/routes/index.tsx:144
 #: app/features/brawlhalla/components/layout/Header.tsx:59
 msgid "Sign in"
 msgstr "Se connecter"
@@ -1257,7 +1257,7 @@ msgid "Sign in with Discord"
 msgstr "Se connecter avec Discord"
 
 #: app/routes/test.tsx:41
-#: app/features/sidebar/components/user.tsx:111
+#: app/features/sidebar/components/user.tsx:113
 #: app/features/brawlhalla/components/layout/Header.tsx:53
 msgid "Sign out"
 msgstr "Se déconnecter"
@@ -1454,7 +1454,7 @@ msgstr ""
 msgid "Total wins"
 msgstr ""
 
-#: app/routes/__root.tsx:80
+#: app/routes/__root.tsx:75
 msgid "Track your Brawlhalla stats, view rankings, and more! • Corehalla"
 msgstr "Suivez vos statistiques de Brawlhalla, consultez les classements, et bien plus encore! • Corehalla"
 
@@ -1512,8 +1512,8 @@ msgstr ""
 msgid "Valhallan"
 msgstr ""
 
-#: app/routes/index.tsx:86
-#: app/routes/index.tsx:129
+#: app/routes/index.tsx:88
+#: app/routes/index.tsx:131
 msgid "View rankings"
 msgstr ""
 
@@ -1617,7 +1617,7 @@ msgstr ""
 msgid "XP earned with this legend"
 msgstr ""
 
-#: app/routes/index.tsx:120
+#: app/routes/index.tsx:122
 msgid "You don't have any favorites yet, you can a player or a clan as favorite when visiting their profile page."
 msgstr ""
 
