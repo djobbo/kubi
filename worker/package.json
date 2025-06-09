@@ -1,14 +1,8 @@
 {
-  "name": "kubi",
+  "name": "worker",
   "module": "index.ts",
   "type": "module",
   "private": true,
-  "workspaces": [
-    "client",
-    "api",
-    "worker",
-    "packages/*"
-  ],
   "devDependencies": {
     "@types/bun": "latest"
   },

@@ -1,18 +1,15 @@
 {
-  "name": "kubi",
+  "name": "@dair/brawlhalla-api",
   "module": "index.ts",
   "type": "module",
   "private": true,
-  "workspaces": [
-    "client",
-    "api",
-    "worker",
-    "packages/*"
-  ],
   "devDependencies": {
     "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5"
+  },
+  "dependencies": {
+    "zod": "^3.25.56"
   }
 }

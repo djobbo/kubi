@@ -1,0 +1,43 @@
+{
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "drizzle.config.js",
+    "eslint.config.mjs",
+    "tailwind.config.js",
+    "postcss.config.js",
+    "prettier.config.js",
+  ],
+  "compilerOptions": {
+    "lib": [
+      "ESNext",
+      "DOM",
+      "DOM.Iterable",
+    ],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "target": "ES2022",
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/panda/*": [
+        "./styled-system/*"
+      ],
+      "@/*": [
+        "./app/*"
+      ],
+      "~/*": [
+        "./*"
+      ],
+    },
+    "noEmit": true
+  }
+}
