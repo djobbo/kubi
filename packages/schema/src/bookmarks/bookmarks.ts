@@ -48,7 +48,7 @@ export const bookmarksTable = sqliteTable(
     userId: text('user_id')
       .notNull()
       .references(() => usersTable.id),
-    createdAt: integer('createdAt', { mode: 'timestamp' }).notNull().defaultNow(),
+    createdAt: integer('createdAt', { mode: 'timestamp_ms' }).notNull().defaultNow(),
   },
   (table) => [
     uniqueIndex('unique_bookmark').on(table.userId, table.pageType, table.pageId),

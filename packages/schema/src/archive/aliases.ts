@@ -9,8 +9,8 @@ export const aliasesTable = sqliteTable(
     id: integer('id').primaryKey({ autoIncrement: true }),
     alias: text('alias').notNull(),
     playerId: text('player_id').notNull(),
-    createdAt: integer('createdAt', { mode: 'timestamp' }).notNull().default(sql`CURRENT_TIMESTAMP`),
-    updatedAt: integer('updatedAt', { mode: 'timestamp' }).notNull().default(sql`CURRENT_TIMESTAMP`),
+    createdAt: integer('createdAt', { mode: 'timestamp_ms' }).notNull().default(sql`(unixepoch() * 1000)`),
+    updatedAt: integer('updatedAt', { mode: 'timestamp_ms' }).notNull().default(sql`(unixepoch() * 1000)`),
     public: integer('public', { mode: 'boolean' }).notNull().default(true),
   },
   (table) => [

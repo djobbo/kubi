@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { CLANS_RANKINGS_PER_PAGE } from '@/features/archive/constants';
 import { getClanRankings } from '@/features/archive/functions/clans/get-clan-rankings';
 import { RankingsLayout } from '@/features/brawlhalla/components/stats/rankings/RankingsLayout';
-import { cleanString } from '@dair/common/src/helpers/cleanString';
+import { fixEncoding } from '@dair/common/src/helpers/fix-encoding';
 import { seo } from '@dair/common/src/helpers/seo';
 import { useDebouncedState } from '@/hooks/useDebouncedState';
 import { cn } from '@/ui/lib/utils';
@@ -115,7 +115,7 @@ function RouteComponent() {
                 )}
                 <p className="flex flex-1 items-center">
                   <Link to="/stats/clan/$clanId" params={{ clanId: clan.id.toString() }}>
-                    {cleanString(clan.name)}
+                    {fixEncoding(clan.name)}
                   </Link>
                 </p>
                 <div className="w-40 flex items-center justify-center">

@@ -18,7 +18,7 @@ import {
   getFullWeapons,
   getLegendsAccumulativeData,
 } from '@dair/brawlhalla-api/src/helpers/parser';
-import { cleanString } from '@dair/common/src/helpers/cleanString';
+import { fixEncoding } from '@dair/common/src/helpers/fix-encoding';
 import { formatTime } from '@dair/common/src/helpers/date';
 import { seo } from '@dair/common/src/helpers/seo';
 import { css } from '@/panda/css';
@@ -83,7 +83,7 @@ export const Route = createFileRoute('/stats/player/$playerId')({
 function RouteComponent() {
   const { player } = Route.useLoaderData();
 
-  const playerName = cleanString(player.stats.name);
+  const playerName = fixEncoding(player.stats.name);
 
   const fullLegends = getFullLegends(player.stats.legends, player.ranked?.legends);
 
@@ -164,7 +164,7 @@ function RouteComponent() {
   return (
     <>
       <StatsHeader
-        name={cleanString(playerName)}
+        name={fixEncoding(playerName)}
         id={player.stats.brawlhalla_id}
         aliases={player.aliases
           .map((alias) => alias.alias)
@@ -183,7 +183,7 @@ function RouteComponent() {
         bookmark={{
           pageType: 'player_stats',
           pageId: player.stats.brawlhalla_id.toString(),
-          name: cleanString(playerName),
+          name: fixEncoding(playerName),
           meta: {
             version: '1',
             data: {

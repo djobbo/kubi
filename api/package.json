@@ -1,9 +1,9 @@
 {
   "name": "@dair/api",
   "scripts": {
-    "dev": "bun run db:push && bun run --hot src/index.ts",
+    "dev": "bun run db:migrate && bun run --hot src/index.ts",
     "db:generate": "drizzle-kit generate",
-    "db:push": "bun db:generate && drizzle-kit push",
+    "db:migrate": "bun db:generate && drizzle-kit migrate",
     "studio": "bunx drizzle-kit studio"
   },
   "dependencies": {

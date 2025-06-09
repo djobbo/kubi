@@ -6,8 +6,8 @@ import { z } from "zod"
 import { get2v2Rankings } from "@/features/brawlhalla/functions"
 import { RankingsLayout } from "@/features/brawlhalla/components/stats/rankings/RankingsLayout"
 import { RankingsTableItem } from "@/features/brawlhalla/components/stats/RankingsTableItem"
-import { getTeamPlayers } from "@dair/brawlhalla-api/src/helpers/teamPlayers"
-import { cleanString } from "@dair/common/src/helpers/cleanString"
+import { getTeamPlayers } from "@dair/brawlhalla-api/src/helpers/team-players"
+import { fixEncoding } from "@dair/common/src/helpers/fix-encoding"
 import { seo } from "@dair/common/src/helpers/seo"
 
 export const Route = createFileRoute("/rankings/2v2/$")({
@@ -121,7 +121,7 @@ function RouteComponent() {
                       to="/stats/player/$playerId"
                       params={{ playerId: player1.id.toString() }}
                     >
-                      {cleanString(player1.name)}
+                      {fixEncoding(player1.name)}
                     </Link>
                   </p>
                   <p className="flex flex-1 items-center">
@@ -129,7 +129,7 @@ function RouteComponent() {
                       to="/stats/player/$playerId"
                       params={{ playerId: player2.id.toString() }}
                     >
-                      {cleanString(player2.name)}
+                      {fixEncoding(player2.name)}
                     </Link>
                   </p>
                 </>

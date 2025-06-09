@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 import { db } from '@dair/db';
 import { serviceAuthenticationMiddleware } from '@/features/auth/functions/serviceAuthenticationMiddleware';
-import { cleanString } from '@dair/common/src/helpers/cleanString';
+import { fixEncoding } from '@dair/common/src/helpers/fix-encoding';
 
 import { clanInsertSchema, clansTable } from '../../../../../../db/src/schema/archive/clans';
 
@@ -17,7 +17,7 @@ export const addOrUpdateClans = createServerFn({ method: 'POST' })
       .values(
         clans.map((clan) => ({
           ...clan,
-          name: cleanString(clan.name.trim()),
+          name: fixEncoding(clan.name.trim()),
           createdAt: clan.createdAt ?? null,
         }))
       )

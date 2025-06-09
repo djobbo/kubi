@@ -6,7 +6,7 @@ import {
   FlagIcon,
   RankedTierBanner,
 } from "@/features/brawlhalla/components/Image"
-import { cleanString } from "@dair/common/src/helpers/cleanString"
+import { fixEncoding } from "@dair/common/src/helpers/fix-encoding"
 import { css } from "@/panda/css"
 import { cn } from "@/ui/lib/utils"
 
@@ -14,7 +14,7 @@ import type { PlayerRanked } from "@dair/brawlhalla-api/src/api/schema/player-ra
 import { rankedRegions } from "@dair/brawlhalla-api/src/constants/ranked/regions"
 import { getTierFromRating } from "@dair/brawlhalla-api/src/constants/ranked/tiers"
 import { getLegendEloReset } from "@dair/brawlhalla-api/src/helpers/season-reset"
-import { getPlayerTeam } from "@dair/brawlhalla-api/src/helpers/teamPlayers"
+import { getPlayerTeam } from "@dair/brawlhalla-api/src/helpers/team-players"
 import { calculateWinrate } from "@dair/brawlhalla-api/src/helpers/winrate"
 import { MiscStatGroup } from "./MiscStatGroup"
 import { RatingDisplay } from "./RatingDisplay"
@@ -58,7 +58,7 @@ export const TeamCard = ({ playerId, team }: TeamCardProps) => {
               containerClassName="block w-4 h-4 rounded overflow-hidden mr-2"
               className="object-contain object-center"
             />
-            {cleanString(playerName)} {"&"} {cleanString(teammate.name)}
+            {fixEncoding(playerName)} {"&"} {fixEncoding(teammate.name)}
           </span>
         }
       >

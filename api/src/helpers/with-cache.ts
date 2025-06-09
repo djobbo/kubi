@@ -1,8 +1,8 @@
 import { desc, eq } from 'drizzle-orm';
 
 import { db } from '../db';
-import { CACHE_VERSION } from '@dair/schema/src/cache/constants';
 import { apiCacheTable } from '@dair/schema/src/cache/api-cache';
+import { env } from '../env';
 
 export const DEFAULT_CACHE_MAX_AGE = 15 * 60 * 1000;
 
@@ -12,7 +12,9 @@ interface Cache {
 }
 
 const isValidCache = <T extends Cache>(cache: T, maxAge = DEFAULT_CACHE_MAX_AGE) => {
-  if (cache.version !== CACHE_VERSION) return false;
+  if (cache.version !== env.CACHE_VERSION) return false;
+
+  console.log(Date.now(), cache.createdAt.getTime(), Date.now() - cache.createdAt.getTime() > maxAge, maxAge)
 
   if (Date.now() - cache.createdAt.getTime() > maxAge) return false;
 
@@ -31,11 +33,13 @@ export const withCache = async <T>(
     .orderBy(desc(apiCacheTable.createdAt))
     .limit(1);
 
+    console.log(cached)
+
   if (cached && isValidCache(cached, maxAge)) {
     console.log('Cache hit', cacheName);
 
     // TODO: Use validator?
-    return cached.data as T;
+    return {data: cached.data as T, createdAt: cached.createdAt};
   }
 
   console.log(
@@ -50,7 +54,7 @@ export const withCache = async <T>(
     data = await fn();
   } catch (error) {
     console.error('Failed to fetch data from API', cacheName, error);
-    if (cached) return cached.data as T;
+    if (cached) return {data: cached.data as T, createdAt: cached.createdAt};
     throw error;
   }
 
@@ -60,8 +64,9 @@ export const withCache = async <T>(
       cacheName,
       cacheId: `${cacheName}-${Date.now()}`,
       data,
+      version: env.CACHE_VERSION,
     })
     .onConflictDoNothing();
 
-  return data;
+  return {data, createdAt: new Date()};
 };

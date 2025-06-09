@@ -7,7 +7,7 @@ import type { Bookmark } from '../../../../../db/src/schema/bookmarks/bookmarks'
 import { useBookmarks } from '@/features/bookmarks/hooks/use-bookmarks';
 import { UnsafeImage, getLegendIconSrc } from '@/features/brawlhalla/components/Image';
 import { legendsMap } from '@dair/brawlhalla-api/src/constants/legends';
-import { cleanString } from '@dair/common/src/helpers/cleanString';
+import { fixEncoding } from '@dair/common/src/helpers/fix-encoding';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -53,7 +53,7 @@ interface NavBookmarkProps {
 }
 
 const NavBookmark = ({ bookmark, isCollapsed, ...props }: NavBookmarkProps) => {
-  const cleanName = cleanString(bookmark.name);
+  const cleanName = fixEncoding(bookmark.name);
 
   if (bookmark.pageType === 'player_stats') {
     const image = getBookmarkIconUrl(bookmark);

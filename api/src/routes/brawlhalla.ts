@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import { brawlhallaService } from '../services/brawlhalla/brawlhalla-service';
 import { brawltoolsService } from '../services/brawltools/brawltools-service';
+import { aliasesService } from '../services/aliases';
 
 const brawlhallaRoute = new Hono();
 
@@ -47,6 +48,18 @@ brawlhallaRoute.get('/rankings/power/:region?/:page?', async (c) => {
     gameMode,
   });
   return c.json(rankings);
+});
+
+brawlhallaRoute.get('/search/:name', async (c) => {
+  const { name } = c.req.param();
+  const aliases = await aliasesService.searchAliases(name);
+  return c.json(aliases);
+});
+
+brawlhallaRoute.get('/aliases/:playerId/:page?', async (c) => {
+  const { playerId, page } = c.req.param();
+  const aliases = await aliasesService.getAliases(playerId, page ? parseInt(page) : undefined);
+  return c.json(aliases);
 });
 
 export default brawlhallaRoute;

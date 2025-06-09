@@ -6,7 +6,7 @@ import { getClan } from "@/features/brawlhalla/functions"
 import { ClanMember } from "@/features/brawlhalla/components/stats/clan/ClanMember"
 import type { MiscStat } from "@/features/brawlhalla/components/stats/MiscStatGroup"
 import { StatsHeader } from "@/features/brawlhalla/components/stats/StatsHeader"
-import { cleanString } from "@dair/common/src/helpers/cleanString"
+import { fixEncoding } from "@dair/common/src/helpers/fix-encoding"
 import { formatUnixTime } from "@dair/common/src/helpers/date"
 import { seo } from "@dair/common/src/helpers/seo"
 
@@ -47,7 +47,7 @@ const clanRankWeights = {
 function RouteComponent() {
   const { clan } = Route.useLoaderData()
 
-  const clanName = cleanString(clan.clan_name)
+  const clanName = fixEncoding(clan.clan_name)
 
   const clanStats: MiscStat[] = [
     {
@@ -84,13 +84,13 @@ function RouteComponent() {
   return (
     <>
       <StatsHeader
-        name={cleanString(clan.clan_name)}
+        name={fixEncoding(clan.clan_name)}
         id={clan.clan_id}
         miscStats={clanStats}
         bookmark={{
           pageType: "clan_stats",
           pageId: clan.clan_id.toString(),
-          name: cleanString(clan.clan_name),
+          name: fixEncoding(clan.clan_name),
           meta: {
             version: "1",
             data: {

@@ -10,10 +10,12 @@ import { playerRankedSchema } from '@dair/brawlhalla-api/src/api/schema/player-r
 import { playerStatsSchema } from '@dair/brawlhalla-api/src/api/schema/player-stats';
 import { ranking1v1Schema, ranking2v2Schema } from '@dair/brawlhalla-api/src/api/schema/rankings';
 import { withCache } from '../../helpers/with-cache';
+import { getTeamPlayers } from '@dair/brawlhalla-api/src/helpers/team-players';
 
 import { typesafeFetch } from '../../helpers/typesafe-fetch';
 import z from 'zod';
 import { env } from '../../env';
+import { aliasesService } from '../aliases';
 
 const BRAWLHALLA_API_URL = 'https://api.brawlhalla.com';
 
@@ -25,18 +27,75 @@ const fetchBrawlhallaApi = typesafeFetch('Brawlhalla API', BRAWLHALLA_API_URL, {
 });
 
 export const brawlhallaService = {
-  getPlayerStatsById: (playerId: string) => withCache(`brawlhalla-player-stats-${playerId}`, () => fetchBrawlhallaApi({
-    path: `/player/${playerId}/stats`,
-    schema: playerStatsSchema,
-    mock: playerStatsMock,
-  }),
-  env.CACHE_MAX_AGE_OVERRIDE ?? 15 * 60 * 1000
-),
-  getPlayerRankedById: (playerId: string) => withCache(`brawlhalla-player-ranked-${playerId}`, () => fetchBrawlhallaApi({
-    path: `/player/${playerId}/ranked`,
-    schema: playerRankedSchema,
-    mock: playerRankedMock,
-  }), env.CACHE_MAX_AGE_OVERRIDE ?? 15 * 60 * 1000),
+  getPlayerStatsById: async (playerId: string) => {
+    const fetchPlayerStats = async () => {
+      const playerStats = await fetchBrawlhallaApi({
+        path: `/player/${playerId}/stats`,
+        schema: playerStatsSchema,
+        mock: playerStatsMock,
+      })
+
+    const now = new Date()
+    await aliasesService.updateAliases([
+      {
+        playerId: playerId.toString(),
+        alias: playerStats.name,
+        updatedAt: now,
+      },
+    ]);
+
+    return playerStats;
+  }
+
+    const playerStats = await withCache(`brawlhalla-player-stats-${playerId}`, fetchPlayerStats, env.CACHE_MAX_AGE_OVERRIDE ?? 15 * 60 * 1000)
+
+    return playerStats
+  },
+  getPlayerRankedById: async (playerId: string) => {
+    const fetchPlayerRanked = async () => {
+      const playerRanked = await fetchBrawlhallaApi({
+        path: `/player/${playerId}/ranked`,
+        schema: playerRankedSchema,
+        mock: playerRankedMock,
+      })
+
+
+      const now = new Date()
+      await aliasesService.updateAliases([
+        {
+          playerId: playerId.toString(),
+          alias: playerRanked.name,
+          updatedAt: now,
+        },
+        ...playerRanked['2v2']
+              .flatMap((team) => {
+                const players = getTeamPlayers(team);
+                if (!players) return null;
+                const [player1, player2] = players;
+
+                return [
+                  {
+                    playerId: player1.id.toString(),
+                    alias: player1.name,
+                    updatedAt: now,
+                  },
+                  {
+                    playerId: player2.id.toString(),
+                    alias: player2.name,
+                    updatedAt: now,
+                  },
+                ];
+              })
+              .filter((player) => player !== null),
+      ]);
+
+      return playerRanked;
+    }
+
+    const playerRanked = await withCache(`brawlhalla-player-ranked-${playerId}`, fetchPlayerRanked, env.CACHE_MAX_AGE_OVERRIDE ?? 15 * 60 * 1000)
+
+    return playerRanked
+  },
   getClanById: (clanId: string) => withCache(`brawlhalla-clan-${clanId}`, () => fetchBrawlhallaApi({
     path: `/clan/${clanId}`,
     schema: clanSchema,

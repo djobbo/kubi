@@ -4,7 +4,7 @@ import { Crown, Star, User, UserRoundPlus } from 'lucide-react';
 
 import { Card } from '@/components/base/Card';
 import type { Clan, ClanMemberRank } from '@dair/brawlhalla-api/src/api/schema/clan';
-import { cleanString } from '@dair/common/src/helpers/cleanString';
+import { fixEncoding } from '@dair/common/src/helpers/fix-encoding';
 import { formatUnixTime } from '@dair/common/src/helpers/date';
 
 import type { MiscStat } from '../MiscStatGroup';
@@ -23,7 +23,7 @@ const memberIcons: Record<ClanMemberRank, typeof Crown> = {
 } as const;
 
 export const ClanMember = ({ member, clan }: ClanMemberProps) => {
-  const memberName = cleanString(member.name);
+  const memberName = fixEncoding(member.name);
 
   const memberStats: MiscStat[] = [
     {
@@ -52,7 +52,7 @@ export const ClanMember = ({ member, clan }: ClanMemberProps) => {
         title={
           <span className="flex items-center gap-1">
             <Icon size={12} />
-            {cleanString(member.name)}
+            {fixEncoding(member.name)}
             <span className="text-xs text-muted-foreground">({member.rank})</span>
           </span>
         }

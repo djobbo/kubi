@@ -8,7 +8,7 @@ export const sessionsTable = sqliteTable('session', {
   userId: text('user_id')
     .notNull()
     .references(() => usersTable.id),
-  expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
+  expiresAt: integer('expires_at', { mode: 'timestamp_ms' }).notNull(),
 });
 
 export type Session = InferSelectModel<typeof sessionsTable>;

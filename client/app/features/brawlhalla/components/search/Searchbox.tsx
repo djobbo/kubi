@@ -13,7 +13,7 @@ import { useEffect } from "react"
 
 import { Spinner } from "@/components/base/Spinner"
 import { env } from "@/env"
-import { cleanString } from "@dair/common/src/helpers/cleanString"
+import { fixEncoding } from "@dair/common/src/helpers/fix-encoding"
 import { useDebouncedState } from "@/hooks/useDebouncedState"
 import { css } from "@/panda/css"
 import { cn } from "@/ui/lib/utils"
@@ -44,7 +44,7 @@ const AliasesSubtitle = ({
   return (
     <span className="flex gap-1">
       {aliases.map((alias) => {
-        const cleanAlias = cleanString(alias)
+        const cleanAlias = fixEncoding(alias)
 
         if (cleanAlias.length < 2 || cleanAlias.endsWith("•2")) return
 
@@ -198,7 +198,7 @@ export const Searchbox = () => {
                             key={`alias-${playerId}-${alias}`}
                             icon={<UserRound className="w-8 h-8" />}
                             href={`/stats/player/${playerId}`}
-                            title={cleanString(alias)}
+                            title={fixEncoding(alias)}
                             subtitle={
                               <AliasesSubtitle
                                 immediateSearch={immediateSearch}

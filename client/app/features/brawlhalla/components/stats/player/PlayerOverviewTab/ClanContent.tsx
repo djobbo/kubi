@@ -5,7 +5,7 @@ import { Shield } from 'lucide-react';
 
 import type { PlayerStats } from '@dair/brawlhalla-api/src/api/schema/player-stats';
 import { CollapsibleSection } from '@/features/brawlhalla/components/layout/CollapsibleSection';
-import { cleanString } from '@dair/common/src/helpers/cleanString';
+import { fixEncoding } from '@dair/common/src/helpers/fix-encoding';
 import { cn } from '@/ui/lib/utils';
 
 import { MiscStatGroup } from '../../MiscStatGroup';
@@ -19,7 +19,7 @@ export const PlayerOverviewClanContent = ({ playerStats }: PlayerOverviewClanCon
 
   if (!clan) return null;
 
-  const playerName = cleanString(playerStats.name);
+  const playerName = fixEncoding(playerStats.name);
 
   return (
     <CollapsibleSection
@@ -36,7 +36,7 @@ export const PlayerOverviewClanContent = ({ playerStats }: PlayerOverviewClanCon
           params={{ clanId: clan.clan_id.toString() }}
           className={cn('inline-block font-bold text-3xl mt-2 hover:underline')}
         >
-          {cleanString(clan.clan_name)}
+          {fixEncoding(clan.clan_name)}
         </Link>
         <span className="inline-block text-xs font-bold ml-2 text-muted-foreground">
           #{clan.clan_id}

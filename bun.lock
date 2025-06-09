@@ -79,6 +79,7 @@
       },
       "devDependencies": {
         "@biomejs/biome": "1.5.3",
+        "@dair/api": "workspace:*",
         "@lingui/cli": "^5.3.2",
         "@lingui/conf": "^5.3.2",
         "@lingui/vite-plugin": "^5.3.2",
@@ -151,7 +152,7 @@
         "@types/bun": "latest",
       },
       "peerDependencies": {
-        "typescript": "^5",
+        "typescript": "^5.8.3",
       },
     },
   },

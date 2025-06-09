@@ -2,16 +2,16 @@ import { createServerFn } from '@tanstack/react-start';
 import { sql } from 'drizzle-orm';
 import { z } from 'zod';
 
-import { db } from '@dair/db';
+import { db } from '@dair/api';
 import { serviceAuthenticationMiddleware } from '@/features/auth/functions/serviceAuthenticationMiddleware';
-import { cleanString } from '@dair/common/src/helpers/cleanString';
+import { fixEncoding } from '@dair/common/src/helpers/fix-encoding';
 
-import type { NewAlias } from '../../../../../../db/src/schema/archive/aliases';
-import { aliasesInsertSchema, aliasesTable } from '../../../../../../db/src/schema/archive/aliases';
+import type { NewAlias } from '@dair/schema/src/archive/aliases';
+import { aliasesInsertSchema, aliasesTable } from '@dair/schema/src/archive/aliases';
 
 export const dedupeAndCleanAliases = (aliases: NewAlias[]) =>
   aliases.reduce((acc, alias) => {
-    let cleanAlias = cleanString(alias.alias.trim());
+    let cleanAlias = fixEncoding(alias.alias.trim());
 
     // Strip the •2 suffix from the alias (suffix added when 2 players play on the same machine)
     if (cleanAlias.endsWith('•2')) {

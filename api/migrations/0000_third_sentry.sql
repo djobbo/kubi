@@ -2,8 +2,8 @@ CREATE TABLE `aliases` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`alias` text NOT NULL,
 	`player_id` text NOT NULL,
-	`createdAt` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	`updatedAt` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`createdAt` integer DEFAULT (unixepoch() * 1000) NOT NULL,
+	`updatedAt` integer DEFAULT (unixepoch() * 1000) NOT NULL,
 	`public` integer DEFAULT true NOT NULL
 );
 --> statement-breakpoint
@@ -11,8 +11,8 @@ CREATE UNIQUE INDEX `unique_alias` ON `aliases` (`player_id`,`alias`);--> statem
 CREATE TABLE `clans` (
 	`clan_id` text PRIMARY KEY NOT NULL,
 	`name` text NOT NULL,
-	`createdAt` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	`updatedAt` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`createdAt` integer DEFAULT (unixepoch() * 1000) NOT NULL,
+	`updatedAt` integer DEFAULT (unixepoch() * 1000) NOT NULL,
 	`xp` integer DEFAULT 0 NOT NULL
 );
 --> statement-breakpoint
@@ -38,7 +38,8 @@ CREATE TABLE `user` (
 	`last_name` text,
 	`avatar_url` text,
 	`email` text,
-	`created_at` integer DEFAULT CURRENT_TIMESTAMP NOT NULL
+	`created_at` integer DEFAULT (unixepoch() * 1000) NOT NULL,
+	`updated_at` integer DEFAULT (unixepoch() * 1000) NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE `bookmarks` (
@@ -58,5 +59,5 @@ CREATE TABLE `api-cache` (
 	`cacheId` text PRIMARY KEY NOT NULL,
 	`data` text,
 	`createdAt` integer DEFAULT (cast((julianday('now') - 2440587.5)*86400000 as integer)) NOT NULL,
-	`version` integer DEFAULT 1 NOT NULL
+	`version` integer NOT NULL
 );
