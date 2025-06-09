@@ -3,7 +3,7 @@ import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 import { useAuth } from '@/features/auth/use-auth';
 
 import { checkBookmarked } from '../functions/check-bookmarked';
-import type { NewBookmark } from '../schema';
+import type { NewBookmark } from '../../../../../db/src/schema/bookmarks/bookmarks';
 
 export const useIsBookmarked = (bookmark: NewBookmark, initialValue?: boolean) => {
   const { isLoggedIn, session } = useAuth();

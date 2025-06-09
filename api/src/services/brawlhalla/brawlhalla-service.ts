@@ -9,6 +9,7 @@ import { clanSchema } from '@dair/brawlhalla-api/src/api/schema/clan';
 import { playerRankedSchema } from '@dair/brawlhalla-api/src/api/schema/player-ranked';
 import { playerStatsSchema } from '@dair/brawlhalla-api/src/api/schema/player-stats';
 import { ranking1v1Schema, ranking2v2Schema } from '@dair/brawlhalla-api/src/api/schema/rankings';
+import { withCache } from '../../helpers/with-cache';
 
 import { typesafeFetch } from '../../helpers/typesafe-fetch';
 import z from 'zod';
@@ -24,29 +25,31 @@ const fetchBrawlhallaApi = typesafeFetch('Brawlhalla API', BRAWLHALLA_API_URL, {
 });
 
 export const brawlhallaService = {
-  getPlayerStatsById: (playerId: string) => fetchBrawlhallaApi({
+  getPlayerStatsById: (playerId: string) => withCache(`brawlhalla-player-stats-${playerId}`, () => fetchBrawlhallaApi({
     path: `/player/${playerId}/stats`,
     schema: playerStatsSchema,
     mock: playerStatsMock,
   }),
-  getPlayerRankedById: (playerId: string) => fetchBrawlhallaApi({
+  env.CACHE_MAX_AGE_OVERRIDE ?? 15 * 60 * 1000
+),
+  getPlayerRankedById: (playerId: string) => withCache(`brawlhalla-player-ranked-${playerId}`, () => fetchBrawlhallaApi({
     path: `/player/${playerId}/ranked`,
     schema: playerRankedSchema,
     mock: playerRankedMock,
-  }),
-  getClanById: (clanId: string) => fetchBrawlhallaApi({
+  }), env.CACHE_MAX_AGE_OVERRIDE ?? 15 * 60 * 1000),
+  getClanById: (clanId: string) => withCache(`brawlhalla-clan-${clanId}`, () => fetchBrawlhallaApi({
     path: `/clan/${clanId}`,
     schema: clanSchema,
     mock: clanMock,
-  }),
-  getRankings1v1: (region: string = DEFAULT_RANKINGS_REGION, page: number = DEFAULT_RANKINGS_PAGE, name?: string) => fetchBrawlhallaApi({
+  }), env.CACHE_MAX_AGE_OVERRIDE ?? 15 * 60 * 1000),
+  getRankings1v1: (region: string = DEFAULT_RANKINGS_REGION, page: number = DEFAULT_RANKINGS_PAGE, name?: string) => withCache(`brawlhalla-rankings-1v1-${region}-${page}-${name}`, () => fetchBrawlhallaApi({
     path: `/rankings/1v1/${region.toLowerCase()}/${page}${name ? `?name=${name}` : ''}`,
     schema: z.array(ranking1v1Schema),
     mock: rankings1v1Mock,
-  }),
-  getRankings2v2: (region: string = DEFAULT_RANKINGS_REGION, page: number = DEFAULT_RANKINGS_PAGE, name?: string) => fetchBrawlhallaApi({
-    path: `/rankings/2v2/${region.toLowerCase()}/${page}${name ? `?name=${name}` : ''}`,
+  }), env.CACHE_MAX_AGE_OVERRIDE ?? 5 * 60 * 1000),
+  getRankings2v2: (region: string = DEFAULT_RANKINGS_REGION, page: number = DEFAULT_RANKINGS_PAGE) => withCache(`brawlhalla-rankings-2v2-${region}-${page}`, () => fetchBrawlhallaApi({
+    path: `/rankings/2v2/${region.toLowerCase()}/${page}`,
     schema: z.array(ranking2v2Schema),
     mock: rankings2v2Mock,
-  }),
+  }), env.CACHE_MAX_AGE_OVERRIDE ?? 5 * 60 * 1000),
 };

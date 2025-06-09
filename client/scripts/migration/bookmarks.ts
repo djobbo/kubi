@@ -2,8 +2,8 @@ import { sql as drizzleSql } from 'drizzle-orm';
 import postgres from 'postgres';
 import { z } from 'zod';
 
-import type { NewBookmark } from '@/db/schema';
-import { bookmarksTable, usersTable } from '@/db/schema';
+import type { NewBookmark } from '@dair/db/schema';
+import { bookmarksTable, usersTable } from '@dair/db/schema';
 import { PRE_MIGRATION_DISCORD_USER_ID_PREFIX } from '@/features/bookmarks/constants';
 
 import { supabase } from './client';

@@ -2,9 +2,9 @@ import { createServerFn } from '@tanstack/react-start';
 import { desc, eq } from 'drizzle-orm';
 import { z } from 'zod';
 
-import { db } from '@/db';
+import { db } from '@dair/db';
 
-import { clansTable } from '../../schema';
+import { clansTable } from '../../../../../../db/src/schema/archive/clans';
 
 const clanRankingsQuerySchema = z.object({
   clan: z.string().optional(),

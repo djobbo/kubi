@@ -4,7 +4,7 @@ import { useAuth } from '@/features/auth/use-auth';
 
 import { addBookmark } from '../functions/add-bookmark';
 import { deleteBookmark } from '../functions/delete-bookmark';
-import type { NewBookmark } from '../schema';
+import type { NewBookmark } from '../../../../../db/src/schema/bookmarks/bookmarks';
 
 export const useToggleBookmark = (bookmark: NewBookmark) => {
   const { isLoggedIn, session } = useAuth();

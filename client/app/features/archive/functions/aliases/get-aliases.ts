@@ -2,9 +2,9 @@ import { createServerFn } from '@tanstack/react-start';
 import { and, desc, eq } from 'drizzle-orm';
 import { z } from 'zod';
 
-import { db } from '@/db';
+import { db } from '@dair/db';
 
-import { aliasesTable } from '../../schema/aliases';
+import { aliasesTable } from '../../../../../../db/src/schema/archive/aliases';
 
 const aliasesQuerySchema = z.object({
   playerId: z.string(),

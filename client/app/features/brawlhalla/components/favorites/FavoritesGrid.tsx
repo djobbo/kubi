@@ -7,7 +7,7 @@ import { useBookmark } from "@/features/bookmarks/hooks/use-bookmark"
 import type {
   Bookmark,
   NewBookmark,
-} from "@/features/bookmarks/schema/bookmarks"
+} from "../../../../../../db/src/schema/bookmarks/bookmarks"
 import { LegendIcon, UnsafeImage } from "@/features/brawlhalla/components/Image"
 import { cleanString } from "@dair/common/src/helpers/cleanString"
 import { css } from "@/panda/css"

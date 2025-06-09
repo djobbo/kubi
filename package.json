@@ -4,9 +4,9 @@
   "type": "module",
   "private": true,
   "workspaces": [
-    "client",
     "api",
-    "worker",
+    "client",
+    "crawler",
     "packages/*"
   ],
   "devDependencies": {

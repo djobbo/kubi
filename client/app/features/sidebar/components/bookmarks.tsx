@@ -3,7 +3,7 @@ import { Trans } from '@lingui/react/macro';
 import { Link } from '@tanstack/react-router';
 import { BookmarkIcon, Folder, Forward, MoreHorizontal, ShieldIcon, Trash2 } from 'lucide-react';
 
-import type { Bookmark } from '@/db/schema';
+import type { Bookmark } from '../../../../../db/src/schema/bookmarks/bookmarks';
 import { useBookmarks } from '@/features/bookmarks/hooks/use-bookmarks';
 import { UnsafeImage, getLegendIconSrc } from '@/features/brawlhalla/components/Image';
 import { legendsMap } from '@dair/brawlhalla-api/src/constants/legends';

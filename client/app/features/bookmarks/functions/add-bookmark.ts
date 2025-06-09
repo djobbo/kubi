@@ -1,10 +1,10 @@
 import { createServerFn } from '@tanstack/react-start';
 import { z } from 'zod';
 
-import { db } from '@/db';
+import { db } from '@dair/db';
 import { getSession } from '@/features/auth/functions/getSession';
 
-import { bookmarksInsertSchema, bookmarksTable } from '../schema/bookmarks';
+import { bookmarksInsertSchema, bookmarksTable } from '@dair/db/src/schema/schema/bookmarks';
 
 export const addBookmark = createServerFn({ method: 'POST' })
   .validator(z.object({ bookmark: bookmarksInsertSchema }))

@@ -4,12 +4,14 @@ import { and, eq } from 'drizzle-orm';
 import { parseCookies } from 'vinxi/http';
 import { z } from 'zod';
 
-import { db } from '@/db';
+import { db } from '@dair/db';
 import { createSession, generateSessionToken } from '@/features/auth/api';
 import { setSessionTokenCookie } from '@/features/auth/cookies';
 import { generateIdFromEntropySize } from '@/features/auth/helpers/crypto';
 import { DISCORD_OAUTH_STATE_COOKIE_NAME, discord } from '@/features/auth/providers';
-import { DISCORD_PROVIDER_ID, oauthAccountsTable, usersTable } from '@/features/auth/schema';
+import { DISCORD_PROVIDER_ID } from '../../../../../db/src/schema/auth/oauth-accounts';
+import { usersTable } from '../../../../../db/src/schema/auth/users';
+import { oauthAccountsTable } from '../../../../../db/src/schema/auth/oauth-accounts';
 
 const discordUserResponseSchema = z.object({
   id: z.string(),

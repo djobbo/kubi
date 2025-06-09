@@ -2,9 +2,11 @@ import { sha256 } from '@oslojs/crypto/sha2';
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from '@oslojs/encoding';
 import { eq } from 'drizzle-orm';
 
-import { db } from '@/db';
-import type { OAuthAccount, User } from '@/db/schema';
-import { type Session, oauthAccountsTable, sessionsTable, usersTable } from '@/db/schema';
+import { db } from '@dair/db';
+import type { User } from '../../../../db/src/schema/auth/users';
+import { OAuthAccount, oauthAccountsTable } from '../../../../db/src/schema/auth/oauth-accounts';
+import { Session, sessionsTable } from '../../../../db/src/schema/auth/sessions';
+import { usersTable } from '../../../../db/src/schema/auth/users';
 
 export const generateSessionToken = (): string => {
   const bytes = new Uint8Array(20);

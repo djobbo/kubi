@@ -5,7 +5,7 @@ import { ExternalLink, UserRoundMinus, UserRoundPlus } from "lucide-react"
 import type { ReactNode } from "react"
 import toast from "react-hot-toast"
 
-import type { NewBookmark } from "@/db/schema"
+import type { NewBookmark } from "@dair/db/schema"
 import { AdsenseStatsHeader } from "@/features/analytics/components/adsense"
 import { useAuth } from "@/features/auth/use-auth"
 import { useBookmark } from "@/features/bookmarks/hooks/use-bookmark"

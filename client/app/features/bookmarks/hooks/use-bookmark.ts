@@ -1,4 +1,4 @@
-import type { NewBookmark } from '../schema';
+import type { NewBookmark } from '../../../../../db/src/schema/bookmarks/bookmarks';
 import { useIsBookmarked } from './use-is-bookmarked';
 import { useToggleBookmark } from './use-toggle-bookmark';
 

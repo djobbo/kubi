@@ -17,8 +17,6 @@
     "lint": "biome check --apply .",
     "check:lint": "biome check .",
     "check:deadcode": "bun locales:compile && dotenv -e .env.example -- knip-bun",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "bun db:generate && bun run ./app/db/migrate.ts",
     "ui": "bunx --bun shadcn@latest",
     "pwa:assets": "pwa-assets-generator",
     "locales:extract": "lingui extract --clean",
@@ -27,7 +25,6 @@
     "check:locales": "bun locales:build --strict",
     "prepare": "bun panda:build",
     "panda:build": "panda codegen",
-    "studio": "bunx drizzle-kit studio",
     "migration:start": "bun run ./scripts/migration/migrate.ts"
   },
   "devDependencies": {
@@ -45,7 +42,6 @@
     "autoprefixer": "^10.4.21",
     "babel-plugin-macros": "^3.1.0",
     "dotenv-cli": "^8.0.0",
-    "drizzle-kit": "^0.30.6",
     "knip": "^5.60.2",
     "postcss": "^8.5.4",
     "tailwindcss": "^3.4.17",
@@ -86,8 +82,6 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "dayjs": "^1.11.13",
-    "drizzle-orm": "^0.41.0",
-    "drizzle-zod": "^0.7.1",
     "kbar": "^0.1.0-beta.45",
     "lucide-react": "^0.487.0",
     "nprogress": "^0.2.0",

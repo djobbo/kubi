@@ -39,46 +39,6 @@ import { getDateFromUnixTime } from '@dair/common/src/helpers/date';
 const BRAWLHALLA_API_BASE = 'https://api.brawlhalla.com';
 const BRAWLTOOLS_API_BASE = 'https://api.brawltools.com';
 
-const fetchApi = async <T>(props: {
-  baseUrl: string;
-  path: string;
-  schema: z.ZodType<T>;
-  mock?: T;
-  init?: RequestInit;
-}): Promise<T> => {
-  const { baseUrl, path, schema, mock, init } = props;
-  const url = new URL(path, baseUrl);
-
-  url.searchParams.append('api_key', env.BRAWLHALLA_API_KEY);
-
-  if (env.IS_DEV && mock) return mock;
-
-  const response = await fetch(url, init);
-
-  if (!response.ok) {
-    console.error('Brawlhalla API - Fetch Error', {
-      status: response.status,
-      path,
-    });
-
-    throw new Error(`Failed to fetch Brawlhalla API: ${response.statusText}`);
-  }
-
-  const json = await response.json();
-
-  const safeParseResult = schema.safeParse(json);
-
-  if (!safeParseResult.success) {
-    console.error('Brawlhalla API - Parse Error', {
-      path,
-      error: safeParseResult.error,
-    });
-  }
-
-  // Even if the parse fails, we still want to return the JSON,
-  // the parsing is here to log undocumented API changes
-  return json as T;
-};
 
 export const getPlayerStats = createServerFn({ method: 'GET' })
   .validator(brawlhallaIdSchema)
@@ -92,7 +52,7 @@ export const getPlayerStats = createServerFn({ method: 'GET' })
           schema: playerStatsSchema,
           mock: playerStatsMock,
         }),
-      env.IS_DEV ? 30 * 1000 : 15 * 60 * 1000
+      env.CACHE_MAX_AGE_OVERRIDE ?? 15 * 60 * 1000
     );
 
     try {

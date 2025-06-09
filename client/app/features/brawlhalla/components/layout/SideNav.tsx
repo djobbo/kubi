@@ -15,7 +15,7 @@ import {
 import type { ReactNode } from "react"
 
 import { Tooltip } from "@/components/base/Tooltip"
-import type { NewBookmark } from "@/db/schema"
+import type { NewBookmark } from "@/features/bookmarks/schema"
 import { useBookmark } from "@/features/bookmarks/hooks/use-bookmark"
 import { useBookmarks } from "@/features/bookmarks/hooks/use-bookmarks"
 import {

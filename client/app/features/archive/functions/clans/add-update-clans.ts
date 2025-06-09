@@ -2,11 +2,11 @@ import { createServerFn } from '@tanstack/react-start';
 import { sql } from 'drizzle-orm';
 import { z } from 'zod';
 
-import { db } from '@/db';
+import { db } from '@dair/db';
 import { serviceAuthenticationMiddleware } from '@/features/auth/functions/serviceAuthenticationMiddleware';
 import { cleanString } from '@dair/common/src/helpers/cleanString';
 
-import { clanInsertSchema, clansTable } from '../../schema';
+import { clanInsertSchema, clansTable } from '../../../../../../db/src/schema/archive/clans';
 
 export const addOrUpdateClans = createServerFn({ method: 'POST' })
   .middleware([serviceAuthenticationMiddleware])

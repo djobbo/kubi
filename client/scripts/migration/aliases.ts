@@ -1,7 +1,7 @@
 import { sql } from 'drizzle-orm';
 
-import type { NewAlias } from '@/db/schema';
-import { aliasesTable } from '@/db/schema';
+import type { NewAlias } from '../../../db/src/schema/archive/aliases';
+import { aliasesTable } from '../../../db/src/schema/archive/aliases';
 
 import { supabase } from './client';
 import { migrationDb } from './db';

@@ -2,12 +2,12 @@ import { createServerFn } from '@tanstack/react-start';
 import { sql } from 'drizzle-orm';
 import { z } from 'zod';
 
-import { db } from '@/db';
+import { db } from '@dair/db';
 import { serviceAuthenticationMiddleware } from '@/features/auth/functions/serviceAuthenticationMiddleware';
 import { cleanString } from '@dair/common/src/helpers/cleanString';
 
-import type { NewAlias } from '../../schema';
-import { aliasesInsertSchema, aliasesTable } from '../../schema';
+import type { NewAlias } from '../../../../../../db/src/schema/archive/aliases';
+import { aliasesInsertSchema, aliasesTable } from '../../../../../../db/src/schema/archive/aliases';
 
 export const dedupeAndCleanAliases = (aliases: NewAlias[]) =>
   aliases.reduce((acc, alias) => {

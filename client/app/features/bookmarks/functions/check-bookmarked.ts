@@ -2,10 +2,10 @@ import { createServerFn } from '@tanstack/react-start';
 import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
 
-import { db } from '@/db';
+import { db } from '@dair/db';
 import { getSession } from '@/features/auth/functions/getSession';
 
-import { bookmarksTable, pageTypeSchema } from '../schema/bookmarks';
+import { bookmarksTable, pageTypeSchema } from '../../../../../db/src/schema/bookmarks/bookmarks';
 
 const bookmarksDeleteQuerySchema = z.object({
   pageType: pageTypeSchema,
