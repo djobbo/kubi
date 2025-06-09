@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-enum PowerRankingsOrderBy {
+export enum PowerRankingsOrderBy {
   Top8Count = "top8",
   Top32Count = "top32",
   GoldMedals = "gold",
@@ -29,7 +29,7 @@ export const powerRankedOrderBySchema = z
 
 export type PowerRankedOrderBy = z.infer<typeof powerRankedOrderBySchema>
 
-enum PowerRankingsOrder {
+export enum PowerRankingsOrder {
   Asc = "ASC",
   Desc = "DESC",
 }

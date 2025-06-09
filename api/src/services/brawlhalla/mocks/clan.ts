@@ -1,6 +1,6 @@
 /* eslint-disable lingui/no-unlocalized-strings */
 
-import type { Clan } from "../schema/clan"
+import type { Clan } from "@dair/brawlhalla-api/src/api/schema/clan"
 
 export const clanMock: Clan = {
   clan_id: 955295,

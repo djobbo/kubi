@@ -1,6 +1,6 @@
 /* eslint-disable lingui/no-unlocalized-strings */
 
-import type { PlayerRanked } from "../schema/player-ranked"
+import type { PlayerRanked } from "@dair/brawlhalla-api/src/api/schema/player-ranked"
 
 export const playerRankedMock: PlayerRanked = {
   name: "free uohhhhhh coupon \u00f0\u009f\u0098\u00ad",

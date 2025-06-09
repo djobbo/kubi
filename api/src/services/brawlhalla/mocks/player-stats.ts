@@ -1,6 +1,6 @@
 /* eslint-disable lingui/no-unlocalized-strings */
 
-import type { PlayerStats } from "../schema/player-stats"
+import type { PlayerStats } from "@dair/brawlhalla-api/src/api/schema/player-stats"
 
 export const playerStatsMock: PlayerStats = {
   brawlhalla_id: 4281946,

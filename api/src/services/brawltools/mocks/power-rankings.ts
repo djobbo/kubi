@@ -1,6 +1,6 @@
 /* eslint-disable lingui/no-unlocalized-strings */
 
-import type { PowerRankings } from "../schema/power-rankings"
+import type { PowerRankings } from "@dair/brawlhalla-api/src/api/schema/power-rankings"
 
 export const powerRankingsMock: PowerRankings = {
   prPlayers: [

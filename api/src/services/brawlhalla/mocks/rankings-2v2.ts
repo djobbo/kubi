@@ -1,6 +1,6 @@
 /* eslint-disable lingui/no-unlocalized-strings */
 
-import type { Ranking2v2 } from "../schema/rankings"
+import type { Ranking2v2 } from "@dair/brawlhalla-api/src/api/schema/rankings"
 
 export const rankings2v2Mock: Ranking2v2[] = [
   {

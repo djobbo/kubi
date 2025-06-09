@@ -1,0 +1,19 @@
+{
+  "name": "@dair/brawlhalla-servers",
+  "module": "./src/index.ts",
+  "types": "./src/index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "bun run scripts/update-servers-location.ts"
+  },
+  "dependencies": {
+    "@dair/brawlhalla-api": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-enum PowerRankingsRegion {
+export enum PowerRankingsRegion {
   NA = "NA",
   EU = "EU",
   SA = "SA",

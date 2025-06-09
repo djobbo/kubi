@@ -1,15 +1,16 @@
 {
   "name": "@dair/api",
-  "version": "1.0.50",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts"
+    "dev": "bun run --hot src/index.ts"
   },
   "dependencies": {
-    "elysia": "latest"
+    "@dair/brawlhalla-api": "workspace:*",
+    "@dair/brawlhalla-servers": "workspace:*",
+    "@t3-oss/env-core": "^0.13.6",
+    "hono": "^4.7.11",
+    "zod": "^3.25.56"
   },
   "devDependencies": {
-    "bun-types": "latest"
-  },
-  "module": "src/index.js"
+    "@types/bun": "latest"
+  }
 }
