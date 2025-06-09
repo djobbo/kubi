@@ -3,10 +3,10 @@ import type { ImgHTMLAttributes } from 'react';
 import type { SafeAsset } from '@/assetsTree.gen';
 import { cn } from '@/ui/lib/utils';
 
-import type { LegendNameKey } from '../constants/legends';
-import type { RankedRegion } from '../constants/ranked/regions';
-import type { RankedTier } from '../constants/ranked/tiers';
-import type { Weapon } from '../constants/weapons';
+import type { LegendNameKey } from '@dair/brawlhalla-api/src/constants/legends';
+import type { RankedRegion } from '@dair/brawlhalla-api/src/constants/ranked/regions';
+import type { RankedTier } from '@dair/brawlhalla-api/src/constants/ranked/tiers';
+import type { Weapon } from '@dair/brawlhalla-api/src/constants/weapons';
 
 export type ImagePropsWithoutSrc = Omit<ImgHTMLAttributes<HTMLImageElement>, 'src'> & {
   containerClassName?: string;

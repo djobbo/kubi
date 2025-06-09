@@ -3,7 +3,6 @@
         "oven.bun-vscode",
         "bradlc.vscode-tailwindcss",
         "styled-components.vscode-styled-components",
-        "dbaeumer.vscode-eslint",
         "mrorz.language-gettext"
     ]
 }

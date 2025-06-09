@@ -5,13 +5,13 @@ import { useState } from 'react';
 
 import { Card } from '@/components/base/Card';
 import { SectionTitle } from '@/features/brawlhalla/components/layout/SectionTitle';
-import { getTierFromRating } from '@/features/brawlhalla/constants/ranked/tiers';
+import { getTierFromRating } from '@dair/brawlhalla-api/src/constants/ranked/tiers';
 import {
   getGloryFromBestRating,
   getGloryFromWins,
   getLegendEloReset,
   getPersonalEloReset,
-} from '@/features/brawlhalla/helpers/season-reset';
+} from '@dair/brawlhalla-api/src/helpers/season-reset';
 
 export const Route = createFileRoute('/calc')({
   component: RouteComponent,

@@ -7,7 +7,7 @@ import { CupcakeButton } from '@/features/games/cupcakes/components/CupcakeButto
 import { CupcakeItems } from '@/features/games/cupcakes/components/CupcakeItems';
 import cupcakesStyles from '@/features/games/cupcakes/cupcakes.css?url';
 import { useCupcakesStore } from '@/features/games/cupcakes/store';
-import { seo } from '@/helpers/seo';
+import { seo } from '@dair/common/src/helpers/seo';
 
 export const Route = createFileRoute('/games/cupcakes')({
   component: RouteComponent,

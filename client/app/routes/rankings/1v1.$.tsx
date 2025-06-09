@@ -3,13 +3,13 @@ import { Trans } from '@lingui/react/macro';
 import { Link, createFileRoute } from '@tanstack/react-router';
 import { z } from 'zod';
 
-import { get1v1Rankings } from '@/features/brawlhalla/api/functions';
+import { get1v1Rankings } from '@/features/brawlhalla/functions';
 import { LegendIcon } from '@/features/brawlhalla/components/Image';
 import { RankingsTableItem } from '@/features/brawlhalla/components/stats/RankingsTableItem';
 import { RankingsLayout } from '@/features/brawlhalla/components/stats/rankings/RankingsLayout';
-import { legendsMap } from '@/features/brawlhalla/constants/legends';
-import { cleanString } from '@/helpers/cleanString';
-import { seo } from '@/helpers/seo';
+import { legendsMap } from '@dair/brawlhalla-api/src/constants/legends';
+import { cleanString } from '@dair/common/src/helpers/cleanString';
+import { seo } from '@dair/common/src/helpers/seo';
 
 export const Route = createFileRoute('/rankings/1v1/$')({
   component: RouteComponent,

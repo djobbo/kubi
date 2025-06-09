@@ -3,9 +3,9 @@ import { Trans } from '@lingui/react/macro';
 import { Link } from '@tanstack/react-router';
 import { Shield } from 'lucide-react';
 
-import type { PlayerStats } from '@/features/brawlhalla/api/schema/player-stats';
+import type { PlayerStats } from '@dair/brawlhalla-api/src/api/schema/player-stats';
 import { CollapsibleSection } from '@/features/brawlhalla/components/layout/CollapsibleSection';
-import { cleanString } from '@/helpers/cleanString';
+import { cleanString } from '@dair/common/src/helpers/cleanString';
 import { cn } from '@/ui/lib/utils';
 
 import { MiscStatGroup } from '../../MiscStatGroup';

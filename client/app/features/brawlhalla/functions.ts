@@ -33,8 +33,8 @@ import { getAliases } from '@/features/archive/functions/aliases/get-aliases';
 import { searchAliases } from '@/features/archive/functions/aliases/search-aliases';
 import { addOrUpdateClans } from '@/features/archive/functions/clans/add-update-clans';
 import { withCache } from '@/features/cache/cache';
-import { cleanString } from '@/helpers/cleanString';
-import { getDateFromUnixTime } from '@/helpers/date';
+import { cleanString } from '@dair/common/src/helpers/cleanString';
+import { getDateFromUnixTime } from '@dair/common/src/helpers/date';
 
 const BRAWLHALLA_API_BASE = 'https://api.brawlhalla.com';
 const BRAWLTOOLS_API_BASE = 'https://api.brawltools.com';

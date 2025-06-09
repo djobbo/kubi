@@ -1,7 +1,7 @@
 import { createServerFn } from '@tanstack/react-start';
 import { load as loadHtml } from 'cheerio';
 
-import { legends } from '@/features/brawlhalla/constants/legends';
+import { legends } from '@dair/brawlhalla-api/src/constants/legends';
 
 import { getBrawlhallaArticles } from './getBrawlhallaArticles';
 

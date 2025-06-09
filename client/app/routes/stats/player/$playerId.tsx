@@ -5,7 +5,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { z } from 'zod';
 
 import { getAliases } from '@/features/archive/functions/aliases/get-aliases';
-import { getPlayerRanked, getPlayerStats } from '@/features/brawlhalla/api/functions';
+import { getPlayerRanked, getPlayerStats } from '@/features/brawlhalla/functions';
 import { FlagIcon, LegendIcon, WeaponIcon } from '@/features/brawlhalla/components/Image';
 import type { MiscStat } from '@/features/brawlhalla/components/stats/MiscStatGroup';
 import { StatsHeader } from '@/features/brawlhalla/components/stats/StatsHeader';
@@ -17,10 +17,10 @@ import {
   getFullLegends,
   getFullWeapons,
   getLegendsAccumulativeData,
-} from '@/features/brawlhalla/helpers/parser';
-import { cleanString } from '@/helpers/cleanString';
-import { formatTime } from '@/helpers/date';
-import { seo } from '@/helpers/seo';
+} from '@dair/brawlhalla-api/src/helpers/parser';
+import { cleanString } from '@dair/common/src/helpers/cleanString';
+import { formatTime } from '@dair/common/src/helpers/date';
+import { seo } from '@dair/common/src/helpers/seo';
 import { css } from '@/panda/css';
 import { cn } from '@/ui/lib/utils';
 import { colors } from '@/ui/theme';

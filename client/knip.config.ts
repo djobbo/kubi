@@ -4,7 +4,6 @@ export default {
   entry: [
     // @tanstack/react-start
     'app.config.ts',
-    'eslint.config.mjs',
     'app/client.tsx',
     'app/router.ts',
     'app/ssr.tsx',

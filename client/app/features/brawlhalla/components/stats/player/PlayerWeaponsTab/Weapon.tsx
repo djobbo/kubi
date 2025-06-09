@@ -3,8 +3,8 @@ import type { ReactNode } from 'react';
 
 import { Card } from '@/components/base/Card';
 import { WeaponIcon } from '@/features/brawlhalla/components/Image';
-import type { FullWeapon } from '@/features/brawlhalla/helpers/parser';
-import { formatTime } from '@/helpers/date';
+import type { FullWeapon } from '@dair/brawlhalla-api/src/helpers/parser';
+import { formatTime } from '@dair/common/src/helpers/date';
 
 import { CollapsibleContent } from '../../../layout/CollapsibleContent';
 import { GamesDisplay } from '../../GamesDisplay';

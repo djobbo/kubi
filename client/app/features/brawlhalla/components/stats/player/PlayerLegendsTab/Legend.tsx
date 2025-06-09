@@ -2,8 +2,8 @@ import { t } from '@lingui/core/macro';
 import type { ReactNode } from 'react';
 
 import { LegendIcon } from '@/features/brawlhalla/components/Image';
-import type { FullLegend } from '@/features/brawlhalla/helpers/parser';
-import { formatTime } from '@/helpers/date';
+import type { FullLegend } from '@dair/brawlhalla-api/src/helpers/parser';
+import { formatTime } from '@dair/common/src/helpers/date';
 
 import { CollapsibleContent } from '../../../layout/CollapsibleContent';
 import { GeneralStats } from '../../GeneralStats';

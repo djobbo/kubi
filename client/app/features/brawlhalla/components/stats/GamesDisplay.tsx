@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { Progress } from '@/components/base/Progress';
 import { cn } from '@/ui/lib/utils';
 
-import { calculateWinrate } from '../../helpers/winrate';
+import { calculateWinrate } from '@dair/brawlhalla-api/src/helpers/winrate';
 
 interface GamesCardProps {
   games: number;

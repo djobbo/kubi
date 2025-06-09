@@ -1,37 +1,37 @@
-import { Trans } from '@lingui/react/macro';
-import { Star, StarOff } from 'lucide-react';
+import { Trans } from "@lingui/react/macro"
+import { Star, StarOff } from "lucide-react"
 
-import { useAuth } from '@/features/auth/use-auth';
-import { useBookmark } from '@/features/bookmarks/hooks/use-bookmark';
-import { LegendIcon } from '@/features/brawlhalla/components/Image';
-import { cleanString } from '@/helpers/cleanString';
+import { useAuth } from "@/features/auth/use-auth"
+import { useBookmark } from "@/features/bookmarks/hooks/use-bookmark"
+import { LegendIcon } from "@/features/brawlhalla/components/Image"
+import { cleanString } from "@dair/common/src/helpers/cleanString"
 
-import type { Ranking1v1 } from '../../api/schema/rankings';
-import { legendsMap } from '../../constants/legends';
-import { SearchboxItem } from './SearchboxItem';
+import type { Ranking1v1 } from "@dair/brawlhalla-api/src/api/schema/rankings"
+import { legendsMap } from "@dair/brawlhalla-api/src/constants/legends"
+import { SearchboxItem } from "./SearchboxItem"
 
 interface RankedPlayerItemProps {
-  player: Ranking1v1;
+  player: Ranking1v1
 }
 
 export const RankedPlayerItem = ({ player }: RankedPlayerItemProps) => {
-  const { isLoggedIn } = useAuth();
-  const legend = legendsMap[player.best_legend];
+  const { isLoggedIn } = useAuth()
+  const legend = legendsMap[player.best_legend]
 
   const { isBookmarked, toggleBookmark } = useBookmark({
-    pageType: 'player_stats',
+    pageType: "player_stats",
     pageId: player.brawlhalla_id.toString(),
     name: player.name,
     meta: {
-      version: '1',
+      version: "1",
       data: {
         icon: {
-          type: 'legend',
+          type: "legend",
           id: legend?.legend_id,
         },
       },
     },
-  });
+  })
 
   const icon = legend && (
     <LegendIcon
@@ -40,9 +40,9 @@ export const RankedPlayerItem = ({ player }: RankedPlayerItemProps) => {
       containerClassName="w-8 h-8 rounded-lg overflow-hidden border border-muted-foreground"
       className="object-contain object-center"
     />
-  );
+  )
 
-  const { rating, peak_rating, tier } = player;
+  const { rating, peak_rating, tier } = player
 
   return (
     <SearchboxItem
@@ -60,12 +60,12 @@ export const RankedPlayerItem = ({ player }: RankedPlayerItemProps) => {
             type="button"
             className="cursor-pointer"
             onClick={(e) => {
-              if (!isLoggedIn) return;
+              if (!isLoggedIn) return
 
-              e.preventDefault();
-              e.stopPropagation();
+              e.preventDefault()
+              e.stopPropagation()
 
-              toggleBookmark(!isBookmarked);
+              toggleBookmark(!isBookmarked)
             }}
           >
             {isBookmarked ? <StarOff size={16} /> : <Star size={16} />}
@@ -73,5 +73,5 @@ export const RankedPlayerItem = ({ player }: RankedPlayerItemProps) => {
         )
       }
     />
-  );
-};
+  )
+}

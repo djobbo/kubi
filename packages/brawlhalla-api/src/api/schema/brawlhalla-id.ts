@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { cleanString } from "@/helpers/cleanString"
+import { cleanString } from "@dair/common/src/helpers/cleanString"
 
 export const brawlhallaIdSchema = z.number()
 

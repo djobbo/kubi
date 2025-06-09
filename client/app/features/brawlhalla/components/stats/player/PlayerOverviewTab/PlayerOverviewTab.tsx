@@ -2,10 +2,10 @@ import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { ChartColumnBig, Flame, Hand, Target } from 'lucide-react';
 
-import type { PlayerRanked } from '@/features/brawlhalla/api/schema/player-ranked';
-import type { PlayerStats } from '@/features/brawlhalla/api/schema/player-stats';
-import { type FullLegend, getWeaponlessData } from '@/features/brawlhalla/helpers/parser';
-import { formatTime } from '@/helpers/date';
+import type { PlayerRanked } from '@dair/brawlhalla-api/src/api/schema/player-ranked';
+import type { PlayerStats } from '@dair/brawlhalla-api/src/api/schema/player-stats';
+import { type FullLegend, getWeaponlessData } from '@dair/brawlhalla-api/src/helpers/parser';
+import { formatTime } from '@dair/common/src/helpers/date';
 
 import { CollapsibleSection } from '../../../layout/CollapsibleSection';
 import { GeneralStats } from '../../GeneralStats';

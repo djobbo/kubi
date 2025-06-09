@@ -1,4 +1,4 @@
-import { cleanString } from "@/helpers/cleanString"
+import { cleanString } from "@dair/common/src/helpers/cleanString"
 
 import type { PlayerRanked } from "../api/schema/player-ranked"
 import type { PlayerStats } from "../api/schema/player-stats"

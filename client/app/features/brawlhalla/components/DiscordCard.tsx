@@ -6,7 +6,7 @@ import { ArrowRight } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 
 import { SafeImage } from '@/features/brawlhalla/components/Image';
-import { clamp } from '@/helpers/math';
+import { clamp } from '@dair/common/src/helpers/math';
 import { Button } from '@/ui/components/button';
 
 export const DiscordCard = () => {

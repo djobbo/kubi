@@ -6,8 +6,8 @@ import { BookmarkIcon, Folder, Forward, MoreHorizontal, ShieldIcon, Trash2 } fro
 import type { Bookmark } from '@/db/schema';
 import { useBookmarks } from '@/features/bookmarks/hooks/use-bookmarks';
 import { UnsafeImage, getLegendIconSrc } from '@/features/brawlhalla/components/Image';
-import { legendsMap } from '@/features/brawlhalla/constants/legends';
-import { cleanString } from '@/helpers/cleanString';
+import { legendsMap } from '@dair/brawlhalla-api/src/constants/legends';
+import { cleanString } from '@dair/common/src/helpers/cleanString';
 import {
   DropdownMenu,
   DropdownMenuContent,

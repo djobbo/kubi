@@ -10,23 +10,23 @@
 
 // Import Routes
 
-import { Route as socialDiscordImport } from './routes/(social)/discord';
-import { Route as socialDonateImport } from './routes/(social)/donate';
-import { Route as socialGithubImport } from './routes/(social)/github';
-import { Route as socialTwitterImport } from './routes/(social)/twitter';
-import { Route as socialWikiImport } from './routes/(social)/wiki';
-import { Route as meBookmarksImport } from './routes/@me/bookmarks';
-import { Route as rootRoute } from './routes/__root';
-import { Route as CalcImport } from './routes/calc';
-import { Route as GamesCupcakesImport } from './routes/games/cupcakes';
-import { Route as IndexImport } from './routes/index';
-import { Route as Rankings1v1SplatImport } from './routes/rankings/1v1.$';
-import { Route as Rankings2v2SplatImport } from './routes/rankings/2v2.$';
-import { Route as RankingsClansSplatImport } from './routes/rankings/clans.$';
-import { Route as RankingsPowerSplatImport } from './routes/rankings/power.$';
-import { Route as StatsClanClanIdImport } from './routes/stats/clan/$clanId';
-import { Route as StatsPlayerPlayerIdImport } from './routes/stats/player/$playerId';
-import { Route as TestImport } from './routes/test';
+import { Route as rootRoute } from './routes/__root'
+import { Route as TestImport } from './routes/test'
+import { Route as CalcImport } from './routes/calc'
+import { Route as IndexImport } from './routes/index'
+import { Route as GamesCupcakesImport } from './routes/games/cupcakes'
+import { Route as meBookmarksImport } from './routes/@me/bookmarks'
+import { Route as socialWikiImport } from './routes/(social)/wiki'
+import { Route as socialTwitterImport } from './routes/(social)/twitter'
+import { Route as socialGithubImport } from './routes/(social)/github'
+import { Route as socialDonateImport } from './routes/(social)/donate'
+import { Route as socialDiscordImport } from './routes/(social)/discord'
+import { Route as StatsPlayerPlayerIdImport } from './routes/stats/player/$playerId'
+import { Route as StatsClanClanIdImport } from './routes/stats/clan/$clanId'
+import { Route as RankingsPowerSplatImport } from './routes/rankings/power.$'
+import { Route as RankingsClansSplatImport } from './routes/rankings/clans.$'
+import { Route as Rankings2v2SplatImport } from './routes/rankings/2v2.$'
+import { Route as Rankings1v1SplatImport } from './routes/rankings/1v1.$'
 
 // Create/Update Routes
 
@@ -34,279 +34,279 @@ const TestRoute = TestImport.update({
   id: '/test',
   path: '/test',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const CalcRoute = CalcImport.update({
   id: '/calc',
   path: '/calc',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const GamesCupcakesRoute = GamesCupcakesImport.update({
   id: '/games/cupcakes',
   path: '/games/cupcakes',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const meBookmarksRoute = meBookmarksImport.update({
   id: '/@me/bookmarks',
   path: '/@me/bookmarks',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const socialWikiRoute = socialWikiImport.update({
   id: '/(social)/wiki',
   path: '/wiki',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const socialTwitterRoute = socialTwitterImport.update({
   id: '/(social)/twitter',
   path: '/twitter',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const socialGithubRoute = socialGithubImport.update({
   id: '/(social)/github',
   path: '/github',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const socialDonateRoute = socialDonateImport.update({
   id: '/(social)/donate',
   path: '/donate',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const socialDiscordRoute = socialDiscordImport.update({
   id: '/(social)/discord',
   path: '/discord',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const StatsPlayerPlayerIdRoute = StatsPlayerPlayerIdImport.update({
   id: '/stats/player/$playerId',
   path: '/stats/player/$playerId',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const StatsClanClanIdRoute = StatsClanClanIdImport.update({
   id: '/stats/clan/$clanId',
   path: '/stats/clan/$clanId',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const RankingsPowerSplatRoute = RankingsPowerSplatImport.update({
   id: '/rankings/power/$',
   path: '/rankings/power/$',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const RankingsClansSplatRoute = RankingsClansSplatImport.update({
   id: '/rankings/clans/$',
   path: '/rankings/clans/$',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const Rankings2v2SplatRoute = Rankings2v2SplatImport.update({
   id: '/rankings/2v2/$',
   path: '/rankings/2v2/$',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const Rankings1v1SplatRoute = Rankings1v1SplatImport.update({
   id: '/rankings/1v1/$',
   path: '/rankings/1v1/$',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
-      id: '/';
-      path: '/';
-      fullPath: '/';
-      preLoaderRoute: typeof IndexImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
     '/calc': {
-      id: '/calc';
-      path: '/calc';
-      fullPath: '/calc';
-      preLoaderRoute: typeof CalcImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/calc'
+      path: '/calc'
+      fullPath: '/calc'
+      preLoaderRoute: typeof CalcImport
+      parentRoute: typeof rootRoute
+    }
     '/test': {
-      id: '/test';
-      path: '/test';
-      fullPath: '/test';
-      preLoaderRoute: typeof TestImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/test'
+      path: '/test'
+      fullPath: '/test'
+      preLoaderRoute: typeof TestImport
+      parentRoute: typeof rootRoute
+    }
     '/(social)/discord': {
-      id: '/(social)/discord';
-      path: '/discord';
-      fullPath: '/discord';
-      preLoaderRoute: typeof socialDiscordImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/(social)/discord'
+      path: '/discord'
+      fullPath: '/discord'
+      preLoaderRoute: typeof socialDiscordImport
+      parentRoute: typeof rootRoute
+    }
     '/(social)/donate': {
-      id: '/(social)/donate';
-      path: '/donate';
-      fullPath: '/donate';
-      preLoaderRoute: typeof socialDonateImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/(social)/donate'
+      path: '/donate'
+      fullPath: '/donate'
+      preLoaderRoute: typeof socialDonateImport
+      parentRoute: typeof rootRoute
+    }
     '/(social)/github': {
-      id: '/(social)/github';
-      path: '/github';
-      fullPath: '/github';
-      preLoaderRoute: typeof socialGithubImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/(social)/github'
+      path: '/github'
+      fullPath: '/github'
+      preLoaderRoute: typeof socialGithubImport
+      parentRoute: typeof rootRoute
+    }
     '/(social)/twitter': {
-      id: '/(social)/twitter';
-      path: '/twitter';
-      fullPath: '/twitter';
-      preLoaderRoute: typeof socialTwitterImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/(social)/twitter'
+      path: '/twitter'
+      fullPath: '/twitter'
+      preLoaderRoute: typeof socialTwitterImport
+      parentRoute: typeof rootRoute
+    }
     '/(social)/wiki': {
-      id: '/(social)/wiki';
-      path: '/wiki';
-      fullPath: '/wiki';
-      preLoaderRoute: typeof socialWikiImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/(social)/wiki'
+      path: '/wiki'
+      fullPath: '/wiki'
+      preLoaderRoute: typeof socialWikiImport
+      parentRoute: typeof rootRoute
+    }
     '/@me/bookmarks': {
-      id: '/@me/bookmarks';
-      path: '/@me/bookmarks';
-      fullPath: '/@me/bookmarks';
-      preLoaderRoute: typeof meBookmarksImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/@me/bookmarks'
+      path: '/@me/bookmarks'
+      fullPath: '/@me/bookmarks'
+      preLoaderRoute: typeof meBookmarksImport
+      parentRoute: typeof rootRoute
+    }
     '/games/cupcakes': {
-      id: '/games/cupcakes';
-      path: '/games/cupcakes';
-      fullPath: '/games/cupcakes';
-      preLoaderRoute: typeof GamesCupcakesImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/games/cupcakes'
+      path: '/games/cupcakes'
+      fullPath: '/games/cupcakes'
+      preLoaderRoute: typeof GamesCupcakesImport
+      parentRoute: typeof rootRoute
+    }
     '/rankings/1v1/$': {
-      id: '/rankings/1v1/$';
-      path: '/rankings/1v1/$';
-      fullPath: '/rankings/1v1/$';
-      preLoaderRoute: typeof Rankings1v1SplatImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/rankings/1v1/$'
+      path: '/rankings/1v1/$'
+      fullPath: '/rankings/1v1/$'
+      preLoaderRoute: typeof Rankings1v1SplatImport
+      parentRoute: typeof rootRoute
+    }
     '/rankings/2v2/$': {
-      id: '/rankings/2v2/$';
-      path: '/rankings/2v2/$';
-      fullPath: '/rankings/2v2/$';
-      preLoaderRoute: typeof Rankings2v2SplatImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/rankings/2v2/$'
+      path: '/rankings/2v2/$'
+      fullPath: '/rankings/2v2/$'
+      preLoaderRoute: typeof Rankings2v2SplatImport
+      parentRoute: typeof rootRoute
+    }
     '/rankings/clans/$': {
-      id: '/rankings/clans/$';
-      path: '/rankings/clans/$';
-      fullPath: '/rankings/clans/$';
-      preLoaderRoute: typeof RankingsClansSplatImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/rankings/clans/$'
+      path: '/rankings/clans/$'
+      fullPath: '/rankings/clans/$'
+      preLoaderRoute: typeof RankingsClansSplatImport
+      parentRoute: typeof rootRoute
+    }
     '/rankings/power/$': {
-      id: '/rankings/power/$';
-      path: '/rankings/power/$';
-      fullPath: '/rankings/power/$';
-      preLoaderRoute: typeof RankingsPowerSplatImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/rankings/power/$'
+      path: '/rankings/power/$'
+      fullPath: '/rankings/power/$'
+      preLoaderRoute: typeof RankingsPowerSplatImport
+      parentRoute: typeof rootRoute
+    }
     '/stats/clan/$clanId': {
-      id: '/stats/clan/$clanId';
-      path: '/stats/clan/$clanId';
-      fullPath: '/stats/clan/$clanId';
-      preLoaderRoute: typeof StatsClanClanIdImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/stats/clan/$clanId'
+      path: '/stats/clan/$clanId'
+      fullPath: '/stats/clan/$clanId'
+      preLoaderRoute: typeof StatsClanClanIdImport
+      parentRoute: typeof rootRoute
+    }
     '/stats/player/$playerId': {
-      id: '/stats/player/$playerId';
-      path: '/stats/player/$playerId';
-      fullPath: '/stats/player/$playerId';
-      preLoaderRoute: typeof StatsPlayerPlayerIdImport;
-      parentRoute: typeof rootRoute;
-    };
+      id: '/stats/player/$playerId'
+      path: '/stats/player/$playerId'
+      fullPath: '/stats/player/$playerId'
+      preLoaderRoute: typeof StatsPlayerPlayerIdImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute;
-  '/calc': typeof CalcRoute;
-  '/test': typeof TestRoute;
-  '/discord': typeof socialDiscordRoute;
-  '/donate': typeof socialDonateRoute;
-  '/github': typeof socialGithubRoute;
-  '/twitter': typeof socialTwitterRoute;
-  '/wiki': typeof socialWikiRoute;
-  '/@me/bookmarks': typeof meBookmarksRoute;
-  '/games/cupcakes': typeof GamesCupcakesRoute;
-  '/rankings/1v1/$': typeof Rankings1v1SplatRoute;
-  '/rankings/2v2/$': typeof Rankings2v2SplatRoute;
-  '/rankings/clans/$': typeof RankingsClansSplatRoute;
-  '/rankings/power/$': typeof RankingsPowerSplatRoute;
-  '/stats/clan/$clanId': typeof StatsClanClanIdRoute;
-  '/stats/player/$playerId': typeof StatsPlayerPlayerIdRoute;
+  '/': typeof IndexRoute
+  '/calc': typeof CalcRoute
+  '/test': typeof TestRoute
+  '/discord': typeof socialDiscordRoute
+  '/donate': typeof socialDonateRoute
+  '/github': typeof socialGithubRoute
+  '/twitter': typeof socialTwitterRoute
+  '/wiki': typeof socialWikiRoute
+  '/@me/bookmarks': typeof meBookmarksRoute
+  '/games/cupcakes': typeof GamesCupcakesRoute
+  '/rankings/1v1/$': typeof Rankings1v1SplatRoute
+  '/rankings/2v2/$': typeof Rankings2v2SplatRoute
+  '/rankings/clans/$': typeof RankingsClansSplatRoute
+  '/rankings/power/$': typeof RankingsPowerSplatRoute
+  '/stats/clan/$clanId': typeof StatsClanClanIdRoute
+  '/stats/player/$playerId': typeof StatsPlayerPlayerIdRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute;
-  '/calc': typeof CalcRoute;
-  '/test': typeof TestRoute;
-  '/discord': typeof socialDiscordRoute;
-  '/donate': typeof socialDonateRoute;
-  '/github': typeof socialGithubRoute;
-  '/twitter': typeof socialTwitterRoute;
-  '/wiki': typeof socialWikiRoute;
-  '/@me/bookmarks': typeof meBookmarksRoute;
-  '/games/cupcakes': typeof GamesCupcakesRoute;
-  '/rankings/1v1/$': typeof Rankings1v1SplatRoute;
-  '/rankings/2v2/$': typeof Rankings2v2SplatRoute;
-  '/rankings/clans/$': typeof RankingsClansSplatRoute;
-  '/rankings/power/$': typeof RankingsPowerSplatRoute;
-  '/stats/clan/$clanId': typeof StatsClanClanIdRoute;
-  '/stats/player/$playerId': typeof StatsPlayerPlayerIdRoute;
+  '/': typeof IndexRoute
+  '/calc': typeof CalcRoute
+  '/test': typeof TestRoute
+  '/discord': typeof socialDiscordRoute
+  '/donate': typeof socialDonateRoute
+  '/github': typeof socialGithubRoute
+  '/twitter': typeof socialTwitterRoute
+  '/wiki': typeof socialWikiRoute
+  '/@me/bookmarks': typeof meBookmarksRoute
+  '/games/cupcakes': typeof GamesCupcakesRoute
+  '/rankings/1v1/$': typeof Rankings1v1SplatRoute
+  '/rankings/2v2/$': typeof Rankings2v2SplatRoute
+  '/rankings/clans/$': typeof RankingsClansSplatRoute
+  '/rankings/power/$': typeof RankingsPowerSplatRoute
+  '/stats/clan/$clanId': typeof StatsClanClanIdRoute
+  '/stats/player/$playerId': typeof StatsPlayerPlayerIdRoute
 }
 
 export interface FileRoutesById {
-  __root__: typeof rootRoute;
-  '/': typeof IndexRoute;
-  '/calc': typeof CalcRoute;
-  '/test': typeof TestRoute;
-  '/(social)/discord': typeof socialDiscordRoute;
-  '/(social)/donate': typeof socialDonateRoute;
-  '/(social)/github': typeof socialGithubRoute;
-  '/(social)/twitter': typeof socialTwitterRoute;
-  '/(social)/wiki': typeof socialWikiRoute;
-  '/@me/bookmarks': typeof meBookmarksRoute;
-  '/games/cupcakes': typeof GamesCupcakesRoute;
-  '/rankings/1v1/$': typeof Rankings1v1SplatRoute;
-  '/rankings/2v2/$': typeof Rankings2v2SplatRoute;
-  '/rankings/clans/$': typeof RankingsClansSplatRoute;
-  '/rankings/power/$': typeof RankingsPowerSplatRoute;
-  '/stats/clan/$clanId': typeof StatsClanClanIdRoute;
-  '/stats/player/$playerId': typeof StatsPlayerPlayerIdRoute;
+  __root__: typeof rootRoute
+  '/': typeof IndexRoute
+  '/calc': typeof CalcRoute
+  '/test': typeof TestRoute
+  '/(social)/discord': typeof socialDiscordRoute
+  '/(social)/donate': typeof socialDonateRoute
+  '/(social)/github': typeof socialGithubRoute
+  '/(social)/twitter': typeof socialTwitterRoute
+  '/(social)/wiki': typeof socialWikiRoute
+  '/@me/bookmarks': typeof meBookmarksRoute
+  '/games/cupcakes': typeof GamesCupcakesRoute
+  '/rankings/1v1/$': typeof Rankings1v1SplatRoute
+  '/rankings/2v2/$': typeof Rankings2v2SplatRoute
+  '/rankings/clans/$': typeof RankingsClansSplatRoute
+  '/rankings/power/$': typeof RankingsPowerSplatRoute
+  '/stats/clan/$clanId': typeof StatsClanClanIdRoute
+  '/stats/player/$playerId': typeof StatsPlayerPlayerIdRoute
 }
 
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
+  fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/calc'
@@ -323,8 +323,8 @@ export interface FileRouteTypes {
     | '/rankings/clans/$'
     | '/rankings/power/$'
     | '/stats/clan/$clanId'
-    | '/stats/player/$playerId';
-  fileRoutesByTo: FileRoutesByTo;
+    | '/stats/player/$playerId'
+  fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/calc'
@@ -341,7 +341,7 @@ export interface FileRouteTypes {
     | '/rankings/clans/$'
     | '/rankings/power/$'
     | '/stats/clan/$clanId'
-    | '/stats/player/$playerId';
+    | '/stats/player/$playerId'
   id:
     | '__root__'
     | '/'
@@ -359,27 +359,27 @@ export interface FileRouteTypes {
     | '/rankings/clans/$'
     | '/rankings/power/$'
     | '/stats/clan/$clanId'
-    | '/stats/player/$playerId';
-  fileRoutesById: FileRoutesById;
+    | '/stats/player/$playerId'
+  fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute;
-  CalcRoute: typeof CalcRoute;
-  TestRoute: typeof TestRoute;
-  socialDiscordRoute: typeof socialDiscordRoute;
-  socialDonateRoute: typeof socialDonateRoute;
-  socialGithubRoute: typeof socialGithubRoute;
-  socialTwitterRoute: typeof socialTwitterRoute;
-  socialWikiRoute: typeof socialWikiRoute;
-  meBookmarksRoute: typeof meBookmarksRoute;
-  GamesCupcakesRoute: typeof GamesCupcakesRoute;
-  Rankings1v1SplatRoute: typeof Rankings1v1SplatRoute;
-  Rankings2v2SplatRoute: typeof Rankings2v2SplatRoute;
-  RankingsClansSplatRoute: typeof RankingsClansSplatRoute;
-  RankingsPowerSplatRoute: typeof RankingsPowerSplatRoute;
-  StatsClanClanIdRoute: typeof StatsClanClanIdRoute;
-  StatsPlayerPlayerIdRoute: typeof StatsPlayerPlayerIdRoute;
+  IndexRoute: typeof IndexRoute
+  CalcRoute: typeof CalcRoute
+  TestRoute: typeof TestRoute
+  socialDiscordRoute: typeof socialDiscordRoute
+  socialDonateRoute: typeof socialDonateRoute
+  socialGithubRoute: typeof socialGithubRoute
+  socialTwitterRoute: typeof socialTwitterRoute
+  socialWikiRoute: typeof socialWikiRoute
+  meBookmarksRoute: typeof meBookmarksRoute
+  GamesCupcakesRoute: typeof GamesCupcakesRoute
+  Rankings1v1SplatRoute: typeof Rankings1v1SplatRoute
+  Rankings2v2SplatRoute: typeof Rankings2v2SplatRoute
+  RankingsClansSplatRoute: typeof RankingsClansSplatRoute
+  RankingsPowerSplatRoute: typeof RankingsPowerSplatRoute
+  StatsClanClanIdRoute: typeof StatsClanClanIdRoute
+  StatsPlayerPlayerIdRoute: typeof StatsPlayerPlayerIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -399,11 +399,11 @@ const rootRouteChildren: RootRouteChildren = {
   RankingsPowerSplatRoute: RankingsPowerSplatRoute,
   StatsClanClanIdRoute: StatsClanClanIdRoute,
   StatsPlayerPlayerIdRoute: StatsPlayerPlayerIdRoute,
-};
+}
 
 export const routeTree = rootRoute
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>();
+  ._addFileTypes<FileRouteTypes>()
 
 /* ROUTE_MANIFEST_START
 {

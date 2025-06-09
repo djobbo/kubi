@@ -2,10 +2,10 @@ import { t } from '@lingui/core/macro';
 import { Trans } from '@lingui/react/macro';
 import { ChevronsUp } from 'lucide-react';
 
-import type { PlayerRanked } from '@/features/brawlhalla/api/schema/player-ranked';
-import { getTierFromRating } from '@/features/brawlhalla/constants/ranked/tiers';
-import { getGlory, getPersonalEloReset } from '@/features/brawlhalla/helpers/season-reset';
-import { calculateWinrate } from '@/features/brawlhalla/helpers/winrate';
+import type { PlayerRanked } from '@dair/brawlhalla-api/src/api/schema/player-ranked';
+import { getTierFromRating } from '@dair/brawlhalla-api/src/constants/ranked/tiers';
+import { getGlory, getPersonalEloReset } from '@dair/brawlhalla-api/src/helpers/season-reset';
+import { calculateWinrate } from '@dair/brawlhalla-api/src/helpers/winrate';
 
 import { RankedTierBanner } from '../../../Image';
 import { CollapsibleSection } from '../../../layout/CollapsibleSection';

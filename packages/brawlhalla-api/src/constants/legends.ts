@@ -1,7 +1,7 @@
 // TODO: Add translations
 /* eslint-disable lingui/no-unlocalized-strings */
 
-import { arrayToMap } from "@/helpers/arrayToMap"
+import { arrayToMap } from "@dair/common/src/helpers/arrayToMap"
 
 import type { Weapon } from "./weapons"
 

@@ -1,4 +1,4 @@
-import { submitForm } from '@/helpers/submit-form';
+import { submitForm } from '@dair/common/src/helpers/submit-form';
 import { useRootContext } from '@/hooks/useRootContext';
 import type { APIRoute as discordAPIRoute } from '@/routes/api/auth/discord';
 import type { APIRoute as logoutAPIRoute } from '@/routes/api/auth/logout';

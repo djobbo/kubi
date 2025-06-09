@@ -3,9 +3,9 @@ import { Link } from '@tanstack/react-router';
 import { Crown, Star, User, UserRoundPlus } from 'lucide-react';
 
 import { Card } from '@/components/base/Card';
-import type { Clan, ClanMemberRank } from '@/features/brawlhalla/api/schema/clan';
-import { cleanString } from '@/helpers/cleanString';
-import { formatUnixTime } from '@/helpers/date';
+import type { Clan, ClanMemberRank } from '@dair/brawlhalla-api/src/api/schema/clan';
+import { cleanString } from '@dair/common/src/helpers/cleanString';
+import { formatUnixTime } from '@dair/common/src/helpers/date';
 
 import type { MiscStat } from '../MiscStatGroup';
 import { MiscStatGroup } from '../MiscStatGroup';

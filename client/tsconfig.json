@@ -3,7 +3,6 @@
     "**/*.ts",
     "**/*.tsx",
     "drizzle.config.js",
-    "eslint.config.mjs",
     "tailwind.config.js",
     "postcss.config.js",
     "prettier.config.js",

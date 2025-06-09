@@ -5,8 +5,8 @@ import { Progress } from '@/components/base/Progress';
 import { FlagIcon, RankedTierIcon } from '@/features/brawlhalla/components/Image';
 import { cn } from '@/ui/lib/utils';
 
-import type { Ranking } from '../../api/schema/rankings';
-import { calculateWinrate } from '../../helpers/winrate';
+import type { Ranking } from '@dair/brawlhalla-api/src/api/schema/rankings';
+import { calculateWinrate } from '@dair/brawlhalla-api/src/helpers/winrate';
 
 type RankingsTableItemProps = Ranking & {
   className?: string;

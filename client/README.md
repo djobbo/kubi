@@ -46,6 +46,5 @@ bun dev
     - Docker
 
 - Linting
-    - ESLint
-    - Prettier
+    - Biome
     - Knip (Dead Code Elimination)

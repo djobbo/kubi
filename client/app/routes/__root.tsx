@@ -18,7 +18,7 @@ import { Layout } from '@/features/brawlhalla/components/layout/Layout';
 import { Searchbox } from '@/features/brawlhalla/components/search/Searchbox';
 import { SideNavProvider } from '@/features/sidebar/sidenav-provider';
 import globalStyles from '@/global.css?url';
-import { seo } from '@/helpers/seo';
+import { seo } from '@dair/common/src/helpers/seo';
 import { activateLocale } from '@/locales/activate';
 import { SidebarProvider } from '@/ui/components/sidebar';
 

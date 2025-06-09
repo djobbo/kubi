@@ -2,8 +2,8 @@ import { t } from '@lingui/core/macro';
 
 import { Card } from '@/components/base/Card';
 import { WeaponIcon } from '@/features/brawlhalla/components/Image';
-import type { FullLegend } from '@/features/brawlhalla/helpers/parser';
-import { formatTime } from '@/helpers/date';
+import type { FullLegend } from '@dair/brawlhalla-api/src/helpers/parser';
+import { formatTime } from '@dair/common/src/helpers/date';
 
 import { CollapsibleSection } from '../../../layout/CollapsibleSection';
 import { MiscStatGroup } from '../../MiscStatGroup';

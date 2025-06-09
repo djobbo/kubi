@@ -2,8 +2,8 @@ import { t } from '@lingui/core/macro';
 import { ArrowDownWideNarrow, ArrowUpWideNarrow } from 'lucide-react';
 
 import { Select } from '@/components/base/Select';
-import type { PlayerRanked } from '@/features/brawlhalla/api/schema/player-ranked';
-import { calculateWinrate } from '@/features/brawlhalla/helpers/winrate';
+import type { PlayerRanked } from '@dair/brawlhalla-api/src/api/schema/player-ranked';
+import { calculateWinrate } from '@dair/brawlhalla-api/src/helpers/winrate';
 import { SortDirection, useSortBy } from '@/hooks/useSortBy';
 
 import type { MiscStat } from '../../MiscStatGroup';

@@ -1,4 +1,4 @@
-import { arrayToMap } from "@/helpers/arrayToMap"
+import { arrayToMap } from "@dair/common/src/helpers/arrayToMap"
 
 import type { PlayerRanked } from "../api/schema/player-ranked"
 import type { PlayerStats } from "../api/schema/player-stats"

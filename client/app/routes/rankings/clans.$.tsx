@@ -6,8 +6,8 @@ import { z } from 'zod';
 import { CLANS_RANKINGS_PER_PAGE } from '@/features/archive/constants';
 import { getClanRankings } from '@/features/archive/functions/clans/get-clan-rankings';
 import { RankingsLayout } from '@/features/brawlhalla/components/stats/rankings/RankingsLayout';
-import { cleanString } from '@/helpers/cleanString';
-import { seo } from '@/helpers/seo';
+import { cleanString } from '@dair/common/src/helpers/cleanString';
+import { seo } from '@dair/common/src/helpers/seo';
 import { useDebouncedState } from '@/hooks/useDebouncedState';
 import { cn } from '@/ui/lib/utils';
 

@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 import { db } from '@/db';
 import { serviceAuthenticationMiddleware } from '@/features/auth/functions/serviceAuthenticationMiddleware';
-import { cleanString } from '@/helpers/cleanString';
+import { cleanString } from '@dair/common/src/helpers/cleanString';
 
 import { clanInsertSchema, clansTable } from '../../schema';
 

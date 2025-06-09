@@ -3,8 +3,8 @@ import { Trans } from '@lingui/react/macro';
 import { memo } from 'react';
 
 import { LegendIcon } from '@/features/brawlhalla/components/Image';
-import type { FullLegend, FullWeapon } from '@/features/brawlhalla/helpers/parser';
-import { calculateWinrate } from '@/features/brawlhalla/helpers/winrate';
+import type { FullLegend, FullWeapon } from '@dair/brawlhalla-api/src/helpers/parser';
+import { calculateWinrate } from '@dair/brawlhalla-api/src/helpers/winrate';
 
 import { SectionTitle } from '../../../layout/SectionTitle';
 import type { MiscStat } from '../../MiscStatGroup';

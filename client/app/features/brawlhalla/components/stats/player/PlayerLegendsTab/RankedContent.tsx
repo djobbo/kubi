@@ -1,9 +1,9 @@
 import { t } from '@lingui/core/macro';
 
-import { getTierFromRating } from '@/features/brawlhalla/constants/ranked/tiers';
-import type { FullLegend } from '@/features/brawlhalla/helpers/parser';
-import { getLegendEloReset } from '@/features/brawlhalla/helpers/season-reset';
-import { calculateWinrate } from '@/features/brawlhalla/helpers/winrate';
+import { getTierFromRating } from '@dair/brawlhalla-api/src/constants/ranked/tiers';
+import type { FullLegend } from '@dair/brawlhalla-api/src/helpers/parser';
+import { getLegendEloReset } from '@dair/brawlhalla-api/src/helpers/season-reset';
+import { calculateWinrate } from '@dair/brawlhalla-api/src/helpers/winrate';
 
 import { RankedTierBanner } from '../../../Image';
 import { CollapsibleSection } from '../../../layout/CollapsibleSection';

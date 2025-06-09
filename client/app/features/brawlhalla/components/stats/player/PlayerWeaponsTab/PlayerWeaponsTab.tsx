@@ -4,10 +4,10 @@ import { ArrowDownWideNarrow, ArrowUpWideNarrow } from 'lucide-react';
 import { useMemo } from 'react';
 
 import { Select } from '@/components/base/Select';
-import type { FullWeapon } from '@/features/brawlhalla/helpers/parser';
-import { getWeaponsAccumulativeData } from '@/features/brawlhalla/helpers/parser';
-import { calculateWinrate } from '@/features/brawlhalla/helpers/winrate';
-import { formatTime } from '@/helpers/date';
+import type { FullWeapon } from '@dair/brawlhalla-api/src/helpers/parser';
+import { getWeaponsAccumulativeData } from '@dair/brawlhalla-api/src/helpers/parser';
+import { calculateWinrate } from '@dair/brawlhalla-api/src/helpers/winrate';
+import { formatTime } from '@dair/common/src/helpers/date';
 import { SortDirection, useSortBy } from '@/hooks/useSortBy';
 
 import { Weapon } from './Weapon';
