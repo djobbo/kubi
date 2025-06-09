@@ -109,12 +109,8 @@
           "tableFrom": "oauth_account",
           "tableTo": "user",
           "schemaTo": "app-auth",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -122,10 +118,7 @@
       "compositePrimaryKeys": {
         "oauth_account_provider_id_provider_user_id_pk": {
           "name": "oauth_account_provider_id_provider_user_id_pk",
-          "columns": [
-            "provider_id",
-            "provider_user_id"
-          ]
+          "columns": ["provider_id", "provider_user_id"]
         }
       },
       "uniqueConstraints": {},
@@ -163,12 +156,8 @@
           "tableFrom": "session",
           "tableTo": "user",
           "schemaTo": "app-auth",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -319,12 +308,8 @@
           "tableFrom": "bookmarks",
           "tableTo": "user",
           "schemaTo": "app-auth",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -385,17 +370,12 @@
     "app-auth.oauth_provider": {
       "name": "oauth_provider",
       "schema": "app-auth",
-      "values": [
-        "discord"
-      ]
+      "values": ["discord"]
     },
     "app-bookmarks.page_type": {
       "name": "page_type",
       "schema": "app-bookmarks",
-      "values": [
-        "player_stats",
-        "clan_stats"
-      ]
+      "values": ["player_stats", "clan_stats"]
     }
   },
   "schemas": {

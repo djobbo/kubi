@@ -1,9 +1,9 @@
-import { drizzle } from "drizzle-orm/postgres-js"
-import postgres from "postgres"
+import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
 
-import * as schema from "@/db/schema"
-import { env } from "@/env"
+import * as schema from '@/db/schema';
+import { env } from '@/env';
 
-const queryClient = postgres(env.DATABASE_URL)
+const queryClient = postgres(env.DATABASE_URL);
 
-export const db = drizzle(queryClient, { schema })
+export const db = drizzle(queryClient, { schema });

@@ -1,30 +1,20 @@
-import { t } from "@lingui/core/macro"
-import { Trans } from "@lingui/react/macro"
-import { Link } from "@tanstack/react-router"
-import {
-  BookmarkIcon,
-  Folder,
-  Forward,
-  MoreHorizontal,
-  ShieldIcon,
-  Trash2,
-} from "lucide-react"
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
+import { Link } from '@tanstack/react-router';
+import { BookmarkIcon, Folder, Forward, MoreHorizontal, ShieldIcon, Trash2 } from 'lucide-react';
 
-import type { Bookmark } from "@/db/schema"
-import { useBookmarks } from "@/features/bookmarks/hooks/use-bookmarks"
-import {
-  getLegendIconSrc,
-  UnsafeImage,
-} from "@/features/brawlhalla/components/Image"
-import { legendsMap } from "@/features/brawlhalla/constants/legends"
-import { cleanString } from "@/helpers/cleanString"
+import type { Bookmark } from '@/db/schema';
+import { useBookmarks } from '@/features/bookmarks/hooks/use-bookmarks';
+import { UnsafeImage, getLegendIconSrc } from '@/features/brawlhalla/components/Image';
+import { legendsMap } from '@/features/brawlhalla/constants/legends';
+import { cleanString } from '@/helpers/cleanString';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/ui/components/dropdown-menu"
+} from '@/ui/components/dropdown-menu';
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -33,47 +23,43 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/ui/components/sidebar"
+} from '@/ui/components/sidebar';
 
 const getBookmarkIconUrl = (bookmark: Bookmark) => {
-  const meta = bookmark.meta
-  if (!(meta && "icon" in meta.data)) return
+  const meta = bookmark.meta;
+  if (!(meta && 'icon' in meta.data)) return;
 
   switch (meta.data.icon?.type) {
-    case "legend": {
-      const legendId = meta.data.icon.id
-      if (!legendId) break
+    case 'legend': {
+      const legendId = meta.data.icon.id;
+      if (!legendId) break;
 
-      const legend = legendsMap[legendId as keyof typeof legendsMap]
-      if (!legend) break
+      const legend = legendsMap[legendId as keyof typeof legendsMap];
+      if (!legend) break;
 
-      return getLegendIconSrc(legend.legend_name_key)
-      break
+      return getLegendIconSrc(legend.legend_name_key);
+      break;
     }
-    case "url": {
-      return meta.data.icon.url
-      break
+    case 'url': {
+      return meta.data.icon.url;
+      break;
     }
   }
-}
+};
 
 interface NavBookmarkProps {
-  isCollapsed?: boolean
-  bookmark: Bookmark
+  isCollapsed?: boolean;
+  bookmark: Bookmark;
 }
 
 const NavBookmark = ({ bookmark, isCollapsed, ...props }: NavBookmarkProps) => {
-  const cleanName = cleanString(bookmark.name)
+  const cleanName = cleanString(bookmark.name);
 
-  if (bookmark.pageType === "player_stats") {
-    const image = getBookmarkIconUrl(bookmark)
+  if (bookmark.pageType === 'player_stats') {
+    const image = getBookmarkIconUrl(bookmark);
 
     return (
-      <Link
-        {...props}
-        to={`/stats/player/$playerId`}
-        params={{ playerId: bookmark.pageId }}
-      >
+      <Link {...props} to={`/stats/player/$playerId`} params={{ playerId: bookmark.pageId }}>
         {isCollapsed ? (
           <div className="relative flex items-center justify-center">
             {image && (
@@ -103,30 +89,26 @@ const NavBookmark = ({ bookmark, isCollapsed, ...props }: NavBookmarkProps) => {
           )
         )}
       </Link>
-    )
+    );
   }
 
-  if (bookmark.pageType === "clan_stats") {
+  if (bookmark.pageType === 'clan_stats') {
     return (
-      <Link
-        {...props}
-        to={`/stats/clan/$clanId`}
-        params={{ clanId: bookmark.pageId }}
-      >
+      <Link {...props} to={`/stats/clan/$clanId`} params={{ clanId: bookmark.pageId }}>
         <ShieldIcon />
         <span className="truncate">{cleanName}</span>
       </Link>
-    )
+    );
   }
 
-  return null
-}
+  return null;
+};
 
 export const NavBookmarks = () => {
-  const { isMobile } = useSidebar()
-  const bookmarks = useBookmarks()
-  const sidebar = useSidebar()
-  const isCollapsed = sidebar.state === "collapsed"
+  const { isMobile } = useSidebar();
+  const bookmarks = useBookmarks();
+  const sidebar = useSidebar();
+  const isCollapsed = sidebar.state === 'collapsed';
 
   return (
     <SidebarGroup
@@ -162,8 +144,8 @@ export const NavBookmarks = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 className="w-48 rounded-lg"
-                side={isMobile ? "bottom" : "right"}
-                align={isMobile ? "end" : "start"}
+                side={isMobile ? 'bottom' : 'right'}
+                align={isMobile ? 'end' : 'start'}
               >
                 <DropdownMenuItem>
                   <Folder className="text-muted-foreground" />
@@ -196,5 +178,5 @@ export const NavBookmarks = () => {
         )}
       </SidebarMenu>
     </SidebarGroup>
-  )
-}
+  );
+};

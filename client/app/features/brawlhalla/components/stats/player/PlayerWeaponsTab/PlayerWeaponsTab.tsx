@@ -1,41 +1,27 @@
-import { t } from "@lingui/core/macro"
-import { Trans } from "@lingui/react/macro"
-import { ArrowDownWideNarrow, ArrowUpWideNarrow } from "lucide-react"
-import { useMemo } from "react"
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
+import { ArrowDownWideNarrow, ArrowUpWideNarrow } from 'lucide-react';
+import { useMemo } from 'react';
 
-import { Select } from "@/components/base/Select"
-import type { FullWeapon } from "@/features/brawlhalla/helpers/parser"
-import { getWeaponsAccumulativeData } from "@/features/brawlhalla/helpers/parser"
-import { calculateWinrate } from "@/features/brawlhalla/helpers/winrate"
-import { formatTime } from "@/helpers/date"
-import { SortDirection, useSortBy } from "@/hooks/useSortBy"
+import { Select } from '@/components/base/Select';
+import type { FullWeapon } from '@/features/brawlhalla/helpers/parser';
+import { getWeaponsAccumulativeData } from '@/features/brawlhalla/helpers/parser';
+import { calculateWinrate } from '@/features/brawlhalla/helpers/winrate';
+import { formatTime } from '@/helpers/date';
+import { SortDirection, useSortBy } from '@/hooks/useSortBy';
 
-import { Weapon } from "./Weapon"
+import { Weapon } from './Weapon';
 
 interface PlayerWeaponsTabProps {
-  weapons: FullWeapon[]
-  matchtime: number
-  games: number
+  weapons: FullWeapon[];
+  matchtime: number;
+  games: number;
 }
 
-type WeaponSortOption =
-  | "name"
-  | "xp"
-  | "games"
-  | "wins"
-  | "losses"
-  | "winrate"
-  | "matchtime"
+type WeaponSortOption = 'name' | 'xp' | 'games' | 'wins' | 'losses' | 'winrate' | 'matchtime';
 
-export const PlayerWeaponsTab = ({
-  weapons,
-  matchtime,
-  games,
-}: PlayerWeaponsTabProps) => {
-  const weaponsStats = useMemo(
-    () => getWeaponsAccumulativeData(weapons),
-    [weapons],
-  )
+export const PlayerWeaponsTab = ({ weapons, matchtime, games }: PlayerWeaponsTabProps) => {
+  const weaponsStats = useMemo(() => getWeaponsAccumulativeData(weapons), [weapons]);
 
   const {
     sortedArray: sortedWeapons,
@@ -78,28 +64,21 @@ export const PlayerWeaponsTab = ({
       },
       losses: {
         label: t`Losses`,
-        sortFn: (a, b) =>
-          (a.games ?? 0) - (a.wins ?? 0) - ((b.games ?? 0) - (b.wins ?? 0)),
-        displayFn: (weapon) => (
-          <>{(weapon.games ?? 0) - (weapon.wins ?? 0)} losses</>
-        ),
+        sortFn: (a, b) => (a.games ?? 0) - (a.wins ?? 0) - ((b.games ?? 0) - (b.wins ?? 0)),
+        displayFn: (weapon) => <>{(weapon.games ?? 0) - (weapon.wins ?? 0)} losses</>,
       },
       winrate: {
         label: t`Winrate`,
         sortFn: (a, b) =>
-          calculateWinrate(a.wins ?? 0, a.games ?? 0) -
-          calculateWinrate(b.wins ?? 0, b.games ?? 0),
+          calculateWinrate(a.wins ?? 0, a.games ?? 0) - calculateWinrate(b.wins ?? 0, b.games ?? 0),
         displayFn: (weapon) => (
-          <Trans>
-            {calculateWinrate(weapon.wins ?? 0, weapon.games ?? 0).toFixed(2)}%
-            winrate
-          </Trans>
+          <Trans>{calculateWinrate(weapon.wins ?? 0, weapon.games ?? 0).toFixed(2)}% winrate</Trans>
         ),
       },
     },
-    "matchtime",
-    SortDirection.Descending,
-  )
+    'matchtime',
+    SortDirection.Descending
+  );
 
   return (
     <>
@@ -132,13 +111,11 @@ export const PlayerWeaponsTab = ({
             games={games}
             displayedInfoFn={displayWeaponSortFn}
             rank={
-              weaponSortDirection === SortDirection.Ascending
-                ? sortedWeapons.length - i
-                : i + 1
+              weaponSortDirection === SortDirection.Ascending ? sortedWeapons.length - i : i + 1
             }
           />
         ))}
       </div>
     </>
-  )
-}
+  );
+};

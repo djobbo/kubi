@@ -1,23 +1,23 @@
-import { Trans } from "@lingui/react/macro"
-import type { CSSProperties } from "react"
+import { Trans } from '@lingui/react/macro';
+import type { CSSProperties } from 'react';
 
-import { Button } from "@/ui/components/button"
+import { Button } from '@/ui/components/button';
 
-import { calculateItemPrice } from "../helpers/calculate-price"
-import type { Item } from "../store"
-import { useCupcakesStore } from "../store"
-import { CupcakeUpgrade } from "./CupcakeUpgrade"
-import { ItemIcon } from "./ItemImage"
+import { calculateItemPrice } from '../helpers/calculate-price';
+import type { Item } from '../store';
+import { useCupcakesStore } from '../store';
+import { CupcakeUpgrade } from './CupcakeUpgrade';
+import { ItemIcon } from './ItemImage';
 
 interface CupcakeItemProps {
-  item: Item
+  item: Item;
 }
 
 const CupcakeProgress = ({ item }: CupcakeItemProps) => {
-  const showProgress = !!item.interval && item.count > 0
+  const showProgress = !!item.interval && item.count > 0;
 
   if (!showProgress) {
-    return null
+    return null;
   }
 
   return (
@@ -25,17 +25,17 @@ const CupcakeProgress = ({ item }: CupcakeItemProps) => {
       className="cupcake-progress w-64 h-8 relative bg-amber-200 rounded-lg overflow-hidden after:rounded-lg"
       style={
         {
-          "--interval": `${item.interval}s`,
+          '--interval': `${item.interval}s`,
         } as CSSProperties
       }
     />
-  )
-}
+  );
+};
 
 const CupcakeItem = ({ item }: CupcakeItemProps) => {
-  const { cupcakes, buyItem } = useCupcakesStore()
+  const { cupcakes, buyItem } = useCupcakesStore();
 
-  const price = calculateItemPrice(item, item.count)
+  const price = calculateItemPrice(item, item.count);
 
   return (
     <div key={item.id} className="m-8">
@@ -56,34 +56,27 @@ const CupcakeItem = ({ item }: CupcakeItemProps) => {
       </div>
       <ul className="flex gap-4">
         {item.upgrades.map((upgrade, index) => {
-          const previousUpgrade = item.upgrades[index - 1]
+          const previousUpgrade = item.upgrades[index - 1];
           if (!!previousUpgrade && !previousUpgrade.bought) {
-            return null
+            return null;
           }
 
-          return (
-            <CupcakeUpgrade
-              key={upgrade.id}
-              index={index}
-              upgrade={upgrade}
-              item={item}
-            />
-          )
+          return <CupcakeUpgrade key={upgrade.id} index={index} upgrade={upgrade} item={item} />;
         })}
       </ul>
     </div>
-  )
-}
+  );
+};
 
 export const CupcakeItems = () => {
-  const { items } = useCupcakesStore()
+  const { items } = useCupcakesStore();
 
   return items.map((item, i) => {
-    const previousItem = items[i - 1]
+    const previousItem = items[i - 1];
     if (!!previousItem && previousItem.count < 1) {
-      return null
+      return null;
     }
 
-    return <CupcakeItem key={item.id} item={item} />
-  })
-}
+    return <CupcakeItem key={item.id} item={item} />;
+  });
+};

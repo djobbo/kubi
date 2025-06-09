@@ -1,42 +1,38 @@
-import { t } from "@lingui/core/macro"
-import { Trans } from "@lingui/react/macro"
-import { ArrowDownWideNarrow, ArrowUpWideNarrow } from "lucide-react"
-import { useMemo, useState } from "react"
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
+import { ArrowDownWideNarrow, ArrowUpWideNarrow } from 'lucide-react';
+import { useMemo, useState } from 'react';
 
-import { Select } from "@/components/base/Select"
-import { type Weapon, weapons } from "@/features/brawlhalla/constants/weapons"
-import type { FullLegend } from "@/features/brawlhalla/helpers/parser"
-import { calculateWinrate } from "@/features/brawlhalla/helpers/winrate"
-import { formatTime } from "@/helpers/date"
-import { SortDirection, useSortBy } from "@/hooks/useSortBy"
+import { Select } from '@/components/base/Select';
+import { type Weapon, weapons } from '@/features/brawlhalla/constants/weapons';
+import type { FullLegend } from '@/features/brawlhalla/helpers/parser';
+import { calculateWinrate } from '@/features/brawlhalla/helpers/winrate';
+import { formatTime } from '@/helpers/date';
+import { SortDirection, useSortBy } from '@/hooks/useSortBy';
 
-import type { MiscStat } from "../../MiscStatGroup"
-import { MiscStatGroup } from "../../MiscStatGroup"
-import { Legend } from "./Legend"
+import type { MiscStat } from '../../MiscStatGroup';
+import { MiscStatGroup } from '../../MiscStatGroup';
+import { Legend } from './Legend';
 
 interface PlayerLegendsTabProps {
-  legends: FullLegend[]
-  matchtime: number
-  games: number
+  legends: FullLegend[];
+  matchtime: number;
+  games: number;
 }
 
 type LegendSortOption =
-  | "name"
-  | "xp"
-  | "games"
-  | "wins"
-  | "losses"
-  | "winrate"
-  | "rating"
-  | "peak_rating"
-  | "matchtime"
+  | 'name'
+  | 'xp'
+  | 'games'
+  | 'wins'
+  | 'losses'
+  | 'winrate'
+  | 'rating'
+  | 'peak_rating'
+  | 'matchtime';
 
-export const PlayerLegendsTab = ({
-  legends,
-  matchtime,
-  games,
-}: PlayerLegendsTabProps) => {
-  const [weaponFilter, setWeaponFilter] = useState<Weapon | "">("")
+export const PlayerLegendsTab = ({ legends, matchtime, games }: PlayerLegendsTabProps) => {
+  const [weaponFilter, setWeaponFilter] = useState<Weapon | ''>('');
   const {
     sortedArray: sortedLegends,
     sortBy: legendSortBy,
@@ -82,9 +78,7 @@ export const PlayerLegendsTab = ({
           (a.stats?.games ?? 0) -
           (a.stats?.wins ?? 0) -
           ((b.stats?.games ?? 0) - (b.stats?.wins ?? 0)),
-        displayFn: (legend) => (
-          <>{(legend.stats?.games ?? 0) - (legend.stats?.wins ?? 0)} losses</>
-        ),
+        displayFn: (legend) => <>{(legend.stats?.games ?? 0) - (legend.stats?.wins ?? 0)} losses</>,
       },
       winrate: {
         label: t`Winrate`,
@@ -93,11 +87,8 @@ export const PlayerLegendsTab = ({
           calculateWinrate(b.stats?.wins ?? 0, b.stats?.games ?? 0),
         displayFn: (legend) => (
           <Trans>
-            {calculateWinrate(
-              legend.stats?.wins ?? 0,
-              legend.stats?.games ?? 0,
-            ).toFixed(2)}
-            % winrate
+            {calculateWinrate(legend.stats?.wins ?? 0, legend.stats?.games ?? 0).toFixed(2)}%
+            winrate
           </Trans>
         ),
       },
@@ -108,38 +99,29 @@ export const PlayerLegendsTab = ({
       },
       peak_rating: {
         label: t`Peak elo`,
-        sortFn: (a, b) =>
-          (a.ranked?.peak_rating ?? 0) - (b.ranked?.peak_rating ?? 0),
-        displayFn: (legend) => (
-          <Trans>{legend.ranked?.peak_rating ?? 0} peak elo</Trans>
-        ),
+        sortFn: (a, b) => (a.ranked?.peak_rating ?? 0) - (b.ranked?.peak_rating ?? 0),
+        displayFn: (legend) => <Trans>{legend.ranked?.peak_rating ?? 0} peak elo</Trans>,
       },
     },
-    "xp",
-    SortDirection.Descending,
-  )
+    'xp',
+    SortDirection.Descending
+  );
 
   const filteredLegends = useMemo(
     () =>
       sortedLegends.filter(
-        (legend) =>
-          !weaponFilter ||
-          [legend.weapon_one, legend.weapon_two].includes(weaponFilter),
+        (legend) => !weaponFilter || [legend.weapon_one, legend.weapon_two].includes(weaponFilter)
       ),
-    [sortedLegends, weaponFilter],
-  )
+    [sortedLegends, weaponFilter]
+  );
 
   const globalLegendsStats: MiscStat[] = [
     {
       name: t`Legends played`,
       value: (
         <>
-          {
-            filteredLegends.filter(
-              (legend) => legend.stats && legend.stats.matchtime > 0,
-            ).length
-          }{" "}
-          / {filteredLegends.length}
+          {filteredLegends.filter((legend) => legend.stats && legend.stats.matchtime > 0).length} /{' '}
+          {filteredLegends.length}
         </>
       ),
       desc: t`Legends that were played at least once`,
@@ -148,9 +130,7 @@ export const PlayerLegendsTab = ({
       name: t`Played in ranked`,
       value: (
         <>
-          {filteredLegends.filter(
-            (legend) => legend.ranked && legend.ranked.games > 0,
-          ).length ?? 0}{" "}
+          {filteredLegends.filter((legend) => legend.ranked && legend.ranked.games > 0).length ?? 0}{' '}
           / {filteredLegends.length}
         </>
       ),
@@ -158,35 +138,30 @@ export const PlayerLegendsTab = ({
     },
     {
       name: t`Total legends level`,
-      value: filteredLegends.reduce(
-        (level, legend) => level + (legend.stats?.level ?? 0),
-        0,
-      ),
+      value: filteredLegends.reduce((level, legend) => level + (legend.stats?.level ?? 0), 0),
       desc: t`Sum of of all legends`,
     },
     {
       name: t`Avg. level`,
       value: (
-        filteredLegends.reduce(
-          (level, legend) => level + (legend.stats?.level ?? 0),
-          0,
-        ) / filteredLegends.length
+        filteredLegends.reduce((level, legend) => level + (legend.stats?.level ?? 0), 0) /
+        filteredLegends.length
       ).toFixed(0),
       desc: t`Average level of all legends`,
     },
-  ]
+  ];
 
   return (
     <>
       <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mt-8 items-center w-full">
-        <Select<Weapon | "">
+        <Select<Weapon | ''>
           className="flex-1 w-full"
           onChange={setWeaponFilter}
           value={weaponFilter}
           options={[
             {
-              label: "All Weapons",
-              value: "",
+              label: 'All Weapons',
+              value: '',
             },
             ...weapons.map((weapon) => ({
               label: weapon,
@@ -226,13 +201,11 @@ export const PlayerLegendsTab = ({
             games={games}
             displayedInfoFn={displayLegendSortFn}
             rank={
-              legendSortDirection === SortDirection.Ascending
-                ? filteredLegends.length - i
-                : i + 1
+              legendSortDirection === SortDirection.Ascending ? filteredLegends.length - i : i + 1
             }
           />
         ))}
       </div>
     </>
-  )
-}
+  );
+};

@@ -1,11 +1,11 @@
-import { $ } from "bun"
+import { $ } from 'bun';
 
-import { COMPOSE_FILE } from "./constants"
+import { COMPOSE_FILE } from './constants';
 
-const build = Bun.argv.includes("--build")
+const build = Bun.argv.includes('--build');
 
 if (build) {
-  await $`docker compose -f ${COMPOSE_FILE} down`
-  await $`docker compose -f ${COMPOSE_FILE} build --no-cache`
+  await $`docker compose -f ${COMPOSE_FILE} down`;
+  await $`docker compose -f ${COMPOSE_FILE} build --no-cache`;
 }
-await $`docker compose -f ${COMPOSE_FILE} up -d --wait`
+await $`docker compose -f ${COMPOSE_FILE} up -d --wait`;

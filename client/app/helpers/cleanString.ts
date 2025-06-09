@@ -1,7 +1,7 @@
 export const cleanString = (str: string): string => {
   try {
-    return decodeURIComponent(escape(str))
+    return decodeURIComponent(escape(str));
   } catch {
-    return str
+    return str;
   }
-}
+};

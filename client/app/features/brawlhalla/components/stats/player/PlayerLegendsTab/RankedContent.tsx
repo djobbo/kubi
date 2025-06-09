@@ -1,27 +1,25 @@
-import { t } from "@lingui/core/macro"
+import { t } from '@lingui/core/macro';
 
-import { getTierFromRating } from "@/features/brawlhalla/constants/ranked/tiers"
-import type { FullLegend } from "@/features/brawlhalla/helpers/parser"
-import { getLegendEloReset } from "@/features/brawlhalla/helpers/season-reset"
-import { calculateWinrate } from "@/features/brawlhalla/helpers/winrate"
+import { getTierFromRating } from '@/features/brawlhalla/constants/ranked/tiers';
+import type { FullLegend } from '@/features/brawlhalla/helpers/parser';
+import { getLegendEloReset } from '@/features/brawlhalla/helpers/season-reset';
+import { calculateWinrate } from '@/features/brawlhalla/helpers/winrate';
 
-import { RankedTierBanner } from "../../../Image"
-import { CollapsibleSection } from "../../../layout/CollapsibleSection"
-import type { MiscStat } from "../../MiscStatGroup"
-import { MiscStatGroup } from "../../MiscStatGroup"
-import { RatingDisplay } from "../../RatingDisplay"
+import { RankedTierBanner } from '../../../Image';
+import { CollapsibleSection } from '../../../layout/CollapsibleSection';
+import type { MiscStat } from '../../MiscStatGroup';
+import { MiscStatGroup } from '../../MiscStatGroup';
+import { RatingDisplay } from '../../RatingDisplay';
 
 interface PlayerLegendRankedContentProps {
-  ranked: FullLegend["ranked"]
+  ranked: FullLegend['ranked'];
 }
 
-export const PlayerLegendRankedContent = ({
-  ranked,
-}: PlayerLegendRankedContentProps) => {
-  if (!ranked) return null
+export const PlayerLegendRankedContent = ({ ranked }: PlayerLegendRankedContentProps) => {
+  if (!ranked) return null;
 
-  const eloReset = getLegendEloReset(ranked?.rating)
-  const eloResetTier = getTierFromRating(eloReset)
+  const eloReset = getLegendEloReset(ranked?.rating);
+  const eloResetTier = getTierFromRating(eloReset);
 
   const rankedStats: MiscStat[] = [
     {
@@ -43,13 +41,13 @@ export const PlayerLegendRankedContent = ({
           },
         ]
       : []),
-  ]
+  ];
 
   return (
     <CollapsibleSection trigger={t`Ranked Season`}>
       <div className="flex items-center gap-4">
         <RankedTierBanner
-          tier={ranked.tier ?? "Valhallan"}
+          tier={ranked.tier ?? 'Valhallan'}
           alt={ranked.tier ?? t`Valhallan`}
           containerClassName="h-24 w-16"
           className="object-contain object-center"
@@ -67,5 +65,5 @@ export const PlayerLegendRankedContent = ({
       </div>
       <MiscStatGroup className="mt-4" stats={rankedStats} />
     </CollapsibleSection>
-  )
-}
+  );
+};

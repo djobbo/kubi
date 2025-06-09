@@ -1,131 +1,115 @@
-import { t } from "@lingui/core/macro"
-import { Trans } from "@lingui/react/macro"
-import { queryOptions, useQuery } from "@tanstack/react-query"
-import {
-  KBarAnimator,
-  KBarPortal,
-  KBarPositioner,
-  KBarSearch,
-  useKBar,
-} from "kbar"
-import { ArrowUp, UserRound } from "lucide-react"
-import { useEffect } from "react"
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
+import { queryOptions, useQuery } from '@tanstack/react-query';
+import { KBarAnimator, KBarPortal, KBarPositioner, KBarSearch, useKBar } from 'kbar';
+import { ArrowUp, UserRound } from 'lucide-react';
+import { useEffect } from 'react';
 
-import { Spinner } from "@/components/base/Spinner"
-import { env } from "@/env"
-import { cleanString } from "@/helpers/cleanString"
-import { useDebouncedState } from "@/hooks/useDebouncedState"
-import { css } from "@/panda/css"
-import { cn } from "@/ui/lib/utils"
-import { colors } from "@/ui/theme"
+import { Spinner } from '@/components/base/Spinner';
+import { env } from '@/env';
+import { cleanString } from '@/helpers/cleanString';
+import { useDebouncedState } from '@/hooks/useDebouncedState';
+import { css } from '@/panda/css';
+import { cn } from '@/ui/lib/utils';
+import { colors } from '@/ui/theme';
 
-import { searchPlayer } from "../../api/functions"
-import { MAX_SHOWN_ALIASES } from "../../constants/aliases"
-import { RankedPlayerItem } from "./RankedPlayerItem"
-import { SearchboxItem } from "./SearchboxItem"
+import { searchPlayer } from '../../api/functions';
+import { MAX_SHOWN_ALIASES } from '../../constants/aliases';
+import { RankedPlayerItem } from './RankedPlayerItem';
+import { SearchboxItem } from './SearchboxItem';
 
 const resultsContainerClass = css({
-  maxHeight: "calc(100vh - 14vh - 100px)",
-})
+  maxHeight: 'calc(100vh - 14vh - 100px)',
+});
 
 interface AliasesSubtitleProps {
-  immediateSearch: string
-  aliases?: string[]
+  immediateSearch: string;
+  aliases?: string[];
 }
 
-const AliasesSubtitle = ({
-  immediateSearch,
-  aliases,
-}: AliasesSubtitleProps) => {
+const AliasesSubtitle = ({ immediateSearch, aliases }: AliasesSubtitleProps) => {
   if (!aliases || aliases.length === 0) {
-    return null
+    return null;
   }
 
   return (
     <span className="flex gap-1">
       {aliases.map((alias) => {
-        const cleanAlias = cleanString(alias)
+        const cleanAlias = cleanString(alias);
 
-        if (cleanAlias.length < 2 || cleanAlias.endsWith("•2")) return
+        if (cleanAlias.length < 2 || cleanAlias.endsWith('•2')) return;
 
         return (
           <span
             key={cleanAlias}
             className={cn({
-              "font-semibold": cleanAlias
-                .toLowerCase()
-                .startsWith(immediateSearch.toLowerCase()),
+              'font-semibold': cleanAlias.toLowerCase().startsWith(immediateSearch.toLowerCase()),
             })}
           >
             {cleanAlias}
           </span>
-        )
+        );
       })}
     </span>
-  )
-}
+  );
+};
 
 export const usePlayerSearch = (name: string, enabled: boolean) => {
   return useQuery(
     queryOptions({
-      queryKey: ["player-search", name],
+      queryKey: ['player-search', name],
       queryFn: async () => {
         const search = await searchPlayer({
           data: name,
-        })
+        });
 
-        return search
+        return search;
       },
       enabled,
-    }),
-  )
-}
+    })
+  );
+};
 
 export const Searchbox = () => {
-  const [search, setSearch, immediateSearch, isDebouncingSearch] =
-    useDebouncedState("", env.IS_DEV ? 250 : 750)
+  const [search, setSearch, immediateSearch, isDebouncingSearch] = useDebouncedState(
+    '',
+    env.IS_DEV ? 250 : 750
+  );
 
-  const enableSearch = search.length > 2
-  const playerSearchQuery = usePlayerSearch(search, enableSearch)
+  const enableSearch = search.length > 2;
+  const playerSearchQuery = usePlayerSearch(search, enableSearch);
 
-  const { data, isLoading } = playerSearchQuery
-  const {
-    rankings = [],
-    aliases = [],
-    potentialBrawlhallaIdAliases = null,
-  } = data ?? {}
+  const { data, isLoading } = playerSearchQuery;
+  const { rankings = [], aliases = [], potentialBrawlhallaIdAliases = null } = data ?? {};
 
   const {
     query: { toggle },
-  } = useKBar()
+  } = useKBar();
 
   useEffect(() => {
     // open searchbox on "/"
     const onKeyDown = (e: KeyboardEvent) => {
-      if (document.activeElement?.tagName === "INPUT") return
+      if (document.activeElement?.tagName === 'INPUT') return;
 
-      if (e.key === "/") {
-        e.preventDefault()
-        toggle()
+      if (e.key === '/') {
+        e.preventDefault();
+        toggle();
       }
-    }
+    };
 
-    document.addEventListener("keydown", onKeyDown)
-    return () => document.removeEventListener("keydown", onKeyDown)
-  }, [toggle])
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [toggle]);
 
   const filteredRankings =
     rankings?.filter((player) =>
-      player.name.toLowerCase().startsWith(immediateSearch.toLowerCase()),
-    ) ?? []
+      player.name.toLowerCase().startsWith(immediateSearch.toLowerCase())
+    ) ?? [];
 
   const hasResults =
-    filteredRankings.length > 0 ||
-    aliases.length > 0 ||
-    !!potentialBrawlhallaIdAliases
+    filteredRankings.length > 0 || aliases.length > 0 || !!potentialBrawlhallaIdAliases;
 
-  const categoryTitleClassName =
-    "text-xs font-semibold text-muted-foreground px-4 py-2"
+  const categoryTitleClassName = 'text-xs font-semibold text-muted-foreground px-4 py-2';
 
   return (
     <KBarPortal>
@@ -137,21 +121,20 @@ export const Searchbox = () => {
                 className="p-4 w-full bg-secondary text-foreground outline-none border-b border-b-border"
                 defaultPlaceholder={t`Search player by name or brawlhalla id...`}
                 onChange={(e) => {
-                  setSearch(e.target.value)
+                  setSearch(e.target.value);
                 }}
                 value={search}
               />
-              {immediateSearch.length > 0 &&
-                (isLoading || isDebouncingSearch) && (
-                  <Spinner
-                    className="absolute top-1/2 -translate-x-1/2 right-2"
-                    size="2rem"
-                    color={colors.border}
-                  />
-                )}
+              {immediateSearch.length > 0 && (isLoading || isDebouncingSearch) && (
+                <Spinner
+                  className="absolute top-1/2 -translate-x-1/2 right-2"
+                  size="2rem"
+                  color={colors.border}
+                />
+              )}
             </div>
             {/* TODO: add tabs for searching for clans, tournaments, etc */}
-            <div className={cn(resultsContainerClass, "overflow-y-auto")}>
+            <div className={cn(resultsContainerClass, 'overflow-y-auto')}>
               <div className="max-h-[50vh] my-2">
                 {hasResults ? (
                   <>
@@ -214,23 +197,19 @@ export const Searchbox = () => {
                   <div className="flex items-center justify-center px-4 py-8 w-full gap-2">
                     <ArrowUp className="w-4 h-4" />
                     <p className="text-center text-sm mx-4">
-                      {!!immediateSearch &&
-                        !isLoading &&
-                        !isDebouncingSearch &&
-                        enableSearch && (
-                          <span className="block text-lg font-semibold mb-2 text-foreground">
-                            <Trans>No players found</Trans>
-                          </span>
-                        )}
+                      {!!immediateSearch && !isLoading && !isDebouncingSearch && enableSearch && (
+                        <span className="block text-lg font-semibold mb-2 text-foreground">
+                          <Trans>No players found</Trans>
+                        </span>
+                      )}
                       <Trans>
-                        Search for a player (must start with exact match, with
-                        at least 3 characters)
+                        Search for a player (must start with exact match, with at least 3
+                        characters)
                       </Trans>
                       <br />
                       <span className="text-xs text-muted-foreground">
                         <Trans>
-                          Only players that have completed their 10 placement
-                          matches are shown.
+                          Only players that have completed their 10 placement matches are shown.
                         </Trans>
                       </span>
                     </p>
@@ -241,12 +220,12 @@ export const Searchbox = () => {
             </div>
             <p className="text-center text-xs text-muted-foreground italic p-2 border-t border-border">
               <Trans>
-                If you{"'"}re having trouble finding a player by name, trying
-                using their brawlhalla id instead.
+                If you{"'"}re having trouble finding a player by name, trying using their brawlhalla
+                id instead.
               </Trans>
               <br />
               <Trans>
-                Join our{" "}
+                Join our{' '}
                 <a
                   href="/discord"
                   target="_blank"
@@ -254,7 +233,7 @@ export const Searchbox = () => {
                   className="text-muted-foreground underline"
                 >
                   Discord
-                </a>{" "}
+                </a>{' '}
                 if you need help.
               </Trans>
             </p>
@@ -262,5 +241,5 @@ export const Searchbox = () => {
         </KBarAnimator>
       </KBarPositioner>
     </KBarPortal>
-  )
-}
+  );
+};

@@ -1,7 +1,7 @@
-import type { MouseEventHandler } from "react"
+import type { MouseEventHandler } from 'react';
 
-import { useCupcakesStore } from "../store"
-import { FloatingCupcakes } from "./FloatingCupcakes"
+import { useCupcakesStore } from '../store';
+import { FloatingCupcakes } from './FloatingCupcakes';
 
 const CupcakeSVG = () => {
   return (
@@ -49,16 +49,16 @@ const CupcakeSVG = () => {
         </g>
       </defs>
     </svg>
-  )
-}
+  );
+};
 
 export const CupcakeButton = () => {
-  const { onClick } = useCupcakesStore()
+  const { onClick } = useCupcakesStore();
 
   const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
-    const rect = event.currentTarget.getBoundingClientRect()
-    onClick(event.clientX - rect.left, event.clientY - rect.top)
-  }
+    const rect = event.currentTarget.getBoundingClientRect();
+    onClick(event.clientX - rect.left, event.clientY - rect.top);
+  };
 
   return (
     <div className="relative inline-block">
@@ -71,5 +71,5 @@ export const CupcakeButton = () => {
       </button>
       <FloatingCupcakes />
     </div>
-  )
-}
+  );
+};

@@ -1,33 +1,30 @@
-import { t } from "@lingui/core/macro"
-import { Trans } from "@lingui/react/macro"
-import { ChartColumnBig, Flame, Hand, Target } from "lucide-react"
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
+import { ChartColumnBig, Flame, Hand, Target } from 'lucide-react';
 
-import type { PlayerRanked } from "@/features/brawlhalla/api/schema/player-ranked"
-import type { PlayerStats } from "@/features/brawlhalla/api/schema/player-stats"
-import {
-  type FullLegend,
-  getWeaponlessData,
-} from "@/features/brawlhalla/helpers/parser"
-import { formatTime } from "@/helpers/date"
+import type { PlayerRanked } from '@/features/brawlhalla/api/schema/player-ranked';
+import type { PlayerStats } from '@/features/brawlhalla/api/schema/player-stats';
+import { type FullLegend, getWeaponlessData } from '@/features/brawlhalla/helpers/parser';
+import { formatTime } from '@/helpers/date';
 
-import { CollapsibleSection } from "../../../layout/CollapsibleSection"
-import { GeneralStats } from "../../GeneralStats"
-import type { MiscStat } from "../../MiscStatGroup"
-import { MiscStatGroup } from "../../MiscStatGroup"
-import { PlayerOverviewClanContent } from "./ClanContent"
-import { PlayerOverviewRankedContent } from "./RankedContent"
+import { CollapsibleSection } from '../../../layout/CollapsibleSection';
+import { GeneralStats } from '../../GeneralStats';
+import type { MiscStat } from '../../MiscStatGroup';
+import { MiscStatGroup } from '../../MiscStatGroup';
+import { PlayerOverviewClanContent } from './ClanContent';
+import { PlayerOverviewRankedContent } from './RankedContent';
 
 interface PlayerOverviewTabProps {
-  stats: PlayerStats
-  ranked?: PlayerRanked
-  legends: FullLegend[]
-  kos: number
-  falls: number
-  suicides: number
-  teamkos: number
-  damageDealt: number
-  damageTaken: number
-  matchtime: number
+  stats: PlayerStats;
+  ranked?: PlayerRanked;
+  legends: FullLegend[];
+  kos: number;
+  falls: number;
+  suicides: number;
+  teamkos: number;
+  damageDealt: number;
+  damageTaken: number;
+  matchtime: number;
 }
 
 export const PlayerOverviewTab = ({
@@ -42,8 +39,8 @@ export const PlayerOverviewTab = ({
   damageTaken,
   matchtime,
 }: PlayerOverviewTabProps) => {
-  const { clan } = stats
-  const { unarmed, gadgets, throws } = getWeaponlessData(legends)
+  const { clan } = stats;
+  const { unarmed, gadgets, throws } = getWeaponlessData(legends);
 
   const generalStats: MiscStat[] = [
     {
@@ -72,7 +69,7 @@ export const PlayerOverviewTab = ({
       desc: t`Damage dealt unarmed`,
     },
     {
-      name: "DPS",
+      name: 'DPS',
       value: `${(unarmed.damageDealt / unarmed.matchtime).toFixed(2)} dmg/s`,
       desc: t`Damage dealt unarmed per second`,
     },
@@ -81,7 +78,7 @@ export const PlayerOverviewTab = ({
       value: (unarmed.damageDealt / stats.games).toFixed(2),
       desc: t`Average damage dealt unarmed per game`,
     },
-  ]
+  ];
 
   const gadgetsStats: MiscStat[] = [
     {
@@ -104,7 +101,7 @@ export const PlayerOverviewTab = ({
       value: (gadgets.damageDealt / stats.games).toFixed(2),
       desc: t`Average damage dealt with gadgets per game`,
     },
-  ]
+  ];
 
   const throwsStats: MiscStat[] = [
     {
@@ -127,7 +124,7 @@ export const PlayerOverviewTab = ({
       value: (throws.damageDealt / stats.games).toFixed(2),
       desc: t`Damage dealt with thrown items per game`,
     },
-  ]
+  ];
 
   return (
     <>
@@ -185,5 +182,5 @@ export const PlayerOverviewTab = ({
         <MiscStatGroup className="mt-8" stats={gadgetsStats} />
       </CollapsibleSection>
     </>
-  )
-}
+  );
+};

@@ -1,7 +1,7 @@
-import { Link, useRouterState } from "@tanstack/react-router"
-import { DotIcon } from "lucide-react"
+import { Link, useRouterState } from '@tanstack/react-router';
+import { DotIcon } from 'lucide-react';
 
-import { navConfig } from "@/config/nav"
+import { navConfig } from '@/config/nav';
 import {
   SidebarGroup,
   SidebarMenu,
@@ -9,18 +9,18 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/ui/components/sidebar"
-import { cn } from "@/ui/lib/utils"
+} from '@/ui/components/sidebar';
+import { cn } from '@/ui/lib/utils';
 
 export const MainNav = () => {
-  const router = useRouterState()
-  const sidebar = useSidebar()
+  const router = useRouterState();
+  const sidebar = useSidebar();
 
   return (
     <SidebarGroup>
       <SidebarMenu>
         {navConfig().sidebar.map((item) => {
-          const isActive = item.isActive?.(router.location.pathname) ?? false
+          const isActive = item.isActive?.(router.location.pathname) ?? false;
 
           return (
             <SidebarMenuItem key={item.title}>
@@ -29,7 +29,7 @@ export const MainNav = () => {
                   to={item.to}
                   target={item.target}
                   className={cn({
-                    border: isActive && sidebar.state === "collapsed",
+                    border: isActive && sidebar.state === 'collapsed',
                   })}
                 >
                   {item.Icon && <item.Icon />}
@@ -42,7 +42,7 @@ export const MainNav = () => {
                 </SidebarMenuBadge>
               )}
             </SidebarMenuItem>
-          )
+          );
 
           // TODO: Implement when we have a use case for it
           // return (
@@ -79,5 +79,5 @@ export const MainNav = () => {
         })}
       </SidebarMenu>
     </SidebarGroup>
-  )
-}
+  );
+};

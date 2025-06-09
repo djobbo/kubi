@@ -1,28 +1,28 @@
-import { Trans } from "@lingui/react/macro"
-import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
+import { Trans } from '@lingui/react/macro';
+import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 
-import { getBrawlhallaArticles } from "@/features/bh-articles/functions/getBrawlhallaArticles"
+import { getBrawlhallaArticles } from '@/features/bh-articles/functions/getBrawlhallaArticles';
 
-import { ArticlePreviewGrid } from "./articles/ArticlePreviewGrid"
-import { SectionTitle } from "./layout/SectionTitle"
+import { ArticlePreviewGrid } from './articles/ArticlePreviewGrid';
+import { SectionTitle } from './layout/SectionTitle';
 
 export const LandingArticles = () => {
   const { data: articles } = useSuspenseQuery(
     queryOptions({
-      queryKey: ["landingArticles"],
+      queryKey: ['landingArticles'],
       queryFn: async () => {
         const articles = getBrawlhallaArticles({
           data: {
             query: { first: 3, category: null, after: null },
           },
-        })
+        });
 
-        return articles
+        return articles;
       },
-    }),
-  )
+    })
+  );
 
-  if (!articles || articles.length <= 0) return null
+  if (!articles || articles.length <= 0) return null;
 
   return (
     <>
@@ -31,5 +31,5 @@ export const LandingArticles = () => {
       </SectionTitle>
       <ArticlePreviewGrid articles={articles} />
     </>
-  )
-}
+  );
+};

@@ -1,1 +1,1 @@
-export { PlayerLegendsTab } from "./PlayerLegendsTab"
+export { PlayerLegendsTab } from './PlayerLegendsTab';

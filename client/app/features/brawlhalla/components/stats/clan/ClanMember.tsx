@@ -1,21 +1,18 @@
-import { t } from "@lingui/core/macro"
-import { Link } from "@tanstack/react-router"
-import { Crown, Star, User, UserRoundPlus } from "lucide-react"
+import { t } from '@lingui/core/macro';
+import { Link } from '@tanstack/react-router';
+import { Crown, Star, User, UserRoundPlus } from 'lucide-react';
 
-import { Card } from "@/components/base/Card"
-import type {
-  Clan,
-  ClanMemberRank,
-} from "@/features/brawlhalla/api/schema/clan"
-import { cleanString } from "@/helpers/cleanString"
-import { formatUnixTime } from "@/helpers/date"
+import { Card } from '@/components/base/Card';
+import type { Clan, ClanMemberRank } from '@/features/brawlhalla/api/schema/clan';
+import { cleanString } from '@/helpers/cleanString';
+import { formatUnixTime } from '@/helpers/date';
 
-import type { MiscStat } from "../MiscStatGroup"
-import { MiscStatGroup } from "../MiscStatGroup"
+import type { MiscStat } from '../MiscStatGroup';
+import { MiscStatGroup } from '../MiscStatGroup';
 
 interface ClanMemberProps {
-  member: Clan["clan"][number]
-  clan: Clan
+  member: Clan['clan'][number];
+  clan: Clan;
 }
 
 const memberIcons: Record<ClanMemberRank, typeof Crown> = {
@@ -23,10 +20,10 @@ const memberIcons: Record<ClanMemberRank, typeof Crown> = {
   Officer: Star,
   Member: User,
   Recruit: UserRoundPlus,
-} as const
+} as const;
 
 export const ClanMember = ({ member, clan }: ClanMemberProps) => {
-  const memberName = cleanString(member.name)
+  const memberName = cleanString(member.name);
 
   const memberStats: MiscStat[] = [
     {
@@ -36,16 +33,13 @@ export const ClanMember = ({ member, clan }: ClanMemberProps) => {
     },
     {
       name: t`XP`,
-      value: `${member.xp} (${(
-        (member.xp / parseInt(clan.clan_xp)) *
-        100
-      ).toFixed(2)}
+      value: `${member.xp} (${((member.xp / parseInt(clan.clan_xp)) * 100).toFixed(2)}
                     %)`,
       desc: t`XP earned ${memberName} the member since joining the clan`,
     },
-  ]
+  ];
 
-  const Icon = memberIcons[member.rank]
+  const Icon = memberIcons[member.rank];
 
   return (
     <Link
@@ -71,5 +65,5 @@ export const ClanMember = ({ member, clan }: ClanMemberProps) => {
         />
       </Card>
     </Link>
-  )
-}
+  );
+};

@@ -2,44 +2,44 @@ import {
   SiDiscord as DiscordIcon,
   SiGithub as GithubIcon,
   SiX as TwitterIcon,
-} from "@icons-pack/react-simple-icons"
-import { t } from "@lingui/core/macro"
-import { Trans } from "@lingui/react/macro"
-import { Link } from "@tanstack/react-router"
+} from '@icons-pack/react-simple-icons';
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
+import { Link } from '@tanstack/react-router';
 
-import { Tooltip } from "@/components/base/Tooltip"
+import { Tooltip } from '@/components/base/Tooltip';
 
 const getSocialLinks = () => [
   {
-    href: "/discord",
+    href: '/discord',
     Icon: DiscordIcon,
     name: t`Discord`,
   },
   {
-    href: "/twitter",
+    href: '/twitter',
     Icon: TwitterIcon,
     name: t`Twitter`,
   },
   {
-    href: "/github",
+    href: '/github',
     Icon: GithubIcon,
     name: t`Github`,
   },
-]
+];
 
 interface FooterProps {
-  className?: string
+  className?: string;
 }
 
 export const Footer = ({ className }: FooterProps) => {
-  const currentYear = new Date().getFullYear()
+  const currentYear = new Date().getFullYear();
 
   return (
     <footer className={className}>
       <p className="text-center text-xs border-t border-border py-8">
         <span className="block max-w-screen-sm mx-auto">
           <Trans>
-            Visual assets courtesy of{" "}
+            Visual assets courtesy of{' '}
             <a
               className="p-link"
               href="https://www.bluemammoth.com"
@@ -48,8 +48,8 @@ export const Footer = ({ className }: FooterProps) => {
             >
               Blue Mammoth Games
             </a>
-          </Trans>{" "}
-          &{" "}
+          </Trans>{' '}
+          &{' '}
           <a
             className="p-link"
             href="https://www.flaticon.com/fr/packs/square-country-simple-flags"
@@ -61,13 +61,13 @@ export const Footer = ({ className }: FooterProps) => {
           .
           <br />
           <Trans>
-            Corehalla is neither associated nor endorsed by Blue Mammoth Games
-            and doesn&apos;t reflect the views or opinions of Blue Mammoth Games
-            or anyone officially involved in developing Brawlhalla.
+            Corehalla is neither associated nor endorsed by Blue Mammoth Games and doesn&apos;t
+            reflect the views or opinions of Blue Mammoth Games or anyone officially involved in
+            developing Brawlhalla.
           </Trans>
           <br />
           <Trans>
-            Brawlhalla and Blue Mammoth Games are trademarks of{" "}
+            Brawlhalla and Blue Mammoth Games are trademarks of{' '}
             <a
               className="p-link"
               href="https://www.bluemammoth.com"
@@ -102,5 +102,5 @@ export const Footer = ({ className }: FooterProps) => {
         </p>
       </div>
     </footer>
-  )
-}
+  );
+};

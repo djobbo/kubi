@@ -1,16 +1,16 @@
-import type { ReactNode } from "react"
+import type { ReactNode } from 'react';
 
-import { Progress } from "@/components/base/Progress"
-import { cn } from "@/ui/lib/utils"
+import { Progress } from '@/components/base/Progress';
+import { cn } from '@/ui/lib/utils';
 
-import { calculateWinrate } from "../../helpers/winrate"
+import { calculateWinrate } from '../../helpers/winrate';
 
 interface GamesCardProps {
-  games: number
-  wins: number
-  description?: ReactNode
-  className?: string
-  mainContent?: ReactNode
+  games: number;
+  wins: number;
+  description?: ReactNode;
+  className?: string;
+  mainContent?: ReactNode;
 }
 
 export const GamesDisplay = ({
@@ -21,11 +21,11 @@ export const GamesDisplay = ({
   mainContent,
 }: GamesCardProps) => {
   return (
-    <div className={cn("flex flex-col", className)}>
+    <div className={cn('flex flex-col', className)}>
       <p className="text-5xl font-bold">
         {mainContent ?? games}
         <span className="ml-2 text-xs font-normal uppercase text-muted-foreground">
-          {description ?? "games"}
+          {description ?? 'games'}
         </span>
       </p>
       <Progress
@@ -35,18 +35,18 @@ export const GamesDisplay = ({
       />
       <div className="flex justify-between font-bold text-md mt-2">
         <span>
-          {wins}W{" "}
+          {wins}W{' '}
           <span className="text-xs text-muted-foreground">
             ({calculateWinrate(wins, games).toFixed(2)}%)
           </span>
         </span>
         <span>
-          {games - wins}L{" "}
+          {games - wins}L{' '}
           <span className="text-xs text-muted-foreground">
             ({calculateWinrate(games - wins, games).toFixed(2)}%)
           </span>
         </span>
       </div>
     </div>
-  )
-}
+  );
+};

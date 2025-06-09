@@ -1,53 +1,45 @@
-import { SiDiscord as DiscordIcon } from "@icons-pack/react-simple-icons"
-import { t } from "@lingui/core/macro"
-import { Trans } from "@lingui/react/macro"
-import { ExternalLink, UserRoundMinus, UserRoundPlus } from "lucide-react"
-import type { ReactNode } from "react"
-import toast from "react-hot-toast"
+import { SiDiscord as DiscordIcon } from '@icons-pack/react-simple-icons';
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
+import { ExternalLink, UserRoundMinus, UserRoundPlus } from 'lucide-react';
+import type { ReactNode } from 'react';
+import toast from 'react-hot-toast';
 
-import type { NewBookmark } from "@/db/schema"
-import { AdsenseStatsHeader } from "@/features/analytics/components/adsense"
-import { useAuth } from "@/features/auth/use-auth"
-import { useBookmark } from "@/features/bookmarks/hooks/use-bookmark"
-import { cleanString } from "@/helpers/cleanString"
-import { useCopyToClipboard } from "@/hooks/useCopyToClipboard"
-import { Button } from "@/ui/components/button"
-import { cn } from "@/ui/lib/utils"
+import type { NewBookmark } from '@/db/schema';
+import { AdsenseStatsHeader } from '@/features/analytics/components/adsense';
+import { useAuth } from '@/features/auth/use-auth';
+import { useBookmark } from '@/features/bookmarks/hooks/use-bookmark';
+import { cleanString } from '@/helpers/cleanString';
+import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
+import { Button } from '@/ui/components/button';
+import { cn } from '@/ui/lib/utils';
 
-import { MAX_SHOWN_ALIASES } from "../../constants/aliases"
-import type { MiscStat } from "./MiscStatGroup"
-import { MiscStatGroup } from "./MiscStatGroup"
+import { MAX_SHOWN_ALIASES } from '../../constants/aliases';
+import type { MiscStat } from './MiscStatGroup';
+import { MiscStatGroup } from './MiscStatGroup';
 
 interface StatsHeaderProps {
-  name: string
-  id: number
-  icon?: ReactNode
-  aliases?: string[]
-  miscStats?: MiscStat[]
-  bookmark: NewBookmark
+  name: string;
+  id: number;
+  icon?: ReactNode;
+  aliases?: string[];
+  miscStats?: MiscStat[];
+  bookmark: NewBookmark;
 }
 
-export const StatsHeader = ({
-  name,
-  id,
-  icon,
-  aliases,
-  miscStats,
-  bookmark,
-}: StatsHeaderProps) => {
-  const { isLoggedIn, logIn } = useAuth()
-  const { isBookmarked, toggleBookmark } = useBookmark(bookmark)
-  const copyToClipboard = useCopyToClipboard()
+export const StatsHeader = ({ name, id, icon, aliases, miscStats, bookmark }: StatsHeaderProps) => {
+  const { isLoggedIn, logIn } = useAuth();
+  const { isBookmarked, toggleBookmark } = useBookmark(bookmark);
+  const copyToClipboard = useCopyToClipboard();
 
   return (
     <>
       <div
         className="w-full h-28 max-h-28 relative rounded-md overflow-hidden shadow-md"
         style={{
-          background:
-            "url(/assets/images/brand/backgrounds/background-text-sm.jpg)",
-          backgroundPosition: "center",
-          backgroundSize: "cover",
+          background: 'url(/assets/images/brand/backgrounds/background-text-sm.jpg)',
+          backgroundPosition: 'center',
+          backgroundSize: 'cover',
         }}
       >
         <AdsenseStatsHeader />
@@ -55,9 +47,9 @@ export const StatsHeader = ({
       <div className="flex flex-col sm:flex-row justify-end py-2 gap-2">
         {isLoggedIn ? (
           <Button
-            variant={isBookmarked ? "outline" : "primary"}
+            variant={isBookmarked ? 'outline' : 'primary'}
             onClick={() => {
-              toggleBookmark(!isBookmarked)
+              toggleBookmark(!isBookmarked);
             }}
           >
             {isBookmarked ? (
@@ -74,26 +66,25 @@ export const StatsHeader = ({
           </Button>
         ) : (
           <Button onClick={logIn}>
-            <DiscordIcon size="16" className="mr-2" />{" "}
-            <Trans>Sign in to add favorites</Trans>
+            <DiscordIcon size="16" className="mr-2" /> <Trans>Sign in to add favorites</Trans>
           </Button>
         )}
         <Button
           variant="outline"
           onClick={() => {
-            copyToClipboard(window.location.href)
+            copyToClipboard(window.location.href);
             toast(t`Copied link to clipboard!`, {
-              icon: "📋",
-            })
+              icon: '📋',
+            });
           }}
         >
           <ExternalLink size="16" className="mr-2" /> <Trans>Share</Trans>
         </Button>
       </div>
       <div
-        className={cn("flex flex-col justify-center items-center", {
-          "mt-8": !bookmark,
-          "mt-4": !!bookmark,
+        className={cn('flex flex-col justify-center items-center', {
+          'mt-8': !bookmark,
+          'mt-4': !!bookmark,
         })}
       >
         <h1 className="font-bold text-3xl lg:text-5xl flex items-center">
@@ -105,7 +96,7 @@ export const StatsHeader = ({
       {!!aliases && aliases.length > 0 && (
         <div className="flex flex-wrap gap-2 mt-4 justify-center">
           {aliases.slice(0, MAX_SHOWN_ALIASES).map((alias) => (
-            <p key={alias} className={cn("rounded-lg py-0.5 px-3 bg-border")}>
+            <p key={alias} className={cn('rounded-lg py-0.5 px-3 bg-border')}>
               {cleanString(alias)}
             </p>
           ))}
@@ -119,5 +110,5 @@ export const StatsHeader = ({
         />
       )}
     </>
-  )
-}
+  );
+};

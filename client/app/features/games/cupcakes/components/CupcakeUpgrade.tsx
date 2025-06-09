@@ -1,29 +1,25 @@
-import { t } from "@lingui/core/macro"
+import { t } from '@lingui/core/macro';
 
-import { SafeImage } from "@/features/brawlhalla/components/Image"
-import { Button } from "@/ui/components/button"
-import { cn } from "@/ui/lib/utils"
+import { SafeImage } from '@/features/brawlhalla/components/Image';
+import { Button } from '@/ui/components/button';
+import { cn } from '@/ui/lib/utils';
 
-import type { Item, Upgrade } from "../store"
-import { useCupcakesStore } from "../store"
+import type { Item, Upgrade } from '../store';
+import { useCupcakesStore } from '../store';
 
 interface CupcakeUpgradeProps {
-  index: number
-  upgrade: Upgrade
-  item: Item
+  index: number;
+  upgrade: Upgrade;
+  item: Item;
 }
-export const CupcakeUpgrade = ({
-  index,
-  upgrade,
-  item,
-}: CupcakeUpgradeProps) => {
-  const { cupcakes, buyUpgrade } = useCupcakesStore()
+export const CupcakeUpgrade = ({ index, upgrade, item }: CupcakeUpgradeProps) => {
+  const { cupcakes, buyUpgrade } = useCupcakesStore();
 
-  const hasNotBought = !upgrade.bought
-  const hasEnoughCupcakes = upgrade.price <= cupcakes
-  const hasEnoughItems = item.count >= upgrade.itemsRequired
+  const hasNotBought = !upgrade.bought;
+  const hasEnoughCupcakes = upgrade.price <= cupcakes;
+  const hasEnoughItems = item.count >= upgrade.itemsRequired;
 
-  const canBuy = hasNotBought && hasEnoughCupcakes && hasEnoughItems
+  const canBuy = hasNotBought && hasEnoughCupcakes && hasEnoughItems;
 
   return (
     <li key={upgrade.id}>
@@ -33,8 +29,8 @@ export const CupcakeUpgrade = ({
         className="flex flex-col items-center"
       >
         <p
-          className={cn("font-bold", {
-            "text-red-500": !hasEnoughCupcakes,
+          className={cn('font-bold', {
+            'text-red-500': !hasEnoughCupcakes,
           })}
         >
           <span className="flex items-center">
@@ -48,13 +44,13 @@ export const CupcakeUpgrade = ({
           </span>
         </p>
         <p
-          className={cn("text-xs", {
-            "text-red-500": !hasEnoughItems,
+          className={cn('text-xs', {
+            'text-red-500': !hasEnoughItems,
           })}
         >
           {upgrade.itemsRequired} {item.name} needed
         </p>
       </Button>
     </li>
-  )
-}
+  );
+};

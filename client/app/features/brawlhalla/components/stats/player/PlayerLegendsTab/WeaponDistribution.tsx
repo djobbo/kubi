@@ -1,44 +1,40 @@
-import { t } from "@lingui/core/macro"
+import { t } from '@lingui/core/macro';
 
-import { Card } from "@/components/base/Card"
-import { WeaponIcon } from "@/features/brawlhalla/components/Image"
-import type { FullLegend } from "@/features/brawlhalla/helpers/parser"
-import { formatTime } from "@/helpers/date"
+import { Card } from '@/components/base/Card';
+import { WeaponIcon } from '@/features/brawlhalla/components/Image';
+import type { FullLegend } from '@/features/brawlhalla/helpers/parser';
+import { formatTime } from '@/helpers/date';
 
-import { CollapsibleSection } from "../../../layout/CollapsibleSection"
-import { MiscStatGroup } from "../../MiscStatGroup"
+import { CollapsibleSection } from '../../../layout/CollapsibleSection';
+import { MiscStatGroup } from '../../MiscStatGroup';
 
 interface PlayerLegendWeaponDistributionProps {
-  legend: FullLegend
+  legend: FullLegend;
 }
 
-export const PlayerLegendWeaponDistribution = ({
-  legend,
-}: PlayerLegendWeaponDistributionProps) => {
+export const PlayerLegendWeaponDistribution = ({ legend }: PlayerLegendWeaponDistributionProps) => {
   const weaponOne = {
     weapon: legend.weapon_one,
     kos: legend.stats?.koweaponone ?? 0,
-    damage: parseInt(legend.stats?.damageweaponone ?? "0"),
+    damage: parseInt(legend.stats?.damageweaponone ?? '0'),
     timeheld: legend.stats?.timeheldweaponone ?? 0,
-  } as const
+  } as const;
 
   const weaponTwo = {
     weapon: legend.weapon_two,
     kos: legend.stats?.koweapontwo ?? 0,
-    damage: parseInt(legend.stats?.damageweapontwo ?? "0"),
+    damage: parseInt(legend.stats?.damageweapontwo ?? '0'),
     timeheld: legend.stats?.timeheldweapontwo ?? 0,
-  } as const
+  } as const;
 
   const unarmed = {
     weapon: t`Unarmed`,
     kos: legend.stats?.kounarmed ?? 0,
-    damage: parseInt(legend.stats?.damageunarmed ?? "0"),
+    damage: parseInt(legend.stats?.damageunarmed ?? '0'),
     timeheld: legend.stats
-      ? legend.stats.matchtime -
-        legend.stats.timeheldweaponone -
-        legend.stats.timeheldweapontwo
+      ? legend.stats.matchtime - legend.stats.timeheldweaponone - legend.stats.timeheldweapontwo
       : 0,
-  }
+  };
 
   return (
     <CollapsibleSection trigger={t`Weapon Distribution`}>
@@ -67,14 +63,12 @@ export const PlayerLegendWeaponDistribution = ({
                   name: t`KOs`,
                   value: (
                     <>
-                      {weapon.kos}{" "}
+                      {weapon.kos}{' '}
                       <span className="text-xs text-muted-foreground">
                         (
                         {legend.stats
-                          ? `${((weapon.kos / legend.stats?.kos) * 100).toFixed(
-                              2,
-                            )}%`
-                          : "0%"}
+                          ? `${((weapon.kos / legend.stats?.kos) * 100).toFixed(2)}%`
+                          : '0%'}
                         )
                       </span>
                     </>
@@ -85,16 +79,14 @@ export const PlayerLegendWeaponDistribution = ({
                   name: t`Damage dealt`,
                   value: (
                     <>
-                      {weapon.damage}{" "}
+                      {weapon.damage}{' '}
                       <span className="text-xs text-muted-foreground">
                         (
                         {legend.stats
-                          ? `${(
-                              (weapon.damage /
-                                parseInt(legend.stats.damagedealt)) *
-                              100
-                            ).toFixed(2)}%`
-                          : "0%"}
+                          ? `${((weapon.damage / parseInt(legend.stats.damagedealt)) * 100).toFixed(
+                              2
+                            )}%`
+                          : '0%'}
                         )
                       </span>
                     </>
@@ -105,15 +97,12 @@ export const PlayerLegendWeaponDistribution = ({
                   name: t`Time held`,
                   value: (
                     <>
-                      {formatTime(weapon.timeheld)}{" "}
+                      {formatTime(weapon.timeheld)}{' '}
                       <span className="text-xs text-muted-foreground">
                         (
                         {legend.stats
-                          ? `${(
-                              (weapon.timeheld / legend.stats?.matchtime) *
-                              100
-                            ).toFixed(2)}%`
-                          : "0%"}
+                          ? `${((weapon.timeheld / legend.stats?.matchtime) * 100).toFixed(2)}%`
+                          : '0%'}
                         )
                       </span>
                     </>
@@ -122,9 +111,7 @@ export const PlayerLegendWeaponDistribution = ({
                 },
                 {
                   name: t`DPS`,
-                  value: `${(weapon.damage / weapon.timeheld).toFixed(
-                    1,
-                  )} dmg/s`,
+                  value: `${(weapon.damage / weapon.timeheld).toFixed(1)} dmg/s`,
                   desc: t`Damage dealt per second with this ${weapon.weapon}`,
                 },
                 {
@@ -144,18 +131,14 @@ export const PlayerLegendWeaponDistribution = ({
             name: t`Throw KOs`,
             value: legend.stats ? (
               <>
-                {legend.stats.kothrownitem}{" "}
+                {legend.stats.kothrownitem}{' '}
                 <span className="text-xs text-muted-foreground">
-                  (
-                  {(
-                    (legend.stats.kothrownitem / legend.stats.kos) *
-                    100
-                  ).toFixed(2)}
+                  ({((legend.stats.kothrownitem / legend.stats.kos) * 100).toFixed(2)}
                   %)
                 </span>
               </>
             ) : (
-              "0 (0%)"
+              '0 (0%)'
             ),
             desc: t`Kills with thrown items`,
           },
@@ -163,19 +146,18 @@ export const PlayerLegendWeaponDistribution = ({
             name: t`Throw damage`,
             value: legend.stats ? (
               <>
-                {legend.stats.damagethrownitem}{" "}
+                {legend.stats.damagethrownitem}{' '}
                 <span className="text-xs text-muted-foreground">
                   (
                   {(
-                    (parseInt(legend.stats.damagethrownitem) /
-                      parseInt(legend.stats.damagedealt)) *
+                    (parseInt(legend.stats.damagethrownitem) / parseInt(legend.stats.damagedealt)) *
                     100
                   ).toFixed(2)}
                   %)
                 </span>
               </>
             ) : (
-              "0 (0%)"
+              '0 (0%)'
             ),
             desc: t`Damage dealt with thrown items`,
           },
@@ -183,17 +165,14 @@ export const PlayerLegendWeaponDistribution = ({
             name: t`Gadgets KOs`,
             value: legend.stats ? (
               <>
-                {legend.stats.kogadgets}{" "}
+                {legend.stats.kogadgets}{' '}
                 <span className="text-xs text-muted-foreground">
-                  (
-                  {((legend.stats.kogadgets / legend.stats.kos) * 100).toFixed(
-                    2,
-                  )}
+                  ({((legend.stats.kogadgets / legend.stats.kos) * 100).toFixed(2)}
                   %)
                 </span>
               </>
             ) : (
-              "0 (0%)"
+              '0 (0%)'
             ),
             desc: t`Kills with gadgets`,
           },
@@ -201,24 +180,23 @@ export const PlayerLegendWeaponDistribution = ({
             name: t`Gadgets damage`,
             value: legend.stats ? (
               <>
-                {legend.stats.damagegadgets}{" "}
+                {legend.stats.damagegadgets}{' '}
                 <span className="text-xs text-muted-foreground">
                   (
                   {(
-                    (parseInt(legend.stats.damagegadgets) /
-                      parseInt(legend.stats.damagedealt)) *
+                    (parseInt(legend.stats.damagegadgets) / parseInt(legend.stats.damagedealt)) *
                     100
                   ).toFixed(2)}
                   %)
                 </span>
               </>
             ) : (
-              "0 (0%)"
+              '0 (0%)'
             ),
             desc: t`Damage dealt with gadgets`,
           },
         ]}
       />
     </CollapsibleSection>
-  )
-}
+  );
+};

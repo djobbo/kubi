@@ -1,32 +1,24 @@
-import { t } from "@lingui/core/macro"
-import { ArrowDownWideNarrow, ArrowUpWideNarrow } from "lucide-react"
+import { t } from '@lingui/core/macro';
+import { ArrowDownWideNarrow, ArrowUpWideNarrow } from 'lucide-react';
 
-import { Select } from "@/components/base/Select"
-import type { PlayerRanked } from "@/features/brawlhalla/api/schema/player-ranked"
-import { calculateWinrate } from "@/features/brawlhalla/helpers/winrate"
-import { SortDirection, useSortBy } from "@/hooks/useSortBy"
+import { Select } from '@/components/base/Select';
+import type { PlayerRanked } from '@/features/brawlhalla/api/schema/player-ranked';
+import { calculateWinrate } from '@/features/brawlhalla/helpers/winrate';
+import { SortDirection, useSortBy } from '@/hooks/useSortBy';
 
-import type { MiscStat } from "../../MiscStatGroup"
-import { MiscStatGroup } from "../../MiscStatGroup"
-import { TeamCard } from "../../TeamCard"
+import type { MiscStat } from '../../MiscStatGroup';
+import { MiscStatGroup } from '../../MiscStatGroup';
+import { TeamCard } from '../../TeamCard';
 
 interface Player2v2TabProps {
-  ranked: PlayerRanked
+  ranked: PlayerRanked;
 }
 
-type TeamSortOption =
-  | "games"
-  | "wins"
-  | "losses"
-  | "winrate"
-  | "rating"
-  | "peak_rating"
+type TeamSortOption = 'games' | 'wins' | 'losses' | 'winrate' | 'rating' | 'peak_rating';
 
 export const Player2v2Tab = ({ ranked }: Player2v2TabProps) => {
-  const teams = ranked["2v2"]
-  const { totalWins, totalGames, totalRating, totalPeakRating } = ranked[
-    "2v2"
-  ].reduce(
+  const teams = ranked['2v2'];
+  const { totalWins, totalGames, totalRating, totalPeakRating } = ranked['2v2'].reduce(
     ({ totalWins, totalGames, totalRating, totalPeakRating }, team) => ({
       totalWins: totalWins + team.wins,
       totalGames: totalGames + team.games,
@@ -38,8 +30,8 @@ export const Player2v2Tab = ({ ranked }: Player2v2TabProps) => {
       totalGames: 0,
       totalRating: 0,
       totalPeakRating: 0,
-    },
-  )
+    }
+  );
 
   const {
     sortedArray: sortedTeams,
@@ -48,7 +40,7 @@ export const Player2v2Tab = ({ ranked }: Player2v2TabProps) => {
     options: teamSortOptions,
     changeSortDirection: changeTeamSortDirection,
     sortDirection: teamSortDirection,
-  } = useSortBy<PlayerRanked["2v2"][number], TeamSortOption>(
+  } = useSortBy<PlayerRanked['2v2'][number], TeamSortOption>(
     teams,
     {
       games: {
@@ -61,14 +53,12 @@ export const Player2v2Tab = ({ ranked }: Player2v2TabProps) => {
       },
       losses: {
         label: t`Losses`,
-        sortFn: (a, b) =>
-          (a.games ?? 0) - (a.wins ?? 0) - ((b.games ?? 0) - (b.wins ?? 0)),
+        sortFn: (a, b) => (a.games ?? 0) - (a.wins ?? 0) - ((b.games ?? 0) - (b.wins ?? 0)),
       },
       winrate: {
         label: t`Winrate`,
         sortFn: (a, b) =>
-          calculateWinrate(a.wins ?? 0, a.games ?? 0) -
-          calculateWinrate(b.wins ?? 0, b.games ?? 0),
+          calculateWinrate(a.wins ?? 0, a.games ?? 0) - calculateWinrate(b.wins ?? 0, b.games ?? 0),
       },
       rating: {
         label: t`Elo`,
@@ -79,11 +69,11 @@ export const Player2v2Tab = ({ ranked }: Player2v2TabProps) => {
         sortFn: (a, b) => (a.peak_rating ?? 0) - (b.peak_rating ?? 0),
       },
     },
-    "rating",
-    SortDirection.Descending,
-  )
+    'rating',
+    SortDirection.Descending
+  );
 
-  const teamCount = teams.length
+  const teamCount = teams.length;
 
   const global2v2Stats: MiscStat[] = [
     {
@@ -136,7 +126,7 @@ export const Player2v2Tab = ({ ranked }: Player2v2TabProps) => {
       value: (totalPeakRating / teamCount).toFixed(0),
       desc: t`Average team peak Elo rating`,
     },
-  ]
+  ];
 
   return (
     <>
@@ -171,5 +161,5 @@ export const Player2v2Tab = ({ ranked }: Player2v2TabProps) => {
         ))}
       </div>
     </>
-  )
-}
+  );
+};

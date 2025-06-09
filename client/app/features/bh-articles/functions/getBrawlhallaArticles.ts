@@ -1,11 +1,11 @@
-import { createServerFn } from "@tanstack/react-start"
-import { cacheExchange, Client, fetchExchange, gql } from "@urql/core"
-import { z } from "zod"
+import { createServerFn } from '@tanstack/react-start';
+import { Client, cacheExchange, fetchExchange, gql } from '@urql/core';
+import { z } from 'zod';
 
-import { env } from "@/env"
-import { withCache } from "@/features/cache/cache"
+import { env } from '@/env';
+import { withCache } from '@/features/cache/cache';
 
-import { BRAWLHALLA_GRAPHQL_API_URL } from "../constants"
+import { BRAWLHALLA_GRAPHQL_API_URL } from '../constants';
 
 const getArticleQuery = (withContent?: boolean) => gql`
   query ($category: String, $after: String, $first: Int = 6) {
@@ -18,7 +18,7 @@ const getArticleQuery = (withContent?: boolean) => gql`
         slug
         dateGmt
         excerpt
-        ${withContent ? "content" : ""}
+        ${withContent ? 'content' : ''}
         author {
           node {
             databaseId
@@ -50,16 +50,16 @@ const getArticleQuery = (withContent?: boolean) => gql`
       }
     }
   }
-`
+`;
 
 const authorSchema = z.object({
   name: z.string(),
-})
+});
 
 const categorySchema = z.object({
   name: z.string(),
   slug: z.string(),
-})
+});
 
 const imageSizeSchema = z.object({
   name: z.string(),
@@ -67,7 +67,7 @@ const imageSizeSchema = z.object({
   sourceUrl: z.string(),
   width: z.coerce.number(),
   height: z.coerce.number(),
-})
+});
 
 const featuredImageSchema = z.object({
   sourceUrl: z.string(),
@@ -76,7 +76,7 @@ const featuredImageSchema = z.object({
     width: z.number(),
     sizes: z.array(imageSizeSchema),
   }),
-})
+});
 
 const articleSchema = z
   .object({
@@ -102,7 +102,7 @@ const articleSchema = z
       sourceUrl: data.featuredImage.node.sourceUrl,
     },
     categories: data.categories.nodes,
-  }))
+  }));
 
 const articlesSchema = z.object({
   posts: z.object({
@@ -111,14 +111,14 @@ const articlesSchema = z.object({
     }),
     nodes: z.array(articleSchema),
   }),
-})
+});
 
 const client = new Client({
   url: BRAWLHALLA_GRAPHQL_API_URL,
   exchanges: [cacheExchange, fetchExchange],
-})
+});
 
-export const getBrawlhallaArticles = createServerFn({ method: "GET" })
+export const getBrawlhallaArticles = createServerFn({ method: 'GET' })
   .validator(
     z.object({
       withContent: z.boolean().optional(),
@@ -129,24 +129,24 @@ export const getBrawlhallaArticles = createServerFn({ method: "GET" })
           after: z.string().nullable().optional(),
         })
         .optional(),
-    }),
+    })
   )
   .handler(async ({ data: { query, withContent } }) => {
-    const { first = 3, category = null, after = null } = query ?? {}
+    const { first = 3, category = null, after = null } = query ?? {};
 
     return withCache(
       `bh-article-${category}-${first}-${after}`,
       async () => {
         const result = await client
           .query(getArticleQuery(withContent), { first, category, after })
-          .toPromise()
+          .toPromise();
 
-        const articles = articlesSchema.parse(result.data).posts.nodes
+        const articles = articlesSchema.parse(result.data).posts.nodes;
 
-        return articles
+        return articles;
       },
-      env.IS_DEV ? 30 * 1000 : 15 * 60 * 1000,
-    )
-  })
+      env.IS_DEV ? 30 * 1000 : 15 * 60 * 1000
+    );
+  });
 
-export type BrawlhallaArticle = z.infer<typeof articleSchema>
+export type BrawlhallaArticle = z.infer<typeof articleSchema>;

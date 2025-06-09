@@ -1,9 +1,9 @@
-import { Card } from "@/components/base/Card"
-import { Progress } from "@/components/base/Progress"
+import { Card } from '@/components/base/Card';
+import { Progress } from '@/components/base/Progress';
 
 interface ProgressCardProps {
-  title?: string
-  bars: { title: string; value: number; progress: number }[]
+  title?: string;
+  bars: { title: string; value: number; progress: number }[];
 }
 
 export const ProgressCard = ({ title, bars }: ProgressCardProps) => {
@@ -12,8 +12,7 @@ export const ProgressCard = ({ title, bars }: ProgressCardProps) => {
       {bars.map(({ title, value, progress }) => (
         <div className="mt-3" key={title}>
           <p className="font-bold">
-            {value}{" "}
-            <span className="text-sm text-muted-foreground">{title}</span>
+            {value} <span className="text-sm text-muted-foreground">{title}</span>
           </p>
           <Progress
             value={progress}
@@ -23,5 +22,5 @@ export const ProgressCard = ({ title, bars }: ProgressCardProps) => {
         </div>
       ))}
     </Card>
-  )
-}
+  );
+};

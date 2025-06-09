@@ -1,65 +1,54 @@
-import {
-  SiDiscord as DiscordIcon,
-  SiKofi as KofiIcon,
-} from "@icons-pack/react-simple-icons"
-import { t } from "@lingui/core/macro"
-import { Trans } from "@lingui/react/macro"
-import { Link } from "@tanstack/react-router"
-import { ArrowRight } from "lucide-react"
-import { useEffect, useRef } from "react"
+import { SiDiscord as DiscordIcon, SiKofi as KofiIcon } from '@icons-pack/react-simple-icons';
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
+import { Link } from '@tanstack/react-router';
+import { ArrowRight } from 'lucide-react';
+import { useEffect, useRef } from 'react';
 
-import { SafeImage } from "@/features/brawlhalla/components/Image"
-import { clamp } from "@/helpers/math"
-import { Button } from "@/ui/components/button"
+import { SafeImage } from '@/features/brawlhalla/components/Image';
+import { clamp } from '@/helpers/math';
+import { Button } from '@/ui/components/button';
 
 export const DiscordCard = () => {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const cardRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onMousePositionChange = (e: MouseEvent) => {
-      if (!containerRef.current || !cardRef.current) return
+      if (!containerRef.current || !cardRef.current) return;
 
-      const {
-        x: cardX,
-        y: cardY,
-        width,
-        height,
-      } = cardRef.current.getBoundingClientRect()
+      const { x: cardX, y: cardY, width, height } = cardRef.current.getBoundingClientRect();
 
-      const x = clamp(e.clientX - cardX, 0, width)
-      const y = clamp(e.clientY - cardY, 0, height)
-      const halfWidth = width / 2
-      const halfHeight = height / 2
+      const x = clamp(e.clientX - cardX, 0, width);
+      const y = clamp(e.clientY - cardY, 0, height);
+      const halfWidth = width / 2;
+      const halfHeight = height / 2;
 
-      const rotationX = (x - halfWidth) / 28
-      const rotationY = (y - halfHeight) / 40
+      const rotationX = (x - halfWidth) / 28;
+      const rotationY = (y - halfHeight) / 40;
 
-      const shadowX = (x - halfWidth) / 24
-      const shadowY = (y - halfHeight) / 36
+      const shadowX = (x - halfWidth) / 24;
+      const shadowY = (y - halfHeight) / 36;
 
-      const perspective = `${(cardRef.current?.offsetWidth ?? 0) * 6}px`
+      const perspective = `${(cardRef.current?.offsetWidth ?? 0) * 6}px`;
 
-      containerRef.current.style.perspective = perspective
-      cardRef.current.style.perspective = perspective
+      containerRef.current.style.perspective = perspective;
+      cardRef.current.style.perspective = perspective;
       // eslint-disable-next-line lingui/no-unlocalized-strings
-      cardRef.current.style.transform = `rotateY(${rotationX}deg) rotateX(${-rotationY}deg)`
+      cardRef.current.style.transform = `rotateY(${rotationX}deg) rotateX(${-rotationY}deg)`;
       // eslint-disable-next-line lingui/no-unlocalized-strings
-      cardRef.current.style.filter = `drop-shadow(${-shadowX}px ${-shadowY}px 0.25rem #00000012)`
-    }
+      cardRef.current.style.filter = `drop-shadow(${-shadowX}px ${-shadowY}px 0.25rem #00000012)`;
+    };
 
-    window.addEventListener("mousemove", onMousePositionChange)
+    window.addEventListener('mousemove', onMousePositionChange);
 
     return () => {
-      window.removeEventListener("mousemove", onMousePositionChange)
-    }
-  }, [])
+      window.removeEventListener('mousemove', onMousePositionChange);
+    };
+  }, []);
 
   return (
-    <div
-      ref={containerRef}
-      className="scale-100 hover:scale-[1.01] transition-transform"
-    >
+    <div ref={containerRef} className="scale-100 hover:scale-[1.01] transition-transform">
       <div
         ref={cardRef}
         className="bg-secondary/50 border border-border/75 rounded-2xl w-96 overflow-hidden"
@@ -88,14 +77,14 @@ export const DiscordCard = () => {
             </p>
             <p>
               <Trans>
-                Which weapon(s) do you enjoy playing the most? and which one(s)
-                you dislike playing?
+                Which weapon(s) do you enjoy playing the most? and which one(s) you dislike playing?
               </Trans>
             </p>
             <a
               href="/discord"
               target="_blank"
               aria-label="Join our Discord server to share your thoughts"
+              rel="noreferrer"
             >
               <span className="flex justify-end items-center gap-1 font-semibold bg-gradient-to-l from-accent-foreground to-accent-secondary-foreground bg-clip-text text-fill-none">
                 <Trans>Share your thoughts</Trans>
@@ -118,5 +107,5 @@ export const DiscordCard = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

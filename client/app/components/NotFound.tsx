@@ -1,7 +1,7 @@
-import { Trans } from "@lingui/react/macro"
-import { Link } from "@tanstack/react-router"
+import { Trans } from '@lingui/react/macro';
+import { Link } from '@tanstack/react-router';
 
-import { Button } from "@/ui/components/button"
+import { Button } from '@/ui/components/button';
 
 export const NotFound = () => {
   return (
@@ -20,5 +20,5 @@ export const NotFound = () => {
         </Button>
       </p>
     </div>
-  )
-}
+  );
+};

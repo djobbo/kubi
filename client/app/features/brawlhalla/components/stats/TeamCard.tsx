@@ -1,52 +1,46 @@
-import { t } from "@lingui/core/macro"
-import { Link } from "@tanstack/react-router"
+import { t } from '@lingui/core/macro';
+import { Link } from '@tanstack/react-router';
 
-import { Card } from "@/components/base/Card"
-import {
-  FlagIcon,
-  RankedTierBanner,
-} from "@/features/brawlhalla/components/Image"
-import { cleanString } from "@/helpers/cleanString"
-import { css } from "@/panda/css"
-import { cn } from "@/ui/lib/utils"
+import { Card } from '@/components/base/Card';
+import { FlagIcon, RankedTierBanner } from '@/features/brawlhalla/components/Image';
+import { cleanString } from '@/helpers/cleanString';
+import { css } from '@/panda/css';
+import { cn } from '@/ui/lib/utils';
 
-import type { PlayerRanked } from "../../api/schema/player-ranked"
-import { rankedRegions } from "../../constants/ranked/regions"
-import { getTierFromRating } from "../../constants/ranked/tiers"
-import { getLegendEloReset } from "../../helpers/season-reset"
-import { getPlayerTeam } from "../../helpers/teamPlayers"
-import { calculateWinrate } from "../../helpers/winrate"
-import { MiscStatGroup } from "./MiscStatGroup"
-import { RatingDisplay } from "./RatingDisplay"
+import type { PlayerRanked } from '../../api/schema/player-ranked';
+import { rankedRegions } from '../../constants/ranked/regions';
+import { getTierFromRating } from '../../constants/ranked/tiers';
+import { getLegendEloReset } from '../../helpers/season-reset';
+import { getPlayerTeam } from '../../helpers/teamPlayers';
+import { calculateWinrate } from '../../helpers/winrate';
+import { MiscStatGroup } from './MiscStatGroup';
+import { RatingDisplay } from './RatingDisplay';
 
 interface TeamCardProps {
-  playerId: number
-  team: PlayerRanked["2v2"][number]
+  playerId: number;
+  team: PlayerRanked['2v2'][number];
 }
 
 const rankedBannerClassName = css({
   top: 0,
-  right: "-1rem",
-  bottom: "-2rem",
+  right: '-1rem',
+  bottom: '-2rem',
   opacity: 0.08,
-  transform: "translateX(25%) rotate(15deg)",
+  transform: 'translateX(25%) rotate(15deg)',
   zIndex: -1,
-})
+});
 
 export const TeamCard = ({ playerId, team }: TeamCardProps) => {
-  const teamData = getPlayerTeam(playerId, team)
-  if (!teamData) return null
+  const teamData = getPlayerTeam(playerId, team);
+  if (!teamData) return null;
 
-  const { playerName, teammate } = teamData
-  const regionTxt = rankedRegions[team.region - 1] ?? "all"
-  const eloReset = getLegendEloReset(team.rating)
-  const eloResetTier = getTierFromRating(eloReset)
+  const { playerName, teammate } = teamData;
+  const regionTxt = rankedRegions[team.region - 1] ?? 'all';
+  const eloReset = getLegendEloReset(team.rating);
+  const eloResetTier = getTierFromRating(eloReset);
 
   return (
-    <Link
-      to={`/stats/player/$playerId`}
-      params={{ playerId: teammate.id.toString() }}
-    >
+    <Link to={`/stats/player/$playerId`} params={{ playerId: teammate.id.toString() }}>
       <Card
         className="relative overflow-hidden z-0 hover:bg-secondary border border-border"
         title={
@@ -58,14 +52,14 @@ export const TeamCard = ({ playerId, team }: TeamCardProps) => {
               containerClassName="block w-4 h-4 rounded overflow-hidden mr-2"
               className="object-contain object-center"
             />
-            {cleanString(playerName)} {"&"} {cleanString(teammate.name)}
+            {cleanString(playerName)} {'&'} {cleanString(teammate.name)}
           </span>
         }
       >
         <RankedTierBanner
-          tier={team.tier ?? "Valhallan"}
+          tier={team.tier ?? 'Valhallan'}
           alt={team.tier ?? t`Valhallan`}
-          containerClassName={cn(" w-full", rankedBannerClassName)}
+          containerClassName={cn(' w-full', rankedBannerClassName)}
           position="absolute"
           className="object-contain object-center"
         />
@@ -98,5 +92,5 @@ export const TeamCard = ({ playerId, team }: TeamCardProps) => {
         />
       </Card>
     </Link>
-  )
-}
+  );
+};

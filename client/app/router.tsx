@@ -1,10 +1,10 @@
-import { QueryClient } from "@tanstack/react-query"
-import { createRouter as createTanStackRouter } from "@tanstack/react-router"
-import { routerWithQueryClient } from "@tanstack/react-router-with-query"
+import { QueryClient } from '@tanstack/react-query';
+import { createRouter as createTanStackRouter } from '@tanstack/react-router';
+import { routerWithQueryClient } from '@tanstack/react-router-with-query';
 
-import { DefaultCatchBoundary } from "@/components/DefaultCatchBoundary"
-import { NotFound } from "@/components/NotFound"
-import { routeTree } from "@/routeTree.gen"
+import { DefaultCatchBoundary } from '@/components/DefaultCatchBoundary';
+import { NotFound } from '@/components/NotFound';
+import { routeTree } from '@/routeTree.gen';
 
 export function createRouter() {
   const queryClient = new QueryClient({
@@ -14,13 +14,13 @@ export function createRouter() {
         staleTime: 1000 * 60, // 1 minute
       },
     },
-  })
+  });
 
   return routerWithQueryClient(
     createTanStackRouter({
       routeTree,
       context: { queryClient, session: null },
-      defaultPreload: "intent",
+      defaultPreload: 'intent',
       defaultPreloadDelay: 300,
       // react-query will handle data fetching & caching
       // https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#passing-all-loader-events-to-an-external-cache
@@ -30,12 +30,12 @@ export function createRouter() {
       scrollRestoration: true,
       defaultStructuralSharing: true,
     }),
-    queryClient,
-  )
+    queryClient
+  );
 }
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface Register {
-    router: ReturnType<typeof createRouter>
+    router: ReturnType<typeof createRouter>;
   }
 }

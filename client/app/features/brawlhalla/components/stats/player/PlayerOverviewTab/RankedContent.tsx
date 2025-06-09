@@ -1,31 +1,26 @@
-import { t } from "@lingui/core/macro"
-import { Trans } from "@lingui/react/macro"
-import { ChevronsUp } from "lucide-react"
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
+import { ChevronsUp } from 'lucide-react';
 
-import type { PlayerRanked } from "@/features/brawlhalla/api/schema/player-ranked"
-import { getTierFromRating } from "@/features/brawlhalla/constants/ranked/tiers"
-import {
-  getGlory,
-  getPersonalEloReset,
-} from "@/features/brawlhalla/helpers/season-reset"
-import { calculateWinrate } from "@/features/brawlhalla/helpers/winrate"
+import type { PlayerRanked } from '@/features/brawlhalla/api/schema/player-ranked';
+import { getTierFromRating } from '@/features/brawlhalla/constants/ranked/tiers';
+import { getGlory, getPersonalEloReset } from '@/features/brawlhalla/helpers/season-reset';
+import { calculateWinrate } from '@/features/brawlhalla/helpers/winrate';
 
-import { RankedTierBanner } from "../../../Image"
-import { CollapsibleSection } from "../../../layout/CollapsibleSection"
-import type { MiscStat } from "../../MiscStatGroup"
-import { MiscStatGroup } from "../../MiscStatGroup"
-import { RatingDisplay } from "../../RatingDisplay"
+import { RankedTierBanner } from '../../../Image';
+import { CollapsibleSection } from '../../../layout/CollapsibleSection';
+import type { MiscStat } from '../../MiscStatGroup';
+import { MiscStatGroup } from '../../MiscStatGroup';
+import { RatingDisplay } from '../../RatingDisplay';
 
 interface PlayerOverviewRankedContentProps {
-  ranked: PlayerRanked
+  ranked: PlayerRanked;
 }
 
-export const PlayerOverviewRankedContent = ({
-  ranked,
-}: PlayerOverviewRankedContentProps) => {
-  const glory = getGlory(ranked)
+export const PlayerOverviewRankedContent = ({ ranked }: PlayerOverviewRankedContentProps) => {
+  const glory = getGlory(ranked);
 
-  const eloReset = getPersonalEloReset(ranked.rating)
+  const eloReset = getPersonalEloReset(ranked.rating);
 
   const rankedStats: MiscStat[] = [
     {
@@ -73,7 +68,7 @@ export const PlayerOverviewRankedContent = ({
       value: <>{eloReset}</>,
       desc: t`Elo reset for next season (${getTierFromRating(eloReset)})`,
     },
-  ]
+  ];
 
   return (
     <CollapsibleSection
@@ -86,7 +81,7 @@ export const PlayerOverviewRankedContent = ({
     >
       <div className="flex items-center gap-4">
         <RankedTierBanner
-          tier={ranked.tier ?? "Valhallan"}
+          tier={ranked.tier ?? 'Valhallan'}
           alt={ranked.tier ?? t`Valhallan`}
           containerClassName="h-24 w-16"
           className="object-contain object-center"
@@ -104,5 +99,5 @@ export const PlayerOverviewRankedContent = ({
       </div>
       <MiscStatGroup className="mt-4" stats={rankedStats} />
     </CollapsibleSection>
-  )
-}
+  );
+};

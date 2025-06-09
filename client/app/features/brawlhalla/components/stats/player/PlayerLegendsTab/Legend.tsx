@@ -1,32 +1,26 @@
-import { t } from "@lingui/core/macro"
-import type { ReactNode } from "react"
+import { t } from '@lingui/core/macro';
+import type { ReactNode } from 'react';
 
-import { LegendIcon } from "@/features/brawlhalla/components/Image"
-import type { FullLegend } from "@/features/brawlhalla/helpers/parser"
-import { formatTime } from "@/helpers/date"
+import { LegendIcon } from '@/features/brawlhalla/components/Image';
+import type { FullLegend } from '@/features/brawlhalla/helpers/parser';
+import { formatTime } from '@/helpers/date';
 
-import { CollapsibleContent } from "../../../layout/CollapsibleContent"
-import { GeneralStats } from "../../GeneralStats"
-import type { MiscStat } from "../../MiscStatGroup"
-import { MiscStatGroup } from "../../MiscStatGroup"
-import { PlayerLegendRankedContent } from "./RankedContent"
-import { PlayerLegendWeaponDistribution } from "./WeaponDistribution"
+import { CollapsibleContent } from '../../../layout/CollapsibleContent';
+import { GeneralStats } from '../../GeneralStats';
+import type { MiscStat } from '../../MiscStatGroup';
+import { MiscStatGroup } from '../../MiscStatGroup';
+import { PlayerLegendRankedContent } from './RankedContent';
+import { PlayerLegendWeaponDistribution } from './WeaponDistribution';
 
 interface LegendProps {
-  legend: FullLegend
-  matchtime: number
-  games: number
-  displayedInfoFn?: (legend: FullLegend) => ReactNode
-  rank: number
+  legend: FullLegend;
+  matchtime: number;
+  games: number;
+  displayedInfoFn?: (legend: FullLegend) => ReactNode;
+  rank: number;
 }
 
-export const Legend = ({
-  legend,
-  matchtime,
-  games,
-  displayedInfoFn,
-  rank,
-}: LegendProps) => {
+export const Legend = ({ legend, matchtime, games, displayedInfoFn, rank }: LegendProps) => {
   const legendStats: MiscStat[] = [
     {
       name: t`Level`,
@@ -45,9 +39,7 @@ export const Legend = ({
     },
     {
       name: t`Time played (%)`,
-      value: `${(((legend.stats?.matchtime ?? 0) / matchtime) * 100).toFixed(
-        2,
-      )}%`,
+      value: `${(((legend.stats?.matchtime ?? 0) / matchtime) * 100).toFixed(2)}%`,
       desc: t`Time played with this legend (percentage of total time)`,
     },
     {
@@ -55,7 +47,7 @@ export const Legend = ({
       value: `${(((legend.stats?.games ?? 0) / games) * 100).toFixed(2)}%`,
       desc: t`Usage rate of this legend (percentage of total games)`,
     },
-  ]
+  ];
 
   return (
     <CollapsibleContent
@@ -77,9 +69,7 @@ export const Legend = ({
             />
             {legend.bio_name}
           </span>
-          <span className="text-sm text-muted-foreground">
-            {displayedInfoFn?.(legend)}
-          </span>
+          <span className="text-sm text-muted-foreground">{displayedInfoFn?.(legend)}</span>
         </span>
       }
     >
@@ -92,12 +82,12 @@ export const Legend = ({
         falls={legend.stats?.falls ?? 0}
         suicides={legend.stats?.suicides ?? 0}
         teamkos={legend.stats?.teamkos ?? 0}
-        damageDealt={parseInt(legend.stats?.damagedealt ?? "0")}
-        damageTaken={parseInt(legend.stats?.damagetaken ?? "0")}
+        damageDealt={parseInt(legend.stats?.damagedealt ?? '0')}
+        damageTaken={parseInt(legend.stats?.damagetaken ?? '0')}
         matchtime={legend.stats?.matchtime ?? 0}
       />
       <PlayerLegendRankedContent ranked={legend.ranked} />
       <PlayerLegendWeaponDistribution legend={legend} />
     </CollapsibleContent>
-  )
-}
+  );
+};

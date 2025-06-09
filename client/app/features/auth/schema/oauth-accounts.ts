@@ -1,21 +1,19 @@
-import type { InferSelectModel } from "drizzle-orm"
-import { primaryKey, text } from "drizzle-orm/pg-core"
+import type { InferSelectModel } from 'drizzle-orm';
+import { primaryKey, text } from 'drizzle-orm/pg-core';
 
-import { authSchema } from "@/features/auth/schema/schema"
-import { usersTable } from "@/features/auth/schema/users"
+import { authSchema } from '@/features/auth/schema/schema';
+import { usersTable } from '@/features/auth/schema/users';
 
-export const DISCORD_PROVIDER_ID = "discord"
+export const DISCORD_PROVIDER_ID = 'discord';
 
-export const providersEnum = authSchema.enum("oauth_provider", [
-  DISCORD_PROVIDER_ID,
-])
+export const providersEnum = authSchema.enum('oauth_provider', [DISCORD_PROVIDER_ID]);
 
 export const oauthAccountsTable = authSchema.table(
-  "oauth_account",
+  'oauth_account',
   {
-    providerId: providersEnum("provider_id"),
-    providerUserId: text("provider_user_id"),
-    userId: text("user_id")
+    providerId: providersEnum('provider_id'),
+    providerUserId: text('provider_user_id'),
+    userId: text('user_id')
       .notNull()
       .references(() => usersTable.id),
   },
@@ -23,7 +21,7 @@ export const oauthAccountsTable = authSchema.table(
     pk: primaryKey({
       columns: [table.providerId, table.providerUserId],
     }),
-  }),
-)
+  })
+);
 
-export type OAuthAccount = InferSelectModel<typeof oauthAccountsTable>
+export type OAuthAccount = InferSelectModel<typeof oauthAccountsTable>;

@@ -1,26 +1,26 @@
-import type { KnipConfig } from "knip"
+import type { KnipConfig } from 'knip';
 
 export default {
   entry: [
     // @tanstack/react-start
-    "app.config.ts",
-    "eslint.config.mjs",
-    "app/client.tsx",
-    "app/router.ts",
-    "app/ssr.tsx",
-    "app/routes/**/*.tsx",
-    "app/routes/api/**/*.ts",
-    "app/routeTree.gen.ts",
-    "app/api.ts",
+    'app.config.ts',
+    'eslint.config.mjs',
+    'app/client.tsx',
+    'app/router.ts',
+    'app/ssr.tsx',
+    'app/routes/**/*.tsx',
+    'app/routes/api/**/*.ts',
+    'app/routeTree.gen.ts',
+    'app/api.ts',
     // scripts
-    "scripts/**/*.ts",
+    'scripts/**/*.ts',
     // migration script
-    "app/db/migrate.ts",
+    'app/db/migrate.ts',
     // pwa assets
-    "pwa-assets.config.ts",
+    'pwa-assets.config.ts',
     // lingui
-    "lingui.config.ts",
+    'lingui.config.ts',
   ],
   // TOREMOVE: when github actions plugin works
-  "github-actions": { config: [".github/workflows/*.{yml}"] },
-} satisfies KnipConfig
+  'github-actions': { config: ['.github/workflows/*.{yml}'] },
+} satisfies KnipConfig;

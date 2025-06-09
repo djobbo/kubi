@@ -1,54 +1,49 @@
-const upgrade = function (
+const upgrade = (
   price: number,
   {
     intervalMultiplier,
     outputMultiplier,
-  }: { intervalMultiplier?: number; outputMultiplier?: number },
-) {
-  return {
-    price,
-    outputMultiplier,
-    intervalMultiplier,
-  }
-}
-const smallOutputUpgrade = (price: number) =>
-  upgrade(price, { outputMultiplier: 2 }) // +100%
-const largeOutputUpgrade = (price: number) =>
-  upgrade(price, { outputMultiplier: 6 }) // +500%
-const intervalUpgrade = (price: number) =>
-  upgrade(price, { intervalMultiplier: 0.5 }) // -50%
+  }: { intervalMultiplier?: number; outputMultiplier?: number }
+) => ({
+  price,
+  outputMultiplier,
+  intervalMultiplier,
+});
+const smallOutputUpgrade = (price: number) => upgrade(price, { outputMultiplier: 2 }); // +100%
+const largeOutputUpgrade = (price: number) => upgrade(price, { outputMultiplier: 6 }); // +500%
+const intervalUpgrade = (price: number) => upgrade(price, { intervalMultiplier: 0.5 }); // -50%
 
 export enum ItemId {
-  Helpers = "helpers",
-  Scarlet = "scarlet",
-  Orion = "orion",
-  Grimm = "grimm",
-  Kitchen = "kitchen",
-  Ivaldi = "ivaldi",
-  Farms = "farms",
-  Celestial = "celestial",
-  Grandma = "grandma",
+  Helpers = 'helpers',
+  Scarlet = 'scarlet',
+  Orion = 'orion',
+  Grimm = 'grimm',
+  Kitchen = 'kitchen',
+  Ivaldi = 'ivaldi',
+  Farms = 'farms',
+  Celestial = 'celestial',
+  Grandma = 'grandma',
 }
 
-export type BaseUpgrade = ReturnType<typeof upgrade>
+export type BaseUpgrade = ReturnType<typeof upgrade>;
 
 export interface BaseItem {
-  id: ItemId
-  name: string
-  caption: string
-  basePrice: number
-  priceMultiplier: number
-  marginPrice: number
-  output: number
-  interval: number | null
-  upgrades: BaseUpgrade[]
+  id: ItemId;
+  name: string;
+  caption: string;
+  basePrice: number;
+  priceMultiplier: number;
+  marginPrice: number;
+  output: number;
+  interval: number | null;
+  upgrades: BaseUpgrade[];
 }
 
 export const BASE_ITEMS = [
   {
     id: ItemId.Helpers,
-    name: "Helpful Bakers",
-    caption: "Your Greatest Fans. Bakes when you bake.",
+    name: 'Helpful Bakers',
+    caption: 'Your Greatest Fans. Bakes when you bake.',
     basePrice: 10,
     priceMultiplier: 2.6,
     marginPrice: 1,
@@ -64,8 +59,8 @@ export const BASE_ITEMS = [
   },
   {
     id: ItemId.Scarlet,
-    name: "Scarlethalla Oven",
-    caption: "Discounted from Lady Scarlet herself.",
+    name: 'Scarlethalla Oven',
+    caption: 'Discounted from Lady Scarlet herself.',
     basePrice: 15,
     priceMultiplier: 1.9,
     marginPrice: 5,
@@ -82,7 +77,7 @@ export const BASE_ITEMS = [
   {
     id: ItemId.Orion,
     name: "Orion's Lance",
-    caption: "Automatic cupcake maker in each one.",
+    caption: 'Automatic cupcake maker in each one.',
     output: 100,
     interval: 10,
     basePrice: 150,
@@ -98,9 +93,8 @@ export const BASE_ITEMS = [
   },
   {
     id: ItemId.Grimm,
-    name: "Grimm",
-    caption:
-      "Unknownst to many, Grimm has been known to bake a cupcake or two.",
+    name: 'Grimm',
+    caption: 'Unknownst to many, Grimm has been known to bake a cupcake or two.',
     output: 7_000,
     interval: 20,
     basePrice: 5_000,
@@ -116,8 +110,8 @@ export const BASE_ITEMS = [
   },
   {
     id: ItemId.Kitchen,
-    name: "The Kitchen",
-    caption: "Donated and paid for by MBFC",
+    name: 'The Kitchen',
+    caption: 'Donated and paid for by MBFC',
     output: 45_000,
     interval: 30,
     basePrice: 75_000,
@@ -133,7 +127,7 @@ export const BASE_ITEMS = [
   },
   {
     id: ItemId.Ivaldi,
-    name: "Sons Of Ivaldi",
+    name: 'Sons Of Ivaldi',
     caption: "Surely there couldn't have been THIS many sons.",
     output: 100_000,
     interval: 40,
@@ -150,8 +144,8 @@ export const BASE_ITEMS = [
   },
   {
     id: ItemId.Farms,
-    name: "Cupcake Farms",
-    caption: "Plant one, Harvest two. Or a few billion",
+    name: 'Cupcake Farms',
+    caption: 'Plant one, Harvest two. Or a few billion',
     output: 320_000,
     interval: 50,
     basePrice: 5_000_000,
@@ -167,8 +161,8 @@ export const BASE_ITEMS = [
   },
   {
     id: ItemId.Celestial,
-    name: "Celestial Beings",
-    caption: "Might as well make use of their celestial-ness",
+    name: 'Celestial Beings',
+    caption: 'Might as well make use of their celestial-ness',
     output: 4_500_000,
     interval: 60,
     basePrice: 15_000_000,
@@ -184,7 +178,7 @@ export const BASE_ITEMS = [
   },
   {
     id: ItemId.Grandma,
-    name: "Grandma",
+    name: 'Grandma',
     caption: '"Stop eating the batter, young miss!" -Grandma',
     output: 15_000_000,
     interval: 70,
@@ -199,4 +193,4 @@ export const BASE_ITEMS = [
       largeOutputUpgrade(732_050_000_000_000),
     ],
   },
-] as const satisfies BaseItem[]
+] as const satisfies BaseItem[];

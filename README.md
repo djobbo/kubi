@@ -1,1 +1,1 @@
-# kubi
+# dair.gg

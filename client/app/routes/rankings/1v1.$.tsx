@@ -1,17 +1,17 @@
-import { t } from "@lingui/core/macro"
-import { Trans } from "@lingui/react/macro"
-import { createFileRoute, Link } from "@tanstack/react-router"
-import { z } from "zod"
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
+import { Link, createFileRoute } from '@tanstack/react-router';
+import { z } from 'zod';
 
-import { get1v1Rankings } from "@/features/brawlhalla/api/functions"
-import { LegendIcon } from "@/features/brawlhalla/components/Image"
-import { RankingsLayout } from "@/features/brawlhalla/components/stats/rankings/RankingsLayout"
-import { RankingsTableItem } from "@/features/brawlhalla/components/stats/RankingsTableItem"
-import { legendsMap } from "@/features/brawlhalla/constants/legends"
-import { cleanString } from "@/helpers/cleanString"
-import { seo } from "@/helpers/seo"
+import { get1v1Rankings } from '@/features/brawlhalla/api/functions';
+import { LegendIcon } from '@/features/brawlhalla/components/Image';
+import { RankingsTableItem } from '@/features/brawlhalla/components/stats/RankingsTableItem';
+import { RankingsLayout } from '@/features/brawlhalla/components/stats/rankings/RankingsLayout';
+import { legendsMap } from '@/features/brawlhalla/constants/legends';
+import { cleanString } from '@/helpers/cleanString';
+import { seo } from '@/helpers/seo';
 
-export const Route = createFileRoute("/rankings/1v1/$")({
+export const Route = createFileRoute('/rankings/1v1/$')({
   component: RouteComponent,
   validateSearch: (search) =>
     z
@@ -21,42 +21,38 @@ export const Route = createFileRoute("/rankings/1v1/$")({
       .parse(search),
   loaderDeps: ({ search: { player } }) => ({ player }),
   loader: async ({ params: { _splat }, deps: { player } }) => {
-    const [region, page = "1"] = _splat?.split("/") ?? []
+    const [region, page = '1'] = _splat?.split('/') ?? [];
     const rankings = await get1v1Rankings({
       data: {
         region,
         page: z.coerce.number().min(1).max(1000).catch(1).parse(page),
         name: player,
       },
-    })
+    });
 
     return {
       rankings,
       player,
       region,
       page,
-    }
+    };
   },
   head: ({ loaderData }) => {
-    if (!loaderData) return {}
+    if (!loaderData) return {};
 
-    const { region, page, player } = loaderData
+    const { region, page, player } = loaderData;
 
-    const formatedRegion = region === "all" ? t`Global` : region.toUpperCase()
-    const formatedSearch = player ? ` - ${player}` : ""
+    const formatedRegion = region === 'all' ? t`Global` : region.toUpperCase();
+    const formatedSearch = player ? ` - ${player}` : '';
 
     return {
       meta: seo({
-        title: t`Brawlhalla ${formatedRegion} 1v1 Rankings - Page ${page} ${
-          formatedSearch
-        } • Corehalla`,
-        description: t`Brawlhalla ${formatedRegion} 1v1 Rankings - Page ${page} ${
-          formatedSearch
-        } • Corehalla`,
+        title: t`Brawlhalla ${formatedRegion} 1v1 Rankings - Page ${page} ${formatedSearch} • Corehalla`,
+        description: t`Brawlhalla ${formatedRegion} 1v1 Rankings - Page ${page} ${formatedSearch} • Corehalla`,
       }),
-    }
+    };
   },
-})
+});
 
 function RouteComponent() {
   const {
@@ -64,7 +60,7 @@ function RouteComponent() {
     region,
     page,
     rankings,
-  } = Route.useLoaderData()
+  } = Route.useLoaderData();
   // const [search, setSearch, immediateSearch] = useDebouncedState(
   //   player ?? "",
   //   500,
@@ -73,25 +69,25 @@ function RouteComponent() {
   return (
     <RankingsLayout
       brackets={[
-        { page: "1v1", label: t`1v1` },
-        { page: "2v2", label: t`2v2` },
-        { page: "rotating", label: t`Rotating` },
-        { page: "power/1v1", label: t`Power 1v1` },
-        { page: "power/2v2", label: t`Power 2v2` },
-        { page: "clans", label: t`Clans` },
+        { page: '1v1', label: t`1v1` },
+        { page: '2v2', label: t`2v2` },
+        { page: 'rotating', label: t`Rotating` },
+        { page: 'power/1v1', label: t`Power 1v1` },
+        { page: 'power/2v2', label: t`Power 2v2` },
+        { page: 'clans', label: t`Clans` },
       ]}
       currentBracket="1v1"
       regions={[
-        { page: "all", label: t`Global` },
-        { page: "us-e", label: t`US-E` },
-        { page: "eu", label: t`EU` },
-        { page: "sea", label: t`SEA` },
-        { page: "brz", label: t`BRZ` },
-        { page: "aus", label: t`AUS` },
-        { page: "us-w", label: t`US-W` },
-        { page: "jpn", label: t`JPN` },
-        { page: "sa", label: t`SA` },
-        { page: "me", label: t`ME` },
+        { page: 'all', label: t`Global` },
+        { page: 'us-e', label: t`US-E` },
+        { page: 'eu', label: t`EU` },
+        { page: 'sea', label: t`SEA` },
+        { page: 'brz', label: t`BRZ` },
+        { page: 'aus', label: t`AUS` },
+        { page: 'us-w', label: t`US-W` },
+        { page: 'jpn', label: t`JPN` },
+        { page: 'sa', label: t`SA` },
+        { page: 'me', label: t`ME` },
       ]}
       currentRegion={region}
       currentPage={page}
@@ -136,7 +132,7 @@ function RouteComponent() {
           //   player.name.toLowerCase().startsWith(immediateSearch),
           // )
           .map((player, i) => {
-            const legend = legendsMap[player.best_legend]
+            const legend = legendsMap[player.best_legend];
 
             return (
               <RankingsTableItem
@@ -161,9 +157,9 @@ function RouteComponent() {
                 }
                 {...player}
               />
-            )
+            );
           })}
       </div>
     </RankingsLayout>
-  )
+  );
 }

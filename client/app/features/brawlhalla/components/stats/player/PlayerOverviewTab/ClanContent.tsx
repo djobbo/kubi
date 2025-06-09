@@ -1,27 +1,25 @@
-import { t } from "@lingui/core/macro"
-import { Trans } from "@lingui/react/macro"
-import { Link } from "@tanstack/react-router"
-import { Shield } from "lucide-react"
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
+import { Link } from '@tanstack/react-router';
+import { Shield } from 'lucide-react';
 
-import type { PlayerStats } from "@/features/brawlhalla/api/schema/player-stats"
-import { CollapsibleSection } from "@/features/brawlhalla/components/layout/CollapsibleSection"
-import { cleanString } from "@/helpers/cleanString"
-import { cn } from "@/ui/lib/utils"
+import type { PlayerStats } from '@/features/brawlhalla/api/schema/player-stats';
+import { CollapsibleSection } from '@/features/brawlhalla/components/layout/CollapsibleSection';
+import { cleanString } from '@/helpers/cleanString';
+import { cn } from '@/ui/lib/utils';
 
-import { MiscStatGroup } from "../../MiscStatGroup"
+import { MiscStatGroup } from '../../MiscStatGroup';
 
 interface PlayerOverviewClanContentProps {
-  playerStats: PlayerStats
+  playerStats: PlayerStats;
 }
 
-export const PlayerOverviewClanContent = ({
-  playerStats,
-}: PlayerOverviewClanContentProps) => {
-  const { clan } = playerStats
+export const PlayerOverviewClanContent = ({ playerStats }: PlayerOverviewClanContentProps) => {
+  const { clan } = playerStats;
 
-  if (!clan) return null
+  if (!clan) return null;
 
-  const playerName = cleanString(playerStats.name)
+  const playerName = cleanString(playerStats.name);
 
   return (
     <CollapsibleSection
@@ -36,7 +34,7 @@ export const PlayerOverviewClanContent = ({
         <Link
           to={`/stats/clan/$clanId`}
           params={{ clanId: clan.clan_id.toString() }}
-          className={cn("inline-block font-bold text-3xl mt-2 hover:underline")}
+          className={cn('inline-block font-bold text-3xl mt-2 hover:underline')}
         >
           {cleanString(clan.clan_name)}
         </Link>
@@ -54,14 +52,11 @@ export const PlayerOverviewClanContent = ({
           },
           {
             name: t`Contribution`,
-            value: `${(
-              (clan.personal_xp / parseInt(clan.clan_xp)) *
-              100
-            ).toFixed(2)}%`,
+            value: `${((clan.personal_xp / parseInt(clan.clan_xp)) * 100).toFixed(2)}%`,
             desc: t`Percentage of the clan XP earned by ${playerName}`,
           },
         ]}
       />
     </CollapsibleSection>
-  )
-}
+  );
+};

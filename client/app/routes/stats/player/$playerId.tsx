@@ -1,69 +1,57 @@
-import { t } from "@lingui/core/macro"
-import { Trans } from "@lingui/react/macro"
-import {
-  Root as Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@radix-ui/react-tabs"
-import { createFileRoute } from "@tanstack/react-router"
-import { z } from "zod"
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
+import { Root as Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs';
+import { createFileRoute } from '@tanstack/react-router';
+import { z } from 'zod';
 
-import { getAliases } from "@/features/archive/functions/aliases/get-aliases"
-import {
-  getPlayerRanked,
-  getPlayerStats,
-} from "@/features/brawlhalla/api/functions"
-import {
-  FlagIcon,
-  LegendIcon,
-  WeaponIcon,
-} from "@/features/brawlhalla/components/Image"
-import type { MiscStat } from "@/features/brawlhalla/components/stats/MiscStatGroup"
-import { Player2v2Tab } from "@/features/brawlhalla/components/stats/player/Player2v2Tab"
-import { PlayerLegendsTab } from "@/features/brawlhalla/components/stats/player/PlayerLegendsTab"
-import { PlayerOverviewTab } from "@/features/brawlhalla/components/stats/player/PlayerOverviewTab"
-import { PlayerWeaponsTab } from "@/features/brawlhalla/components/stats/player/PlayerWeaponsTab"
-import { StatsHeader } from "@/features/brawlhalla/components/stats/StatsHeader"
+import { getAliases } from '@/features/archive/functions/aliases/get-aliases';
+import { getPlayerRanked, getPlayerStats } from '@/features/brawlhalla/api/functions';
+import { FlagIcon, LegendIcon, WeaponIcon } from '@/features/brawlhalla/components/Image';
+import type { MiscStat } from '@/features/brawlhalla/components/stats/MiscStatGroup';
+import { StatsHeader } from '@/features/brawlhalla/components/stats/StatsHeader';
+import { Player2v2Tab } from '@/features/brawlhalla/components/stats/player/Player2v2Tab';
+import { PlayerLegendsTab } from '@/features/brawlhalla/components/stats/player/PlayerLegendsTab';
+import { PlayerOverviewTab } from '@/features/brawlhalla/components/stats/player/PlayerOverviewTab';
+import { PlayerWeaponsTab } from '@/features/brawlhalla/components/stats/player/PlayerWeaponsTab';
 import {
   getFullLegends,
   getFullWeapons,
   getLegendsAccumulativeData,
-} from "@/features/brawlhalla/helpers/parser"
-import { cleanString } from "@/helpers/cleanString"
-import { formatTime } from "@/helpers/date"
-import { seo } from "@/helpers/seo"
-import { css } from "@/panda/css"
-import { cn } from "@/ui/lib/utils"
-import { colors } from "@/ui/theme"
+} from '@/features/brawlhalla/helpers/parser';
+import { cleanString } from '@/helpers/cleanString';
+import { formatTime } from '@/helpers/date';
+import { seo } from '@/helpers/seo';
+import { css } from '@/panda/css';
+import { cn } from '@/ui/lib/utils';
+import { colors } from '@/ui/theme';
 
 const tabClassName = cn(
-  "px-6 py-4 uppercase text-xs border-b-2 z-10 whitespace-nowrap",
+  'px-6 py-4 uppercase text-xs border-b-2 z-10 whitespace-nowrap',
   css({
-    borderColor: "transparent",
+    borderColor: 'transparent',
     color: colors.muted,
     '&[data-state="active"]': {
       borderColor: colors.accent,
       color: colors.text,
     },
-    "&:hover": {
+    '&:hover': {
       backgroundColor: colors.secondary,
       borderColor: colors.text,
       color: colors.text,
     },
-  }),
-)
+  })
+);
 
-export const Route = createFileRoute("/stats/player/$playerId")({
+export const Route = createFileRoute('/stats/player/$playerId')({
   component: RouteComponent,
   loader: async ({ params: { playerId } }) => {
-    const id = z.coerce.number().parse(playerId)
+    const id = z.coerce.number().parse(playerId);
 
     const [stats, ranked, aliases] = await Promise.all([
       getPlayerStats({ data: id }),
       getPlayerRanked({ data: id }),
       getAliases({ data: { query: { playerId, limit: 5 } } }),
-    ] as const)
+    ] as const);
 
     return {
       player: {
@@ -72,44 +60,41 @@ export const Route = createFileRoute("/stats/player/$playerId")({
         ranked,
         aliases,
       },
-    }
+    };
   },
   head: ({ loaderData }) => {
-    if (!loaderData) return {}
+    if (!loaderData) return {};
 
     const {
       player: {
         stats: { name },
       },
-    } = loaderData
+    } = loaderData;
 
     return {
       meta: seo({
         title: t`${name} - Player Stats • Corehalla`,
         description: t`${name} Stats - Brawlhalla Player Stats • Corehalla`,
       }),
-    }
+    };
   },
-})
+});
 
 function RouteComponent() {
-  const { player } = Route.useLoaderData()
+  const { player } = Route.useLoaderData();
 
-  const playerName = cleanString(player.stats.name)
+  const playerName = cleanString(player.stats.name);
 
-  const fullLegends = getFullLegends(
-    player.stats.legends,
-    player.ranked?.legends,
-  )
+  const fullLegends = getFullLegends(player.stats.legends, player.ranked?.legends);
 
   const { matchtime, kos, falls, suicides, teamkos, damagedealt, damagetaken } =
-    getLegendsAccumulativeData(fullLegends)
+    getLegendsAccumulativeData(fullLegends);
 
-  const weapons = getFullWeapons(fullLegends)
+  const weapons = getFullWeapons(fullLegends);
 
   const legendsSortedByLevel = fullLegends
     .slice(0)
-    .sort((a, b) => (b.stats?.matchtime ?? 0) - (a.stats?.matchtime ?? 0))
+    .sort((a, b) => (b.stats?.matchtime ?? 0) - (a.stats?.matchtime ?? 0));
 
   const accountStats: MiscStat[] = [
     {
@@ -155,8 +140,8 @@ function RouteComponent() {
                 const matchtime =
                   weapon === legend.weapon_one
                     ? legend.stats?.timeheldweaponone
-                    : legend.stats?.timeheldweapontwo
-                return acc + (matchtime ?? 0)
+                    : legend.stats?.timeheldweapontwo;
+                return acc + (matchtime ?? 0);
               }, 0),
             }))
             .sort((a, b) => b.matchtime - a.matchtime)
@@ -174,7 +159,7 @@ function RouteComponent() {
       ),
       desc: t`${playerName}'s main weapons`,
     },
-  ]
+  ];
 
   return (
     <>
@@ -183,9 +168,7 @@ function RouteComponent() {
         id={player.stats.brawlhalla_id}
         aliases={player.aliases
           .map((alias) => alias.alias)
-          .filter(
-            (alias) => alias !== playerName && alias !== player.stats.name,
-          )}
+          .filter((alias) => alias !== playerName && alias !== player.stats.name)}
         miscStats={accountStats}
         icon={
           player.ranked?.region && (
@@ -198,14 +181,14 @@ function RouteComponent() {
           )
         }
         bookmark={{
-          pageType: "player_stats",
+          pageType: 'player_stats',
           pageId: player.stats.brawlhalla_id.toString(),
           name: cleanString(playerName),
           meta: {
-            version: "1",
+            version: '1',
             data: {
               icon: {
-                type: "legend",
+                type: 'legend',
                 id: legendsSortedByLevel[0].legend_id,
               },
             },
@@ -217,7 +200,7 @@ function RouteComponent() {
           <TabsTrigger value="overview" className={tabClassName}>
             <Trans>Overview</Trans>
           </TabsTrigger>
-          {player.ranked && player.ranked["2v2"].length > 0 && (
+          {player.ranked && player.ranked['2v2'].length > 0 && (
             <TabsTrigger value="2v2" className={tabClassName}>
               <Trans>2v2 Ranked</Trans>
             </TabsTrigger>
@@ -243,7 +226,7 @@ function RouteComponent() {
             matchtime={matchtime}
           />
         </TabsContent>
-        {player.ranked && player.ranked["2v2"].length > 0 && (
+        {player.ranked && player.ranked['2v2'].length > 0 && (
           <TabsContent value="2v2">
             <Player2v2Tab ranked={player.ranked} />
           </TabsContent>
@@ -256,13 +239,9 @@ function RouteComponent() {
           />
         </TabsContent>
         <TabsContent value="weapons">
-          <PlayerWeaponsTab
-            weapons={weapons}
-            matchtime={matchtime}
-            games={player.stats.games}
-          />
+          <PlayerWeaponsTab weapons={weapons} matchtime={matchtime} games={player.stats.games} />
         </TabsContent>
       </Tabs>
     </>
-  )
+  );
 }

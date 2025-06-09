@@ -1,23 +1,23 @@
-import { t } from "@lingui/core/macro"
+import { t } from '@lingui/core/macro';
 
-import { Card } from "@/components/base/Card"
-import { cn } from "@/ui/lib/utils"
+import { Card } from '@/components/base/Card';
+import { cn } from '@/ui/lib/utils';
 
-import { GamesDisplay } from "./GamesDisplay"
-import { MiscStatGroup } from "./MiscStatGroup"
-import { ProgressCard } from "./ProgressCard"
+import { GamesDisplay } from './GamesDisplay';
+import { MiscStatGroup } from './MiscStatGroup';
+import { ProgressCard } from './ProgressCard';
 
 interface GeneralStatsProps {
-  className?: string
-  games: number
-  wins: number
-  kos: number
-  falls: number
-  suicides: number
-  teamkos: number
-  damageDealt: number
-  damageTaken: number
-  matchtime: number
+  className?: string;
+  games: number;
+  wins: number;
+  kos: number;
+  falls: number;
+  suicides: number;
+  teamkos: number;
+  damageDealt: number;
+  damageTaken: number;
+  matchtime: number;
 }
 
 export const GeneralStats = ({
@@ -32,17 +32,12 @@ export const GeneralStats = ({
   damageTaken,
   matchtime,
 }: GeneralStatsProps) => {
-  const kosReference = Math.max(kos, falls, suicides, teamkos)
-  const damageReference = Math.max(damageDealt, damageTaken)
+  const kosReference = Math.max(kos, falls, suicides, teamkos);
+  const damageReference = Math.max(damageDealt, damageTaken);
 
   return (
     <>
-      <div
-        className={cn(
-          "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8",
-          className,
-        )}
-      >
+      <div className={cn('grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8', className)}>
         <div>
           <Card title={t`Games`}>
             <GamesDisplay games={games} wins={wins} />
@@ -152,5 +147,5 @@ export const GeneralStats = ({
         ]}
       />
     </>
-  )
-}
+  );
+};

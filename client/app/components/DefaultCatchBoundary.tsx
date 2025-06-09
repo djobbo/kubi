@@ -1,4 +1,4 @@
-import { Trans } from "@lingui/react/macro"
+import { Trans } from '@lingui/react/macro';
 import {
   ErrorComponent,
   type ErrorComponentProps,
@@ -6,19 +6,19 @@ import {
   rootRouteId,
   useMatch,
   useRouter,
-} from "@tanstack/react-router"
+} from '@tanstack/react-router';
 
-import { Button } from "@/ui/components/button"
+import { Button } from '@/ui/components/button';
 
 export const DefaultCatchBoundary = ({ error }: ErrorComponentProps) => {
-  const router = useRouter()
+  const router = useRouter();
   const isRoot = useMatch({
     strict: false,
     select: (state) => state.id === rootRouteId,
-  })
+  });
 
   // eslint-disable-next-line no-console
-  console.error(error)
+  console.error(error);
 
   return (
     <div className="min-w-0 flex-1 p-4 flex flex-col items-center justify-center gap-6">
@@ -27,7 +27,7 @@ export const DefaultCatchBoundary = ({ error }: ErrorComponentProps) => {
         <Button
           type="button"
           onClick={() => {
-            router.invalidate()
+            router.invalidate();
           }}
         >
           <Trans>Try Again</Trans>
@@ -43,8 +43,8 @@ export const DefaultCatchBoundary = ({ error }: ErrorComponentProps) => {
             <Link
               to="/"
               onClick={(e) => {
-                e.preventDefault()
-                window.history.back()
+                e.preventDefault();
+                window.history.back();
               }}
             >
               <Trans>Go back</Trans>
@@ -53,5 +53,5 @@ export const DefaultCatchBoundary = ({ error }: ErrorComponentProps) => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};

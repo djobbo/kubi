@@ -1,13 +1,13 @@
-import { Link } from "@tanstack/react-router"
-import { useKBar } from "kbar"
-import type { ReactNode } from "react"
+import { Link } from '@tanstack/react-router';
+import { useKBar } from 'kbar';
+import type { ReactNode } from 'react';
 
 interface SearchboxItemProps {
-  icon?: ReactNode
-  title: ReactNode
-  subtitle?: ReactNode
-  href: string
-  rightContent?: ReactNode
+  icon?: ReactNode;
+  title: ReactNode;
+  subtitle?: ReactNode;
+  href: string;
+  rightContent?: ReactNode;
 }
 
 export const SearchboxItem = ({
@@ -19,7 +19,7 @@ export const SearchboxItem = ({
 }: SearchboxItemProps) => {
   const {
     query: { toggle },
-  } = useKBar()
+  } = useKBar();
 
   return (
     <Link
@@ -31,12 +31,10 @@ export const SearchboxItem = ({
         {icon}
         <div className="ml-4 min-w-0 flex-1">
           <p className="truncate">{title}</p>
-          {!!subtitle && (
-            <p className="text-xs text-muted-foreground truncate">{subtitle}</p>
-          )}
+          {!!subtitle && <p className="text-xs text-muted-foreground truncate">{subtitle}</p>}
         </div>
       </div>
       {rightContent}
     </Link>
-  )
-}
+  );
+};

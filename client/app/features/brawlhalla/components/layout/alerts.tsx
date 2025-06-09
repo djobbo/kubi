@@ -1,18 +1,18 @@
-import { Trans } from "@lingui/react/macro"
-import { Link } from "@tanstack/react-router"
+import { Trans } from '@lingui/react/macro';
+import { Link } from '@tanstack/react-router';
 
 export const alerts = {
   BH_MAINTENANCE: (
     <span>
       <Trans>
-        Brawlhalla maintenance ongoing. More info{" "}
+        Brawlhalla maintenance ongoing. More info{' '}
         <Link
           to="/discord"
           target="_blank"
           className="text-ring font-semibold hover:text-foreground"
         >
           here
-        </Link>{" "}
+        </Link>{' '}
         !
       </Trans>
     </span>
@@ -21,14 +21,14 @@ export const alerts = {
     <span>
       <Trans>
         Known issues with fetching stats from Brawlhalla{"'"}s servers, don
-        {"'"}t panic. Updates{" "}
+        {"'"}t panic. Updates{' '}
         <Link
           to="/discord"
           target="_blank"
           className="text-ring font-semibold hover:text-foreground"
         >
           here
-        </Link>{" "}
+        </Link>{' '}
         !
       </Trans>
     </span>
@@ -36,15 +36,15 @@ export const alerts = {
   AUTH_ISSUES: (
     <span>
       <Trans>
-        Authentication server is down, and so favorites aren{"'"}t accessible,
-        sorry for the inconvenience. Updates{" "}
+        Authentication server is down, and so favorites aren{"'"}t accessible, sorry for the
+        inconvenience. Updates{' '}
         <Link
           to="/discord"
           target="_blank"
           className="text-ring font-semibold hover:text-foreground"
         >
           here
-        </Link>{" "}
+        </Link>{' '}
         !
       </Trans>
     </span>
@@ -52,15 +52,14 @@ export const alerts = {
   AUTH_ISSUES_RESOLVED: (
     <span>
       <Trans>
-        Authentication server is back online, you can reconnect! Don{"'"}t
-        forget to join our{" "}
+        Authentication server is back online, you can reconnect! Don{"'"}t forget to join our{' '}
         <Link
           to="/discord"
           target="_blank"
           className="text-ring font-semibold hover:text-foreground"
         >
           Discord
-        </Link>{" "}
+        </Link>{' '}
         !
       </Trans>
     </span>
@@ -68,17 +67,13 @@ export const alerts = {
   NEW_BH_WIKI: (
     <span>
       <Trans>
-        The Brawlhalla Wiki has officially migrated to its new home at wiki.gg!
-        Explore the latest updates and resources by visiting{" "}
-        <Link
-          to="/wiki"
-          target="_blank"
-          className="text-ring font-semibold hover:text-foreground"
-        >
+        The Brawlhalla Wiki has officially migrated to its new home at wiki.gg! Explore the latest
+        updates and resources by visiting{' '}
+        <Link to="/wiki" target="_blank" className="text-ring font-semibold hover:text-foreground">
           brawlhalla.wiki.gg
-        </Link>{" "}
+        </Link>{' '}
         today!
       </Trans>
     </span>
   ),
-} as const
+} as const;

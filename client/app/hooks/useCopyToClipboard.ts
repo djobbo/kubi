@@ -1,14 +1,14 @@
 export const useCopyToClipboard = () => {
   const copyToClipboard = async (text: string) => {
-    if (!navigator?.clipboard) return false
+    if (!navigator?.clipboard) return false;
 
     try {
-      await navigator.clipboard.writeText(text)
-      return true
+      await navigator.clipboard.writeText(text);
+      return true;
     } catch {
-      return false
+      return false;
     }
-  }
+  };
 
-  return copyToClipboard
-}
+  return copyToClipboard;
+};

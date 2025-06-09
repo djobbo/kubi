@@ -1,13 +1,13 @@
-import { t } from "@lingui/core/macro"
-import type { CSSProperties } from "react"
+import { t } from '@lingui/core/macro';
+import type { CSSProperties } from 'react';
 
-import { SafeImage } from "@/features/brawlhalla/components/Image"
+import { SafeImage } from '@/features/brawlhalla/components/Image';
 
-import { FLOATING_CUPCAKE_SPEED_MULTIPLIER } from "../contants"
-import { useCupcakesStore } from "../store"
+import { FLOATING_CUPCAKE_SPEED_MULTIPLIER } from '../contants';
+import { useCupcakesStore } from '../store';
 
 export const FloatingCupcakes = () => {
-  const { floatingCupcakes } = useCupcakesStore()
+  const { floatingCupcakes } = useCupcakesStore();
 
   return floatingCupcakes.map((cupcake) => (
     <div
@@ -17,8 +17,8 @@ export const FloatingCupcakes = () => {
         {
           left: `${cupcake.position.x}px`,
           top: `${cupcake.position.y}px`,
-          "--direction-x": `${cupcake.direction.x * FLOATING_CUPCAKE_SPEED_MULTIPLIER}px`,
-          "--direction-y": `${cupcake.direction.y * FLOATING_CUPCAKE_SPEED_MULTIPLIER}px`,
+          '--direction-x': `${cupcake.direction.x * FLOATING_CUPCAKE_SPEED_MULTIPLIER}px`,
+          '--direction-y': `${cupcake.direction.y * FLOATING_CUPCAKE_SPEED_MULTIPLIER}px`,
         } as CSSProperties
       }
     >
@@ -30,5 +30,5 @@ export const FloatingCupcakes = () => {
         className="object-contain object-center"
       />
     </div>
-  ))
-}
+  ));
+};

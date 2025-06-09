@@ -1,25 +1,25 @@
-import { setCookie } from "vinxi/http"
+import { setCookie } from 'vinxi/http';
 
-import { env } from "@/env"
+import { env } from '@/env';
 
-export const AUTH_COOKIE_NAME = "auth_session"
+export const AUTH_COOKIE_NAME = 'auth_session';
 
 export function setSessionTokenCookie(token: string, expiresAt: Date): void {
   setCookie(AUTH_COOKIE_NAME, token, {
     httpOnly: true,
-    sameSite: "lax",
+    sameSite: 'lax',
     expires: expiresAt,
-    path: "/",
+    path: '/',
     secure: env.IS_PROD,
-  })
+  });
 }
 
 export function deleteSessionTokenCookie(): void {
-  setCookie(AUTH_COOKIE_NAME, "", {
+  setCookie(AUTH_COOKIE_NAME, '', {
     httpOnly: true,
-    sameSite: "lax",
+    sameSite: 'lax',
     maxAge: 0,
-    path: "/",
+    path: '/',
     secure: env.IS_PROD,
-  })
+  });
 }

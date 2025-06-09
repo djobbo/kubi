@@ -1,16 +1,16 @@
-import type { BrawlhallaArticle } from "@/features/bh-articles/functions/getBrawlhallaArticles"
-import { UnsafeImage } from "@/features/brawlhalla/components/Image"
+import type { BrawlhallaArticle } from '@/features/bh-articles/functions/getBrawlhallaArticles';
+import { UnsafeImage } from '@/features/brawlhalla/components/Image';
 
 interface ArticlePreviewProps {
-  article: BrawlhallaArticle
+  article: BrawlhallaArticle;
 }
 
-const BASE_BRAWLHALLA_ARTICLE_URL = "https://brawlhalla.com/news/"
+const BASE_BRAWLHALLA_ARTICLE_URL = 'https://brawlhalla.com/news/';
 
 export const ArticlePreview = ({ article }: ArticlePreviewProps) => {
-  const { title, featuredImage, categories } = article
+  const { title, featuredImage, categories } = article;
 
-  const href = `${BASE_BRAWLHALLA_ARTICLE_URL}${article.slug}`
+  const href = `${BASE_BRAWLHALLA_ARTICLE_URL}${article.slug}`;
 
   return (
     <div className="flex flex-col">
@@ -42,5 +42,5 @@ export const ArticlePreview = ({ article }: ArticlePreviewProps) => {
         </a>
       </h4>
     </div>
-  )
-}
+  );
+};

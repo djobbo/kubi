@@ -1,13 +1,13 @@
-import { css } from "@/panda/css"
-import { ANIMATED_LOGO_CENTER_ANIMATION_NAME } from "~/panda.config"
+import { css } from '@/panda/css';
+import { ANIMATED_LOGO_CENTER_ANIMATION_NAME } from '~/panda.config';
 
 const centerClass = css({
-  transformOrigin: "center",
+  transformOrigin: 'center',
   animation: `${ANIMATED_LOGO_CENTER_ANIMATION_NAME} 2.5s infinite`,
-})
+});
 
 interface AnimatedLogoProps {
-  size?: number
+  size?: number;
 }
 
 export const AnimatedLogo = ({ size }: AnimatedLogoProps) => {
@@ -42,5 +42,5 @@ export const AnimatedLogo = ({ size }: AnimatedLogoProps) => {
         />
       </g>
     </svg>
-  )
-}
+  );
+};

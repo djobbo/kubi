@@ -1,38 +1,37 @@
-import { t } from "@lingui/core/macro"
-import { Trans } from "@lingui/react/macro"
-import { createFileRoute } from "@tanstack/react-router"
-import { useState } from "react"
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
+import { createFileRoute } from '@tanstack/react-router';
+import { useState } from 'react';
 
-import { Card } from "@/components/base/Card"
-import { SectionTitle } from "@/features/brawlhalla/components/layout/SectionTitle"
-import { getTierFromRating } from "@/features/brawlhalla/constants/ranked/tiers"
+import { Card } from '@/components/base/Card';
+import { SectionTitle } from '@/features/brawlhalla/components/layout/SectionTitle';
+import { getTierFromRating } from '@/features/brawlhalla/constants/ranked/tiers';
 import {
   getGloryFromBestRating,
   getGloryFromWins,
   getLegendEloReset,
   getPersonalEloReset,
-} from "@/features/brawlhalla/helpers/season-reset"
+} from '@/features/brawlhalla/helpers/season-reset';
 
-export const Route = createFileRoute("/calc")({
+export const Route = createFileRoute('/calc')({
   component: RouteComponent,
-})
+});
 
-const inputClassName =
-  "w-full px-4 py-2 border bg-secondary border-border rounded-lg block mb-4"
-const resultClassName = "text-xl font-semibold block text-center"
+const inputClassName = 'w-full px-4 py-2 border bg-secondary border-border rounded-lg block mb-4';
+const resultClassName = 'text-xl font-semibold block text-center';
 
 function RouteComponent() {
-  const [hasPlayed10Games, setHasPlayed10Games] = useState(false)
-  const [wins, setWins] = useState("0")
-  const [rating, setRating] = useState("0")
-  const [personalRating, setPersonalRating] = useState("0")
-  const [heroRating, setHeroRating] = useState("0")
+  const [hasPlayed10Games, setHasPlayed10Games] = useState(false);
+  const [wins, setWins] = useState('0');
+  const [rating, setRating] = useState('0');
+  const [personalRating, setPersonalRating] = useState('0');
+  const [heroRating, setHeroRating] = useState('0');
 
-  const gloryWins = getGloryFromWins(parseInt(wins || "0"))
-  const gloryRating = getGloryFromBestRating(parseInt(rating || "200"))
+  const gloryWins = getGloryFromWins(parseInt(wins || '0'));
+  const gloryRating = getGloryFromBestRating(parseInt(rating || '200'));
 
-  const squashPersonal = getPersonalEloReset(parseInt(personalRating || "0"))
-  const squashHero = getLegendEloReset(parseInt(heroRating || "0"))
+  const squashPersonal = getPersonalEloReset(parseInt(personalRating || '0'));
+  const squashHero = getLegendEloReset(parseInt(heroRating || '0'));
 
   return (
     <>
@@ -82,9 +81,7 @@ function RouteComponent() {
               </Card>
               <span className="operator">=</span>
               <Card title={t`Total Glory`}>
-                <span className={resultClassName}>
-                  {gloryWins + gloryRating}
-                </span>
+                <span className={resultClassName}>{gloryWins + gloryRating}</span>
               </Card>
             </>
           ) : (
@@ -124,5 +121,5 @@ function RouteComponent() {
         </div>
       </div>
     </>
-  )
+  );
 }

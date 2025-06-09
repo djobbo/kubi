@@ -3,9 +3,9 @@ export default {
   singleQuote: false,
   tabWidth: 2,
   useTabs: false,
-  trailingComma: "all",
+  trailingComma: 'all',
   printWidth: 80,
-  arrowParens: "always",
+  arrowParens: 'always',
   jsxSingleQuote: false,
   jsxBracketSameLine: false,
-}
+};

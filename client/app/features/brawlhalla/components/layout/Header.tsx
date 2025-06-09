@@ -2,26 +2,26 @@ import {
   SiDiscord as DiscordIcon,
   SiGithub as GithubIcon,
   SiX as TwitterIcon,
-} from "@icons-pack/react-simple-icons"
-import { t } from "@lingui/core/macro"
-import { Trans } from "@lingui/react/macro"
-import { Link } from "@tanstack/react-router"
+} from '@icons-pack/react-simple-icons';
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
+import { Link } from '@tanstack/react-router';
 
-import { useAuth } from "@/features/auth/use-auth"
-import { UnsafeImage } from "@/features/brawlhalla/components/Image"
-import { Button } from "@/ui/components/button"
-import { SidebarTrigger } from "@/ui/components/sidebar"
-import { cn } from "@/ui/lib/utils"
+import { useAuth } from '@/features/auth/use-auth';
+import { UnsafeImage } from '@/features/brawlhalla/components/Image';
+import { Button } from '@/ui/components/button';
+import { SidebarTrigger } from '@/ui/components/sidebar';
+import { cn } from '@/ui/lib/utils';
 
-import { SearchButton, SearchButtonIcon } from "../search/SearchButton"
-import { AlertBar } from "./AlertBar"
+import { SearchButton, SearchButtonIcon } from '../search/SearchButton';
+import { AlertBar } from './AlertBar';
 
 interface HeaderProps {
-  className?: string
+  className?: string;
 }
 
 export const Header = ({ className }: HeaderProps) => {
-  const { isLoggedIn, logIn, logOut, session } = useAuth()
+  const { isLoggedIn, logIn, logOut, session } = useAuth();
 
   return (
     <>
@@ -29,7 +29,7 @@ export const Header = ({ className }: HeaderProps) => {
       <div
         className={cn(
           className,
-          "flex items-center justify-between h-[--header-height] px-4 gap-8",
+          'flex items-center justify-between h-[--header-height] px-4 gap-8'
         )}
       >
         <SidebarTrigger />
@@ -86,5 +86,5 @@ export const Header = ({ className }: HeaderProps) => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};

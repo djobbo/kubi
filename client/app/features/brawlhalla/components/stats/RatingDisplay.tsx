@@ -1,13 +1,13 @@
-import { t } from "@lingui/core/macro"
+import { t } from '@lingui/core/macro';
 
-import { GamesDisplay } from "./GamesDisplay"
+import { GamesDisplay } from './GamesDisplay';
 
 interface RatingDisplayProps {
-  className?: string
-  games: number
-  wins: number
-  rating: number
-  peak_rating: number
+  className?: string;
+  games: number;
+  wins: number;
+  rating: number;
+  peak_rating: number;
 }
 
 export const RatingDisplay = ({
@@ -32,5 +32,5 @@ export const RatingDisplay = ({
         description={t`Peak`}
       />
     </>
-  )
-}
+  );
+};

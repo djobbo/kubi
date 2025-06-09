@@ -1,14 +1,14 @@
-import { ChevronLeft, ChevronRight, ChevronsLeft } from "lucide-react"
+import { ChevronLeft, ChevronRight, ChevronsLeft } from 'lucide-react';
 
-import { Paginator } from "./Paginator"
+import { Paginator } from './Paginator';
 
 interface PaginationProps {
-  firstPage?: number
-  lastPage?: number
-  currentPage: number
-  getPageHref: (page: string) => string
-  span?: number
-  className?: string
+  firstPage?: number;
+  lastPage?: number;
+  currentPage: number;
+  getPageHref: (page: string) => string;
+  span?: number;
+  className?: string;
 }
 
 export const Pagination = ({
@@ -29,9 +29,9 @@ export const Pagination = ({
       ),
     },
     ...Array.from({ length: 2 * span + 1 }, (_, i) => {
-      const page = currentPage + i - span
+      const page = currentPage + i - span;
 
-      if (page <= firstPage) return null
+      if (page <= firstPage) return null;
 
       const label =
         page === currentPage - 1 ? (
@@ -46,14 +46,14 @@ export const Pagination = ({
           </span>
         ) : (
           page.toString()
-        )
+        );
 
       return {
         page: page.toString(),
         label,
-      }
+      };
     }),
-  ]
+  ];
   return (
     <Paginator
       pages={pages}
@@ -61,5 +61,5 @@ export const Pagination = ({
       currentPage={currentPage.toString()}
       className={className}
     />
-  )
-}
+  );
+};

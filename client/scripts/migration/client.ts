@@ -1,7 +1,7 @@
-import { createClient } from "@supabase/supabase-js"
+import { createClient } from '@supabase/supabase-js';
 
-import type { Database } from "./database.types"
-import { MIGRATION_SUPABASE_SERVICE_KEY, MIGRATION_SUPABASE_URL } from "./env"
+import type { Database } from './database.types';
+import { MIGRATION_SUPABASE_SERVICE_KEY, MIGRATION_SUPABASE_URL } from './env';
 
 /**
  * Supabase client
@@ -10,5 +10,5 @@ import { MIGRATION_SUPABASE_SERVICE_KEY, MIGRATION_SUPABASE_URL } from "./env"
  */
 export const supabase = createClient<Database>(
   MIGRATION_SUPABASE_URL,
-  MIGRATION_SUPABASE_SERVICE_KEY,
-)
+  MIGRATION_SUPABASE_SERVICE_KEY
+);

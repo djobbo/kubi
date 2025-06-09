@@ -1,25 +1,25 @@
-import { Trans } from "@lingui/react/macro"
-import { useSuspenseQuery } from "@tanstack/react-query"
-import { CircleHelp } from "lucide-react"
+import { Trans } from '@lingui/react/macro';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { CircleHelp } from 'lucide-react';
 
-import { Tooltip } from "@/components/base/Tooltip"
-import { getWeeklyRotation } from "@/features/bh-articles/functions/getWeeklyRotation"
-import { LegendIcon } from "@/features/brawlhalla/components/Image"
+import { Tooltip } from '@/components/base/Tooltip';
+import { getWeeklyRotation } from '@/features/bh-articles/functions/getWeeklyRotation';
+import { LegendIcon } from '@/features/brawlhalla/components/Image';
 
 const useWeeklyRotation = () => {
   const { data: weeklyRotation } = useSuspenseQuery({
-    queryKey: ["weeklyRotation"],
+    queryKey: ['weeklyRotation'],
     queryFn: async () => {
-      const weeklyRotation = await getWeeklyRotation()
-      return weeklyRotation
+      const weeklyRotation = await getWeeklyRotation();
+      return weeklyRotation;
     },
-  })
+  });
 
-  return weeklyRotation
-}
+  return weeklyRotation;
+};
 
 export const WeeklyRotation = () => {
-  const weeklyRotation = useWeeklyRotation()
+  const weeklyRotation = useWeeklyRotation();
 
   return (
     <div className="flex flex-col items-center">
@@ -48,5 +48,5 @@ export const WeeklyRotation = () => {
         <Trans>Free Legends Rotation</Trans>
       </span>
     </div>
-  )
-}
+  );
+};

@@ -1,26 +1,26 @@
-import { createServerFn } from "@tanstack/react-start"
-import { z } from "zod"
+import { createServerFn } from '@tanstack/react-start';
+import { z } from 'zod';
 
-import { db } from "@/db"
-import { getSession } from "@/features/auth/functions/getSession"
+import { db } from '@/db';
+import { getSession } from '@/features/auth/functions/getSession';
 
-import { bookmarksInsertSchema, bookmarksTable } from "../schema/bookmarks"
+import { bookmarksInsertSchema, bookmarksTable } from '../schema/bookmarks';
 
-export const addBookmark = createServerFn({ method: "POST" })
+export const addBookmark = createServerFn({ method: 'POST' })
   .validator(z.object({ bookmark: bookmarksInsertSchema }))
   .handler(async ({ data: { bookmark } }) => {
     // TODO: CRSF protection
-    const session = await getSession()
+    const session = await getSession();
     if (!session) {
-      throw new Error("Unauthorized")
+      throw new Error('Unauthorized');
     }
 
-    const { user } = session
+    const { user } = session;
 
     const newBookmark = {
       ...bookmark,
       userId: user.id,
-    }
+    };
 
     const bookmarkData = await db
       .insert(bookmarksTable)
@@ -30,13 +30,9 @@ export const addBookmark = createServerFn({ method: "POST" })
         set: {
           name: newBookmark.name,
         },
-        target: [
-          bookmarksTable.userId,
-          bookmarksTable.pageId,
-          bookmarksTable.pageType,
-        ],
+        target: [bookmarksTable.userId, bookmarksTable.pageId, bookmarksTable.pageType],
       })
-      .execute()
+      .execute();
 
-    return bookmarkData[0] ?? newBookmark
-  })
+    return bookmarkData[0] ?? newBookmark;
+  });

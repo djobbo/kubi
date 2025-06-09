@@ -1,11 +1,11 @@
-import { t } from "@lingui/core/macro"
-import { Trans } from "@lingui/react/macro"
-import { type DialogProps } from "@radix-ui/react-dialog"
-import { useRouter } from "@tanstack/react-router"
-import { FileIcon } from "lucide-react"
-import { useCallback, useEffect, useState } from "react"
+import { t } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro';
+import { type DialogProps } from '@radix-ui/react-dialog';
+import { useRouter } from '@tanstack/react-router';
+import { FileIcon } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
 
-import { Button } from "@/ui/components/button"
+import { Button } from '@/ui/components/button';
 import {
   CommandDialog,
   CommandEmpty,
@@ -14,13 +14,13 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@/ui/components/command"
-import { cn } from "@/ui/lib/utils"
+} from '@/ui/components/command';
+import { cn } from '@/ui/lib/utils';
 
 interface CommandMenuProps extends DialogProps {
-  title?: string
-  titleShort?: string
-  keyboardShortcut?: boolean
+  title?: string;
+  titleShort?: string;
+  keyboardShortcut?: boolean;
 }
 
 export const CommandMenu = ({
@@ -29,43 +29,43 @@ export const CommandMenu = ({
   keyboardShortcut = false,
   ...props
 }: CommandMenuProps) => {
-  const router = useRouter()
-  const [open, setOpen] = useState(false)
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (!keyboardShortcut) return
+    if (!keyboardShortcut) return;
 
     const down = (e: KeyboardEvent) => {
-      if ((e.key === "k" && (e.metaKey || e.ctrlKey)) || e.key === "/") {
+      if ((e.key === 'k' && (e.metaKey || e.ctrlKey)) || e.key === '/') {
         if (
           (e.target instanceof HTMLElement && e.target.isContentEditable) ||
           e.target instanceof HTMLInputElement ||
           e.target instanceof HTMLTextAreaElement ||
           e.target instanceof HTMLSelectElement
         ) {
-          return
+          return;
         }
 
-        e.preventDefault()
-        setOpen((open) => !open)
+        e.preventDefault();
+        setOpen((open) => !open);
       }
-    }
+    };
 
-    document.addEventListener("keydown", down)
-    return () => document.removeEventListener("keydown", down)
-  }, [keyboardShortcut])
+    document.addEventListener('keydown', down);
+    return () => document.removeEventListener('keydown', down);
+  }, [keyboardShortcut]);
 
   const runCommand = useCallback((command: () => unknown) => {
-    setOpen(false)
-    command()
-  }, [])
+    setOpen(false);
+    command();
+  }, []);
 
   return (
     <>
       <Button
         variant="outline"
         className={cn(
-          "relative h-8 w-full justify-start rounded-[0.5rem] bg-muted/50 text-sm font-normal text-muted-foreground shadow-none sm:pr-12 md:w-40 lg:w-64",
+          'relative h-8 w-full justify-start rounded-[0.5rem] bg-muted/50 text-sm font-normal text-muted-foreground shadow-none sm:pr-12 md:w-40 lg:w-64'
         )}
         onClick={() => setOpen(true)}
         {...props}
@@ -87,7 +87,7 @@ export const CommandMenu = ({
             <CommandItem
               value="hello"
               onSelect={() => {
-                runCommand(() => router.navigate({ to: "/" }))
+                runCommand(() => router.navigate({ to: '/' }));
               }}
             >
               <FileIcon className="mr-2 h-4 w-4" />
@@ -98,5 +98,5 @@ export const CommandMenu = ({
         </CommandList>
       </CommandDialog>
     </>
-  )
-}
+  );
+};

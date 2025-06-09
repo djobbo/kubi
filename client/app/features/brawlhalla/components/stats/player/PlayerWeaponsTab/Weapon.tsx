@@ -1,43 +1,37 @@
-import { t } from "@lingui/core/macro"
-import type { ReactNode } from "react"
+import { t } from '@lingui/core/macro';
+import type { ReactNode } from 'react';
 
-import { Card } from "@/components/base/Card"
-import { WeaponIcon } from "@/features/brawlhalla/components/Image"
-import type { FullWeapon } from "@/features/brawlhalla/helpers/parser"
-import { formatTime } from "@/helpers/date"
+import { Card } from '@/components/base/Card';
+import { WeaponIcon } from '@/features/brawlhalla/components/Image';
+import type { FullWeapon } from '@/features/brawlhalla/helpers/parser';
+import { formatTime } from '@/helpers/date';
 
-import { CollapsibleContent } from "../../../layout/CollapsibleContent"
-import { GamesDisplay } from "../../GamesDisplay"
-import type { MiscStat } from "../../MiscStatGroup"
-import { MiscStatGroup } from "../../MiscStatGroup"
-import { PlayerWeaponRankedContent } from "./RankedContent"
+import { CollapsibleContent } from '../../../layout/CollapsibleContent';
+import { GamesDisplay } from '../../GamesDisplay';
+import type { MiscStat } from '../../MiscStatGroup';
+import { MiscStatGroup } from '../../MiscStatGroup';
+import { PlayerWeaponRankedContent } from './RankedContent';
 
 type Weapon = FullWeapon & {
-  games: number
-  wins: number
-  level: number
-  xp: number
-  kos: number
-  damageDealt: number
-  matchtime: number
-}
+  games: number;
+  wins: number;
+  level: number;
+  xp: number;
+  kos: number;
+  damageDealt: number;
+  matchtime: number;
+};
 
 interface WeaponProps {
-  weapon: Weapon
-  matchtime: number
-  games: number
-  displayedInfoFn?: (weapon: Weapon) => ReactNode
-  rank: number
+  weapon: Weapon;
+  matchtime: number;
+  games: number;
+  displayedInfoFn?: (weapon: Weapon) => ReactNode;
+  rank: number;
 }
 
-export const Weapon = ({
-  weapon,
-  matchtime,
-  games,
-  displayedInfoFn,
-  rank,
-}: WeaponProps) => {
-  const { weapon: weaponName } = weapon
+export const Weapon = ({ weapon, matchtime, games, displayedInfoFn, rank }: WeaponProps) => {
+  const { weapon: weaponName } = weapon;
   const weaponStats: MiscStat[] = [
     {
       name: t`Weapon level`,
@@ -99,7 +93,7 @@ export const Weapon = ({
       value: (weapon.damageDealt / weapon.games).toFixed(2),
       desc: t`Average damage dealt per game ${weaponName}`,
     },
-  ]
+  ];
 
   return (
     <CollapsibleContent
@@ -120,9 +114,7 @@ export const Weapon = ({
             />
             {weapon.weapon}
           </span>
-          <span className="text-sm text-muted-foreground">
-            {displayedInfoFn?.(weapon)}
-          </span>
+          <span className="text-sm text-muted-foreground">{displayedInfoFn?.(weapon)}</span>
         </span>
       }
     >
@@ -132,5 +124,5 @@ export const Weapon = ({
       <MiscStatGroup className="mt-4" stats={weaponStats} />
       <PlayerWeaponRankedContent weapon={weapon} />
     </CollapsibleContent>
-  )
-}
+  );
+};

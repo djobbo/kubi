@@ -1,18 +1,18 @@
-import { Trans } from "@lingui/react/macro"
-import { Link, useRouter } from "@tanstack/react-router"
-import type { ComponentPropsWithoutRef, ReactNode } from "react"
-import { useState } from "react"
+import { Trans } from '@lingui/react/macro';
+import { Link, useRouter } from '@tanstack/react-router';
+import type { ComponentPropsWithoutRef, ReactNode } from 'react';
+import { useState } from 'react';
 
-import { Logo } from "@/components/layout/Logo"
-import { navConfig } from "@/config/nav"
-import { siteConfig } from "@/config/site"
-import { Button } from "@/ui/components/button"
-import { ScrollArea } from "@/ui/components/scroll-area"
-import { Sheet, SheetContent, SheetTrigger } from "@/ui/components/sheet"
-import { cn } from "@/ui/lib/utils"
+import { Logo } from '@/components/layout/Logo';
+import { navConfig } from '@/config/nav';
+import { siteConfig } from '@/config/site';
+import { Button } from '@/ui/components/button';
+import { ScrollArea } from '@/ui/components/scroll-area';
+import { Sheet, SheetContent, SheetTrigger } from '@/ui/components/sheet';
+import { cn } from '@/ui/lib/utils';
 
 export function MobileNav() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -88,34 +88,28 @@ export function MobileNav() {
         </ScrollArea>
       </SheetContent>
     </Sheet>
-  )
+  );
 }
 
 interface MobileLinkProps extends ComponentPropsWithoutRef<typeof Link> {
-  onOpenChange?: (open: boolean) => void
-  children: ReactNode
-  className?: string
+  onOpenChange?: (open: boolean) => void;
+  children: ReactNode;
+  className?: string;
 }
 
-function MobileLink({
-  to,
-  onOpenChange,
-  className,
-  children,
-  ...props
-}: MobileLinkProps) {
-  const router = useRouter()
+function MobileLink({ to, onOpenChange, className, children, ...props }: MobileLinkProps) {
+  const router = useRouter();
 
   return (
     <Link
       onClick={() => {
-        router.navigate({ to })
-        onOpenChange?.(false)
+        router.navigate({ to });
+        onOpenChange?.(false);
       }}
       className={cn(className)}
       {...props}
     >
       {children}
     </Link>
-  )
+  );
 }
