@@ -1,6 +1,5 @@
 import { Hono } from 'hono'
 import brawlhallaRoute from './routes/brawlhalla'
-import locateRoute from './routes/locate'
 
 const app = new Hono()
 
@@ -9,6 +8,5 @@ app.get('/', (c) => {
 })
 
 app.route('/brawlhalla', brawlhallaRoute)
-app.route('/locate', locateRoute)
 
 export default app

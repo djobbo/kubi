@@ -1,7 +1,8 @@
 import { fixEncoding } from '@dair/common/src/helpers/fix-encoding';
 import { aliasesTable, type NewAlias } from '@dair/schema/src/archive/aliases';
 import { db } from '../db';
-import { and, desc, eq, inArray, sql } from 'drizzle-orm';
+import { and, desc, eq, inArray, like, sql } from 'drizzle-orm';
+import { brawlhallaService } from './brawlhalla';
 
 const MIN_ALIAS_SEARCH_LENGTH = 3
 const MAX_ALIASES_PER_PLAYER = 10
@@ -64,19 +65,20 @@ export const aliasesService = {
 
     return aliasesData ?? aliases;
   },
-  searchAliases: async (name: string, page: number = 1, limit: number = 10) => {
-    if (name.length < MIN_ALIAS_SEARCH_LENGTH) {
+  searchAliases: async (name?: string, page: number = 1, limit: number = 10) => {
+    if (!name || name.length < MIN_ALIAS_SEARCH_LENGTH) {
       return [];
     }
 
     // Fetch aliases that start with the name
-    const aliases = await db
+    const aliases = db
       .select({
         playerId: aliasesTable.playerId,
       })
       .from(aliasesTable)
       .orderBy(desc(aliasesTable.createdAt))
-      .where(and(eq(aliasesTable.public, true), sql`lower(${aliasesTable.alias}) like ${sql.placeholder('name')}`))
+      // ilike is not supported by drizzle sqlite
+      .where(like(sql`lower(${aliasesTable.alias})`, `${name.toLowerCase()}%`))
       .limit(limit)
       .offset((page - 1) * limit)
       .all({
@@ -89,7 +91,11 @@ export const aliasesService = {
 
     // Fetch other recent aliases for the corresponding players
     const allAliases = await db
-      .select()
+      .select({
+        playerId: aliasesTable.playerId,
+        alias: aliasesTable.alias,
+        updatedAt: aliasesTable.updatedAt,
+      })
       .from(aliasesTable)
       .orderBy(desc(aliasesTable.createdAt))
       .where(
@@ -99,11 +105,40 @@ export const aliasesService = {
         )
       )
       .limit(MAX_ALIASES_PER_PLAYER)
-      .groupBy(aliasesTable.playerId)
       .execute();
 
-    console.log(allAliases)
+    const aggregatedAliases = allAliases.reduce((acc, alias) => {
+        const existingAlias = acc[alias.playerId]
+        const newAlias = {alias: alias.alias, updatedAt: alias.updatedAt}
 
-    return allAliases;
+        if (!existingAlias) {
+          acc[alias.playerId] = {
+            aliases: [newAlias],
+            playerId: alias.playerId,
+          };
+          return acc;
+        }
+
+        existingAlias.aliases.push(newAlias);
+        acc[alias.playerId] = existingAlias;
+        return acc;
+    }, {} as Record<string, {aliases: {alias: string, updatedAt: Date}[], playerId: string}>);
+
+    const playerRankedCached = await brawlhallaService.getPlayerRankedByIdCached(Object.keys(aggregatedAliases))
+
+    return Object.values(aggregatedAliases).map((alias) => {
+      const ranked = playerRankedCached.find((playerRanked) => playerRanked.brawlhalla_id.toString() === alias.playerId)
+      
+      return {
+      playerId: alias.playerId,
+      aliases: alias.aliases.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime()),
+      ranked: ranked ?{
+        rank: ranked.region,
+        games: ranked.games,
+        wins: ranked.wins,
+        rating: ranked.rating,
+        peak_rating: ranked.peak_rating,
+      } : null,
+    }});
   },
 };

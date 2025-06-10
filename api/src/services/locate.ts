@@ -17,7 +17,7 @@ export const getRegion = async (ip: string) => {
   const res = await fetch(`http://ip-api.com/json/${ip}`) // TODO: use typesafe-fetch
   const data = await res.json()
 
-  if (data.status !== 'success') {
+  if ('status' in data && data.status !== 'success') {
     return null
   }
 

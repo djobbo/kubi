@@ -1,7 +1,9 @@
 import { Hono } from 'hono';
-import { brawlhallaService } from '../services/brawlhalla/brawlhalla-service';
-import { brawltoolsService } from '../services/brawltools/brawltools-service';
-import { aliasesService } from '../services/aliases';
+import { brawlhallaService } from '../../services/brawlhalla/brawlhalla-service';
+import { brawltoolsService } from '../../services/brawltools/brawltools-service';
+import { aliasesService } from '../../services/aliases';
+import { getRegion } from '../../services/locate';
+import { getIp } from '../../helpers/get-ip';
 
 const brawlhallaRoute = new Hono();
 
@@ -50,8 +52,8 @@ brawlhallaRoute.get('/rankings/power/:region?/:page?', async (c) => {
   return c.json(rankings);
 });
 
-brawlhallaRoute.get('/search/:name', async (c) => {
-  const { name } = c.req.param();
+brawlhallaRoute.get('/search', async (c) => {
+  const { name } = c.req.query();
   const aliases = await aliasesService.searchAliases(name);
   return c.json(aliases);
 });
@@ -60,6 +62,17 @@ brawlhallaRoute.get('/aliases/:playerId/:page?', async (c) => {
   const { playerId, page } = c.req.param();
   const aliases = await aliasesService.getAliases(playerId, page ? parseInt(page) : undefined);
   return c.json(aliases);
+});
+
+brawlhallaRoute.get('/locate', async (c) => {
+  const ip = getIp(c)
+
+  if (!ip) {
+    return c.json({ error: 'Could not determine region' }, 400)
+  }
+
+  const region = await getRegion(ip);
+  return c.json({ region });
 });
 
 export default brawlhallaRoute;

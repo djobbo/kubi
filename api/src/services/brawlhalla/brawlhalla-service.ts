@@ -6,7 +6,7 @@ import {
   rankings2v2Mock,
 } from './mocks';
 import { clanSchema } from '@dair/brawlhalla-api/src/api/schema/clan';
-import { playerRankedSchema } from '@dair/brawlhalla-api/src/api/schema/player-ranked';
+import { playerRankedSchema, type PlayerRanked } from '@dair/brawlhalla-api/src/api/schema/player-ranked';
 import { playerStatsSchema } from '@dair/brawlhalla-api/src/api/schema/player-stats';
 import { ranking1v1Schema, ranking2v2Schema } from '@dair/brawlhalla-api/src/api/schema/rankings';
 import { withCache } from '../../helpers/with-cache';
@@ -16,6 +16,9 @@ import { typesafeFetch } from '../../helpers/typesafe-fetch';
 import z from 'zod';
 import { env } from '../../env';
 import { aliasesService } from '../aliases';
+import { apiCacheTable } from '@dair/schema/src/cache/api-cache';
+import { db } from '../../db';
+import { inArray, desc } from 'drizzle-orm';
 
 const BRAWLHALLA_API_URL = 'https://api.brawlhalla.com';
 
@@ -59,7 +62,6 @@ export const brawlhallaService = {
         mock: playerRankedMock,
       })
 
-
       const now = new Date()
       await aliasesService.updateAliases([
         {
@@ -95,6 +97,17 @@ export const brawlhallaService = {
     const playerRanked = await withCache(`brawlhalla-player-ranked-${playerId}`, fetchPlayerRanked, env.CACHE_MAX_AGE_OVERRIDE ?? 15 * 60 * 1000)
 
     return playerRanked
+  },
+  getPlayerRankedByIdCached: async (playerIds: string[]) => {
+    const cached = await db
+    .select()
+    .from(apiCacheTable)
+    .where(inArray(apiCacheTable.cacheName, playerIds.map((id) => `brawlhalla-player-ranked-${id}`)))
+    .orderBy(desc(apiCacheTable.createdAt))
+    .groupBy(apiCacheTable.cacheName)
+    .limit(1);
+
+    return cached.map((cached) => cached.data as PlayerRanked)
   },
   getClanById: (clanId: string) => withCache(`brawlhalla-clan-${clanId}`, () => fetchBrawlhallaApi({
     path: `/clan/${clanId}`,
