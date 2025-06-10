@@ -8,6 +8,15 @@ export const env = createEnv({
     CACHE_MAX_AGE_OVERRIDE: z.optional(z.coerce.number()),
     DATABASE_URL: z.string().min(1),
     CACHE_VERSION: z.coerce.number(),
+    API_URL: z.string().url(),
+    // OAuth providers
+    GOOGLE_CLIENT_ID: z.string().min(1),
+    GOOGLE_CLIENT_SECRET: z.string().min(1),
+    DISCORD_CLIENT_ID: z.string().min(1),
+    DISCORD_CLIENT_SECRET: z.string().min(1),
+    // Auth
+    AUTH_SECRET: z.string().min(1),
+    FRONTEND_URL: z.string().url(),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,

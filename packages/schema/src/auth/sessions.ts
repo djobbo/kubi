@@ -1,14 +1,22 @@
-import type { InferSelectModel } from 'drizzle-orm';
-import { text, integer, sqliteTable } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { relations, sql } from "drizzle-orm";
+import { usersTable } from "./users";
 
-import { usersTable } from './users';
-
-export const sessionsTable = sqliteTable('session', {
-  id: text('id').primaryKey(),
-  userId: text('user_id')
+export const sessionsTable = sqliteTable("sessions", {
+  id: text("id").primaryKey().notNull(),
+  userId: text("user_id")
     .notNull()
-    .references(() => usersTable.id),
-  expiresAt: integer('expires_at', { mode: 'timestamp_ms' }).notNull(),
+    .references(() => usersTable.id, { onDelete: "cascade" }),
+  expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`(unixepoch())`),
 });
 
-export type Session = InferSelectModel<typeof sessionsTable>;
+export type Session = typeof sessionsTable.$inferSelect;
+export type NewSession = typeof sessionsTable.$inferInsert;
+
+export const sessionsRelations = relations(sessionsTable, ({ one }) => ({
+  user: one(usersTable, {
+    fields: [sessionsTable.userId],
+    references: [usersTable.id],
+  }),
+}));

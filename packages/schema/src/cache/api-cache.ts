@@ -7,3 +7,6 @@ export const apiCacheTable = sqliteTable('api-cache', {
   createdAt: integer('createdAt', { mode: 'timestamp_ms' }).notNull().defaultNow(),
   version: integer('version').notNull(),
 });
+
+export type ApiCache = typeof apiCacheTable.$inferSelect;
+export type NewApiCache = typeof apiCacheTable.$inferInsert;

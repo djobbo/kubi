@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1749512703715,
-      "tag": "0000_perpetual_firebrand",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1749551243842,
-      "tag": "0001_known_magneto",
+      "when": 1749590954673,
+      "tag": "0000_complex_mauler",
       "breakpoints": true
     }
   ]

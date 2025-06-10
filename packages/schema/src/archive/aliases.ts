@@ -1,4 +1,4 @@
-import { sql, type InferSelectModel } from 'drizzle-orm';
+import { sql } from 'drizzle-orm';
 import { integer, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core';
 import { createInsertSchema } from 'drizzle-zod';
 import type { z } from 'zod';
@@ -18,8 +18,7 @@ export const aliasesTable = sqliteTable(
   ]
 );
 
-export type Alias = InferSelectModel<typeof aliasesTable>;
+export type Alias = typeof aliasesTable.$inferSelect;
+export type NewAlias = typeof aliasesTable.$inferInsert;
 
 export const aliasesInsertSchema = createInsertSchema(aliasesTable);
-
-export type NewAlias = z.infer<typeof aliasesInsertSchema>;

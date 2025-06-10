@@ -1,4 +1,3 @@
-import type { InferSelectModel } from 'drizzle-orm';
 import { integer, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core';
 import { createInsertSchema } from 'drizzle-zod';
 import { z } from 'zod';
@@ -55,12 +54,11 @@ export const bookmarksTable = sqliteTable(
   ]
 );
 
-export type Bookmark = InferSelectModel<typeof bookmarksTable>;
+export type Bookmark = typeof bookmarksTable.$inferSelect;
+export type NewBookmark = typeof bookmarksTable.$inferInsert;
 
 export const bookmarksInsertSchema = createInsertSchema(bookmarksTable, {
   pageType: pageTypeSchema,
   meta: metaSchema,
   userId: z.string().optional(),
 });
-
-export type NewBookmark = z.infer<typeof bookmarksInsertSchema>;

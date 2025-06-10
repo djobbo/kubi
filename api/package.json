@@ -14,6 +14,7 @@
     "@hono/zod-validator": "^0.7.0",
     "@libsql/client": "^0.15.9",
     "@t3-oss/env-core": "^0.13.6",
+    "arctic": "^3.7.0",
     "drizzle-orm": "^0.44.2",
     "hono": "^4.7.11",
     "hono-openapi": "^0.4.8",

@@ -1,7 +1,6 @@
-import { sql, type InferSelectModel } from 'drizzle-orm';
+import { sql } from 'drizzle-orm';
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { createInsertSchema } from 'drizzle-zod';
-import type { z } from 'zod';
 
 export const clansTable = sqliteTable('clans', {
   id: text('clan_id').notNull().primaryKey(),
@@ -11,8 +10,7 @@ export const clansTable = sqliteTable('clans', {
   xp: integer('xp').notNull().default(0),
 });
 
-export type ArchivedClan = InferSelectModel<typeof clansTable>;
+export type ArchivedClan = typeof clansTable.$inferSelect;
+export type NewArchivedClan = typeof clansTable.$inferInsert;
 
 export const clanInsertSchema = createInsertSchema(clansTable);
-
-export type NewArchivedClan = z.infer<typeof clanInsertSchema>;
