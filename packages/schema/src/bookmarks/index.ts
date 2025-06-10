@@ -1,2 +1,2 @@
-export * from './bookmarks';
-export * from './legacy-bookmarks';
+export * from "./bookmarks"
+export * from "./legacy-bookmarks"

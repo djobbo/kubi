@@ -1,133 +1,141 @@
-import { createAPIFileRoute } from '@tanstack/react-start/api';
-import { ArcticFetchError, OAuth2RequestError } from 'arctic';
-import { and, eq } from 'drizzle-orm';
-import { parseCookies } from 'vinxi/http';
-import { z } from 'zod';
+import { createAPIFileRoute } from "@tanstack/react-start/api"
+import { ArcticFetchError, OAuth2RequestError } from "arctic"
+import { and, eq } from "drizzle-orm"
+import { parseCookies } from "vinxi/http"
+import { z } from "zod"
 
-import { db } from '@dair/db';
-import { createSession, generateSessionToken } from '@/features/auth/api';
-import { setSessionTokenCookie } from '@/features/auth/cookies';
-import { generateIdFromEntropySize } from '@/features/auth/helpers/crypto';
-import { DISCORD_OAUTH_STATE_COOKIE_NAME, discord } from '@/features/auth/providers';
-import { DISCORD_PROVIDER_ID } from '../../../../../db/src/schema/auth/oauth-accounts';
-import { usersTable } from '../../../../../db/src/schema/auth/users';
-import { oauthAccountsTable } from '../../../../../db/src/schema/auth/oauth-accounts';
+import { createSession, generateSessionToken } from "@/features/auth/api"
+import { setSessionTokenCookie } from "@/features/auth/cookies"
+import { generateIdFromEntropySize } from "@/features/auth/helpers/crypto"
+import {
+	DISCORD_OAUTH_STATE_COOKIE_NAME,
+	discord,
+} from "@/features/auth/providers"
+import { db } from "@dair/db"
+import { DISCORD_PROVIDER_ID } from "../../../../../db/src/schema/auth/oauth-accounts"
+import { oauthAccountsTable } from "../../../../../db/src/schema/auth/oauth-accounts"
+import { usersTable } from "../../../../../db/src/schema/auth/users"
 
 const discordUserResponseSchema = z.object({
-  id: z.string(),
-  username: z.string(),
-  email: z.string().optional(),
-  avatar: z.string().optional(),
-  verified: z.boolean().optional(),
-});
+	id: z.string(),
+	username: z.string(),
+	email: z.string().optional(),
+	avatar: z.string().optional(),
+	verified: z.boolean().optional(),
+})
 
-type DiscordUserResponse = z.infer<typeof discordUserResponseSchema>;
+type DiscordUserResponse = z.infer<typeof discordUserResponseSchema>
 
 const getAvatarUrl = (discordUser: DiscordUserResponse) => {
-  if (discordUser.avatar) {
-    return `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png`;
-  }
+	if (discordUser.avatar) {
+		return `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png`
+	}
 
-  return null;
-};
+	return null
+}
 
-export const APIRoute = createAPIFileRoute('/api/auth/callback/discord')({
-  GET: async ({ request }) => {
-    const url = new URL(request.url);
-    const code = url.searchParams.get('code');
-    const state = url.searchParams.get('state');
+export const APIRoute = createAPIFileRoute("/api/auth/callback/discord")({
+	GET: async ({ request }) => {
+		const url = new URL(request.url)
+		const code = url.searchParams.get("code")
+		const state = url.searchParams.get("state")
 
-    const cookies = parseCookies();
-    const storedState = cookies[DISCORD_OAUTH_STATE_COOKIE_NAME];
+		const cookies = parseCookies()
+		const storedState = cookies[DISCORD_OAUTH_STATE_COOKIE_NAME]
 
-    if (!code || !state || !storedState || state !== storedState) {
-      return new Response(null, { status: 400 });
-    }
+		if (!code || !state || !storedState || state !== storedState) {
+			return new Response(null, { status: 400 })
+		}
 
-    try {
-      const tokens = await discord.validateAuthorizationCode(code, null);
-      const accessToken = tokens.accessToken();
-      // TODO: use discord.js
-      const discordUserResponse = await fetch('https://discord.com/api/v10/users/@me', {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-      const discordUser = discordUserResponseSchema.parse(await discordUserResponse.json());
+		try {
+			const tokens = await discord.validateAuthorizationCode(code, null)
+			const accessToken = tokens.accessToken()
+			// TODO: use discord.js
+			const discordUserResponse = await fetch(
+				"https://discord.com/api/v10/users/@me",
+				{
+					headers: { Authorization: `Bearer ${accessToken}` },
+				},
+			)
+			const discordUser = discordUserResponseSchema.parse(
+				await discordUserResponse.json(),
+			)
 
-      const existingUser = await db.query.oauthAccountsTable.findFirst({
-        where: and(
-          eq(oauthAccountsTable.providerId, DISCORD_PROVIDER_ID),
-          eq(oauthAccountsTable.providerUserId, discordUser.id)
-        ),
-      });
+			const existingUser = await db.query.oauthAccountsTable.findFirst({
+				where: and(
+					eq(oauthAccountsTable.providerId, DISCORD_PROVIDER_ID),
+					eq(oauthAccountsTable.providerUserId, discordUser.id),
+				),
+			})
 
-      if (existingUser) {
-        const token = generateSessionToken();
-        const session = await createSession(token, existingUser.userId);
-        setSessionTokenCookie(token, session.expiresAt);
+			if (existingUser) {
+				const token = generateSessionToken()
+				const session = await createSession(token, existingUser.userId)
+				setSessionTokenCookie(token, session.expiresAt)
 
-        await db
-          .insert(usersTable)
-          .values({
-            id: existingUser.userId,
-            name: discordUser.username,
-            avatarUrl: getAvatarUrl(discordUser),
-          })
-          .onConflictDoUpdate({
-            target: [usersTable.id],
-            set: {
-              name: discordUser.username,
-              avatarUrl: getAvatarUrl(discordUser),
-            },
-          });
+				await db
+					.insert(usersTable)
+					.values({
+						id: existingUser.userId,
+						name: discordUser.username,
+						avatarUrl: getAvatarUrl(discordUser),
+					})
+					.onConflictDoUpdate({
+						target: [usersTable.id],
+						set: {
+							name: discordUser.username,
+							avatarUrl: getAvatarUrl(discordUser),
+						},
+					})
 
-        return new Response(null, {
-          status: 302,
-          headers: {
-            Location: '/',
-          },
-        });
-      }
+				return new Response(null, {
+					status: 302,
+					headers: {
+						Location: "/",
+					},
+				})
+			}
 
-      const userId = generateIdFromEntropySize(10); // 16 characters
+			const userId = generateIdFromEntropySize(10) // 16 characters
 
-      await db.transaction(async (tx) => {
-        await tx.insert(usersTable).values({
-          id: userId,
-          email: discordUser.email,
-          name: discordUser.username,
-          avatarUrl: getAvatarUrl(discordUser),
-        });
+			await db.transaction(async (tx) => {
+				await tx.insert(usersTable).values({
+					id: userId,
+					email: discordUser.email,
+					name: discordUser.username,
+					avatarUrl: getAvatarUrl(discordUser),
+				})
 
-        await tx.insert(oauthAccountsTable).values({
-          providerId: DISCORD_PROVIDER_ID,
-          providerUserId: discordUser.id,
-          userId,
-        });
-      });
+				await tx.insert(oauthAccountsTable).values({
+					providerId: DISCORD_PROVIDER_ID,
+					providerUserId: discordUser.id,
+					userId,
+				})
+			})
 
-      const token = generateSessionToken();
-      const session = await createSession(token, userId);
-      setSessionTokenCookie(token, session.expiresAt);
+			const token = generateSessionToken()
+			const session = await createSession(token, userId)
+			setSessionTokenCookie(token, session.expiresAt)
 
-      return new Response(null, {
-        status: 302,
-        headers: {
-          Location: '/',
-        },
-      });
-    } catch (e) {
-      // the specific error message depends on the provider
-      if (e instanceof OAuth2RequestError) {
-        // invalid code
-        return new Response(null, { status: 400 });
-      }
+			return new Response(null, {
+				status: 302,
+				headers: {
+					Location: "/",
+				},
+			})
+		} catch (e) {
+			// the specific error message depends on the provider
+			if (e instanceof OAuth2RequestError) {
+				// invalid code
+				return new Response(null, { status: 400 })
+			}
 
-      if (e instanceof ArcticFetchError) {
-        // Failed to call `fetch()`
-        return new Response(null, { status: 500 });
-      }
+			if (e instanceof ArcticFetchError) {
+				// Failed to call `fetch()`
+				return new Response(null, { status: 500 })
+			}
 
-      return new Response(null, { status: 500 });
-    }
-  },
-});
+			return new Response(null, { status: 500 })
+		}
+	},
+})

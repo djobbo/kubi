@@ -1,1 +1,1 @@
-export { PlayerWeaponsTab } from './PlayerWeaponsTab';
+export { PlayerWeaponsTab } from "./PlayerWeaponsTab"

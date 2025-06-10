@@ -11,67 +11,67 @@ import { legendsMap } from "@dair/brawlhalla-api/src/constants/legends"
 import { SearchboxItem } from "./SearchboxItem"
 
 interface RankedPlayerItemProps {
-  player: Ranking1v1
+	player: Ranking1v1
 }
 
 export const RankedPlayerItem = ({ player }: RankedPlayerItemProps) => {
-  const { isLoggedIn } = useAuth()
-  const legend = legendsMap[player.best_legend]
+	const { isLoggedIn } = useAuth()
+	const legend = legendsMap[player.best_legend]
 
-  const { isBookmarked, toggleBookmark } = useBookmark({
-    pageType: "player_stats",
-    pageId: player.brawlhalla_id.toString(),
-    name: player.name,
-    meta: {
-      version: "1",
-      data: {
-        icon: {
-          type: "legend",
-          id: legend?.legend_id,
-        },
-      },
-    },
-  })
+	const { isBookmarked, toggleBookmark } = useBookmark({
+		pageType: "player_stats",
+		pageId: player.brawlhalla_id.toString(),
+		name: player.name,
+		meta: {
+			version: "1",
+			data: {
+				icon: {
+					type: "legend",
+					id: legend?.legend_id,
+				},
+			},
+		},
+	})
 
-  const icon = legend && (
-    <LegendIcon
-      legendNameKey={legend.legend_name_key}
-      alt={legend.bio_name}
-      containerClassName="w-8 h-8 rounded-lg overflow-hidden border border-muted-foreground"
-      className="object-contain object-center"
-    />
-  )
+	const icon = legend && (
+		<LegendIcon
+			legendNameKey={legend.legend_name_key}
+			alt={legend.bio_name}
+			containerClassName="w-8 h-8 rounded-lg overflow-hidden border border-muted-foreground"
+			className="object-contain object-center"
+		/>
+	)
 
-  const { rating, peak_rating, tier } = player
+	const { rating, peak_rating, tier } = player
 
-  return (
-    <SearchboxItem
-      icon={icon}
-      href={`/stats/player/${player.brawlhalla_id}`}
-      title={cleanString(player.name)}
-      subtitle={
-        <Trans>
-          {rating} / {peak_rating} peak ({tier})
-        </Trans>
-      }
-      rightContent={
-        isLoggedIn && (
-          <button
-            type="button"
-            className="cursor-pointer"
-            onClick={(e) => {
-              if (!isLoggedIn) return
+	return (
+		<SearchboxItem
+			icon={icon}
+			href={`/stats/player/${player.brawlhalla_id}`}
+			title={cleanString(player.name)}
+			subtitle={
+				<Trans>
+					{rating} / {peak_rating} peak ({tier})
+				</Trans>
+			}
+			rightContent={
+				isLoggedIn && (
+					<button
+						type="button"
+						className="cursor-pointer"
+						onClick={(e) => {
+							if (!isLoggedIn) return
 
-              e.preventDefault()
-              e.stopPropagation()
+							e.preventDefault()
+							e.stopPropagation()
 
-              toggleBookmark(!isBookmarked)
-            }}
-          >
-            {isBookmarked ? <StarOff size={16} /> : <Star size={16} />}
-          </button>
-        )
-      }
-    />
-  )
+							toggleBookmark(!isBookmarked)
+						}}
+					>
+						{isBookmarked ? <StarOff size={16} /> : <Star size={16} />}
+					</button>
+				)
+			}
+		/>
+	)
 }

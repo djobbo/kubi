@@ -1,1 +1,1 @@
-export { PlayerOverviewTab } from './PlayerOverviewTab';
+export { PlayerOverviewTab } from "./PlayerOverviewTab"

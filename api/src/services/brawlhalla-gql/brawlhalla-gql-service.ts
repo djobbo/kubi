@@ -1,12 +1,12 @@
-import { Client, cacheExchange, fetchExchange, gql } from '@urql/core';
-import { z } from 'zod';
+import { Client, cacheExchange, fetchExchange, gql } from "@urql/core"
+import { z } from "zod"
 
-import { env } from '../../env';
-import { withCache } from '../../helpers/with-cache';
-import { articleSchema, articlesSchema } from './helpers/schema';
-import { parseWeeklyRotation } from './helpers/parse-weekly-rotation';
+import { env } from "../../env"
+import { withCache } from "../../helpers/with-cache"
+import { parseWeeklyRotation } from "./helpers/parse-weekly-rotation"
+import { articleSchema, articlesSchema } from "./helpers/schema"
 
-export const BRAWLHALLA_GRAPHQL_API_URL = 'https://cms.brawlhalla.com/graphql';
+export const BRAWLHALLA_GRAPHQL_API_URL = "https://cms.brawlhalla.com/graphql"
 
 const getArticleQuery = (withContent?: boolean) => gql`
   query ($category: String, $after: String, $first: Int = 6) {
@@ -19,7 +19,7 @@ const getArticleQuery = (withContent?: boolean) => gql`
         slug
         dateGmt
         excerpt
-        ${withContent ? 'content' : ''}
+        ${withContent ? "content" : ""}
         author {
           node {
             databaseId
@@ -51,43 +51,53 @@ const getArticleQuery = (withContent?: boolean) => gql`
       }
     }
   }
-`;
+`
 
 const client = new Client({
-  url: BRAWLHALLA_GRAPHQL_API_URL,
-  exchanges: [cacheExchange, fetchExchange],
-});
+	url: BRAWLHALLA_GRAPHQL_API_URL,
+	exchanges: [cacheExchange, fetchExchange],
+})
 
-const getArticles = async (query?: { first?: number, category?: string, after?: string, withContent?: boolean }) => {
-  const { first = 3, category = null, after = null, withContent = false } = query ?? {};
+const getArticles = async (query?: {
+	first?: number
+	category?: string
+	after?: string
+	withContent?: boolean
+}) => {
+	const {
+		first = 3,
+		category = null,
+		after = null,
+		withContent = false,
+	} = query ?? {}
 
-  const articles = await withCache(
-    `bh-article-${category}-${first}-${after}`,
-    async () => {
-      const result = await client
-        .query(getArticleQuery(withContent), { first, category, after })
-        .toPromise();
+	const articles = await withCache(
+		`bh-article-${category}-${first}-${after}`,
+		async () => {
+			const result = await client
+				.query(getArticleQuery(withContent), { first, category, after })
+				.toPromise()
 
-      const articles = articlesSchema.parse(result.data).posts.nodes;
+			const articles = articlesSchema.parse(result.data).posts.nodes
 
-      return articles;
-    },
-    env.CACHE_MAX_AGE_OVERRIDE ?? 15 * 60 * 1000
-  );
+			return articles
+		},
+		env.CACHE_MAX_AGE_OVERRIDE ?? 15 * 60 * 1000,
+	)
 
-  return articles;
+	return articles
 }
 
 export const brawlhallaGqlService = {
-  getArticles,
-  getWeeklyRotation: async () => {
-    const articles = await getArticles({
-      first: 1,
-      category: 'weekly-rotation',
-      withContent: true,
-    });
+	getArticles,
+	getWeeklyRotation: async () => {
+		const articles = await getArticles({
+			first: 1,
+			category: "weekly-rotation",
+			withContent: true,
+		})
 
-    const content = articles.data[0]?.content;
-    return parseWeeklyRotation(content);
-  }
+		const content = articles.data[0]?.content
+		return parseWeeklyRotation(content)
+	},
 }

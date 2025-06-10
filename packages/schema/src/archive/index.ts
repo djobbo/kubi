@@ -1,2 +1,2 @@
-export * from './aliases';
-export * from './clans';
+export * from "./aliases"
+export * from "./clans"

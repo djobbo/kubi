@@ -1,3 +1,3 @@
-import {servers} from './constants/servers'
+import { servers } from "./constants/servers"
 
 export { servers }

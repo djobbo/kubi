@@ -1,6 +1,6 @@
-import { useRouteContext } from '@tanstack/react-router';
+import { useRouteContext } from "@tanstack/react-router"
 
 export const useRootContext = () => {
-  const context = useRouteContext({ from: '__root__' });
-  return context;
-};
+	const context = useRouteContext({ from: "__root__" })
+	return context
+}

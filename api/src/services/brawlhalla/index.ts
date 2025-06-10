@@ -1,1 +1,1 @@
-export * from './brawlhalla-service';
+export * from "./brawlhalla-service"

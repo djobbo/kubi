@@ -1,25 +1,24 @@
 {
-  "name": "dair",
-  "module": "index.ts",
-  "type": "module",
-  "private": true,
-  "workspaces": [
-    "api",
-    "client",
-    "packages/*"
-  ],
-  "scripts": {
-    "check:deadcode": "bun locales:compile && dotenv -e .env.example -- knip-bun",
-    "start": "docker compose -f docker-compose.yml up --build",
-    "stop": "docker compose -f docker-compose.yml down",
-    "dev": "docker compose -f docker-compose.dev.yml up --build",
-    "dev:stop": "docker compose -f docker-compose.dev.yml down"
-  },
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
-  },
-  "packageManager": "bun@1.2.15"
+	"name": "dair",
+	"module": "index.ts",
+	"type": "module",
+	"private": true,
+	"workspaces": ["api", "client", "packages/*"],
+	"scripts": {
+		"check:deadcode": "bun locales:compile && dotenv -e .env.example -- knip-bun",
+		"start": "docker compose -f docker-compose.yml up --build",
+		"stop": "docker compose -f docker-compose.yml down",
+		"dev": "docker compose -f docker-compose.dev.yml up --build",
+		"dev:stop": "docker compose -f docker-compose.dev.yml down",
+		"lint": "biome check --write",
+		"check:lint": "biome check"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.9.4",
+		"@types/bun": "latest"
+	},
+	"peerDependencies": {
+		"typescript": "^5"
+	},
+	"packageManager": "bun@1.2.15"
 }

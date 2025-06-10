@@ -1,1 +1,1 @@
-export * from './power-rankings';
+export * from "./power-rankings"
