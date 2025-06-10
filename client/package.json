@@ -16,7 +16,7 @@
     "locales:compile": "lingui compile",
     "locales:build": "bun locales:extract && bun locales:compile",
     "check:locales": "bun locales:build --strict",
-    "prepare": "bun panda:build",
+    "prepare": "[ \"$NODE_ENV\" != \"production\" ] && bun panda:build || exit 0",
     "panda:build": "panda codegen",
     "migration:start": "bun run ./scripts/migration/migrate.ts"
   },

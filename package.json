@@ -10,9 +10,9 @@
   ],
   "scripts": {
     "check:deadcode": "bun locales:compile && dotenv -e .env.example -- knip-bun",
-    "start": "docker compose -f docker-compose.yml up",
+    "start": "docker compose -f docker-compose.yml up --build",
     "stop": "docker compose -f docker-compose.yml down",
-    "dev": "docker compose -f docker-compose.dev.yml up",
+    "dev": "docker compose -f docker-compose.dev.yml up --build",
     "dev:stop": "docker compose -f docker-compose.dev.yml down"
   },
   "devDependencies": {
