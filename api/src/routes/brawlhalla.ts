@@ -4,6 +4,7 @@ import { brawltoolsService } from '../services/brawltools/brawltools-service';
 import { archiveService } from '../services/archive';
 import { getRegion } from '../services/locate';
 import { getIp } from '../helpers/get-ip';
+import { brawlhallaGqlService } from '../services/brawlhalla-gql/brawlhalla-gql-service';
 
 const brawlhallaRoute = new Hono();
 
@@ -34,7 +35,10 @@ brawlhallaRoute.get('/players/:playerId/aliases/:page?', async (c) => {
 brawlhallaRoute.get('/clans/search/:page?', async (c) => {
   const { page } = c.req.param();
   const { name } = c.req.query();
-  const clans = await archiveService.getClans(page ? parseInt(page) : undefined, 25, name);
+  const clans = await archiveService.getClans({
+    page: page ? parseInt(page) : undefined,
+    name,
+  });
   return c.json(clans);
 });
 
@@ -80,6 +84,19 @@ brawlhallaRoute.get('/locate', async (c) => {
 
   const region = await getRegion(ip);
   return c.json({ region });
+});
+
+brawlhallaRoute.get('/weekly-rotation', async (c) => {
+  const weeklyRotation = await brawlhallaGqlService.getWeeklyRotation();
+  return c.json(weeklyRotation);
+});
+
+brawlhallaRoute.get('/articles/:category?', async (c) => {
+  const { category } = c.req.param();
+  const articles = await brawlhallaGqlService.getArticles({
+    category,
+  });
+  return c.json(articles);
 });
 
 export default brawlhallaRoute;

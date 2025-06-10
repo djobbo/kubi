@@ -167,7 +167,7 @@ export const archiveService = {
 
     return clansData;
   },
-  getClans: async ({page = 1, limit = CLANS_RANKINGS_PER_PAGE, name}: {page: number, limit: number, name?: string}) => {
+  getClans: async ({page = 1, limit = CLANS_RANKINGS_PER_PAGE, name}: {page?: number, limit?: number, name?: string}) => {
     const clans = await db
       .select()
       .from(clansTable)

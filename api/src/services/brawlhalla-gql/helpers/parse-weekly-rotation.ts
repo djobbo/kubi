@@ -1,20 +1,7 @@
-import { createServerFn } from '@tanstack/react-start';
 import { load as loadHtml } from 'cheerio';
-
 import { legends } from '@dair/brawlhalla-api/src/constants/legends';
 
-import { getBrawlhallaArticles } from './getBrawlhallaArticles';
-
-export const getWeeklyRotation = createServerFn({ method: 'GET' }).handler(async () => {
-  const latestWeeklyRotation = await getBrawlhallaArticles({
-    data: {
-      query: { first: 1, category: 'weekly-rotation', after: null },
-      withContent: true,
-    },
-  });
-
-  const content = latestWeeklyRotation[0]?.content;
-
+export const parseWeeklyRotation = (content?: string) => {
   if (!content) return [];
 
   const $ = loadHtml(content);
@@ -55,4 +42,4 @@ export const getWeeklyRotation = createServerFn({ method: 'GET' }).handler(async
     .get();
 
   return weeklyRotation;
-});
+}
