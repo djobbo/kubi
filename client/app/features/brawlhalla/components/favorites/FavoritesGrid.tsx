@@ -9,7 +9,7 @@ import type {
   NewBookmark,
 } from "../../../../../../db/src/schema/bookmarks/bookmarks"
 import { LegendIcon, UnsafeImage } from "@/features/brawlhalla/components/Image"
-import { fixEncoding } from "@dair/common/src/helpers/fix-encoding"
+import { cleanString } from "@dair/common/src/helpers/clean-string"
 import { css } from "@/panda/css"
 import { cn } from "@/ui/lib/utils"
 
@@ -61,7 +61,7 @@ const BookmarkDisplay = ({ bookmark }: BookmarkDisplayProps) => {
 
   if (!isBookmarked) return null
 
-  const favoriteName = fixEncoding(bookmark.name)
+  const favoriteName = cleanString(bookmark.name)
   const bookmarkLinkData = getBookmarkLinkData(bookmark)
   if (!bookmarkLinkData) return null
 
@@ -123,7 +123,7 @@ const BookmarkDisplay = ({ bookmark }: BookmarkDisplayProps) => {
       >
         {icon}
         <div className="min-w-0">
-          <p className="font-bold truncate">{fixEncoding(bookmark.name)}</p>
+          <p className="font-bold truncate">{cleanString(bookmark.name)}</p>
           <p className="text-xs text-muted-foreground truncate">
             {bookmark.pageType} #{bookmark.pageId}
           </p>

@@ -23,7 +23,7 @@ import {
   UnsafeImage,
 } from "@/features/brawlhalla/components/Image"
 import { useSideNav } from "@/features/sidebar/sidenav-provider"
-import { fixEncoding } from "@dair/common/src/helpers/fix-encoding"
+import { cleanString } from "@dair/common/src/helpers/clean-string"
 import { css } from "@/panda/css"
 import { Button } from "@/ui/components/button"
 import { cn } from "@/ui/lib/utils"
@@ -65,7 +65,7 @@ const SideNavIcon = ({
   external = false,
 }: SideNavIconProps) => {
   const { closeSideNav } = useSideNav()
-  const cleanName = fixEncoding(name)
+  const cleanName = cleanString(name)
 
   return (
     <Tooltip content={desc ?? cleanName} side="right">
@@ -196,7 +196,7 @@ const BookmarkDisplay = ({ bookmark, location }: BookmarkDisplayProps) => {
         <SideNavIcon
           key={bookmark.id}
           href={`/stats/player/${bookmark.pageId}`}
-          name={fixEncoding(bookmark.name)}
+          name={cleanString(bookmark.name)}
           image={image}
           // TODO: add route match helper
           active={pathname.startsWith(`/stats/player/${bookmark.pageId}`)}
@@ -209,7 +209,7 @@ const BookmarkDisplay = ({ bookmark, location }: BookmarkDisplayProps) => {
         <SideNavIcon
           key={bookmark.id}
           href={`/stats/clan/${bookmark.id}`}
-          name={fixEncoding(bookmark.name)}
+          name={cleanString(bookmark.name)}
           // TODO: add route match helper
           active={pathname.startsWith(`/stats/clan/${bookmark.pageId}`)}
           onRemove={deleteBookmark}

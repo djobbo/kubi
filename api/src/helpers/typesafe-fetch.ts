@@ -16,7 +16,6 @@ export const typesafeFetch = (name: string, baseUrl: string, searchParams?: Reco
         });
     }
 
-    console.log(env.USE_MOCKS, mock)
     if (env.USE_MOCKS && mock) return mock;
   
     const response = await fetch(url, options);

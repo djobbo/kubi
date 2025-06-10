@@ -4,7 +4,7 @@ import { Star, StarOff } from "lucide-react"
 import { useAuth } from "@/features/auth/use-auth"
 import { useBookmark } from "@/features/bookmarks/hooks/use-bookmark"
 import { LegendIcon } from "@/features/brawlhalla/components/Image"
-import { fixEncoding } from "@dair/common/src/helpers/fix-encoding"
+import { cleanString } from "@dair/common/src/helpers/clean-string"
 
 import type { Ranking1v1 } from "@dair/brawlhalla-api/src/api/schema/rankings"
 import { legendsMap } from "@dair/brawlhalla-api/src/constants/legends"
@@ -48,7 +48,7 @@ export const RankedPlayerItem = ({ player }: RankedPlayerItemProps) => {
     <SearchboxItem
       icon={icon}
       href={`/stats/player/${player.brawlhalla_id}`}
-      title={fixEncoding(player.name)}
+      title={cleanString(player.name)}
       subtitle={
         <Trans>
           {rating} / {peak_rating} peak ({tier})

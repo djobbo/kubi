@@ -4,9 +4,9 @@ import { z } from 'zod';
 
 import { db } from '@dair/db';
 import { serviceAuthenticationMiddleware } from '@/features/auth/functions/serviceAuthenticationMiddleware';
-import { fixEncoding } from '@dair/common/src/helpers/fix-encoding';
+import { cleanString } from '@dair/common/src/helpers/clean-string';
 
-import { clanInsertSchema, clansTable } from '../../../../../../db/src/schema/archive/clans';
+import { clanInsertSchema, clansTable } from '@dair/schema/src/archive/clans';
 
 export const addOrUpdateClans = createServerFn({ method: 'POST' })
   .middleware([serviceAuthenticationMiddleware])
@@ -17,7 +17,7 @@ export const addOrUpdateClans = createServerFn({ method: 'POST' })
       .values(
         clans.map((clan) => ({
           ...clan,
-          name: fixEncoding(clan.name.trim()),
+          name: cleanString(clan.name.trim()),
           createdAt: clan.createdAt ?? null,
         }))
       )

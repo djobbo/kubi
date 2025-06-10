@@ -14,8 +14,6 @@ interface Cache {
 const isValidCache = <T extends Cache>(cache: T, maxAge = DEFAULT_CACHE_MAX_AGE) => {
   if (cache.version !== env.CACHE_VERSION) return false;
 
-  console.log(Date.now(), cache.createdAt.getTime(), Date.now() - cache.createdAt.getTime() > maxAge, maxAge)
-
   if (Date.now() - cache.createdAt.getTime() > maxAge) return false;
 
   return true;
@@ -33,7 +31,6 @@ export const withCache = async <T>(
     .orderBy(desc(apiCacheTable.createdAt))
     .limit(1);
 
-    console.log(cached)
 
   if (cached && isValidCache(cached, maxAge)) {
     console.log('Cache hit', cacheName);

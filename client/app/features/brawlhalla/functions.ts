@@ -33,7 +33,7 @@ import { getAliases } from '@/features/archive/functions/aliases/get-aliases';
 import { searchAliases } from '@/features/archive/functions/aliases/search-aliases';
 import { addOrUpdateClans } from '@/features/archive/functions/clans/add-update-clans';
 import { withCache } from '@/features/cache/cache';
-import { fixEncoding } from '@dair/common/src/helpers/fix-encoding';
+import { cleanString } from '@dair/common/src/helpers/clean-string';
 import { getDateFromUnixTime } from '@dair/common/src/helpers/date';
 
 const BRAWLHALLA_API_BASE = 'https://api.brawlhalla.com';
@@ -75,7 +75,7 @@ export const getPlayerStats = createServerFn({ method: 'GET' })
               clans: [
                 {
                   id: playerStats.clan.clan_id.toString(),
-                  name: fixEncoding(playerStats.clan.clan_name),
+                  name: cleanString(playerStats.clan.clan_name),
                   xp: z.coerce.number().catch(0).parse(playerStats.clan.clan_xp),
                 },
               ],

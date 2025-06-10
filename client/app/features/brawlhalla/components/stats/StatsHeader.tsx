@@ -9,7 +9,7 @@ import type { NewBookmark } from "@dair/db/schema"
 import { AdsenseStatsHeader } from "@/features/analytics/components/adsense"
 import { useAuth } from "@/features/auth/use-auth"
 import { useBookmark } from "@/features/bookmarks/hooks/use-bookmark"
-import { fixEncoding } from "@dair/common/src/helpers/fix-encoding"
+import { cleanString } from "@dair/common/src/helpers/clean-string"
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard"
 import { Button } from "@/ui/components/button"
 import { cn } from "@/ui/lib/utils"
@@ -106,7 +106,7 @@ export const StatsHeader = ({
         <div className="flex flex-wrap gap-2 mt-4 justify-center">
           {aliases.slice(0, MAX_SHOWN_ALIASES).map((alias) => (
             <p key={alias} className={cn("rounded-lg py-0.5 px-3 bg-border")}>
-              {fixEncoding(alias)}
+              {cleanString(alias)}
             </p>
           ))}
         </div>

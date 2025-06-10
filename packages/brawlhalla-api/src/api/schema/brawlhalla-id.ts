@@ -1,9 +1,9 @@
 import { z } from "zod"
 
-import { fixEncoding } from "@dair/common/src/helpers/fix-encoding"
+import { cleanString } from "@dair/common/src/helpers/clean-string"
 
 export const brawlhallaIdSchema = z.number()
 
 export const brawlhallaNameSchema = z
   .string()
-  .transform((value) => fixEncoding(value))
+  .transform((value) => cleanString(value))

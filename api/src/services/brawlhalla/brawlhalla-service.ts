@@ -15,7 +15,7 @@ import { getTeamPlayers } from '@dair/brawlhalla-api/src/helpers/team-players';
 import { typesafeFetch } from '../../helpers/typesafe-fetch';
 import z from 'zod';
 import { env } from '../../env';
-import { aliasesService } from '../aliases';
+import { archiveService } from '../archive';
 import { apiCacheTable } from '@dair/schema/src/cache/api-cache';
 import { db } from '../../db';
 import { inArray, desc } from 'drizzle-orm';
@@ -39,13 +39,25 @@ export const brawlhallaService = {
       })
 
     const now = new Date()
-    await aliasesService.updateAliases([
+    await Promise.allSettled([
+      archiveService.updateAliases([
       {
         playerId: playerId.toString(),
         alias: playerStats.name,
         updatedAt: now,
       },
-    ]);
+    ]),
+    async () => {
+      if (!playerStats.clan) return
+
+      await archiveService.updateClans([
+      {
+        id: playerStats.clan.clan_id.toString(),
+        name: playerStats.clan.clan_name,
+        xp: parseInt(playerStats.clan.clan_xp),
+      }
+    ])
+  }]);
 
     return playerStats;
   }
@@ -63,7 +75,7 @@ export const brawlhallaService = {
       })
 
       const now = new Date()
-      await aliasesService.updateAliases([
+      await archiveService.updateAliases([
         {
           playerId: playerId.toString(),
           alias: playerRanked.name,
@@ -109,11 +121,36 @@ export const brawlhallaService = {
 
     return cached.map((cached) => cached.data as PlayerRanked)
   },
-  getClanById: (clanId: string) => withCache(`brawlhalla-clan-${clanId}`, () => fetchBrawlhallaApi({
-    path: `/clan/${clanId}`,
-    schema: clanSchema,
-    mock: clanMock,
-  }), env.CACHE_MAX_AGE_OVERRIDE ?? 15 * 60 * 1000),
+  getClanById: (clanId: string) => {
+    const fetchClan = async () => {
+      const clan = await fetchBrawlhallaApi({
+        path: `/clan/${clanId}`,
+        schema: clanSchema,
+        mock: clanMock,
+      })
+
+      await Promise.allSettled([
+        archiveService.updateClans([
+        {
+          id: clan.clan_id.toString(),
+          name: clan.clan_name,
+          xp: parseInt(clan.clan_xp),
+          createdAt: new Date(clan.clan_create_date * 1000),
+        }
+      ]),
+      archiveService.updateAliases(clan.clan.map((player) => {
+        return {
+          playerId: player.brawlhalla_id.toString(),
+          alias: player.name,
+        }
+      }))
+    ])
+
+      return clan
+    }
+    
+    return withCache(`brawlhalla-clan-${clanId}`, fetchClan, env.CACHE_MAX_AGE_OVERRIDE ?? 15 * 60 * 1000)
+  },
   getRankings1v1: (region: string = DEFAULT_RANKINGS_REGION, page: number = DEFAULT_RANKINGS_PAGE, name?: string) => withCache(`brawlhalla-rankings-1v1-${region}-${page}-${name}`, () => fetchBrawlhallaApi({
     path: `/rankings/1v1/${region.toLowerCase()}/${page}${name ? `?name=${name}` : ''}`,
     schema: z.array(ranking1v1Schema),

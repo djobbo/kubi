@@ -11,7 +11,7 @@ import {
   powerRankedOrderBySchema,
   powerRankedOrderSchema,
 } from '@dair/brawlhalla-api/src/constants/power/order-by';
-import { fixEncoding } from '@dair/common/src/helpers/fix-encoding';
+import { cleanString } from '@dair/common/src/helpers/clean-string';
 import { seo } from '@dair/common/src/helpers/seo';
 import { useDebouncedState } from '@/hooks/useDebouncedState';
 import { cn } from '@/ui/lib/utils';
@@ -79,7 +79,7 @@ function RouteComponent() {
 
   const filteredlPowerRankings =
     rankings.filter(({ playerName }) =>
-      fixEncoding(playerName).toLowerCase().startsWith(search.toLowerCase())
+      cleanString(playerName).toLowerCase().startsWith(search.toLowerCase())
     ) ?? [];
 
   const goldMedalists = filteredlPowerRankings.filter(({ gold }) => gold > 0);
@@ -208,7 +208,7 @@ function RouteComponent() {
               key={`${gameMode}-${region}-${player.powerRanking}-${player.playerId}`}
             >
               <p className="w-16 text-center">{player.powerRanking}</p>
-              <p className="flex-1">{fixEncoding(player.playerName)}</p>
+              <p className="flex-1">{cleanString(player.playerName)}</p>
               <p className="w-20">{player.earnings}</p>
               <p className="w-16 text-center">{player.gold ? `${player.gold} 🏆` : '-'}</p>
               <p className="w-16 text-center">{player.silver ? `${player.silver} 🥈` : '-'}</p>

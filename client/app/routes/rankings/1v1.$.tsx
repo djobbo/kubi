@@ -8,7 +8,7 @@ import { LegendIcon } from '@/features/brawlhalla/components/Image';
 import { RankingsTableItem } from '@/features/brawlhalla/components/stats/RankingsTableItem';
 import { RankingsLayout } from '@/features/brawlhalla/components/stats/rankings/RankingsLayout';
 import { legendsMap } from '@dair/brawlhalla-api/src/constants/legends';
-import { fixEncoding } from '@dair/common/src/helpers/fix-encoding';
+import { cleanString } from '@dair/common/src/helpers/clean-string';
 import { seo } from '@dair/common/src/helpers/seo';
 
 export const Route = createFileRoute('/rankings/1v1/$')({
@@ -152,7 +152,7 @@ function RouteComponent() {
                         className="object-cover object-center"
                       />
                     )}
-                    {fixEncoding(player.name)}
+                    {cleanString(player.name)}
                   </Link>
                 }
                 {...player}

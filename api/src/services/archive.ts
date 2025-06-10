@@ -1,16 +1,16 @@
-import { fixEncoding } from '@dair/common/src/helpers/fix-encoding';
+import { cleanString } from '@dair/common/src/helpers/clean-string';
 import { aliasesTable, type NewAlias } from '@dair/schema/src/archive/aliases';
 import { db } from '../db';
 import { and, desc, eq, inArray, like, sql } from 'drizzle-orm';
 import { brawlhallaService } from './brawlhalla';
+import { clansTable, type NewArchivedClan } from '@dair/schema';
 
 const MIN_ALIAS_SEARCH_LENGTH = 3
 const MAX_ALIASES_PER_PLAYER = 10
 
 export const dedupeAndCleanAliases = (aliases: NewAlias[]) => {
-    return aliases.reduce((acc, alias) => {
-      let cleanAlias = fixEncoding(alias.alias.trim());
-      console.log(cleanAlias)
+    const dedupedAliases = aliases.reduce((acc, alias) => {
+      let cleanAlias = cleanString(alias.alias.trim());
   
       // Strip the •2 suffix from the alias (suffix added when 2 players play on the same machine)
       if (cleanAlias.endsWith('•2')) {
@@ -21,16 +21,21 @@ export const dedupeAndCleanAliases = (aliases: NewAlias[]) => {
         return acc;
       }
   
-      if (acc.some((existingAlias) => existingAlias.alias === cleanAlias)) {
+      if (acc.some((existingAlias) => existingAlias.alias === cleanAlias && existingAlias.playerId === alias.playerId)) {
         return acc;
       }
   
-      acc.push(alias);
+      acc.push({
+        ...alias,
+        alias: cleanAlias,
+      });
       return acc;
     }, [] as NewAlias[]);
+
+    return dedupedAliases;
 }
 
-export const aliasesService = {
+export const archiveService = {
   getAliases: async (playerId: string, page: number = 1, limit: number = 10) => {
     const aliases = await db
       .select()
@@ -45,8 +50,6 @@ export const aliasesService = {
   },
   updateAliases: async (aliases: NewAlias[]) => {
     const dedupedAliases = dedupeAndCleanAliases(aliases);
-
-    console.log(dedupedAliases.map((alias) => alias.alias))
     
     const aliasesData = await db
     .insert(aliasesTable)
@@ -60,8 +63,6 @@ export const aliasesService = {
       target: [aliasesTable.playerId, aliasesTable.alias],
     })
     .execute();
-
-    console.log(aliasesData)
 
     return aliasesData ?? aliases;
   },
@@ -141,4 +142,40 @@ export const aliasesService = {
       } : null,
     }});
   },
+  updateClans: async (clans: NewArchivedClan[]) => {
+    const clansData = await db
+      .insert(clansTable)
+      .values(
+        clans.map((clan) => ({
+          ...clan,
+          name: cleanString(clan.name.trim()),
+          createdAt: clan.createdAt ?? null,
+        }))
+      )
+      .returning()
+      .onConflictDoUpdate({
+        set: {
+          createdAt: sql`CASE WHEN excluded."createdAt" IS NOT NULL THEN excluded."createdAt" ELSE ${clansTable.createdAt} END`,
+          xp: sql`excluded.xp`,
+          name: sql`excluded.name`,
+          updatedAt: new Date(),
+        },
+        target: [clansTable.id],
+      })
+      .execute();
+
+    return clansData;
+  },
+  getClans: async (page: number = 1, limit: number, name?: string) => {
+    const clans = await db
+      .select()
+      .from(clansTable)
+      .orderBy(desc(clansTable.xp))
+      .limit(limit)
+      .offset((page - 1) * limit)
+      .where(name ? like(sql`lower(${clansTable.name})`, `${name.toLowerCase()}%`) : undefined)
+      .execute();
+
+    return clans;
+  }
 };

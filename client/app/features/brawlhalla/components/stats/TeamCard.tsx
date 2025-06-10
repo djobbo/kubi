@@ -6,7 +6,7 @@ import {
   FlagIcon,
   RankedTierBanner,
 } from "@/features/brawlhalla/components/Image"
-import { fixEncoding } from "@dair/common/src/helpers/fix-encoding"
+import { cleanString } from "@dair/common/src/helpers/clean-string"
 import { css } from "@/panda/css"
 import { cn } from "@/ui/lib/utils"
 
@@ -58,7 +58,7 @@ export const TeamCard = ({ playerId, team }: TeamCardProps) => {
               containerClassName="block w-4 h-4 rounded overflow-hidden mr-2"
               className="object-contain object-center"
             />
-            {fixEncoding(playerName)} {"&"} {fixEncoding(teammate.name)}
+            {cleanString(playerName)} {"&"} {cleanString(teammate.name)}
           </span>
         }
       >

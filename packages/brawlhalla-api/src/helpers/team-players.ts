@@ -1,4 +1,4 @@
-import { fixEncoding } from "@dair/common/src/helpers/fix-encoding"
+import { cleanString } from "@dair/common/src/helpers/clean-string"
 
 import type { PlayerRanked } from "../api/schema/player-ranked"
 import type { Ranking2v2 } from "../api/schema/rankings"
@@ -6,7 +6,7 @@ import type { Ranking2v2 } from "../api/schema/rankings"
 export const getTeamPlayers = (
   team: PlayerRanked["2v2"][number] | Ranking2v2,
 ) => {
-  const [player1, player2] = fixEncoding(team.teamname).split("+")
+  const [player1, player2] = cleanString(team.teamname).split("+")
 
   if (!player1 || !player2) return null
 

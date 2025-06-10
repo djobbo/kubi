@@ -1,4 +1,4 @@
-import { fixEncoding } from "@dair/common/src/helpers/fix-encoding"
+import { cleanString } from "@dair/common/src/helpers/clean-string"
 
 import type { PlayerRanked } from "../api/schema/player-ranked"
 import type { PlayerStats } from "../api/schema/player-stats"
@@ -10,13 +10,13 @@ export const getPlayerAliases = (
 ) =>
   [
     ...new Set([
-      fixEncoding(playerStats.name),
+      cleanString(playerStats.name),
       ...(playerRanked?.["2v2"].map((team) => {
         const player = getPlayerTeam(playerRanked.brawlhalla_id, team)
 
         if (!player) return null
 
-        return fixEncoding(player.playerName)
+        return cleanString(player.playerName)
       }) ?? []),
     ]),
   ].filter((alias): alias is string => !!alias)
