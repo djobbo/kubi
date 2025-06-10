@@ -1,12 +1,12 @@
 import { Hono } from 'hono';
-import { brawlhallaService } from '../services/brawlhalla/brawlhalla-service';
-import { brawltoolsService } from '../services/brawltools/brawltools-service';
-import { archiveService } from '../services/archive';
-import { getRegion } from '../services/locate';
-import { getIp } from '../helpers/get-ip';
-import { brawlhallaGqlService } from '../services/brawlhalla-gql/brawlhalla-gql-service';
+import { brawlhallaService } from '../../services/brawlhalla/brawlhalla-service';
+import { brawltoolsService } from '../../services/brawltools/brawltools-service';
+import { archiveService } from '../../services/archive';
+import { getRegion } from '../../services/locate';
+import { getIp } from '../../helpers/get-ip';
+import { brawlhallaGqlService } from '../../services/brawlhalla-gql/brawlhalla-gql-service';
 
-const brawlhallaRoute = new Hono();
+export const brawlhallaRoute = new Hono();
 
 brawlhallaRoute.get('/players/search', async (c) => {
   const { name } = c.req.query();
@@ -98,5 +98,3 @@ brawlhallaRoute.get('/articles/:category?', async (c) => {
   });
   return c.json(articles);
 });
-
-export default brawlhallaRoute;

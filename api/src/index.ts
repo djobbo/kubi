@@ -1,6 +1,5 @@
 import { Hono } from 'hono'
-import brawlhallaRoute from './routes/brawlhalla'
-import { authRoute } from './routes/auth'
+import { v1Route } from './routes/v1'
 
 const app = new Hono()
 
@@ -8,7 +7,6 @@ app.get('/', (c) => {
   return c.text('Welcome to the dair.gg api!')
 })
 
-app.route('/brawlhalla', brawlhallaRoute)
-app.route('/auth', authRoute)
+app.route('/v1', v1Route)
 
 export default app

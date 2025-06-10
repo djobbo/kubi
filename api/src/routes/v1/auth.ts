@@ -1,6 +1,6 @@
 import { Hono } from "hono";
-import { createAuthorizationURL, validateOAuthCallback, createSession, deleteSession } from "../services/auth";
-import { env } from "../env";
+import { createAuthorizationURL, validateOAuthCallback, createSession, deleteSession } from "../../services/auth";
+import { env } from "../../env";
 import { DISCORD_PROVIDER_ID, GOOGLE_PROVIDER_ID, type Provider } from "@dair/schema/src/auth/oauth-accounts";
 
 export const authRoute = new Hono();

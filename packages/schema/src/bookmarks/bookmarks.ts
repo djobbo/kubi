@@ -32,9 +32,9 @@ const metaV1Schema = z
   })
   .nullable();
 
-const metaSchema = metaV1Schema;
+export const metaSchema = metaV1Schema;
 
-type Meta = z.infer<typeof metaSchema>;
+export type Meta = z.infer<typeof metaSchema>;
 
 export const bookmarksTable = sqliteTable(
   'bookmarks',

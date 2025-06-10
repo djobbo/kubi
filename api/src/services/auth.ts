@@ -197,7 +197,11 @@ export async function getSession(c: Context) {
       gt(sessionsTable.expiresAt, new Date())
     ),
     with: {
-      user: true,
+      user: {
+        with: {
+          oauthAccounts: true
+        }
+      },
     },
   });
 
@@ -209,6 +213,8 @@ export async function getSession(c: Context) {
 
   return session;
 }
+
+export type Session = NonNullable<Awaited<ReturnType<typeof getSession>>>;
 
 export async function deleteSession(c: Context) {
   const sessionId = getCookie(c, SESSION_COOKIE);
