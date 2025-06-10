@@ -3,6 +3,8 @@
         "oven.bun-vscode",
         "bradlc.vscode-tailwindcss",
         "styled-components.vscode-styled-components",
-        "mrorz.language-gettext"
+        "mrorz.language-gettext",
+        "ms-azuretools.vscode-docker",
+        "biomejs.biome"
     ]
 }

@@ -6,13 +6,20 @@
   "workspaces": [
     "api",
     "client",
-    "crawler",
     "packages/*"
   ],
+  "scripts": {
+    "check:deadcode": "bun locales:compile && dotenv -e .env.example -- knip-bun",
+    "start": "docker compose -f docker-compose.yml up",
+    "stop": "docker compose -f docker-compose.yml down",
+    "dev": "docker compose -f docker-compose.dev.yml up",
+    "dev:stop": "docker compose -f docker-compose.dev.yml down"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5"
-  }
+  },
+  "packageManager": "bun@1.2.15"
 }

@@ -1,0 +1,39 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URL=/data/sqlite.db
+      - BRAWLHALLA_API_KEY=${BRAWLHALLA_API_KEY}
+    volumes:
+      - sqlite_data:/data
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  client:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    ports:
+      - "3001:3000"
+    environment:
+      - VITE_API_URL=http://api:3000
+    depends_on:
+      - api
+    networks:
+      - app-network
+    restart: unless-stopped
+
+volumes:
+  sqlite_data:
+    name: dair_sqlite_data
+
+networks:
+  app-network:
+    driver: bridge

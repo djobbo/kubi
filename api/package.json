@@ -2,6 +2,7 @@
   "name": "@dair/api",
   "scripts": {
     "dev": "bun run db:migrate && bun run --hot src/index.ts",
+    "start": "bun run db:migrate && bun run src/index.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "bun db:generate && drizzle-kit migrate",
     "studio": "bunx drizzle-kit studio"
@@ -10,8 +11,8 @@
     "@dair/brawlhalla-api": "workspace:*",
     "@dair/brawlhalla-servers": "workspace:*",
     "@dair/schema": "workspace:*",
+    "@libsql/client": "^0.15.9",
     "@t3-oss/env-core": "^0.13.6",
-    "better-sqlite3": "^11.10.0",
     "drizzle-orm": "^0.44.2",
     "hono": "^4.7.11",
     "zod": "^3.25.56"

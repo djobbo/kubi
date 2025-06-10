@@ -3,14 +3,14 @@ import { and, desc, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { db } from '@dair/db';
-import type { User } from '../../../../../db/src/schema/auth/users';
-import { DISCORD_PROVIDER_ID } from '../../../../../db/src/schema/auth/oauth-accounts';
-import { usersTable } from '../../../../../db/src/schema/auth/users';
+import type { User } from '@dair/schema/src/auth/users';
+import { DISCORD_PROVIDER_ID } from '@dair/schema/src/auth/oauth-accounts';
+import { usersTable } from '@dair/schema/src/auth/users';
 import { getSession } from '@/features/auth/functions/getSession';
 import { getOldUserBookmarks } from '~/scripts/migration/bookmarks';
 import { getTempUserId } from '../migration';
-import { bookmarksTable, pageTypeSchema } from '../../../../../db/src/schema/bookmarks/bookmarks';
-import { oauthAccountsTable } from '../../../../../db/src/schema/auth/oauth-accounts';
+import { bookmarksTable, pageTypeSchema } from '@dair/schema/src/bookmarks/bookmarks';
+import { oauthAccountsTable } from '@dair/schema/src/auth/oauth-accounts';
 
 const bookmarksQuerySchema = z.object({
   page: z.number().optional(),

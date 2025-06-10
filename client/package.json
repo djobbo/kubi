@@ -2,21 +2,14 @@
   "name": "@dair/client",
   "module": "index.ts",
   "type": "module",
+  "private": true,
   "scripts": {
-    "dev": "bun dev:up && bun db:migrate && bun locales:compile && bun front:dev",
-    "dev:up": "bun run ./scripts/dev/up.ts",
-    "dev:down": "bun run ./scripts/dev/down.ts",
-    "dev:logs": "bun run ./scripts/dev/logs.ts",
-    "dev:rm": "bun run ./scripts/dev/rm.ts",
-    "build": "bun panda:build && bun locales:compile && bun front:build",
-    "front:dev": "bunx --bun vinxi dev --host",
-    "front:build": "bunx --bun vinxi build",
-    "front:start": "bunx --bun vinxi start --host",
-    "start": "bun db:migrate && bun front:start",
+    "dev": "bun locales:compile && bunx --bun vinxi dev --host",
+    "build": "bun panda:build && bun locales:compile && bunx --bun vinxi build",
+    "start": "bunx --bun vinxi start --host",
     "check:types": "bun locales:compile && tsc --noEmit",
     "lint": "biome check --apply .",
     "check:lint": "biome check .",
-    "check:deadcode": "bun locales:compile && dotenv -e .env.example -- knip-bun",
     "ui": "bunx --bun shadcn@latest",
     "pwa:assets": "pwa-assets-generator",
     "locales:extract": "lingui extract --clean",
@@ -53,6 +46,7 @@
   "dependencies": {
     "@dair/common": "workspace:*",
     "@dair/brawlhalla-api": "workspace:*",
+    "@dair/schema": "workspace:*",
     "@icons-pack/react-simple-icons": "^12.9.0",
     "@lingui/core": "^5.3.2",
     "@lingui/react": "^5.3.2",
@@ -97,7 +91,5 @@
     "vinxi": "^0.5.6",
     "zod": "^3.25.56",
     "zustand": "^5.0.5"
-  },
-  "packageManager": "bun@1.2.9",
-  "private": true
+  }
 }
