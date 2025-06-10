@@ -5,11 +5,28 @@ import { archiveService } from '../../services/archive';
 import { getRegion } from '../../services/locate';
 import { getIp } from '../../helpers/get-ip';
 import { brawlhallaGqlService } from '../../services/brawlhalla-gql/brawlhalla-gql-service';
+import { describeRoute } from 'hono-openapi';
+import { resolver, validator } from 'hono-openapi/zod';
+import { z } from 'zod';
 
 export const brawlhallaRoute = new Hono();
 
-brawlhallaRoute.get('/players/search', async (c) => {
-  const { name } = c.req.query();
+brawlhallaRoute.get('/players/search', describeRoute({
+  description: 'Search for a player',
+  responses: {
+    200: {
+      description: 'Successful response',
+      content: {
+        'application/json': { schema: resolver(z.any()) },
+      },
+    },
+  },
+}),
+validator('query', z.object({
+  name: z.string(),
+})),
+async (c) => {
+  const { name } = c.req.valid('query');
   const aliases = await archiveService.searchAliases(name);
   return c.json(aliases);
 });
