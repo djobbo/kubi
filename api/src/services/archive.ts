@@ -7,6 +7,7 @@ import { clansTable, type NewArchivedClan } from '@dair/schema';
 
 const MIN_ALIAS_SEARCH_LENGTH = 3
 const MAX_ALIASES_PER_PLAYER = 10
+export const CLANS_RANKINGS_PER_PAGE = 50;
 
 export const dedupeAndCleanAliases = (aliases: NewAlias[]) => {
     const dedupedAliases = aliases.reduce((acc, alias) => {
@@ -166,7 +167,7 @@ export const archiveService = {
 
     return clansData;
   },
-  getClans: async (page: number = 1, limit: number, name?: string) => {
+  getClans: async ({page = 1, limit = CLANS_RANKINGS_PER_PAGE, name}: {page: number, limit: number, name?: string}) => {
     const clans = await db
       .select()
       .from(clansTable)
