@@ -1,5 +1,8 @@
 import { Hono } from 'hono'
 import { v1Route } from './routes/v1'
+import { openAPISpecs } from 'hono-openapi'
+import { env } from './env'
+import { swaggerUI } from '@hono/swagger-ui'
 
 const app = new Hono()
 
@@ -8,5 +11,24 @@ app.get('/', (c) => {
 })
 
 app.route('/v1', v1Route)
+
+app.get('/openapi', openAPISpecs(app, {
+    documentation: {
+      info: {
+        title: 'dair.gg API',
+        version: '1.0.0',
+        description: 'dair.gg API',
+      },
+      servers: [
+        { url: env.API_URL, description: 'dair.gg' },
+      ],
+    },
+  })
+)
+
+app.get('/ui', swaggerUI({
+  url: '/openapi',
+  title: 'dair.gg API',
+}))
 
 export default app

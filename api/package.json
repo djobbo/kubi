@@ -11,6 +11,7 @@
     "@dair/brawlhalla-api": "workspace:*",
     "@dair/brawlhalla-servers": "workspace:*",
     "@dair/schema": "workspace:*",
+    "@hono/swagger-ui": "^0.5.2",
     "@hono/zod-validator": "^0.7.0",
     "@libsql/client": "^0.15.9",
     "@t3-oss/env-core": "^0.13.6",
