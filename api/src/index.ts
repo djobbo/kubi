@@ -8,34 +8,31 @@ import { collectMetrics } from "./metrics"
 import { v1Route } from "./routes/v1"
 
 const app = new Hono()
+	.use("*", async (c, next) => {
+		const start = Date.now()
+		await next()
+		const duration = Date.now() - start
+		const status = c.res.status
+		const method = c.req.method
+		const path = c.req.path
 
-app.use("*", async (c, next) => {
-	const start = Date.now()
-	await next()
-	const duration = Date.now() - start
-	const status = c.res.status
-	const method = c.req.method
-	const path = c.req.path
+		collectMetrics(method, path, status, duration)
 
-	collectMetrics(method, path, status, duration)
-
-	logger.info(
-		{
-			method,
-			path,
-			status,
-			duration,
-		},
-		`${method} ${path} ${status} ${duration}ms`,
-	)
-})
-
-app.get("/", (c) => {
-	logger.info("Root endpoint accessed")
-	return c.text("Welcome to the dair.gg api!")
-})
-
-app.route("/v1", v1Route)
+		logger.info(
+			{
+				method,
+				path,
+				status,
+				duration,
+			},
+			`${method} ${path} ${status} ${duration}ms`,
+		)
+	})
+	.get("/", (c) => {
+		logger.info("Root endpoint accessed")
+		return c.text("Welcome to the dair.gg api!")
+	})
+	.route("/v1", v1Route)
 
 app.get(
 	"/openapi",
@@ -59,10 +56,11 @@ app.get(
 	}),
 )
 
-// Add metrics endpoint for Prometheus
 app.get("/metrics", async (c) => {
 	c.header("Content-Type", register.contentType)
 	return c.text(await register.metrics())
 })
 
 export default app
+
+export type App = typeof app

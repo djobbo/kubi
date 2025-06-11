@@ -26,7 +26,7 @@ COPY --from=build /app/packages ./packages
 COPY --from=build /app/api ./api
 COPY --from=build /app/client/public ./client/public
 COPY --from=build /app/client/package.json ./client/
-COPY --from=build /app/client/.vinxi ./client/.vinxi
+COPY --from=build /app/client/.output ./client/.output
 
 # Install only production dependencies
 RUN bun install --frozen-lockfile --production

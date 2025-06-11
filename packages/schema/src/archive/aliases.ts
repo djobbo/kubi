@@ -7,6 +7,7 @@ import {
 } from "drizzle-orm/sqlite-core"
 import { createInsertSchema } from "drizzle-zod"
 import type { z } from "zod"
+import { withTimestamp } from '../helpers/with-timestamp'
 
 export const aliasesTable = sqliteTable(
 	"aliases",
@@ -14,13 +15,8 @@ export const aliasesTable = sqliteTable(
 		id: integer("id").primaryKey({ autoIncrement: true }),
 		alias: text("alias").notNull(),
 		playerId: text("player_id").notNull(),
-		createdAt: integer("createdAt", { mode: "timestamp_ms" })
-			.notNull()
-			.default(sql`(unixepoch() * 1000)`),
-		updatedAt: integer("updatedAt", { mode: "timestamp_ms" })
-			.notNull()
-			.default(sql`(unixepoch() * 1000)`),
 		public: integer("public", { mode: "boolean" }).notNull().default(true),
+		...withTimestamp,
 	},
 	(table) => [uniqueIndex("unique_alias").on(table.playerId, table.alias)],
 )

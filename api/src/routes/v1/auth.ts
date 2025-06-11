@@ -13,47 +13,44 @@ import {
 } from "../../services/auth"
 
 export const authRoute = new Hono()
+	.get("/login/:provider", async (c) => {
+		const provider = c.req.param("provider") as Provider
+		if (provider !== GOOGLE_PROVIDER_ID && provider !== DISCORD_PROVIDER_ID) {
+			return c.json({ error: "Invalid provider" }, 400)
+		}
 
-authRoute.get("/login/:provider", async (c) => {
-	const provider = c.req.param("provider") as Provider
-	if (provider !== GOOGLE_PROVIDER_ID && provider !== DISCORD_PROVIDER_ID) {
-		return c.json({ error: "Invalid provider" }, 400)
-	}
+		const url = createAuthorizationURL(provider)
+		return c.redirect(url)
+	})
+	.get("/callback/:provider", async (c) => {
+		const provider = c.req.param("provider") as Provider
+		if (provider !== GOOGLE_PROVIDER_ID && provider !== DISCORD_PROVIDER_ID) {
+			return c.json({ error: "Invalid provider" }, 400)
+		}
 
-	const url = createAuthorizationURL(provider)
-	return c.redirect(url)
-})
+		const code = c.req.query("code")
+		const state = c.req.query("state")
 
-authRoute.get("/callback/:provider", async (c) => {
-	const provider = c.req.param("provider") as Provider
-	if (provider !== GOOGLE_PROVIDER_ID && provider !== DISCORD_PROVIDER_ID) {
-		return c.json({ error: "Invalid provider" }, 400)
-	}
+		if (!code) {
+			return c.json({ error: "Missing code" }, 400)
+		}
 
-	const code = c.req.query("code")
-	const state = c.req.query("state")
+		if (!state) {
+			return c.json({ error: "Missing state" }, 400)
+		}
 
-	if (!code) {
-		return c.json({ error: "Missing code" }, 400)
-	}
+		try {
+			const user = await validateOAuthCallback(provider, code)
+			await createSession(c, user.id)
 
-	if (!state) {
-		return c.json({ error: "Missing state" }, 400)
-	}
-
-	try {
-		const user = await validateOAuthCallback(provider, code)
-		await createSession(c, user.id)
-
-		// Redirect to the frontend
-		return c.redirect(env.FRONTEND_URL)
-	} catch (error) {
-		console.error("Auth callback error:", error)
-		return c.json({ error: "Authentication failed" }, 500)
-	}
-})
-
-authRoute.get("/logout", async (c) => {
-	await deleteSession(c)
-	return c.json({ success: true })
-})
+			// Redirect to the frontend
+			return c.redirect(env.FRONTEND_URL)
+		} catch (error) {
+			console.error("Auth callback error:", error)
+			return c.json({ error: "Authentication failed" }, 500)
+		}
+	})
+	.get("/logout", async (c) => {
+		await deleteSession(c)
+		return c.json({ success: true })
+	})

@@ -4,7 +4,6 @@ import { bookmarksRoute } from "./bookmarks"
 import { brawlhallaRoute } from "./brawlhalla"
 
 export const v1Route = new Hono()
-
-v1Route.route("/auth", authRoute)
-v1Route.route("/bookmarks", bookmarksRoute)
-v1Route.route("/brawlhalla", brawlhallaRoute)
+	.route("/auth", authRoute)
+	.route("/bookmarks", bookmarksRoute)
+	.route("/brawlhalla", brawlhallaRoute)

@@ -1,7 +1,7 @@
 import { cleanString } from "@dair/common/src/helpers/clean-string"
 import { type NewArchivedClan, clansTable } from "@dair/schema"
 import { type NewAlias, aliasesTable } from "@dair/schema/src/archive/aliases"
-import { and, desc, eq, inArray, like, sql } from "drizzle-orm"
+import { and, count, desc, eq, inArray, like, sql } from "drizzle-orm"
 import { db } from "../db"
 import { brawlhallaService } from "./brawlhalla"
 
@@ -197,7 +197,18 @@ export const archiveService = {
 		limit = CLANS_RANKINGS_PER_PAGE,
 		name,
 	}: { page?: number; limit?: number; name?: string }) => {
-		const clans = await db
+		const clansTransaction = db.transaction(async (tx) => {
+		const total = await tx
+			.select({ count: count() })
+			.from(clansTable)
+			.where(
+				name
+					? like(sql`lower(${clansTable.name})`, `${name.toLowerCase()}%`)
+					: undefined,
+			)
+			.execute()
+
+		const clans = await tx
 			.select()
 			.from(clansTable)
 			.orderBy(desc(clansTable.xp))
@@ -208,8 +219,17 @@ export const archiveService = {
 					? like(sql`lower(${clansTable.name})`, `${name.toLowerCase()}%`)
 					: undefined,
 			)
-			.execute()
+				.execute()
 
-		return clans
+			return {
+				search: name,
+				clans,
+				total: total[0]?.count ?? null,
+				perPage: limit,
+				page,
+			}
+		})
+
+		return clansTransaction
 	},
 }

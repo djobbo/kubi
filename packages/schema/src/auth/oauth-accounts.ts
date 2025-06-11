@@ -1,6 +1,7 @@
-import { relations, sql } from "drizzle-orm"
+import { relations } from "drizzle-orm"
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core"
 import { usersTable } from "./users"
+import { withExpiry, withTimestamp } from '../helpers/with-timestamp'
 
 export const DISCORD_PROVIDER_ID = "discord"
 export const GOOGLE_PROVIDER_ID = "google"
@@ -17,13 +18,8 @@ export const oauthAccountsTable = sqliteTable("oauth_accounts", {
 	providerUserId: text("provider_user_id").notNull(),
 	accessToken: text("access_token").notNull(),
 	refreshToken: text("refresh_token"),
-	expiresAt: integer("expires_at", { mode: "timestamp" }),
-	createdAt: integer("created_at", { mode: "timestamp" })
-		.notNull()
-		.default(sql`(unixepoch())`),
-	updatedAt: integer("updated_at", { mode: "timestamp" })
-		.notNull()
-		.default(sql`(unixepoch())`),
+	...withTimestamp,
+	...withExpiry,
 })
 
 export type OAuthAccount = typeof oauthAccountsTable.$inferSelect

@@ -1,5 +1,7 @@
 {
 	"name": "@dair/api",
+	"type": "module",
+	"types": "./src/index.ts",
 	"scripts": {
 		"dev": "bun run db:migrate && bun run --hot src/index.ts",
 		"start": "bun run db:migrate && bun run src/index.ts",

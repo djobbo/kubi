@@ -1,32 +1,46 @@
 {
 	"include": [
-		"**/*.ts",
-		"**/*.tsx",
-		"drizzle.config.js",
-		"tailwind.config.js",
-		"postcss.config.js",
-		"prettier.config.js"
+		"src/**/*.ts",
+		"src/**/*.tsx",
+		"lingui.config.ts",
+		"vite.config.ts",
+		"pwa-assets.config.ts"
 	],
 	"compilerOptions": {
-		"lib": ["ESNext", "DOM", "DOM.Iterable"],
-		"module": "ESNext",
-		"moduleResolution": "Bundler",
-		"strict": true,
-		"esModuleInterop": true,
-		"jsx": "react-jsx",
-		"isolatedModules": true,
-		"resolveJsonModule": true,
-		"skipLibCheck": true,
 		"target": "ES2022",
-		"allowJs": true,
-		"forceConsistentCasingInFileNames": true,
+		"jsx": "react-jsx",
+		"module": "ESNext",
+		"lib": [
+			"ES2022",
+			"DOM",
+			"DOM.Iterable"
+		],
+		"types": [
+			"vite/client"
+		],
+		/* Bundler mode */
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"verbatimModuleSyntax": true,
+		"noEmit": true,
+		/* Linting */
+		"skipLibCheck": true,
+		"strict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
 		"noFallthroughCasesInSwitch": true,
+		"noUncheckedSideEffectImports": true,
 		"baseUrl": ".",
 		"paths": {
-			"@/panda/*": ["./styled-system/*"],
-			"@/*": ["./app/*"],
-			"~/*": ["./*"]
-		},
-		"noEmit": true
+			"@/panda/*": [
+				"./styled-system/*"
+			],
+			"@/*": [
+				"./src/*"
+			],
+			"~/*": [
+				"./*"
+			]
+		}
 	}
 }

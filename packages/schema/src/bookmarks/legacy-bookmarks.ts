@@ -12,6 +12,7 @@ import {
 	pageTypeEnum,
 	pageTypeSchema,
 } from "./bookmarks"
+import { withTimestamp } from '../helpers/with-timestamp'
 
 export const legacyBookmarksTable = sqliteTable(
 	"legacy_bookmarks",
@@ -22,9 +23,7 @@ export const legacyBookmarksTable = sqliteTable(
 		name: text("name").notNull(),
 		meta: text("meta", { mode: "json" }).$type<Meta>(),
 		discordId: text("discord_id").notNull(),
-		createdAt: integer("createdAt", { mode: "timestamp_ms" })
-			.notNull()
-			.defaultNow(),
+		...withTimestamp,
 	},
 	(table) => [
 		uniqueIndex("unique_legacy_bookmark").on(

@@ -15,8 +15,8 @@ const config = {
 	},
 	catalogs: [
 		{
-			path: "<rootDir>/app/locales/{locale}/messages",
-			include: ["app"],
+			path: "<rootDir>/src/locales/{locale}/messages",
+			include: ["src"],
 		},
 	],
 	format: "po",

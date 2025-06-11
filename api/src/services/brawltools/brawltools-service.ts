@@ -11,6 +11,8 @@ import {
 import { PowerRankingsRegion } from "@dair/brawlhalla-api/src/constants/power/regions"
 import { typesafeFetch } from "../../helpers/typesafe-fetch"
 import { powerRankingsMock } from "./mocks"
+import { env } from '../../env'
+import { withCache } from '../../helpers/with-cache'
 
 const BRAWLTOOLS_API_URL = "https://api.brawltools.com"
 const MAX_RESULTS = 50
@@ -24,20 +26,26 @@ const DEFAULT_ORDER: PowerRankingsOrder = PowerRankingsOrder.Desc
 const DEFAULT_GAME_MODE: PowerRankedGameMode = PowerRankingsGameMode.Power1v1
 
 export const brawltoolsService = {
-	getPowerRankings: ({
+	getPowerRankings: async ({
 		region = DEFAULT_REGION,
 		page = DEFAULT_PAGE,
 		orderBy = DEFAULT_ORDER_BY,
 		order = DEFAULT_ORDER,
 		gameMode = DEFAULT_GAME_MODE,
+		search = ''
 	}: {
 		region?: string
 		page?: number
 		orderBy?: PowerRankingsOrderBy
 		order?: PowerRankingsOrder
 		gameMode?: PowerRankedGameMode
+		search?: string
 	}) =>
-		fetchBrawltoolsApi(
+		{
+
+			const fetchPowerRankings = async () => {
+
+			const data = await fetchBrawltoolsApi(
 			{
 				path: "/pr",
 				schema: powerRankingsSchema,
@@ -49,10 +57,22 @@ export const brawltoolsService = {
 					orderBy: `${orderBy} ${order}`,
 					page,
 					region,
-					query: null,
+					query: search || null,
 					maxResults: MAX_RESULTS,
 				}),
 				method: "POST",
 			},
-		),
+		)
+
+		return data
+	}
+
+	const {data: rankings, updatedAt} = await withCache(
+		`brawlhalla-power-rankings-${gameMode}-${region}-${page}-${orderBy}-${order}-${search}`,
+		fetchPowerRankings,
+		env.CACHE_MAX_AGE_OVERRIDE ?? (search ? 5 * 60 * 1000 : 60 * 60 * 1000),
+	)
+
+	return {rankings, page, gameMode, region, orderBy, order, updatedAt, search}
+	}
 }

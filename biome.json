@@ -7,7 +7,14 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"ignore": [".turbo", "dist", "node_modules", ".vinxi"],
+		"ignore": [
+			".turbo",
+			"dist",
+			"node_modules",
+			".vinxi",
+			"assetsTree.gen.ts",
+			"routeTree.gen.ts"
+		],
 		"include": ["./*"]
 	},
 	"formatter": {

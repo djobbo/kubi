@@ -48,7 +48,7 @@ export const withCache = async <T>(
 		)
 
 		// TODO: Use validator?
-		return { data: cached.data as T, createdAt: cached.createdAt }
+		return { data: cached.data as T, updatedAt: cached.createdAt }
 	}
 
 	logger.info(
@@ -74,7 +74,7 @@ export const withCache = async <T>(
 			},
 			"Failed to fetch data from API",
 		)
-		if (cached) return { data: cached.data as T, createdAt: cached.createdAt }
+		if (cached) return { data: cached.data as T, updatedAt: cached.createdAt }
 		throw error
 	}
 
@@ -88,5 +88,5 @@ export const withCache = async <T>(
 		})
 		.onConflictDoNothing()
 
-	return { data, createdAt: new Date() }
+	return { data, updatedAt: new Date() }
 }
