@@ -4,7 +4,7 @@ import { z } from "zod"
 export const env = createEnv({
 	server: {
 		BRAWLHALLA_API_KEY: z.string().min(1),
-		USE_MOCKS: z.optional(
+		USE_MOCK_DATA: z.optional(
 			z
 				.string()
 				.refine((s) => s === "true" || s === "false")

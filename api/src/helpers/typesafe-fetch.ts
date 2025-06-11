@@ -20,7 +20,7 @@ export const typesafeFetch =
 			}
 		}
 
-		if (env.USE_MOCKS && mock) return mock
+		if (env.USE_MOCK_DATA && mock) return mock
 
 		const response = await fetch(url, options)
 

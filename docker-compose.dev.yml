@@ -7,12 +7,20 @@ services:
       dockerfile: api/Dockerfile
       target: dependencies
     ports:
-      - "3000:3000"
+      - "${API_PORT:-3000}:3000"
     environment:
       - NODE_ENV=development
-      - PORT=3000
       - DATABASE_URL=/data/sqlite.db
       - BRAWLHALLA_API_KEY=${BRAWLHALLA_API_KEY}
+      - USE_MOCK_DATA=${USE_MOCK_DATA:-false}
+      - CACHE_MAX_AGE_OVERRIDE=${CACHE_MAX_AGE_OVERRIDE}
+      - CACHE_VERSION=${CACHE_VERSION}
+      - API_URL=${API_URL}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
+      - DISCORD_CLIENT_SECRET=${DISCORD_CLIENT_SECRET}
+      - AUTH_SECRET=${AUTH_SECRET}
     volumes:
       - sqlite_data:/data
       - .:/app
@@ -20,6 +28,11 @@ services:
     command: ["sh", "-c", "cd api && bun dev"]
     networks:
       - app-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   client:
     env_file:
@@ -29,7 +42,7 @@ services:
       dockerfile: client/Dockerfile
       target: dependencies
     ports:
-      - "3001:3000"
+      - "${CLIENT_PORT:-3001}:3000"
     environment:
       - NODE_ENV=development
       - VITE_API_URL=http://api:3000
@@ -39,6 +52,98 @@ services:
     command: ["sh", "-c", "cd client && bun dev"]
     networks:
       - app-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "${PROMETHEUS_PORT:-9090}:9090"
+    volumes:
+      - ./monitoring/prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "${GRAFANA_PORT:-3002}:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    networks:
+      - app-network
+    depends_on:
+      - prometheus
+      - loki
+    restart: unless-stopped
+
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "${LOKI_PORT:-3100}:3100"
+    volumes:
+      - ./monitoring/loki:/etc/loki
+      - ./monitoring/loki/rules:/etc/loki/rules
+      - loki_data:/loki
+    command: -config.file=/etc/loki/loki-config.yml
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  promtail:
+    image: grafana/promtail:latest
+    volumes:
+      - ./monitoring/promtail:/etc/promtail
+      - /var/log:/var/log
+    command: -config.file=/etc/promtail/promtail-config.yml
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    ports:
+      - "${NODE_EXPORTER_PORT:-9100}:9100"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    ports:
+      - "${CADVISOR_PORT:-8080}:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    networks:
+      - app-network
+    restart: unless-stopped
 
 networks:
   app-network:
@@ -49,3 +154,6 @@ volumes:
   client_node_modules:
   sqlite_data:
     name: dair_sqlite_data
+  prometheus_data:
+  grafana_data:
+  loki_data:

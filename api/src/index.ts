@@ -1,12 +1,37 @@
 import { swaggerUI } from "@hono/swagger-ui"
 import { Hono } from "hono"
 import { openAPISpecs } from "hono-openapi"
+import { register } from "prom-client"
 import { env } from "./env"
+import { logger } from "./helpers/logger"
+import { collectMetrics } from "./metrics"
 import { v1Route } from "./routes/v1"
 
 const app = new Hono()
 
+app.use("*", async (c, next) => {
+	const start = Date.now()
+	await next()
+	const duration = Date.now() - start
+	const status = c.res.status
+	const method = c.req.method
+	const path = c.req.path
+
+	collectMetrics(method, path, status, duration)
+
+	logger.info(
+		{
+			method,
+			path,
+			status,
+			duration,
+		},
+		`${method} ${path} ${status} ${duration}ms`,
+	)
+})
+
 app.get("/", (c) => {
+	logger.info("Root endpoint accessed")
 	return c.text("Welcome to the dair.gg api!")
 })
 
@@ -33,5 +58,11 @@ app.get(
 		title: "dair.gg API",
 	}),
 )
+
+// Add metrics endpoint for Prometheus
+app.get("/metrics", async (c) => {
+	c.header("Content-Type", register.contentType)
+	return c.text(await register.metrics())
+})
 
 export default app

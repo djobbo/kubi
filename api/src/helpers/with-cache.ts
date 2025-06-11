@@ -3,6 +3,7 @@ import { desc, eq } from "drizzle-orm"
 import { apiCacheTable } from "@dair/schema/src/cache/api-cache"
 import { db } from "../db"
 import { env } from "../env"
+import { logger } from "../helpers/logger"
 
 export const DEFAULT_CACHE_MAX_AGE = 15 * 60 * 1000
 
@@ -35,16 +36,30 @@ export const withCache = async <T>(
 		.limit(1)
 
 	if (cached && isValidCache(cached, maxAge)) {
-		console.log("Cache hit", cacheName)
+		logger.info(
+			{
+				cacheName,
+				cacheId: cached.cacheId,
+				createdAt: cached.createdAt,
+				version: cached.version,
+				cacheHit: true,
+			},
+			"Cache hit",
+		)
 
 		// TODO: Use validator?
 		return { data: cached.data as T, createdAt: cached.createdAt }
 	}
 
-	console.log(
+	logger.info(
+		{
+			cacheName,
+			cacheId: cached?.cacheId,
+			createdAt: cached?.createdAt,
+			version: cached?.version,
+			cacheHit: false,
+		},
 		"Cache miss, fetching data from API",
-		cacheName,
-		cached && { createdAt: cached.createdAt, version: cached.version },
 	)
 
 	let data: T
@@ -52,7 +67,13 @@ export const withCache = async <T>(
 	try {
 		data = await fn()
 	} catch (error) {
-		console.error("Failed to fetch data from API", cacheName, error)
+		logger.error(
+			{
+				cacheName,
+				error,
+			},
+			"Failed to fetch data from API",
+		)
 		if (cached) return { data: cached.data as T, createdAt: cached.createdAt }
 		throw error
 	}

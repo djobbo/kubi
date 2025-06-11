@@ -1,5 +1,6 @@
 import { legends } from "@dair/brawlhalla-api/src/constants/legends"
 import { load as loadHtml } from "cheerio"
+import { logger } from "../../../helpers/logger"
 
 export const parseWeeklyRotation = (content?: string) => {
 	if (!content) return []
@@ -17,20 +18,17 @@ export const parseWeeklyRotation = (content?: string) => {
 		.first()
 
 	if (legendsList.length < 1) {
-		// TODO: logger
-		// logError("getWeeklyRotation", "Could not find legends list")
-		console.error("getWeeklyRotation", "Could not find legends list")
+		logger.error(
+			{
+				legendsListLength: legendsList.length,
+			},
+			"Weekly rotation - Could not find legends list",
+		)
 		return []
 	}
 
 	// Select all list items within the <ul> following the found paragraph
 	const legendsListItems = legendsList.find("li")
-	// TODO: logger
-	// logInfo("getWeeklyRotation", `Found ${legendsListItems.length} list items`)
-	console.log(
-		"getWeeklyRotation",
-		`Found ${legendsListItems.length} list items`,
-	)
 
 	// Extract the legend names
 	const weeklyRotation = legendsListItems
@@ -43,6 +41,15 @@ export const parseWeeklyRotation = (content?: string) => {
 			return legend
 		})
 		.get()
+		.filter((legend) => !!legend)
+
+	logger.info(
+		{
+			rotationLength: legendsListItems.length,
+			rotation: weeklyRotation.map((legend) => legend.bio_name),
+		},
+		"Weekly rotation - Found",
+	)
 
 	return weeklyRotation
 }
