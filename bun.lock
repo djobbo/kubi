@@ -135,6 +135,15 @@
         "typescript": "^5",
       },
     },
+    "packages/brawlhalla-replays": {
+      "name": "@dair/brawlhalla-replays",
+      "devDependencies": {
+        "@types/bun": "latest",
+      },
+      "peerDependencies": {
+        "typescript": "^5",
+      },
+    },
     "packages/brawlhalla-servers": {
       "name": "@dair/brawlhalla-servers",
       "dependencies": {
@@ -419,6 +428,8 @@
     "@dair/api": ["@dair/api@workspace:api"],
 
     "@dair/brawlhalla-api": ["@dair/brawlhalla-api@workspace:packages/brawlhalla-api"],
+
+    "@dair/brawlhalla-replays": ["@dair/brawlhalla-replays@workspace:packages/brawlhalla-replays"],
 
     "@dair/brawlhalla-servers": ["@dair/brawlhalla-servers@workspace:packages/brawlhalla-servers"],
 
