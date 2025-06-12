@@ -28,23 +28,6 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  client:
-    build:
-      context: .
-      dockerfile: client/Dockerfile
-    ports:
-      - "${CLIENT_PORT:-3001}:3000"
-    environment:
-      - VITE_API_URL=http://api:3000
-    networks:
-      - app-network
-    restart: unless-stopped
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-
   prometheus:
     image: prom/prometheus:latest
     ports:

@@ -3,11 +3,17 @@
 	"module": "index.ts",
 	"type": "module",
 	"private": true,
-	"workspaces": ["api", "client", "packages/*"],
+	"workspaces": [
+		"api",
+		"client",
+		"packages/*"
+	],
 	"scripts": {
 		"check:deadcode": "bun locales:compile && dotenv -e .env.example -- knip-bun",
-		"start": "docker compose -f docker-compose.yml up --build",
-		"stop": "docker compose -f docker-compose.yml down",
+		"start:server": "docker compose -f docker-compose.server.yml up --build",
+		"stop:server": "docker compose -f docker-compose.server.yml down",
+		"start:client": "docker compose -f docker-compose.client.yml up --build",
+		"stop:client": "docker compose -f docker-compose.client.yml down",
 		"dev": "docker compose -f docker-compose.dev.yml up --build",
 		"dev:stop": "docker compose -f docker-compose.dev.yml down",
 		"lint": "biome check --write",
