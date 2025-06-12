@@ -1,4 +1,4 @@
-CREATE TABLE `aliases` (
+CREATE TABLE IF NOT EXISTS `aliases` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`alias` text NOT NULL,
 	`player_id` text NOT NULL,
@@ -7,8 +7,8 @@ CREATE TABLE `aliases` (
 	`updated_at` integer DEFAULT (unixepoch() * 1000) NOT NULL
 );
 --> statement-breakpoint
-CREATE UNIQUE INDEX `unique_alias` ON `aliases` (`player_id`,`alias`);--> statement-breakpoint
-CREATE TABLE `clans` (
+CREATE UNIQUE INDEX IF NOT EXISTS `unique_alias` ON `aliases` (`player_id`,`alias`);--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS `clans` (
 	`clan_id` text PRIMARY KEY NOT NULL,
 	`name` text NOT NULL,
 	`clan_created_at` integer,
@@ -17,7 +17,7 @@ CREATE TABLE `clans` (
 	`updated_at` integer DEFAULT (unixepoch() * 1000) NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE `oauth_accounts` (
+CREATE TABLE IF NOT EXISTS `oauth_accounts` (
 	`id` text PRIMARY KEY NOT NULL,
 	`user_id` text NOT NULL,
 	`provider` text NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE `oauth_accounts` (
 	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE TABLE `sessions` (
+CREATE TABLE IF NOT EXISTS `sessions` (
 	`id` text PRIMARY KEY NOT NULL,
 	`user_id` text NOT NULL,
 	`created_at` integer DEFAULT (unixepoch() * 1000) NOT NULL,
@@ -39,7 +39,7 @@ CREATE TABLE `sessions` (
 	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE TABLE `users` (
+CREATE TABLE IF NOT EXISTS `users` (
 	`id` text PRIMARY KEY NOT NULL,
 	`email` text NOT NULL,
 	`username` text NOT NULL,
@@ -48,8 +48,8 @@ CREATE TABLE `users` (
 	`updated_at` integer DEFAULT (unixepoch() * 1000) NOT NULL
 );
 --> statement-breakpoint
-CREATE UNIQUE INDEX `users_email_unique` ON `users` (`email`);--> statement-breakpoint
-CREATE TABLE `bookmarks` (
+CREATE UNIQUE INDEX IF NOT EXISTS `users_email_unique` ON `users` (`email`);--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS `bookmarks` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`page_type` text NOT NULL,
 	`page_id` text NOT NULL,
@@ -61,8 +61,8 @@ CREATE TABLE `bookmarks` (
 	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
-CREATE UNIQUE INDEX `unique_bookmark` ON `bookmarks` (`user_id`,`page_type`,`page_id`);--> statement-breakpoint
-CREATE TABLE `legacy_bookmarks` (
+CREATE UNIQUE INDEX IF NOT EXISTS `unique_bookmark` ON `bookmarks` (`user_id`,`page_type`,`page_id`);--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS `legacy_bookmarks` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`page_type` text NOT NULL,
 	`page_id` text NOT NULL,
@@ -73,8 +73,8 @@ CREATE TABLE `legacy_bookmarks` (
 	`updated_at` integer DEFAULT (unixepoch() * 1000) NOT NULL
 );
 --> statement-breakpoint
-CREATE UNIQUE INDEX `unique_legacy_bookmark` ON `legacy_bookmarks` (`discord_id`,`page_type`,`page_id`);--> statement-breakpoint
-CREATE TABLE `api-cache` (
+CREATE UNIQUE INDEX IF NOT EXISTS `unique_legacy_bookmark` ON `legacy_bookmarks` (`discord_id`,`page_type`,`page_id`);--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS `api-cache` (
 	`cacheName` text NOT NULL,
 	`cacheId` text PRIMARY KEY NOT NULL,
 	`data` text,

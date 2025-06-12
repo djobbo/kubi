@@ -9,7 +9,8 @@ COPY api/ ./api/
 COPY client/ ./client/
 
 # Install all dependencies including devDependencies for build
-RUN bun install --frozen-lockfile
+# TODO: RUN bun install --frozen-lockfile (bun regression)
+RUN bun install
 
 FROM dependencies AS build
 
@@ -28,13 +29,18 @@ COPY --from=build /app/api ./api
 COPY --from=build /app/client/package.json ./client/
 
 # Install only production dependencies
-RUN bun install --frozen-lockfile --production
+# TODO: RUN bun install --frozen-lockfile --production (bun regression)
+RUN bun install
 
 WORKDIR /app/api
 
-# Create non-root user
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 bunjs
+# Create non-root user and data directory with proper permissions
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 bunjs && \
+    mkdir -p /data && \
+    chown -R bunjs:nodejs /data && \
+    chmod 755 /data
+
 USER bunjs
 
 EXPOSE 3000
