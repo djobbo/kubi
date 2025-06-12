@@ -6,10 +6,10 @@ import { z } from "zod"
 import { LegendIcon } from "@/features/brawlhalla/components/Image"
 import { RankingsTableItem } from "@/features/brawlhalla/components/stats/RankingsTableItem"
 import { RankingsLayout } from "@/features/brawlhalla/components/stats/rankings/RankingsLayout"
+import { useDebouncedState } from "@/hooks/useDebouncedState"
 import { legendsMap } from "@dair/brawlhalla-api/src/constants/legends"
 import { cleanString } from "@dair/common/src/helpers/clean-string"
 import { seo } from "@dair/common/src/helpers/seo"
-import { useDebouncedState } from '@/hooks/useDebouncedState'
 
 export const Route = createFileRoute("/rankings/1v1/$")({
 	component: RouteComponent,
@@ -20,15 +20,21 @@ export const Route = createFileRoute("/rankings/1v1/$")({
 			})
 			.parse(search),
 	loaderDeps: ({ search: { player } }) => ({ player }),
-	loader: async ({params: { _splat }, deps: { player }, context: {apiClient} }) => {
+	loader: async ({
+		params: { _splat },
+		deps: { player },
+		context: { apiClient },
+	}) => {
 		const [region, page = "1"] = _splat?.split("/") ?? []
-		const {data: rankings, updatedAt} = await apiClient.brawlhalla.get1v1Rankings({
-			param: {
-				page,
-				region,
-			},
-			query: { name: player },
-		}).then((res) => res.json())
+		const { data: rankings, updatedAt } = await apiClient.brawlhalla
+			.get1v1Rankings({
+				param: {
+					page,
+					region,
+				},
+				query: { name: player },
+			})
+			.then((res) => res.json())
 
 		return {
 			rankings,
@@ -56,15 +62,10 @@ export const Route = createFileRoute("/rankings/1v1/$")({
 })
 
 function RouteComponent() {
-	const {
-		player,
-		region,
-		page,
-		rankings,
-	} = Route.useLoaderData()
+	const { player, region, page, rankings } = Route.useLoaderData()
 	const [search, setSearch, immediateSearch] = useDebouncedState(
-	  player ?? "",
-	  500,
+		player ?? "",
+		500,
 	)
 
 	return (
@@ -129,7 +130,7 @@ function RouteComponent() {
 			<div className="rounded-lg overflow-hidden border border-border mb-4 flex flex-col">
 				{rankings
 					.filter((player) =>
-					  player.name.toLowerCase().startsWith(immediateSearch),
+						player.name.toLowerCase().startsWith(immediateSearch),
 					)
 					.map((player, i) => {
 						const legend = legendsMap[player.best_legend]

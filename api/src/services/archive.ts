@@ -175,13 +175,13 @@ export const archiveService = {
 				clans.map((clan) => ({
 					...clan,
 					name: cleanString(clan.name.trim()),
-					createdAt: clan.createdAt ?? null,
+					clanCreatedAt: clan.clanCreatedAt ?? null,
 				})),
 			)
 			.returning()
 			.onConflictDoUpdate({
 				set: {
-					createdAt: sql`CASE WHEN excluded."createdAt" IS NOT NULL THEN excluded."createdAt" ELSE ${clansTable.createdAt} END`,
+					clanCreatedAt: sql`CASE WHEN excluded."clan_created_at" IS NOT NULL THEN excluded."clan_created_at" ELSE ${clansTable.clanCreatedAt} END`,
 					xp: sql`excluded.xp`,
 					name: sql`excluded.name`,
 					updatedAt: new Date(),
@@ -198,27 +198,27 @@ export const archiveService = {
 		name,
 	}: { page?: number; limit?: number; name?: string }) => {
 		const clansTransaction = db.transaction(async (tx) => {
-		const total = await tx
-			.select({ count: count() })
-			.from(clansTable)
-			.where(
-				name
-					? like(sql`lower(${clansTable.name})`, `${name.toLowerCase()}%`)
-					: undefined,
-			)
-			.execute()
+			const total = await tx
+				.select({ count: count() })
+				.from(clansTable)
+				.where(
+					name
+						? like(sql`lower(${clansTable.name})`, `${name.toLowerCase()}%`)
+						: undefined,
+				)
+				.execute()
 
-		const clans = await tx
-			.select()
-			.from(clansTable)
-			.orderBy(desc(clansTable.xp))
-			.limit(limit)
-			.offset((page - 1) * limit)
-			.where(
-				name
-					? like(sql`lower(${clansTable.name})`, `${name.toLowerCase()}%`)
-					: undefined,
-			)
+			const clans = await tx
+				.select()
+				.from(clansTable)
+				.orderBy(desc(clansTable.xp))
+				.limit(limit)
+				.offset((page - 1) * limit)
+				.where(
+					name
+						? like(sql`lower(${clansTable.name})`, `${name.toLowerCase()}%`)
+						: undefined,
+				)
 				.execute()
 
 			return {

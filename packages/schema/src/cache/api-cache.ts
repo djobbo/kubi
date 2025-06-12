@@ -1,5 +1,5 @@
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core"
-import { withTimestamp } from '../helpers/with-timestamp'
+import { withTimestamp } from "../helpers/with-timestamp"
 
 export const apiCacheTable = sqliteTable("api-cache", {
 	cacheName: text("cacheName").notNull(),

@@ -11,14 +11,16 @@ import { seo } from "@dair/common/src/helpers/seo"
 export const Route = createFileRoute("/rankings/2v2/$")({
 	component: RouteComponent,
 
-	loader: async ({ params: { _splat }, context: {apiClient} }) => {
+	loader: async ({ params: { _splat }, context: { apiClient } }) => {
 		const [region, page = "1"] = _splat?.split("/") ?? []
-		const {data: rankings, updatedAt} = await apiClient.brawlhalla.get2v2Rankings({
-			param: {
-				page,
-				region,
-			},
-		}).then((res) => res.json())
+		const { data: rankings, updatedAt } = await apiClient.brawlhalla
+			.get2v2Rankings({
+				param: {
+					page,
+					region,
+				},
+			})
+			.then((res) => res.json())
 
 		return {
 			rankings,

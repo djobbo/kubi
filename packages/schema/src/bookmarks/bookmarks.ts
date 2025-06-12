@@ -9,7 +9,7 @@ import { z } from "zod"
 
 import { legendsMap } from "@dair/brawlhalla-api/src/constants/legends"
 import { usersTable } from "../auth/users"
-import { withTimestamp } from '../helpers/with-timestamp'
+import { withTimestamp } from "../helpers/with-timestamp"
 
 const pageTypes = ["player_stats", "clan_stats"] as const
 

@@ -33,20 +33,26 @@ export const Route = createFileRoute("/rankings/power/$")({
 		orderBy,
 		order,
 	}),
-	loader: async ({ params: { _splat }, deps: { player, orderBy, order }, context: {apiClient}}) => {
+	loader: async ({
+		params: { _splat },
+		deps: { player, orderBy, order },
+		context: { apiClient },
+	}) => {
 		const [gameMode, region, pageStr] = _splat?.split("/") ?? []
-		const powerRankingsData = await apiClient.brawlhalla.getPowerRankings({
-			param: {
-				region,
-				page: pageStr,
-			},
-			query: {
-				gameMode,
-				orderBy,
-				order,
-				player,
-			}
-		}).then((res) => res.json())
+		const powerRankingsData = await apiClient.brawlhalla
+			.getPowerRankings({
+				param: {
+					region,
+					page: pageStr,
+				},
+				query: {
+					gameMode,
+					orderBy,
+					order,
+					player,
+				},
+			})
+			.then((res) => res.json())
 
 		return powerRankingsData
 	},
@@ -78,7 +84,12 @@ export const Route = createFileRoute("/rankings/power/$")({
 //   | "t32"
 
 function RouteComponent() {
-	const { rankings, search: playerSearch, gameMode, region } = Route.useLoaderData()
+	const {
+		rankings,
+		search: playerSearch,
+		gameMode,
+		region,
+	} = Route.useLoaderData()
 	const [search, setSearch, immediateSearch] = useDebouncedState(
 		playerSearch ?? "",
 		500,

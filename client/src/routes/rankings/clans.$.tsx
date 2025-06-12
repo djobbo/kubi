@@ -18,14 +18,20 @@ export const Route = createFileRoute("/rankings/clans/$")({
 			})
 			.parse(search),
 	loaderDeps: ({ search: { clan } }) => ({ clan }),
-	loader: async ({ params: { _splat }, deps: { clan }, context: {apiClient} }) => {
+	loader: async ({
+		params: { _splat },
+		deps: { clan },
+		context: { apiClient },
+	}) => {
 		const [pageStr = "1"] = _splat?.split("/") ?? []
-		const clansSearchData = await apiClient.brawlhalla.getClansSearch({
-			param: {
-				page: pageStr,
-			},
-			query: { name: clan },
-		}).then((res) => res.json())
+		const clansSearchData = await apiClient.brawlhalla
+			.getClansSearch({
+				param: {
+					page: pageStr,
+				},
+				query: { name: clan },
+			})
+			.then((res) => res.json())
 
 		return clansSearchData
 	},

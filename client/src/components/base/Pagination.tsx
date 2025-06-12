@@ -1,8 +1,4 @@
-import {
-	ChevronLeft,
-	ChevronRight,
-	ChevronsLeft,
-} from "lucide-react"
+import { ChevronLeft, ChevronRight, ChevronsLeft } from "lucide-react"
 
 import { Paginator } from "./Paginator"
 

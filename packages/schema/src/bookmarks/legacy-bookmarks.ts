@@ -6,13 +6,13 @@ import {
 } from "drizzle-orm/sqlite-core"
 import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod"
+import { withTimestamp } from "../helpers/with-timestamp"
 import {
 	type Meta,
 	metaSchema,
 	pageTypeEnum,
 	pageTypeSchema,
 } from "./bookmarks"
-import { withTimestamp } from '../helpers/with-timestamp'
 
 export const legacyBookmarksTable = sqliteTable(
 	"legacy_bookmarks",

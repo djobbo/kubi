@@ -1,12 +1,12 @@
+import { env } from "@/env"
 import { lingui } from "@lingui/vite-plugin"
 import tailwindcss from "@tailwindcss/vite"
-import { tanstackStart } from '@tanstack/react-start/plugin/vite'
+import { tanstackStart } from "@tanstack/react-start/plugin/vite"
 import react from "@vitejs/plugin-react"
+import { defineConfig } from "vite"
 import { VitePWA } from "vite-plugin-pwa"
 import viteTsConfigPaths from "vite-tsconfig-paths"
 import safeAssetsPlugin from "./plugins/safe-assets-plugin"
-import { defineConfig } from 'vite'
-import { env } from '@/env'
 
 const pwaConfig = VitePWA({
 	injectRegister: "auto",
@@ -45,29 +45,29 @@ const pwaConfig = VitePWA({
 })
 
 const config = defineConfig({
-		plugins: [
-			...lingui(),
-			viteTsConfigPaths({
-				projects: ["./tsconfig.json"],
-			}),
-			tailwindcss(),
-			...pwaConfig,
-			safeAssetsPlugin({
-				outputFile: "src/assetsTree.gen.ts",
-			}),
-			tanstackStart({
-				sitemap: {
-					enabled: true,
-					host: env.VITE_CLIENT_URL,
+	plugins: [
+		...lingui(),
+		viteTsConfigPaths({
+			projects: ["./tsconfig.json"],
+		}),
+		tailwindcss(),
+		...pwaConfig,
+		safeAssetsPlugin({
+			outputFile: "src/assetsTree.gen.ts",
+		}),
+		tanstackStart({
+			sitemap: {
+				enabled: true,
+				host: env.VITE_CLIENT_URL,
+			},
+			target: "bun",
+			react: {
+				babel: {
+					plugins: ["@lingui/babel-plugin-lingui-macro"],
 				},
-				target: 'bun',
-				react: {
-					babel: {
-						plugins: ["@lingui/babel-plugin-lingui-macro"],
-					},
-				}
-			}),
-		],
+			},
+		}),
+	],
 })
 
 export default config

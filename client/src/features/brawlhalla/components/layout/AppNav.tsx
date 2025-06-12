@@ -1,10 +1,5 @@
 import { t } from "@lingui/core/macro"
-import {
-	Shield,
-	UserRound,
-	UsersRound,
-	Zap,
-} from "lucide-react"
+import { Shield, UserRound, UsersRound, Zap } from "lucide-react"
 
 import { cn } from "@/ui/lib/utils"
 

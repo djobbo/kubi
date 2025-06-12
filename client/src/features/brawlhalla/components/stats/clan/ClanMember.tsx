@@ -1,11 +1,6 @@
 import { t } from "@lingui/core/macro"
 import { Link } from "@tanstack/react-router"
-import {
-	Crown,
-	Star,
-	User,
-	UserRoundPlus,
-} from "lucide-react"
+import { Crown, Star, User, UserRoundPlus } from "lucide-react"
 
 import { Card } from "@/components/base/Card"
 import type {
@@ -51,7 +46,7 @@ export const ClanMember = ({ member, clan }: ClanMemberProps) => {
 
 	return (
 		<Link
-			to={`/stats/player/$playerId`}
+			to="/stats/player/$playerId"
 			params={{ playerId: member.brawlhalla_id.toString() }}
 			key={member.brawlhalla_id}
 		>

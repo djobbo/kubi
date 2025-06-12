@@ -1,7 +1,7 @@
 import { relations } from "drizzle-orm"
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core"
+import { withExpiry, withTimestamp } from "../helpers/with-timestamp"
 import { usersTable } from "./users"
-import { withExpiry, withTimestamp } from '../helpers/with-timestamp'
 
 export const DISCORD_PROVIDER_ID = "discord"
 export const GOOGLE_PROVIDER_ID = "google"

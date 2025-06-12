@@ -7,7 +7,7 @@ import {
 } from "drizzle-orm/sqlite-core"
 import { createInsertSchema } from "drizzle-zod"
 import type { z } from "zod"
-import { withTimestamp } from '../helpers/with-timestamp'
+import { withTimestamp } from "../helpers/with-timestamp"
 
 export const aliasesTable = sqliteTable(
 	"aliases",

@@ -1,10 +1,6 @@
 import { t } from "@lingui/core/macro"
 import { Link } from "@tanstack/react-router"
-import {
-	Bookmark as BookmarkIcon,
-	Shield,
-	X,
-} from "lucide-react"
+import { Bookmark as BookmarkIcon, Shield, X } from "lucide-react"
 import type { ReactNode } from "react"
 
 import { useBookmark } from "@/features/bookmarks/hooks/use-bookmark"

@@ -24,9 +24,9 @@ import { Searchbox } from "@/features/brawlhalla/components/search/Searchbox"
 import { SideNavProvider } from "@/features/sidebar/sidenav-provider"
 import { Toaster } from "@/features/toaster/index.tsx"
 import { activateLocale } from "@/locales/activate"
+import type { RouterContext } from "@/router.tsx"
 import { SidebarProvider } from "@/ui/components/sidebar"
 import { seo } from "@dair/common/src/helpers/seo"
-import type { RouterContext } from '@/router.tsx'
 
 export const Route = createRootRouteWithContext<RouterContext>()({
 	head: ({ loaderData }) => {

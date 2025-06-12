@@ -1,7 +1,7 @@
 import { relations } from "drizzle-orm"
 import { sqliteTable, text } from "drizzle-orm/sqlite-core"
+import { withExpiry, withTimestamp } from "../helpers/with-timestamp"
 import { usersTable } from "./users"
-import { withExpiry, withTimestamp } from '../helpers/with-timestamp'
 
 export const sessionsTable = sqliteTable("sessions", {
 	id: text("id").primaryKey().notNull(),

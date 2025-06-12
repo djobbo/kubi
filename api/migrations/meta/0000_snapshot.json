@@ -1,7 +1,7 @@
 {
 	"version": "6",
 	"dialect": "sqlite",
-	"id": "0600d174-3063-49b2-8e28-1edd68aaaddf",
+	"id": "183308c9-1a4a-490e-ada0-0bcadf02177d",
 	"prevId": "00000000-0000-0000-0000-000000000000",
 	"tables": {
 		"aliases": {
@@ -28,22 +28,6 @@
 					"notNull": true,
 					"autoincrement": false
 				},
-				"createdAt": {
-					"name": "createdAt",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false,
-					"default": "(unixepoch() * 1000)"
-				},
-				"updatedAt": {
-					"name": "updatedAt",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false,
-					"default": "(unixepoch() * 1000)"
-				},
 				"public": {
 					"name": "public",
 					"type": "integer",
@@ -51,6 +35,22 @@
 					"notNull": true,
 					"autoincrement": false,
 					"default": true
+				},
+				"created_at": {
+					"name": "created_at",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false,
+					"default": "(unixepoch() * 1000)"
+				},
+				"updated_at": {
+					"name": "updated_at",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false,
+					"default": "(unixepoch() * 1000)"
 				}
 			},
 			"indexes": {
@@ -82,20 +82,12 @@
 					"notNull": true,
 					"autoincrement": false
 				},
-				"createdAt": {
-					"name": "createdAt",
+				"clan_created_at": {
+					"name": "clan_created_at",
 					"type": "integer",
 					"primaryKey": false,
 					"notNull": false,
 					"autoincrement": false
-				},
-				"updatedAt": {
-					"name": "updatedAt",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false,
-					"default": "(unixepoch() * 1000)"
 				},
 				"xp": {
 					"name": "xp",
@@ -104,6 +96,22 @@
 					"notNull": true,
 					"autoincrement": false,
 					"default": 0
+				},
+				"created_at": {
+					"name": "created_at",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false,
+					"default": "(unixepoch() * 1000)"
+				},
+				"updated_at": {
+					"name": "updated_at",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false,
+					"default": "(unixepoch() * 1000)"
 				}
 			},
 			"indexes": {},
@@ -157,20 +165,13 @@
 					"notNull": false,
 					"autoincrement": false
 				},
-				"expires_at": {
-					"name": "expires_at",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": false,
-					"autoincrement": false
-				},
 				"created_at": {
 					"name": "created_at",
 					"type": "integer",
 					"primaryKey": false,
 					"notNull": true,
 					"autoincrement": false,
-					"default": "(unixepoch())"
+					"default": "(unixepoch() * 1000)"
 				},
 				"updated_at": {
 					"name": "updated_at",
@@ -178,7 +179,14 @@
 					"primaryKey": false,
 					"notNull": true,
 					"autoincrement": false,
-					"default": "(unixepoch())"
+					"default": "(unixepoch() * 1000)"
+				},
+				"expires_at": {
+					"name": "expires_at",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
 				}
 			},
 			"indexes": {},
@@ -214,20 +222,28 @@
 					"notNull": true,
 					"autoincrement": false
 				},
-				"expires_at": {
-					"name": "expires_at",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false
-				},
 				"created_at": {
 					"name": "created_at",
 					"type": "integer",
 					"primaryKey": false,
 					"notNull": true,
 					"autoincrement": false,
-					"default": "(unixepoch())"
+					"default": "(unixepoch() * 1000)"
+				},
+				"updated_at": {
+					"name": "updated_at",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false,
+					"default": "(unixepoch() * 1000)"
+				},
+				"expires_at": {
+					"name": "expires_at",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
 				}
 			},
 			"indexes": {},
@@ -283,7 +299,7 @@
 					"primaryKey": false,
 					"notNull": true,
 					"autoincrement": false,
-					"default": "(unixepoch())"
+					"default": "(unixepoch() * 1000)"
 				},
 				"updated_at": {
 					"name": "updated_at",
@@ -291,7 +307,7 @@
 					"primaryKey": false,
 					"notNull": true,
 					"autoincrement": false,
-					"default": "(unixepoch())"
+					"default": "(unixepoch() * 1000)"
 				}
 			},
 			"indexes": {
@@ -351,13 +367,21 @@
 					"notNull": true,
 					"autoincrement": false
 				},
-				"createdAt": {
-					"name": "createdAt",
+				"created_at": {
+					"name": "created_at",
 					"type": "integer",
 					"primaryKey": false,
 					"notNull": true,
 					"autoincrement": false,
-					"default": "(cast((julianday('now') - 2440587.5)*86400000 as integer))"
+					"default": "(unixepoch() * 1000)"
+				},
+				"updated_at": {
+					"name": "updated_at",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false,
+					"default": "(unixepoch() * 1000)"
 				}
 			},
 			"indexes": {
@@ -378,6 +402,80 @@
 					"onUpdate": "no action"
 				}
 			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {},
+			"checkConstraints": {}
+		},
+		"legacy_bookmarks": {
+			"name": "legacy_bookmarks",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "integer",
+					"primaryKey": true,
+					"notNull": true,
+					"autoincrement": true
+				},
+				"page_type": {
+					"name": "page_type",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"page_id": {
+					"name": "page_id",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"name": {
+					"name": "name",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"meta": {
+					"name": "meta",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				},
+				"discord_id": {
+					"name": "discord_id",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"created_at": {
+					"name": "created_at",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false,
+					"default": "(unixepoch() * 1000)"
+				},
+				"updated_at": {
+					"name": "updated_at",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false,
+					"default": "(unixepoch() * 1000)"
+				}
+			},
+			"indexes": {
+				"unique_legacy_bookmark": {
+					"name": "unique_legacy_bookmark",
+					"columns": ["discord_id", "page_type", "page_id"],
+					"isUnique": true
+				}
+			},
+			"foreignKeys": {},
 			"compositePrimaryKeys": {},
 			"uniqueConstraints": {},
 			"checkConstraints": {}
@@ -406,20 +504,28 @@
 					"notNull": false,
 					"autoincrement": false
 				},
-				"createdAt": {
-					"name": "createdAt",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false,
-					"default": "(cast((julianday('now') - 2440587.5)*86400000 as integer))"
-				},
 				"version": {
 					"name": "version",
 					"type": "integer",
 					"primaryKey": false,
 					"notNull": true,
 					"autoincrement": false
+				},
+				"created_at": {
+					"name": "created_at",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false,
+					"default": "(unixepoch() * 1000)"
+				},
+				"updated_at": {
+					"name": "updated_at",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false,
+					"default": "(unixepoch() * 1000)"
 				}
 			},
 			"indexes": {},

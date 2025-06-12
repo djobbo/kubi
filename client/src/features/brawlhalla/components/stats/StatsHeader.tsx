@@ -1,11 +1,7 @@
 import { SiDiscord as DiscordIcon } from "@icons-pack/react-simple-icons"
 import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
-import {
-	ExternalLink,
-	UserRoundMinus,
-	UserRoundPlus,
-} from "lucide-react"
+import { ExternalLink, UserRoundMinus, UserRoundPlus } from "lucide-react"
 import type { ReactNode } from "react"
 import toast from "react-hot-toast"
 

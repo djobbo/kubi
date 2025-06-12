@@ -1,11 +1,6 @@
 import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
-import {
-	ChartColumnBig,
-	Flame,
-	Hand,
-	Target,
-} from "lucide-react"
+import { ChartColumnBig, Flame, Hand, Target } from "lucide-react"
 
 import type { PlayerRanked } from "@dair/brawlhalla-api/src/api/schema/player-ranked"
 import type { PlayerStats } from "@dair/brawlhalla-api/src/api/schema/player-stats"

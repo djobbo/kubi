@@ -1,8 +1,5 @@
 import { t } from "@lingui/core/macro"
-import {
-	ArrowDownWideNarrow,
-	ArrowUpWideNarrow,
-} from "lucide-react"
+import { ArrowDownWideNarrow, ArrowUpWideNarrow } from "lucide-react"
 
 import { Select } from "@/components/base/Select"
 import { SortDirection, useSortBy } from "@/hooks/useSortBy"

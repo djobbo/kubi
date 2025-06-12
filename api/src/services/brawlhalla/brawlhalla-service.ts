@@ -155,7 +155,7 @@ export const brawlhallaService = {
 						id: clan.clan_id.toString(),
 						name: clan.clan_name,
 						xp: Number.parseInt(clan.clan_xp),
-						createdAt: new Date(clan.clan_create_date * 1000),
+						clanCreatedAt: new Date(clan.clan_create_date * 1000),
 					},
 				]),
 				archiveService.updateAliases(

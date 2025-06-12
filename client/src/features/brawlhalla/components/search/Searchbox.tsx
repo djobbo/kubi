@@ -18,10 +18,10 @@ import { cn } from "@/ui/lib/utils"
 import { colors } from "@/ui/theme"
 import { cleanString } from "@dair/common/src/helpers/clean-string"
 
+import { useRootContext } from "@/hooks/useRootContext"
 import { MAX_SHOWN_ALIASES } from "@dair/brawlhalla-api/src/constants/aliases"
 import { RankedPlayerItem } from "./RankedPlayerItem"
 import { SearchboxItem } from "./SearchboxItem"
-import { useRootContext } from '@/hooks/useRootContext'
 
 const resultsContainerClass = css({
 	maxHeight: "calc(100vh - 14vh - 100px)",
@@ -65,17 +65,19 @@ const AliasesSubtitle = ({
 }
 
 export const usePlayerSearch = (name: string, enabled: boolean) => {
-	const {apiClient} = useRootContext()
+	const { apiClient } = useRootContext()
 
 	return useQuery(
 		queryOptions({
 			queryKey: ["player-search", name],
 			queryFn: async () => {
-				const search = await apiClient.brawlhalla.searchPlayer({
-					query: {
-						name,
-					}
-				}).then((res) => res.json())
+				const search = await apiClient.brawlhalla
+					.searchPlayer({
+						query: {
+							name,
+						},
+					})
+					.then((res) => res.json())
 
 				return search
 			},
