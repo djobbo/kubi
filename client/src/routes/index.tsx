@@ -27,8 +27,8 @@ export const Route = createFileRoute("/")({
 				query: {
 					first: 3,
 				},
-			}),
-			apiClient.brawlhalla.getWeeklyRotation(),
+			}).then(res => res.json()).then(res => res.data),
+			apiClient.brawlhalla.getWeeklyRotation().then(res => res.json()).then(res => res.data),
 		])
 		return {
 			articles,

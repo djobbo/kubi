@@ -51,11 +51,12 @@ const getBookmarkLinkData = (bookmark: NewBookmark) => {
 }
 
 interface BookmarkDisplayProps {
-	bookmark: NewBookmark
+	pageId: NewBookmark["pageId"]
+	pageType: NewBookmark["pageType"]
 }
 
-const BookmarkDisplay = ({ bookmark }: BookmarkDisplayProps) => {
-	const { bookmark, toggleBookmark } = useBookmark(bookmark, true)
+const BookmarkDisplay = ({ pageId, pageType }: BookmarkDisplayProps) => {
+	const { bookmark, toggleBookmark } = useBookmark(pageId, pageType)
 
 	let icon: ReactNode = <BookmarkIcon className="w-8 h-8" />
 

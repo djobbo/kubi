@@ -4,6 +4,7 @@ import { env } from "../../env"
 import { withCache } from "../../helpers/with-cache"
 import { parseWeeklyRotation } from "./helpers/parse-weekly-rotation"
 import { articlesSchema } from "./helpers/schema"
+import type { z } from "zod"
 
 export const BRAWLHALLA_GRAPHQL_API_URL = "https://cms.brawlhalla.com/graphql"
 
@@ -108,4 +109,5 @@ export const brawlhallaGqlService = {
 	)
 
 	return articles
+}
 }

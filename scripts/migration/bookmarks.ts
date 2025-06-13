@@ -3,8 +3,8 @@ import postgres from "postgres"
 import { z } from "zod"
 
 import { PRE_MIGRATION_DISCORD_USER_ID_PREFIX } from "@/features/bookmarks/constants"
-import type { NewBookmark } from "@dair/db/schema"
-import { bookmarksTable, usersTable } from "@dair/db/schema"
+import type { NewBookmark } from "@dair/schema"
+import { bookmarksTable, usersTable } from "@dair/schema"
 
 import { supabase } from "./client"
 import { migrationDb } from "./db"

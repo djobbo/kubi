@@ -43,16 +43,12 @@ const getBookmarkIconUrl = (bookmark: Bookmark) => {
 		case "legend": {
 			const legendId = meta.data.icon.id
 			if (!legendId) break
-
 			const legend = legendsMap[legendId as keyof typeof legendsMap]
 			if (!legend) break
-
 			return getLegendIconSrc(legend.legend_name_key)
-			break
 		}
 		case "url": {
 			return meta.data.icon.url
-			break
 		}
 	}
 }
@@ -71,7 +67,7 @@ const NavBookmark = ({ bookmark, isCollapsed, ...props }: NavBookmarkProps) => {
 		return (
 			<Link
 				{...props}
-				to={`/stats/player/$playerId`}
+				to="/stats/player/$playerId"
 				params={{ playerId: bookmark.pageId }}
 			>
 				{isCollapsed ? (
@@ -110,7 +106,7 @@ const NavBookmark = ({ bookmark, isCollapsed, ...props }: NavBookmarkProps) => {
 		return (
 			<Link
 				{...props}
-				to={`/stats/clan/$clanId`}
+				to="/stats/clan/$clanId"
 				params={{ clanId: bookmark.pageId }}
 			>
 				<ShieldIcon />

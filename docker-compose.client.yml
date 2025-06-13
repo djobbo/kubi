@@ -4,9 +4,9 @@ services:
       context: .
       dockerfile: client/Dockerfile
     ports:
-      - "${CLIENT_PORT:-3001}:3000"
+      - "${CLIENT_PORT:-3001}:5173"
     environment:
-      - VITE_API_URL=http://api:3000
+      - VITE_API_URL=${API_URL}
     networks:
       - app-network
     restart: unless-stopped

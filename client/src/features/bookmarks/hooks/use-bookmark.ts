@@ -9,7 +9,7 @@ export const useBookmark = (
 	pageType: NewBookmark["pageType"],
 ) => {
 	const {apiClient, session, queryClient} = useRootContext()
-	const {bookmarks} = useBookmarks()
+	const bookmarks = useBookmarks()
 	const bookmark = bookmarks.find(b => b.pageId === pageId && b.pageType === pageType)
 	const router = useRouter()
 

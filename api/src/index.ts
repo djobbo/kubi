@@ -6,8 +6,13 @@ import { env } from "./env"
 import { logger } from "./helpers/logger"
 import { collectMetrics } from "./metrics"
 import { v1Route } from "./routes/v1"
+import { cors } from "hono/cors"
 
 const app = new Hono()
+	.use("*", cors({
+		origin: env.FRONTEND_URL,
+		allowMethods: ["GET", "POST", "DELETE", "OPTIONS"],
+	}))
 	.use("*", async (c, next) => {
 		const start = Date.now()
 		await next()

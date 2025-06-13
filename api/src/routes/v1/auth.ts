@@ -11,10 +11,10 @@ import {
 	deleteSession,
 	validateOAuthCallback,
 } from "../../services/auth"
-import { authMiddleware } from "../../middlewares/auth-middleware"
+import { optionalAuthMiddleware } from "../../middlewares/auth-middleware"
 
 export const authRoute = new Hono()
-	.get("/session", authMiddleware, async (c) => {
+	.get("/session", optionalAuthMiddleware, async (c) => {
 		const session = c.get("session")
 		return c.json({ session })
 	})

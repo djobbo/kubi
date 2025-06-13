@@ -11,11 +11,12 @@ import { useCopyToClipboard } from "@/hooks/useCopyToClipboard"
 import { Button } from "@/ui/components/button"
 import { cn } from "@/ui/lib/utils"
 import { cleanString } from "@dair/common/src/helpers/clean-string"
-import type { NewBookmark } from "@dair/db/schema"
+import type { NewBookmark } from "@dair/schema"
 
 import { MAX_SHOWN_ALIASES } from "@dair/brawlhalla-api/src/constants/aliases"
 import type { MiscStat } from "./MiscStatGroup"
 import { MiscStatGroup } from "./MiscStatGroup"
+import { useSession } from "@/hooks/use-session"
 
 interface StatsHeaderProps {
 	name: string
@@ -23,7 +24,8 @@ interface StatsHeaderProps {
 	icon?: ReactNode
 	aliases?: string[]
 	miscStats?: MiscStat[]
-	bookmark: NewBookmark
+	bookmarkPageId: NewBookmark["pageId"]
+	bookmarkPageType: NewBookmark["pageType"]
 }
 
 export const StatsHeader = ({
@@ -32,10 +34,11 @@ export const StatsHeader = ({
 	icon,
 	aliases,
 	miscStats,
-	bookmark,
+	bookmarkPageId,
+	bookmarkPageType,
 }: StatsHeaderProps) => {
 	const { isLoggedIn, logInWithDiscord } = useSession()
-	const { isBookmarked, toggleBookmark } = useBookmark(bookmark)
+	const { bookmark, toggleBookmark } = useBookmark(bookmarkPageId, bookmarkPageType)
 	const copyToClipboard = useCopyToClipboard()
 
 	return (
@@ -54,12 +57,12 @@ export const StatsHeader = ({
 			<div className="flex flex-col sm:flex-row justify-end py-2 gap-2">
 				{isLoggedIn ? (
 					<Button
-						variant={isBookmarked ? "outline" : "primary"}
+						variant={bookmark.bookmarked ? "outline" : "primary"}
 						onClick={() => {
-							toggleBookmark(!isBookmarked)
+							toggleBookmark(!bookmark.bookmarked)
 						}}
 					>
-						{isBookmarked ? (
+						{bookmark.bookmarked ? (
 							<>
 								<Trans>Remove Favorite</Trans>
 								<UserRoundMinus className="ml-2 w-4 h-4" />
@@ -91,8 +94,8 @@ export const StatsHeader = ({
 			</div>
 			<div
 				className={cn("flex flex-col justify-center items-center", {
-					"mt-8": !bookmark,
-					"mt-4": !!bookmark,
+					"mt-8": !bookmark.bookmarked,
+					"mt-4": bookmark.bookmarked,
 				})}
 			>
 				<h1 className="font-bold text-3xl lg:text-5xl flex items-center">
