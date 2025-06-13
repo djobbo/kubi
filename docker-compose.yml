@@ -1,8 +1,6 @@
 services:
   api:
-    build:
-      context: .
-      dockerfile: api/Dockerfile
+    image: ${{ secrets.DOCKERHUB_USERNAME }}/dair-api:latest
     ports:
       - "${API_PORT:-3000}:3000"
     environment:

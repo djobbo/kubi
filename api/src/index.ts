@@ -33,6 +33,7 @@ const app = new Hono()
 			`${method} ${path} ${status} ${duration}ms`,
 		)
 	})
+	.get("/health", (c) => c.json({ message: "OK" }))
 	.get("/", (c) => {
 		logger.info("Root endpoint accessed")
 		return c.text("Welcome to the dair.gg api!")
