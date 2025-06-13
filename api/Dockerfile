@@ -1,36 +1,16 @@
-FROM oven/bun:1 AS dependencies
+FROM oven/bun:1-slim
 
 WORKDIR /app
 
 COPY package.json bun.lock ./
-
 COPY packages/ ./packages/
 COPY api/ ./api/
 COPY client/ ./client/
 
-# Install all dependencies including devDependencies for build
-RUN bun install --frozen-lockfile
-
-FROM dependencies AS build
-
-# Build the API if you have a build step
-WORKDIR /app/api
-RUN bun run build 2>/dev/null || echo "No build script found, skipping..."
-
-FROM oven/bun:1-slim AS production
-
-WORKDIR /app
-
-COPY package.json bun.lock ./
-
-COPY --from=build /app/packages ./packages
-COPY --from=build /app/api ./api
-COPY --from=build /app/client/package.json ./client/
-
-# Install only production dependencies
-RUN bun install --frozen-lockfile --production
-
-WORKDIR /app/api
+# Install dependencies and build
+RUN bun install --frozen-lockfile && \
+    cd api && \
+    bun run build 2>/dev/null || echo "No build script found, skipping..."
 
 # Create non-root user and data directory with proper permissions
 RUN addgroup --system --gid 1001 nodejs && \
@@ -40,6 +20,8 @@ RUN addgroup --system --gid 1001 nodejs && \
     chmod 755 /data
 
 USER bunjs
+
+WORKDIR /app/api
 
 EXPOSE 3000
 

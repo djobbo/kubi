@@ -3,10 +3,10 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"dev": "bun prep && bunx --bun vite dev --host",
+		"dev": "bun prepare && bunx --bun vite dev --host",
 		"start": "bun .output/server/index.mjs",
-		"build": "bun prep && bunx --bun vite build",
-		"check:types": "bun prep && tsc --noEmit",
+		"build": "bun prepare && bunx --bun vite build",
+		"check:types": "bun prepare && tsc --noEmit",
 		"ui": "bunx --bun shadcn@latest",
 		"pwa:assets": "pwa-assets-generator",
 		"locales:extract": "lingui extract --clean",
@@ -14,7 +14,7 @@
 		"locales:build": "bun locales:extract && bun locales:compile",
 		"check:locales": "bun locales:build --strict",
 		"panda:build": "panda codegen",
-		"prep": "bun panda:build && bun locales:compile"
+		"prepare": "bun panda:build && bun locales:compile"
 	},
 	"dependencies": {
 		"@dair/brawlhalla-api": "workspace:*",

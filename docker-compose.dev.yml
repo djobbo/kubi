@@ -5,7 +5,6 @@ services:
     build:
       context: .
       dockerfile: api/Dockerfile
-      target: dependencies
     ports:
       - "${API_PORT:-3000}:3000"
     environment:
