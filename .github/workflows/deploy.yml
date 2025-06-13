@@ -16,10 +16,10 @@ jobs:
         include:
           - service: api
             dockerfile: ./api/Dockerfile
-            tag: ${{ secrets.DOCKERHUB_USERNAME }}/dair-api:latest
+            tag: dair-api:latest
           - service: client
             dockerfile: ./client/Dockerfile
-            tag: ${{ secrets.DOCKERHUB_USERNAME }}/dair-client:latest
+            tag: dair-client:latest
  
     steps:
       - name: Checkout repository
@@ -37,5 +37,5 @@ jobs:
           context: .
           file: ${{ matrix.dockerfile }}
           push: true
-          tags: ${{ matrix.tag }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.tag }}
           platforms: linux/amd64
