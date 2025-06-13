@@ -14,7 +14,7 @@ RUN bun install --frozen-lockfile && \
 
 # Create non-root user and data directory with proper permissions
 RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 bunjs &&
+    adduser --system --uid 1001 bunjs
 
 USER bunjs
 
