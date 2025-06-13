@@ -10,7 +10,7 @@ import { cors } from "hono/cors"
 
 const app = new Hono()
 	.use("*", cors({
-		origin: env.FRONTEND_URL,
+		origin: env.CLIENT_URL,
 		allowMethods: ["GET", "POST", "DELETE", "OPTIONS"],
 	}))
 	.use("*", async (c, next) => {

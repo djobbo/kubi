@@ -21,7 +21,7 @@ export const env = createEnv({
 		DISCORD_CLIENT_SECRET: z.string().min(1),
 		// Auth
 		AUTH_SECRET: z.string().min(1),
-		FRONTEND_URL: z.string().url(),
+		CLIENT_URL: z.string().url(),
 	},
 	runtimeEnv: process.env,
 	emptyStringAsUndefined: true,

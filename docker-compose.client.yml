@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  client:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    ports:
+      - "${CLIENT_PORT:-5173}:5173"
+    environment:
+      - VITE_CLIENT_URL=${CLIENT_URL}
+      - VITE_API_URL=${API_URL}
+      - VITE_SOCIAL_DISCORD_URL=${SOCIAL_DISCORD_URL}
+      - VITE_SOCIAL_GITHUB_URL=${SOCIAL_GITHUB_URL}
+      - VITE_SOCIAL_TWITTER_URL=${SOCIAL_TWITTER_URL}
+      - VITE_SOCIAL_KOFI_URL=${SOCIAL_KOFI_URL}
+      - VITE_BRAWLHALLA_WIKI_URL=${BRAWLHALLA_WIKI_URL}
+      - VITE_GOOGLE_ANALYTICS_TRACKING_ID=${GOOGLE_ANALYTICS_TRACKING_ID}
+      - VITE_GOOGLE_ADSENSE_ID=${GOOGLE_ADSENSE_ID}
+    volumes:
+      - ./client:/app/client
+      - /app/client/node_modules
+    networks:
+      - dair-client-network
+
+networks:
+  dair-client-network:
+    name: dair-client-network

@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package.json bun.lock ./
 COPY packages/ ./packages/
 COPY api/ ./api/
-COPY client/ ./client/
+COPY client/package.json ./client/
 
 # Install dependencies and build
 RUN bun install --frozen-lockfile && \

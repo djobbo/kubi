@@ -49,7 +49,7 @@ export const authRoute = new Hono()
 			await createSession(c, user.id)
 
 			// Redirect to the frontend
-			return c.redirect(env.FRONTEND_URL)
+			return c.redirect(env.CLIENT_URL)
 		} catch (error) {
 			console.error("Auth callback error:", error)
 			return c.json({ error: "Authentication failed" }, 500)
