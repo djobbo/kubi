@@ -6,7 +6,6 @@ import type { ReactNode } from "react"
 import toast from "react-hot-toast"
 
 import { AdsenseStatsHeader } from "@/features/analytics/components/adsense"
-import { useAuth } from "@/features/auth/use-auth"
 import { useBookmark } from "@/features/bookmarks/hooks/use-bookmark"
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard"
 import { Button } from "@/ui/components/button"
@@ -35,7 +34,7 @@ export const StatsHeader = ({
 	miscStats,
 	bookmark,
 }: StatsHeaderProps) => {
-	const { isLoggedIn, logIn } = useAuth()
+	const { isLoggedIn, logInWithDiscord } = useSession()
 	const { isBookmarked, toggleBookmark } = useBookmark(bookmark)
 	const copyToClipboard = useCopyToClipboard()
 
@@ -73,7 +72,7 @@ export const StatsHeader = ({
 						)}
 					</Button>
 				) : (
-					<Button onClick={logIn}>
+					<Button onClick={logInWithDiscord}>
 						<DiscordIcon size="16" className="mr-2" />{" "}
 						<Trans>Sign in to add favorites</Trans>
 					</Button>

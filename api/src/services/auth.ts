@@ -208,7 +208,7 @@ export async function createSession(c: Context, userId: string) {
 	return sessionId
 }
 
-export async function getSession(c: Context) {
+export async function getSession(c: Context, options: { includeProfile?: boolean } = {}) {
 	const sessionId = getCookie(c, SESSION_COOKIE)
 	if (!sessionId) return null
 
@@ -222,6 +222,7 @@ export async function getSession(c: Context) {
 			user: {
 				with: {
 					oauthAccounts: true,
+					bookmarks: options.includeProfile ? true : undefined,
 				},
 			},
 		},

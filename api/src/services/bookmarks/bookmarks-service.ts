@@ -45,10 +45,12 @@ export const bookmarksService = {
 
 		return bookmarkData[0] ?? newBookmark
 	},
-	checkBookmarked: async (
-		userId: string,
+	getBookmarksByPageIds: async (
+		userId: string | undefined,
 		bookmarks: Pick<Bookmark, "pageId" | "pageType">[],
 	) => {
+		if (!userId) return []
+
 		const bookmarksData = (
 			await db.transaction(async (tx) => {
 				return Promise.all(
@@ -69,13 +71,18 @@ export const bookmarksService = {
 			})
 		).flat()
 
-		return bookmarksData.map(({ pageId, pageType }) => ({
-			pageId,
-			pageType,
-			isBookmarked: bookmarksData.some(
-				(b) => b.pageId === pageId && b.pageType === pageType,
-			),
-		}))
+		return bookmarks.map((bookmark) => {
+			const bookmarkData = bookmarksData.find(
+				(b) => b.pageId === bookmark.pageId && b.pageType === bookmark.pageType,
+			)
+
+			if (!bookmarkData) return null
+
+			return {
+				...bookmark,
+				...bookmarkData,
+			}
+		}).filter(b => b !== null)
 	},
 	deleteBookmark: async (
 		userId: string,

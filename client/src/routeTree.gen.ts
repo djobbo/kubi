@@ -240,11 +240,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/test': {
+      id: '/test'
+      path: '/test'
+      fullPath: '/test'
+      preLoaderRoute: typeof TestRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/calc': {
@@ -254,53 +254,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CalcRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/test': {
-      id: '/test'
-      path: '/test'
-      fullPath: '/test'
-      preLoaderRoute: typeof TestRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(social)/discord': {
-      id: '/(social)/discord'
-      path: '/discord'
-      fullPath: '/discord'
-      preLoaderRoute: typeof socialDiscordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(social)/donate': {
-      id: '/(social)/donate'
-      path: '/donate'
-      fullPath: '/donate'
-      preLoaderRoute: typeof socialDonateRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(social)/github': {
-      id: '/(social)/github'
-      path: '/github'
-      fullPath: '/github'
-      preLoaderRoute: typeof socialGithubRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(social)/twitter': {
-      id: '/(social)/twitter'
-      path: '/twitter'
-      fullPath: '/twitter'
-      preLoaderRoute: typeof socialTwitterRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(social)/wiki': {
-      id: '/(social)/wiki'
-      path: '/wiki'
-      fullPath: '/wiki'
-      preLoaderRoute: typeof socialWikiRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/@me/bookmarks': {
-      id: '/@me/bookmarks'
-      path: '/@me/bookmarks'
-      fullPath: '/@me/bookmarks'
-      preLoaderRoute: typeof AtmeBookmarksRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/games/cupcakes': {
@@ -310,32 +268,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GamesCupcakesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/rankings/1v1/$': {
-      id: '/rankings/1v1/$'
-      path: '/rankings/1v1/$'
-      fullPath: '/rankings/1v1/$'
-      preLoaderRoute: typeof Rankings1v1SplatRouteImport
+    '/@me/bookmarks': {
+      id: '/@me/bookmarks'
+      path: '/@me/bookmarks'
+      fullPath: '/@me/bookmarks'
+      preLoaderRoute: typeof AtmeBookmarksRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/rankings/2v2/$': {
-      id: '/rankings/2v2/$'
-      path: '/rankings/2v2/$'
-      fullPath: '/rankings/2v2/$'
-      preLoaderRoute: typeof Rankings2v2SplatRouteImport
+    '/(social)/wiki': {
+      id: '/(social)/wiki'
+      path: '/wiki'
+      fullPath: '/wiki'
+      preLoaderRoute: typeof socialWikiRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/rankings/clans/$': {
-      id: '/rankings/clans/$'
-      path: '/rankings/clans/$'
-      fullPath: '/rankings/clans/$'
-      preLoaderRoute: typeof RankingsClansSplatRouteImport
+    '/(social)/twitter': {
+      id: '/(social)/twitter'
+      path: '/twitter'
+      fullPath: '/twitter'
+      preLoaderRoute: typeof socialTwitterRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/rankings/power/$': {
-      id: '/rankings/power/$'
-      path: '/rankings/power/$'
-      fullPath: '/rankings/power/$'
-      preLoaderRoute: typeof RankingsPowerSplatRouteImport
+    '/(social)/github': {
+      id: '/(social)/github'
+      path: '/github'
+      fullPath: '/github'
+      preLoaderRoute: typeof socialGithubRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(social)/donate': {
+      id: '/(social)/donate'
+      path: '/donate'
+      fullPath: '/donate'
+      preLoaderRoute: typeof socialDonateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(social)/discord': {
+      id: '/(social)/discord'
+      path: '/discord'
+      fullPath: '/discord'
+      preLoaderRoute: typeof socialDiscordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/stats/player/$playerId': {
+      id: '/stats/player/$playerId'
+      path: '/stats/player/$playerId'
+      fullPath: '/stats/player/$playerId'
+      preLoaderRoute: typeof StatsPlayerPlayerIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/stats/clan/$clanId': {
@@ -345,11 +324,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StatsClanClanIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/stats/player/$playerId': {
-      id: '/stats/player/$playerId'
-      path: '/stats/player/$playerId'
-      fullPath: '/stats/player/$playerId'
-      preLoaderRoute: typeof StatsPlayerPlayerIdRouteImport
+    '/rankings/power/$': {
+      id: '/rankings/power/$'
+      path: '/rankings/power/$'
+      fullPath: '/rankings/power/$'
+      preLoaderRoute: typeof RankingsPowerSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rankings/clans/$': {
+      id: '/rankings/clans/$'
+      path: '/rankings/clans/$'
+      fullPath: '/rankings/clans/$'
+      preLoaderRoute: typeof RankingsClansSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rankings/2v2/$': {
+      id: '/rankings/2v2/$'
+      path: '/rankings/2v2/$'
+      fullPath: '/rankings/2v2/$'
+      preLoaderRoute: typeof Rankings2v2SplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rankings/1v1/$': {
+      id: '/rankings/1v1/$'
+      path: '/rankings/1v1/$'
+      fullPath: '/rankings/1v1/$'
+      preLoaderRoute: typeof Rankings1v1SplatRouteImport
       parentRoute: typeof rootRouteImport
     }
   }

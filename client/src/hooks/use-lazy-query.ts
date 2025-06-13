@@ -1,8 +1,8 @@
 import type {
 	FetchQueryOptions,
 	QueryKey,
-} from "@tanstack/react-query/build/modern"
-import { useQueryClient } from "@tanstack/react-query/build/modern"
+} from "@tanstack/react-query"
+import { useQueryClient } from "@tanstack/react-query"
 import { useCallback, useMemo, useState } from "react"
 
 export function useLazyQuery<

@@ -3,11 +3,7 @@
 	"module": "index.ts",
 	"type": "module",
 	"private": true,
-	"workspaces": [
-		"api",
-		"client",
-		"packages/*"
-	],
+	"workspaces": ["api", "client", "packages/*"],
 	"scripts": {
 		"check:deadcode": "bun locales:compile && dotenv -e .env.example -- knip-bun",
 		"start:server": "docker compose -f docker-compose.server.yml up --build",

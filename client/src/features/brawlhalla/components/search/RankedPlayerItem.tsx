@@ -1,7 +1,6 @@
 import { Trans } from "@lingui/react/macro"
 import { Star, StarOff } from "lucide-react"
 
-import { useAuth } from "@/features/auth/use-auth"
 import { useBookmark } from "@/features/bookmarks/hooks/use-bookmark"
 import { LegendIcon } from "@/features/brawlhalla/components/Image"
 import { cleanString } from "@dair/common/src/helpers/clean-string"
@@ -9,16 +8,17 @@ import { cleanString } from "@dair/common/src/helpers/clean-string"
 import type { Ranking1v1 } from "@dair/brawlhalla-api/src/api/schema/rankings"
 import { legendsMap } from "@dair/brawlhalla-api/src/constants/legends"
 import { SearchboxItem } from "./SearchboxItem"
+import { useSession } from '@/hooks/use-session'
 
 interface RankedPlayerItemProps {
 	player: Ranking1v1
 }
 
 export const RankedPlayerItem = ({ player }: RankedPlayerItemProps) => {
-	const { isLoggedIn } = useAuth()
+	const { isLoggedIn } = useSession()
 	const legend = legendsMap[player.best_legend]
 
-	const { isBookmarked, toggleBookmark } = useBookmark({
+	const { bookmark, toggleBookmark } = useBookmark({
 		pageType: "player_stats",
 		pageId: player.brawlhalla_id.toString(),
 		name: player.name,

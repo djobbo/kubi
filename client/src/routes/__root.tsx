@@ -3,14 +3,13 @@ import {
 	Outlet,
 	Scripts,
 	createRootRouteWithContext,
+	useLoaderData,
 } from "@tanstack/react-router"
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools"
 
 import TanStackQueryLayout from "../integrations/tanstack-query/layout.tsx"
 
 import styles from "../styles.css?url"
-
-import type { QueryClient } from "@tanstack/react-query"
 
 import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
@@ -29,6 +28,13 @@ import { SidebarProvider } from "@/ui/components/sidebar"
 import { seo } from "@dair/common/src/helpers/seo"
 
 export const Route = createRootRouteWithContext<RouterContext>()({
+	loader: async ({ context: {apiClient} }) => {
+		const {session} = await apiClient.auth.getSession().then(res => res.json())
+		return {
+			lang: 'en',
+			session,
+		}
+	},
 	head: ({ loaderData }) => {
 		const { lang } = loaderData ?? {}
 		activateLocale(lang)
@@ -105,8 +111,9 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+	const { lang } = Route.useLoaderData()
 	return (
-		<html lang="en">
+		<html lang={lang}>
 			<head>
 				<HeadContent />
 			</head>

@@ -7,7 +7,6 @@ import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
 import { Link } from "@tanstack/react-router"
 
-import { useAuth } from "@/features/auth/use-auth"
 import { UnsafeImage } from "@/features/brawlhalla/components/Image"
 import { Button } from "@/ui/components/button"
 import { SidebarTrigger } from "@/ui/components/sidebar"
@@ -15,13 +14,14 @@ import { cn } from "@/ui/lib/utils"
 
 import { SearchButton, SearchButtonIcon } from "../search/SearchButton"
 import { AlertBar } from "./AlertBar"
+import { useSession } from '@/hooks/use-session'
 
 interface HeaderProps {
 	className?: string
 }
 
 export const Header = ({ className }: HeaderProps) => {
-	const { isLoggedIn, logIn, logOut, session } = useAuth()
+	const { isLoggedIn, logInWithDiscord, logOut, session } = useSession()
 
 	return (
 		<>
@@ -38,23 +38,21 @@ export const Header = ({ className }: HeaderProps) => {
 					{isLoggedIn ? (
 						<>
 							{session?.user.avatarUrl && (
-								<>
-									<div className="relative ">
-										<UnsafeImage
-											src={session.user.avatarUrl}
-											alt={session.user.name ?? t`User avatar`}
-											containerClassName="rounded-lg w-8 h-8 overflow-hidden"
-											className="object-cover object-center"
-										/>
-									</div>
-								</>
+								<div className="relative ">
+									<UnsafeImage
+										src={session.user.avatarUrl}
+										alt={session.user.username ?? t`User avatar`}
+										containerClassName="rounded-lg w-8 h-8 overflow-hidden"
+										className="object-cover object-center"
+									/>
+								</div>
 							)}
 							<Button onClick={logOut}>
 								<Trans>Sign out</Trans>
 							</Button>
 						</>
 					) : (
-						<Button onClick={logIn}>
+						<Button onClick={logInWithDiscord}>
 							<DiscordIcon size="16" className="mr-2" />
 							<Trans>Sign in</Trans>
 						</Button>

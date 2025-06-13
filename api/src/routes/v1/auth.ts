@@ -11,8 +11,13 @@ import {
 	deleteSession,
 	validateOAuthCallback,
 } from "../../services/auth"
+import { authMiddleware } from "../../middlewares/auth-middleware"
 
 export const authRoute = new Hono()
+	.get("/session", authMiddleware, async (c) => {
+		const session = c.get("session")
+		return c.json({ session })
+	})
 	.get("/login/:provider", async (c) => {
 		const provider = c.req.param("provider") as Provider
 		if (provider !== GOOGLE_PROVIDER_ID && provider !== DISCORD_PROVIDER_ID) {
@@ -50,7 +55,7 @@ export const authRoute = new Hono()
 			return c.json({ error: "Authentication failed" }, 500)
 		}
 	})
-	.get("/logout", async (c) => {
+	.post("/logout", async (c) => {
 		await deleteSession(c)
 		return c.json({ success: true })
 	})

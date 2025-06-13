@@ -1,31 +1,29 @@
 import { t } from "@lingui/core/macro"
 import { createFileRoute } from "@tanstack/react-router"
-import { z } from "zod"
 
 import type { MiscStat } from "@/features/brawlhalla/components/stats/MiscStatGroup"
 import { StatsHeader } from "@/features/brawlhalla/components/stats/StatsHeader"
 import { ClanMember } from "@/features/brawlhalla/components/stats/clan/ClanMember"
-import { getClan } from "@/features/brawlhalla/functions"
 import { cleanString } from "@dair/common/src/helpers/clean-string"
 import { formatUnixTime } from "@dair/common/src/helpers/date"
 import { seo } from "@dair/common/src/helpers/seo"
 
 export const Route = createFileRoute("/stats/clan/$clanId")({
 	component: RouteComponent,
-	loader: async ({ params: { clanId } }) => {
-		const id = z.coerce.number().parse(clanId)
+	loader: async ({ params: { clanId }, context: { apiClient } }) => {
+		const clanData = await apiClient.brawlhalla.getClanById({
+			param: {
+				clanId,
+			},
+		}).then((res) => res.json())
 
-		const clan = await getClan({ data: id })
-
-		return {
-			clan,
-		}
+		return clanData
 	},
 	head: ({ loaderData }) => {
 		if (!loaderData) return {}
 
 		const {
-			clan: { clan_name },
+			data: { clan_name },
 		} = loaderData
 
 		return {
@@ -45,7 +43,7 @@ const clanRankWeights = {
 } as const
 
 function RouteComponent() {
-	const { clan } = Route.useLoaderData()
+	const { data: clan } = Route.useLoaderData()
 
 	const clanName = cleanString(clan.clan_name)
 

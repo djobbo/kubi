@@ -7,9 +7,7 @@ import {
 	TabsTrigger,
 } from "@radix-ui/react-tabs"
 import { createFileRoute } from "@tanstack/react-router"
-import { z } from "zod"
 
-import { getAliases } from "@/features/archive/functions/aliases/get-aliases"
 import {
 	FlagIcon,
 	LegendIcon,
@@ -21,10 +19,6 @@ import { Player2v2Tab } from "@/features/brawlhalla/components/stats/player/Play
 import { PlayerLegendsTab } from "@/features/brawlhalla/components/stats/player/PlayerLegendsTab"
 import { PlayerOverviewTab } from "@/features/brawlhalla/components/stats/player/PlayerOverviewTab"
 import { PlayerWeaponsTab } from "@/features/brawlhalla/components/stats/player/PlayerWeaponsTab"
-import {
-	getPlayerRanked,
-	getPlayerStats,
-} from "@/features/brawlhalla/functions"
 import { css } from "@/panda/css"
 import { cn } from "@/ui/lib/utils"
 import { colors } from "@/ui/theme"
@@ -56,32 +50,23 @@ const tabClassName = cn(
 
 export const Route = createFileRoute("/stats/player/$playerId")({
 	component: RouteComponent,
-	loader: async ({ params: { playerId } }) => {
-		const id = z.coerce.number().parse(playerId)
+	loader: async ({ params: { playerId }, context: { apiClient } }) => {
+		const playerData = await apiClient.brawlhalla.getPlayerById({
+				param: {
+					playerId,
+				},
+			}).then((res) => res.json())
 
-		const [stats, ranked, aliases] = await Promise.all([
-			getPlayerStats({ data: id }),
-			getPlayerRanked({ data: id }),
-			getAliases({ data: { query: { playerId, limit: 5 } } }),
-		] as const)
-
-		return {
-			player: {
-				id,
-				stats,
-				ranked,
-				aliases,
-			},
-		}
+		return playerData
 	},
 	head: ({ loaderData }) => {
 		if (!loaderData) return {}
 
 		const {
-			player: {
-				stats: { name },
-			},
-		} = loaderData
+				aliases,
+			} = loaderData
+
+		const name = aliases[0].alias
 
 		return {
 			meta: seo({
@@ -93,13 +78,13 @@ export const Route = createFileRoute("/stats/player/$playerId")({
 })
 
 function RouteComponent() {
-	const { player } = Route.useLoaderData()
+	const { stats, ranked, aliases } = Route.useLoaderData()
 
-	const playerName = cleanString(player.stats.name)
+	const playerName = cleanString(stats.name)
 
 	const fullLegends = getFullLegends(
-		player.stats.legends,
-		player.ranked?.legends,
+		stats?.legends,
+		ranked?.legends,
 	)
 
 	const { matchtime, kos, falls, suicides, teamkos, damagedealt, damagetaken } =
@@ -114,12 +99,12 @@ function RouteComponent() {
 	const accountStats: MiscStat[] = [
 		{
 			name: t`Account level`,
-			value: player.stats.level,
+			value: stats.level,
 			desc: t`${playerName}'s account level`,
 		},
 		{
 			name: t`Account XP`,
-			value: player.stats.xp,
+			value: stats.xp,
 			desc: t`${playerName}'s account XP`,
 		},
 		{
@@ -180,17 +165,17 @@ function RouteComponent() {
 		<>
 			<StatsHeader
 				name={cleanString(playerName)}
-				id={player.stats.brawlhalla_id}
-				aliases={player.aliases
+				id={stats.brawlhalla_id}
+				aliases={aliases
 					.map((alias) => alias.alias)
 					.filter(
-						(alias) => alias !== playerName && alias !== player.stats.name,
+						(alias) => alias !== playerName && alias !== stats.name,
 					)}
 				miscStats={accountStats}
 				icon={
-					player.ranked?.region && (
+					ranked?.region && (
 						<FlagIcon
-							region={player.ranked.region}
+							region={ranked.region}
 							alt={t`Region Flag`}
 							containerClassName="mt-2 w-6 h-6 rounded overflow-hidden mr-2"
 							className="object-contain object-center"
@@ -199,7 +184,7 @@ function RouteComponent() {
 				}
 				bookmark={{
 					pageType: "player_stats",
-					pageId: player.stats.brawlhalla_id.toString(),
+					pageId: stats.brawlhalla_id.toString(),
 					name: cleanString(playerName),
 					meta: {
 						version: "1",
@@ -217,7 +202,7 @@ function RouteComponent() {
 					<TabsTrigger value="overview" className={tabClassName}>
 						<Trans>Overview</Trans>
 					</TabsTrigger>
-					{player.ranked && player.ranked["2v2"].length > 0 && (
+					{ranked && ranked["2v2"].length > 0 && (
 						<TabsTrigger value="2v2" className={tabClassName}>
 							<Trans>2v2 Ranked</Trans>
 						</TabsTrigger>
@@ -231,8 +216,8 @@ function RouteComponent() {
 				</TabsList>
 				<TabsContent value="overview">
 					<PlayerOverviewTab
-						stats={player.stats}
-						ranked={player.ranked}
+						stats={stats}
+						ranked={ranked}
 						legends={fullLegends}
 						damageDealt={damagedealt}
 						damageTaken={damagetaken}
@@ -243,23 +228,23 @@ function RouteComponent() {
 						matchtime={matchtime}
 					/>
 				</TabsContent>
-				{player.ranked && player.ranked["2v2"].length > 0 && (
+				{ranked && ranked["2v2"].length > 0 && (
 					<TabsContent value="2v2">
-						<Player2v2Tab ranked={player.ranked} />
+						<Player2v2Tab ranked={ranked} />
 					</TabsContent>
 				)}
 				<TabsContent value="legends">
 					<PlayerLegendsTab
 						legends={fullLegends}
 						matchtime={matchtime}
-						games={player.stats.games}
+						games={stats.games}
 					/>
 				</TabsContent>
 				<TabsContent value="weapons">
 					<PlayerWeaponsTab
 						weapons={weapons}
 						matchtime={matchtime}
-						games={player.stats.games}
+						games={stats.games}
 					/>
 				</TabsContent>
 			</Tabs>

@@ -18,9 +18,7 @@ import { cn } from "@/ui/lib/utils"
 import { colors } from "@/ui/theme"
 import { cleanString } from "@dair/common/src/helpers/clean-string"
 
-import { useRootContext } from "@/hooks/useRootContext"
-import { MAX_SHOWN_ALIASES } from "@dair/brawlhalla-api/src/constants/aliases"
-import { RankedPlayerItem } from "./RankedPlayerItem"
+import { useRootContext } from "@/hooks/use-root-context"
 import { SearchboxItem } from "./SearchboxItem"
 
 const resultsContainerClass = css({
@@ -117,6 +115,8 @@ export const Searchbox = () => {
 	const categoryTitleClassName =
 		"text-xs font-semibold text-muted-foreground px-4 py-2"
 
+	const hasResults = data && data.length > 0
+
 	return (
 		<KBarPortal>
 			<KBarPositioner className="z-20 bg-secondary/50">
@@ -145,60 +145,32 @@ export const Searchbox = () => {
 							<div className="max-h-[50vh] my-2">
 								{hasResults ? (
 									<>
-										{potentialBrawlhallaIdAliases && (
-											<>
-												<p className={categoryTitleClassName}>
-													<Trans>Search by Brawlhalla ID</Trans>
-												</p>
+										<p className={categoryTitleClassName}>
+											<Trans>Other players with similar names</Trans>
+										</p>
+										{data.map(({ playerId, aliases, ranked }) => {
+											const mainAlias = aliases[0]
+											const otherAliases = aliases.slice(1)
+											
+											return (
 												<SearchboxItem
-													icon={<UserRound />}
-													href={`/stats/player/${search}`}
-													title={t`Player#${search}`}
+													key={`alias-${playerId}`}
+													icon={<UserRound className="w-8 h-8" />}
+													href={`/stats/player/${playerId}`}
+													title={cleanString(mainAlias.alias)}
 													subtitle={
+														<>
+															{ranked && <Trans>
+																{ranked.rating} / {ranked.peak_rating} peak ({ranked.tier})
+															</Trans>}
 														<AliasesSubtitle
 															immediateSearch={immediateSearch}
-															aliases={potentialBrawlhallaIdAliases
-																?.slice(0, MAX_SHOWN_ALIASES)
-																.map((alias) => alias.alias)}
-														/>
+															aliases={otherAliases.map((alias) => alias.alias)}
+														/></>
 													}
 												/>
-											</>
-										)}
-										{filteredRankings.length > 0 && (
-											<>
-												<p className={categoryTitleClassName}>
-													<Trans>Ranked players</Trans>
-												</p>
-												{filteredRankings.map((player) => (
-													<RankedPlayerItem
-														key={`ranking-${player.brawlhalla_id}-${player.name}`}
-														player={player}
-													/>
-												))}
-											</>
-										)}
-										{aliases.length > 0 && (
-											<>
-												<p className={categoryTitleClassName}>
-													<Trans>Other players with similar names</Trans>
-												</p>
-												{aliases.map(({ playerId, alias, otherAliases }) => (
-													<SearchboxItem
-														key={`alias-${playerId}-${alias}`}
-														icon={<UserRound className="w-8 h-8" />}
-														href={`/stats/player/${playerId}`}
-														title={cleanString(alias)}
-														subtitle={
-															<AliasesSubtitle
-																immediateSearch={immediateSearch}
-																aliases={otherAliases}
-															/>
-														}
-													/>
-												))}
-											</>
-										)}
+											)
+										})}
 									</>
 								) : (
 									<div className="flex items-center justify-center px-4 py-8 w-full gap-2">

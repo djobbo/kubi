@@ -1,10 +1,9 @@
 import { Client, cacheExchange, fetchExchange, gql } from "@urql/core"
-import { z } from "zod"
 
 import { env } from "../../env"
 import { withCache } from "../../helpers/with-cache"
 import { parseWeeklyRotation } from "./helpers/parse-weekly-rotation"
-import { articleSchema, articlesSchema } from "./helpers/schema"
+import { articlesSchema } from "./helpers/schema"
 
 export const BRAWLHALLA_GRAPHQL_API_URL = "https://cms.brawlhalla.com/graphql"
 
@@ -58,7 +57,7 @@ const client = new Client({
 	exchanges: [cacheExchange, fetchExchange],
 })
 
-const getArticles = async (query?: {
+const getArticles = async (query: {
 	first?: number
 	category?: string
 	after?: string
@@ -72,7 +71,7 @@ const getArticles = async (query?: {
 	} = query ?? {}
 
 	const articles = await withCache(
-		`bh-article-${category}-${first}-${after}`,
+		`brawlhalla-article-${category}-${first}-${after}`,
 		async () => {
 			const result = await client
 				.query(getArticleQuery(withContent), { first, category, after })
@@ -88,16 +87,25 @@ const getArticles = async (query?: {
 	return articles
 }
 
+export type BrawlhallaArticle = z.infer<typeof articlesSchema>
+
 export const brawlhallaGqlService = {
 	getArticles,
 	getWeeklyRotation: async () => {
-		const articles = await getArticles({
+		const articles = await withCache(
+			"brawlhalla-weekly-rotation",
+			async () => {
+				const articles = await getArticles({
 			first: 1,
 			category: "weekly-rotation",
 			withContent: true,
 		})
 
-		const content = articles.data[0]?.content
-		return parseWeeklyRotation(content)
-	},
+			const content = articles.data[0]?.content
+			return parseWeeklyRotation(content)
+		},
+		env.CACHE_MAX_AGE_OVERRIDE ?? 15 * 60 * 1000,
+	)
+
+	return articles
 }

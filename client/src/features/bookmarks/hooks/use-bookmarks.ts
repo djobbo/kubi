@@ -1,23 +1,19 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
+import { useRootContext } from "@/hooks/use-root-context"
 
-import { useAuth } from "@/features/auth/use-auth"
-
-import type { BookmarksQuery } from "../functions/get-bookmarks"
-import { getBookmarks } from "../functions/get-bookmarks"
-
-export const useBookmarks = (query: BookmarksQuery = {}) => {
-	const { isLoggedIn } = useAuth()
+export const useBookmarks = () => {
+	const { session, apiClient } = useRootContext()
 	const { data: bookmarks } = useSuspenseQuery(
 		queryOptions({
-			queryKey: ["bookmarks", isLoggedIn, query],
+			queryKey: ["bookmarks", session?.user.id],
 			queryFn: async () => {
-				if (!isLoggedIn) return []
+				if (!session) return []
 
-				const bookmarks = await getBookmarks({
-					data: { query },
-				})
+				const {bookmarks} = await apiClient.bookmarks.getBookmarks()
+					.then((res) => res.json())
 				return bookmarks
 			},
+			initialData: session?.user.bookmarks,
 		}),
 	)
 

@@ -9,8 +9,7 @@ COPY api/ ./api/
 COPY client/ ./client/
 
 # Install all dependencies including devDependencies for build
-# TODO: RUN bun install --frozen-lockfile (bun regression)
-RUN bun install
+RUN bun install --frozen-lockfile
 
 FROM dependencies AS build
 
@@ -29,8 +28,7 @@ COPY --from=build /app/api ./api
 COPY --from=build /app/client/package.json ./client/
 
 # Install only production dependencies
-# TODO: RUN bun install --frozen-lockfile --production (bun regression)
-RUN bun install
+RUN bun install --frozen-lockfile --production
 
 WORKDIR /app/api
 

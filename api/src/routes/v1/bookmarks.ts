@@ -1,26 +1,39 @@
 import { Hono } from "hono"
-import { authMiddleware } from "../../helpers/auth-middleware"
+import { authMiddleware } from "../../middlewares/auth-middleware"
 import { bookmarksService } from "../../services/bookmarks/bookmarks-service"
 
 export const bookmarksRoute = new Hono()
 	.get("/", authMiddleware, async (c) => {
 		const session = c.get("session")
 		const bookmarks = await bookmarksService.getBookmarks(session.user.id)
-		return c.json(bookmarks)
+		return c.json({bookmarks})
 	})
-	.post("/", authMiddleware, async (c) => {
+	.get("/:pageType/:pageId", authMiddleware, async (c) => {
 		const session = c.get("session")
-		const { pageId, pageType, name } = await c.req.json()
+		const { pageId, pageType } = c.req.param()
+		const [bookmark] = await bookmarksService.getBookmarksByPageIds(
+			session?.user.id,
+			[{ pageId, pageType }],
+		)
+		return c.json({
+			bookmark
+		})
+	})
+	.post("/:pageType/:pageId", authMiddleware, async (c) => {
+		const session = c.get("session")
+		const { pageId, pageType } = c.req.param()
+		const { name, meta } = await c.req.json()
 		const bookmark = await bookmarksService.addBookmark(session.user.id, {
 			pageId,
 			pageType,
 			name,
+			meta,
 		})
-		return c.json(bookmark)
+		return c.json({bookmark})
 	})
-	.delete("/", authMiddleware, async (c) => {
+	.delete("/:pageType/:pageId", authMiddleware, async (c) => {
 		const session = c.get("session")
-		const { pageId, pageType } = await c.req.json()
+		const { pageId, pageType } = c.req.param()
 		await bookmarksService.deleteBookmark(session.user.id, { pageId, pageType })
 		return c.json({ success: true })
 	})

@@ -8,8 +8,11 @@ import { brawlhallaGqlService } from "../../services/brawlhalla-gql/brawlhalla-g
 import { brawlhallaService } from "../../services/brawlhalla/brawlhalla-service"
 import { brawltoolsService } from "../../services/brawltools/brawltools-service"
 import { getRegion } from "../../services/locate"
+import { optionalAuthMiddleware } from '../../middlewares/auth-middleware'
+import { bookmarksService } from '../../services/bookmarks/bookmarks-service'
 
 export const brawlhallaRoute = new Hono()
+	.use(optionalAuthMiddleware)
 	.get(
 		"/players/search",
 		describeRoute({
@@ -43,10 +46,21 @@ export const brawlhallaRoute = new Hono()
 			playerStatsPromise,
 			playerRankedPromise,
 		])
+		const session = c.get("session")
+		const [aliases, [bookmark]] = await Promise.all([
+			archiveService.getAliases(playerId),
+			bookmarksService.getBookmarksByPageIds(session?.user.id, [
+				{ pageId: playerId, pageType: "player_stats" },
+			]),
+		])
+		const updatedAt = stats.updatedAt.getTime() > ranked.updatedAt.getTime() ? stats.updatedAt : ranked.updatedAt
 
 		return c.json({
-			stats,
-			ranked,
+			stats: stats.data,
+			ranked: ranked.data,
+			updatedAt,
+			aliases,
+			bookmark: bookmark ?? null,
 		})
 	})
 	.get("/players/:playerId/aliases/:page?", async (c) => {
@@ -118,8 +132,12 @@ export const brawlhallaRoute = new Hono()
 	})
 	.get("/articles/:category?", async (c) => {
 		const { category } = c.req.param()
+		const { first, after, withContent } = c.req.query()
 		const articles = await brawlhallaGqlService.getArticles({
 			category,
+			first: first ? Number.parseInt(first) : undefined,
+			after,
+			withContent: !!withContent,
 		})
 		return c.json(articles)
 	})

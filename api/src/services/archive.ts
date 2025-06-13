@@ -163,6 +163,7 @@ export const archiveService = {
 							wins: ranked.wins,
 							rating: ranked.rating,
 							peak_rating: ranked.peak_rating,
+							tier: ranked.tier,
 						}
 					: null,
 			}

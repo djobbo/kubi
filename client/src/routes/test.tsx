@@ -2,8 +2,8 @@ import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
 import { createFileRoute, useRouter } from "@tanstack/react-router"
 
-import { useAuth } from "@/features/auth/use-auth"
 import { Button } from "@/ui/components/button"
+import { useSession } from '@/hooks/use-session'
 
 export const Route = createFileRoute("/test")({
 	component: Home,
@@ -11,9 +11,9 @@ export const Route = createFileRoute("/test")({
 
 function Home() {
 	const router = useRouter()
-	const user = useAuth().session?.user
+	const user = useSession().session?.user
 
-	const username = user?.name ?? t`User`
+	const username = user?.username ?? t`User`
 
 	return (
 		<div className="w-full h-full">

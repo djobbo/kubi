@@ -1,30 +1,10 @@
 import { Trans } from "@lingui/react/macro"
-import {
-	queryOptions,
-	useSuspenseQuery,
-} from "@tanstack/react-query/build/modern"
-
-import { getBrawlhallaArticles } from "@/features/bh-articles/functions/getBrawlhallaArticles"
 
 import { ArticlePreviewGrid } from "./articles/ArticlePreviewGrid"
 import { SectionTitle } from "./layout/SectionTitle"
+import type { BrawlhallaArticle } from "@dair/api/src/services/brawlhalla-gql/brawlhalla-gql-service"
 
-export const LandingArticles = () => {
-	const { data: articles } = useSuspenseQuery(
-		queryOptions({
-			queryKey: ["landingArticles"],
-			queryFn: async () => {
-				const articles = getBrawlhallaArticles({
-					data: {
-						query: { first: 3, category: null, after: null },
-					},
-				})
-
-				return articles
-			},
-		}),
-	)
-
+export const LandingArticles = ({ articles }: { articles: BrawlhallaArticle[] }) => {
 	if (!articles || articles.length <= 0) return null
 
 	return (

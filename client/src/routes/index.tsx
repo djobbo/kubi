@@ -5,7 +5,6 @@ import { Link, createFileRoute, useNavigate } from "@tanstack/react-router"
 import { ArrowRight } from "lucide-react"
 import { Suspense } from "react"
 
-import { useAuth } from "@/features/auth/use-auth"
 import { useBookmarks } from "@/features/bookmarks/hooks/use-bookmarks"
 import { DiscordCard } from "@/features/brawlhalla/components/DiscordCard"
 import { LandingArticles } from "@/features/brawlhalla/components/LandingArticles"
@@ -15,9 +14,27 @@ import { SearchButton } from "@/features/brawlhalla/components/search/SearchButt
 import { css } from "@/panda/css"
 import { Button } from "@/ui/components/button"
 import { cn } from "@/ui/lib/utils"
+import { useSession } from '@/hooks/use-session'
 
 export const Route = createFileRoute("/")({
 	component: Home,
+	loader: async ({ context: { apiClient } }) => {
+		const [articles, weeklyRotation] = await Promise.all([
+			apiClient.brawlhalla.getArticles({
+				param: {
+					category: undefined,
+				},
+				query: {
+					first: 3,
+				},
+			}),
+			apiClient.brawlhalla.getWeeklyRotation(),
+		])
+		return {
+			articles,
+			weeklyRotation,
+		}
+	},
 })
 
 const landingClassName = css({
@@ -26,9 +43,10 @@ const landingClassName = css({
 })
 
 function Home() {
-	const { isLoggedIn, logIn } = useAuth()
+	const { isLoggedIn, logInWithDiscord } = useSession()
 	const bookmarks = useBookmarks()
 	const navigate = useNavigate()
+	const { articles, weeklyRotation } = Route.useLoaderData()
 
 	return (
 		<>
@@ -141,7 +159,7 @@ function Home() {
 										clans
 									</Trans>
 								</span>
-								<Button onClick={logIn} className="mt-2">
+								<Button onClick={logInWithDiscord} className="mt-2">
 									<DiscordIcon size="16" className="mr-2" />
 									<Trans>Sign in</Trans>
 								</Button>
@@ -158,7 +176,7 @@ function Home() {
 					</Trans>
 				}
 			>
-				<WeeklyRotation />
+				<WeeklyRotation weeklyRotation={weeklyRotation} />
 			</Suspense>
 			<Suspense
 				fallback={
@@ -168,7 +186,7 @@ function Home() {
 					</Trans>
 				}
 			>
-				<LandingArticles />
+				<LandingArticles articles={articles} />
 			</Suspense>
 		</>
 	)

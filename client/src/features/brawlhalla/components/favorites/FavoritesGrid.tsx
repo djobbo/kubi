@@ -11,7 +11,7 @@ import { cleanString } from "@dair/common/src/helpers/clean-string"
 import type {
 	Bookmark,
 	NewBookmark,
-} from "../../../../../../db/src/schema/bookmarks/bookmarks"
+} from "@dair/schema/src/bookmarks/bookmarks"
 
 import { legendsMap } from "@dair/brawlhalla-api/src/constants/legends"
 
@@ -35,13 +35,13 @@ const getBookmarkLinkData = (bookmark: NewBookmark) => {
 	switch (bookmark.pageType) {
 		case "player_stats":
 			return {
-				to: `/stats/player/$playerId`,
+				to: "/stats/player/$playerId",
 				params: { playerId: bookmark.pageId.toString() },
 				type: t`Player`,
 			}
 		case "clan_stats":
 			return {
-				to: `/stats/clan/$clanId`,
+				to: "/stats/clan/$clanId",
 				params: { clanId: bookmark.pageId.toString() },
 				type: t`Clan`,
 			}
@@ -55,11 +55,11 @@ interface BookmarkDisplayProps {
 }
 
 const BookmarkDisplay = ({ bookmark }: BookmarkDisplayProps) => {
-	const { isBookmarked, deleteBookmark } = useBookmark(bookmark, true)
+	const { bookmark, toggleBookmark } = useBookmark(bookmark, true)
 
 	let icon: ReactNode = <BookmarkIcon className="w-8 h-8" />
 
-	if (!isBookmarked) return null
+	if (!bookmark.bookmarked) return null
 
 	const favoriteName = cleanString(bookmark.name)
 	const bookmarkLinkData = getBookmarkLinkData(bookmark)

@@ -1,26 +1,11 @@
 import { Trans } from "@lingui/react/macro"
-import { useSuspenseQuery } from "@tanstack/react-query/build/modern"
 import { CircleHelp } from "lucide-react"
 
 import { Tooltip } from "@/components/base/Tooltip"
-import { getWeeklyRotation } from "@/features/bh-articles/functions/getWeeklyRotation"
 import { LegendIcon } from "@/features/brawlhalla/components/Image"
+import type { LegendType } from "@dair/brawlhalla-api/src/constants/legends"
 
-const useWeeklyRotation = () => {
-	const { data: weeklyRotation } = useSuspenseQuery({
-		queryKey: ["weeklyRotation"],
-		queryFn: async () => {
-			const weeklyRotation = await getWeeklyRotation()
-			return weeklyRotation
-		},
-	})
-
-	return weeklyRotation
-}
-
-export const WeeklyRotation = () => {
-	const weeklyRotation = useWeeklyRotation()
-
+export const WeeklyRotation = ({ weeklyRotation }: { weeklyRotation: LegendType[] }) => {
 	return (
 		<div className="flex flex-col items-center">
 			<div className="mx-auto grid gap-4 grid-cols-3 md:grid-cols-9 p-4 rounded-2xl bg-secondary border border-border">

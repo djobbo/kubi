@@ -7,7 +7,6 @@ import {
 	LogOutIcon,
 } from "lucide-react"
 
-import { useAuth } from "@/features/auth/use-auth"
 import { Avatar, AvatarFallback, AvatarImage } from "@/ui/components/avatar"
 import {
 	DropdownMenu,
@@ -24,10 +23,11 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from "@/ui/components/sidebar"
+import { useSession } from '@/hooks/use-session'
 
 export const NavUser = () => {
 	const { isMobile } = useSidebar()
-	const { session, logOut } = useAuth()
+	const { session, logOut } = useSession()
 
 	if (!session) {
 		return null
@@ -108,10 +108,10 @@ export const NavUser = () => {
 						</DropdownMenuGroup>
 						<DropdownMenuSeparator />
 						<DropdownMenuItem asChild>
-							<a type="button" onClick={logOut}>
+							<button type="button" onClick={logOut}>
 								<LogOutIcon />
 								<Trans>Sign out</Trans>
-							</a>
+							</button>
 						</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>
