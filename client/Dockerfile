@@ -14,10 +14,8 @@ RUN bun install --frozen-lockfile && \
     ls -la && \
     echo "=== Checking vite.config.ts ===" && \
     cat vite.config.ts && \
-    echo "=== Checking node version ===" && \
-    node --version && \
-    echo "=== Starting build ===" && \
-    bun run build
+    echo "=== Starting build with debug ===" && \
+    DEBUG=vite:* bun run build
 
 # Create non-root user and data directory with proper permissions
 RUN addgroup --system --gid 1001 nodejs && \
