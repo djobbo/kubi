@@ -1,0 +1,44 @@
+diff --git a/dist/node/chunks/dep-DBxKXgDP.js b/dist/node/chunks/dep-DBxKXgDP.js
+index 2cd82a2f105df2ac39d49cc8c8f787325d882f81..cd3ad9bbfe7864d33807aa6a2e06a39357f859cf 100644
+--- a/dist/node/chunks/dep-DBxKXgDP.js
++++ b/dist/node/chunks/dep-DBxKXgDP.js
+@@ -49218,6 +49218,7 @@ async function loadConfigFromFile(configEnv, configFile, configRoot = process.cw
+     return null;
+   }
+   try {
++    console.log("configLoader", configLoader);
+     const resolver = configLoader === "bundle" ? bundleAndLoadConfigFile : configLoader === "runner" ? runnerImportConfigFile : nativeImportConfigFile;
+     const { configExport, dependencies } = await resolver(resolvedPath);
+     debug?.(`config file loaded in ${getTime()}`);
+@@ -49255,12 +49256,15 @@ async function runnerImportConfigFile(resolvedPath) {
+ }
+ async function bundleAndLoadConfigFile(resolvedPath) {
+   const isESM = typeof process.versions.deno === "string" || isFilePathESM(resolvedPath);
++  console.log("isESM", isESM);
+   const bundled = await bundleConfigFile(resolvedPath, isESM);
++  console.log("bundled", bundled);
+   const userConfig = await loadConfigFromBundledFile(
+     resolvedPath,
+     bundled.code,
+     isESM
+   );
++  console.log("userConfig", userConfig);
+   return {
+     configExport: userConfig,
+     dependencies: bundled.dependencies
+@@ -49271,6 +49275,7 @@ async function bundleConfigFile(fileName, isESM) {
+   const dirnameVarName = "__vite_injected_original_dirname";
+   const filenameVarName = "__vite_injected_original_filename";
+   const importMetaUrlVarName = "__vite_injected_original_import_meta_url";
++  console.log("vite before build");
+   const result = await build$3({
+     absWorkingDir: process.cwd(),
+     entryPoints: [fileName],
+@@ -49383,6 +49388,7 @@ async function bundleConfigFile(fileName, isESM) {
+       }
+     ]
+   });
++  console.log("vite after build");
+   const { text } = result.outputFiles[0];
+   return {
+     code: text,

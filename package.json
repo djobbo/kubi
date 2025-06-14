@@ -22,5 +22,8 @@
 	"peerDependencies": {
 		"typescript": "^5"
 	},
-	"packageManager": "bun@1.2.15"
+	"packageManager": "bun@1.2.15",
+	"patchedDependencies": {
+		"vite@6.3.5": "patches/vite@6.3.5.patch"
+	}
 }
