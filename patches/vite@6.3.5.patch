@@ -1,8 +1,11 @@
 diff --git a/node_modules/vite/.bun-tag-6d4304d33a066bc7 b/.bun-tag-6d4304d33a066bc7
 new file mode 100644
 index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/node_modules/vite/.bun-tag-c4b4f19272a68fee b/.bun-tag-c4b4f19272a68fee
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
 diff --git a/dist/node/chunks/dep-DBxKXgDP.js b/dist/node/chunks/dep-DBxKXgDP.js
-index 2cd82a2f105df2ac39d49cc8c8f787325d882f81..ff1a0479d82f777eefb83e5390535527686ddf6f 100644
+index 2cd82a2f105df2ac39d49cc8c8f787325d882f81..209726c2fef03e57481e1682a9f685d3e9d60872 100644
 --- a/dist/node/chunks/dep-DBxKXgDP.js
 +++ b/dist/node/chunks/dep-DBxKXgDP.js
 @@ -49218,6 +49218,7 @@ async function loadConfigFromFile(configEnv, configFile, configRoot = process.cw
@@ -13,7 +16,15 @@ index 2cd82a2f105df2ac39d49cc8c8f787325d882f81..ff1a0479d82f777eefb83e5390535527
      const resolver = configLoader === "bundle" ? bundleAndLoadConfigFile : configLoader === "runner" ? runnerImportConfigFile : nativeImportConfigFile;
      const { configExport, dependencies } = await resolver(resolvedPath);
      debug?.(`config file loaded in ${getTime()}`);
-@@ -49255,12 +49256,15 @@ async function runnerImportConfigFile(resolvedPath) {
+@@ -49231,6 +49232,7 @@ async function loadConfigFromFile(configEnv, configFile, configRoot = process.cw
+       dependencies
+     };
+   } catch (e) {
++    console.log("vite error", e);
+     const logger = createLogger(logLevel, { customLogger });
+     checkBadCharactersInPath("The config path", resolvedPath, logger);
+     logger.error(colors$1.red(`failed to load config from ${resolvedPath}`), {
+@@ -49255,12 +49257,15 @@ async function runnerImportConfigFile(resolvedPath) {
  }
  async function bundleAndLoadConfigFile(resolvedPath) {
    const isESM = typeof process.versions.deno === "string" || isFilePathESM(resolvedPath);
@@ -29,7 +40,7 @@ index 2cd82a2f105df2ac39d49cc8c8f787325d882f81..ff1a0479d82f777eefb83e5390535527
    return {
      configExport: userConfig,
      dependencies: bundled.dependencies
-@@ -49271,6 +49275,7 @@ async function bundleConfigFile(fileName, isESM) {
+@@ -49271,6 +49276,7 @@ async function bundleConfigFile(fileName, isESM) {
    const dirnameVarName = "__vite_injected_original_dirname";
    const filenameVarName = "__vite_injected_original_filename";
    const importMetaUrlVarName = "__vite_injected_original_import_meta_url";
@@ -37,7 +48,7 @@ index 2cd82a2f105df2ac39d49cc8c8f787325d882f81..ff1a0479d82f777eefb83e5390535527
    const result = await build$3({
      absWorkingDir: process.cwd(),
      entryPoints: [fileName],
-@@ -49383,6 +49388,7 @@ async function bundleConfigFile(fileName, isESM) {
+@@ -49383,6 +49389,7 @@ async function bundleConfigFile(fileName, isESM) {
        }
      ]
    });
@@ -45,7 +56,7 @@ index 2cd82a2f105df2ac39d49cc8c8f787325d882f81..ff1a0479d82f777eefb83e5390535527
    const { text } = result.outputFiles[0];
    return {
      code: text,
-@@ -49393,15 +49399,19 @@ const _require = createRequire$1(import.meta.url);
+@@ -49393,15 +49400,19 @@ const _require = createRequire$1(import.meta.url);
  async function loadConfigFromBundledFile(fileName, bundledCode, isESM) {
    if (isESM) {
      let nodeModulesDir = typeof process.versions.deno === "string" ? void 0 : findNearestNodeModules(path$b.dirname(fileName));
@@ -65,7 +76,7 @@ index 2cd82a2f105df2ac39d49cc8c8f787325d882f81..ff1a0479d82f777eefb83e5390535527
            throw e;
          }
        }
-@@ -49411,10 +49421,14 @@ async function loadConfigFromBundledFile(fileName, bundledCode, isESM) {
+@@ -49411,12 +49422,17 @@ async function loadConfigFromBundledFile(fileName, bundledCode, isESM) {
        nodeModulesDir,
        `.vite-temp/${path$b.basename(fileName)}.${hash}.mjs`
      ) : `${fileName}.${hash}.mjs`;
@@ -79,4 +90,7 @@ index 2cd82a2f105df2ac39d49cc8c8f787325d882f81..ff1a0479d82f777eefb83e5390535527
 +      console.log("vite unlink", tempFileName);
        fs__default.unlink(tempFileName, () => {
        });
++      console.log("vite unlink done");
      }
+   } else {
+     const extension = path$b.extname(fileName);
