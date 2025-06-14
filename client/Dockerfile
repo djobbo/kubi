@@ -2,10 +2,7 @@ FROM oven/bun:1-slim
 
 WORKDIR /app
 
-COPY package.json bun.lock ./
-COPY api/package.json ./api/
-COPY packages/ ./packages/
-COPY client/ ./client/
+COPY . .
 
 # Install dependencies and build
 RUN bun install --frozen-lockfile && \
