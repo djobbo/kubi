@@ -1,4 +1,4 @@
-import { env } from "@/env"
+import { env } from "./src/env"
 import { lingui } from "@lingui/vite-plugin"
 import tailwindcss from "@tailwindcss/vite"
 import { tanstackStart } from "@tanstack/react-start/plugin/vite"
