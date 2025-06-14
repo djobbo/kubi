@@ -1,5 +1,8 @@
+diff --git a/node_modules/vite/.bun-tag-6d4304d33a066bc7 b/.bun-tag-6d4304d33a066bc7
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
 diff --git a/dist/node/chunks/dep-DBxKXgDP.js b/dist/node/chunks/dep-DBxKXgDP.js
-index 2cd82a2f105df2ac39d49cc8c8f787325d882f81..cd3ad9bbfe7864d33807aa6a2e06a39357f859cf 100644
+index 2cd82a2f105df2ac39d49cc8c8f787325d882f81..ff1a0479d82f777eefb83e5390535527686ddf6f 100644
 --- a/dist/node/chunks/dep-DBxKXgDP.js
 +++ b/dist/node/chunks/dep-DBxKXgDP.js
 @@ -49218,6 +49218,7 @@ async function loadConfigFromFile(configEnv, configFile, configRoot = process.cw
@@ -42,3 +45,38 @@ index 2cd82a2f105df2ac39d49cc8c8f787325d882f81..cd3ad9bbfe7864d33807aa6a2e06a393
    const { text } = result.outputFiles[0];
    return {
      code: text,
+@@ -49393,15 +49399,19 @@ const _require = createRequire$1(import.meta.url);
+ async function loadConfigFromBundledFile(fileName, bundledCode, isESM) {
+   if (isESM) {
+     let nodeModulesDir = typeof process.versions.deno === "string" ? void 0 : findNearestNodeModules(path$b.dirname(fileName));
++    console.log("vite nodeModulesDir", nodeModulesDir);
+     if (nodeModulesDir) {
+       try {
++        console.log("vite mkdir", path$b.resolve(nodeModulesDir, ".vite-temp/"));
+         await fsp.mkdir(path$b.resolve(nodeModulesDir, ".vite-temp/"), {
+           recursive: true
+         });
++        console.log("vite mkdir done");
+       } catch (e) {
+         if (e.code === "EACCES") {
+           nodeModulesDir = void 0;
+         } else {
++          console.error("vite mkdir error", e);
+           throw e;
+         }
+       }
+@@ -49411,10 +49421,14 @@ async function loadConfigFromBundledFile(fileName, bundledCode, isESM) {
+       nodeModulesDir,
+       `.vite-temp/${path$b.basename(fileName)}.${hash}.mjs`
+     ) : `${fileName}.${hash}.mjs`;
++    console.log("vite tempFileName", tempFileName);
+     await fsp.writeFile(tempFileName, bundledCode);
++    console.log("vite writeFile done");
+     try {
++      console.log("vite import", pathToFileURL$1(tempFileName).href);
+       return (await import(pathToFileURL$1(tempFileName).href)).default;
+     } finally {
++      console.log("vite unlink", tempFileName);
+       fs__default.unlink(tempFileName, () => {
+       });
+     }
