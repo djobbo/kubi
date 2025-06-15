@@ -10,6 +10,8 @@ on:
 jobs:
   build-and-push-dockerfile-image:
     runs-on: ubuntu-latest
+    env:
+      VITE_CLIENT_URL: ${{ secrets.CLIENT_URL }}
     strategy:
       matrix:
         service: [api, client]
@@ -39,5 +41,3 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.tag }}
           platforms: linux/amd64
-          build-args: |
-            VITE_CLIENT_URL=${{ secrets.CLIENT_URL }}
