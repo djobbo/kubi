@@ -33,11 +33,11 @@ jobs:
  
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
-        env:
-          VITE_CLIENT_URL: ${{ secrets.CLIENT_URL }}
         with:
           context: .
           file: ${{ matrix.dockerfile }}
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.tag }}
           platforms: linux/amd64
+          build-args: |
+            VITE_CLIENT_URL=${{ secrets.CLIENT_URL }}

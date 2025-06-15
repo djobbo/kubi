@@ -1,5 +1,8 @@
 FROM oven/bun:1-slim
 
+ARG VITE_CLIENT_URL
+ENV VITE_CLIENT_URL ${VITE_CLIENT_URL}
+
 WORKDIR /app
 
 COPY package.json bun.lock ./
