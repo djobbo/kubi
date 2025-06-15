@@ -10,8 +10,6 @@ on:
 jobs:
   build-and-push-dockerfile-image:
     runs-on: ubuntu-latest
-    env:
-      VITE_CLIENT_URL: ${{ secrets.CLIENT_URL }}
     strategy:
       matrix:
         service: [api, client]
@@ -35,6 +33,8 @@ jobs:
  
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
+        env:
+          VITE_CLIENT_URL: ${{ secrets.CLIENT_URL }}
         with:
           context: .
           file: ${{ matrix.dockerfile }}
