@@ -1,6 +1,6 @@
 services:
   api:
-    image: ${{ secrets.DOCKERHUB_USERNAME }}/dair-api:latest
+    image: ${DOCKERHUB_USERNAME}/dair-api:latest
     ports:
       - "${API_PORT:-3000}:3000"
     environment:
