@@ -3,7 +3,6 @@ import {
 	Outlet,
 	Scripts,
 	createRootRouteWithContext,
-	useLoaderData,
 } from "@tanstack/react-router"
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools"
 
@@ -29,7 +28,7 @@ import { seo } from "@dair/common/src/helpers/seo"
 
 export const Route = createRootRouteWithContext<RouterContext>()({
 	loader: async ({ context: {apiClient} }) => {
-		const {session} = await apiClient.auth.getSession().then(res => res.json())
+		const session = await apiClient.auth.getSession().then(res => res.json()).then(res => res.session).catch(() => null)
 		return {
 			lang: 'en',
 			session,
