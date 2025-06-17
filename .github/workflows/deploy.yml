@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [api, client]
+        service: [api]
         include:
           - service: api
             dockerfile: ./api/Dockerfile
