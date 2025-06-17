@@ -6,7 +6,7 @@ export const bookmarksRoute = new Hono()
 	.get("/", authMiddleware, async (c) => {
 		const session = c.get("session")
 		const bookmarks = await bookmarksService.getBookmarks(session.user.id)
-		return c.json({bookmarks})
+		return c.json({ bookmarks })
 	})
 	.get("/:pageType/:pageId", authMiddleware, async (c) => {
 		const session = c.get("session")
@@ -16,7 +16,7 @@ export const bookmarksRoute = new Hono()
 			[{ pageId, pageType }],
 		)
 		return c.json({
-			bookmark
+			bookmark,
 		})
 	})
 	.post("/:pageType/:pageId", authMiddleware, async (c) => {
@@ -29,7 +29,7 @@ export const bookmarksRoute = new Hono()
 			name,
 			meta,
 		})
-		return c.json({bookmark})
+		return c.json({ bookmark })
 	})
 	.delete("/:pageType/:pageId", authMiddleware, async (c) => {
 		const session = c.get("session")

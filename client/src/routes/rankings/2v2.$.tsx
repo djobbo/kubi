@@ -12,7 +12,7 @@ export const Route = createFileRoute("/rankings/2v2/$")({
 	component: RouteComponent,
 
 	loader: async ({ params: { _splat }, context: { apiClient } }) => {
-		const [region, page = "1"] = _splat?.split("/") ?? []
+		const [region = "all", page = "1"] = _splat?.split("/") ?? []
 		const { data: rankings, updatedAt } = await apiClient.brawlhalla
 			.get2v2Rankings({
 				param: {

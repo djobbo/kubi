@@ -12,9 +12,9 @@ import { Button } from "@/ui/components/button"
 import { SidebarTrigger } from "@/ui/components/sidebar"
 import { cn } from "@/ui/lib/utils"
 
+import { useSession } from "@/hooks/use-session"
 import { SearchButton, SearchButtonIcon } from "../search/SearchButton"
 import { AlertBar } from "./AlertBar"
-import { useSession } from '@/hooks/use-session'
 
 interface HeaderProps {
 	className?: string

@@ -1,10 +1,12 @@
 import { Trans } from "@lingui/react/macro"
 
+import type { BrawlhallaArticle } from "@dair/api/src/services/brawlhalla-gql/brawlhalla-gql-service"
 import { ArticlePreviewGrid } from "./articles/ArticlePreviewGrid"
 import { SectionTitle } from "./layout/SectionTitle"
-import type { BrawlhallaArticle } from "@dair/api/src/services/brawlhalla-gql/brawlhalla-gql-service"
 
-export const LandingArticles = ({ articles }: { articles: BrawlhallaArticle[] }) => {
+export const LandingArticles = ({
+	articles,
+}: { articles: BrawlhallaArticle[] }) => {
 	if (!articles || articles.length <= 0) return null
 
 	return (

@@ -5,10 +5,10 @@ import { useBookmark } from "@/features/bookmarks/hooks/use-bookmark"
 import { LegendIcon } from "@/features/brawlhalla/components/Image"
 import { cleanString } from "@dair/common/src/helpers/clean-string"
 
+import { useSession } from "@/hooks/use-session"
 import type { Ranking1v1 } from "@dair/brawlhalla-api/src/api/schema/rankings"
 import { legendsMap } from "@dair/brawlhalla-api/src/constants/legends"
 import { SearchboxItem } from "./SearchboxItem"
-import { useSession } from '@/hooks/use-session'
 
 interface RankedPlayerItemProps {
 	player: Ranking1v1

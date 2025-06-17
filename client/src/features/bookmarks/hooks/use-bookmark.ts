@@ -1,16 +1,18 @@
-import { useMutation } from "@tanstack/react-query"
 import { useRootContext } from "@/hooks/use-root-context"
 import type { NewBookmark } from "@dair/schema"
+import { useMutation } from "@tanstack/react-query"
+import { useRouter } from "@tanstack/react-router"
 import { useBookmarks } from "./use-bookmarks"
-import { useRouter } from '@tanstack/react-router'
 
 export const useBookmark = (
 	pageId: NewBookmark["pageId"],
 	pageType: NewBookmark["pageType"],
 ) => {
-	const {apiClient, session, queryClient} = useRootContext()
+	const { apiClient, session, queryClient } = useRootContext()
 	const bookmarks = useBookmarks()
-	const bookmark = bookmarks.find(b => b.pageId === pageId && b.pageType === pageType)
+	const bookmark = bookmarks.find(
+		(b) => b.pageId === pageId && b.pageType === pageType,
+	)
 	const router = useRouter()
 
 	const toggleBookmarkMutation = useMutation({
@@ -28,12 +30,7 @@ export const useBookmark = (
 		},
 		onMutate: async (shouldAddBookmark) => {
 			await queryClient.cancelQueries({
-				queryKey: [
-					"bookmark",
-					session?.user.id,
-					pageId,
-					pageType,
-				],
+				queryKey: ["bookmark", session?.user.id, pageId, pageType],
 			})
 
 			const previousIsBookmarked = queryClient.getQueryData([
@@ -44,12 +41,7 @@ export const useBookmark = (
 			])
 
 			queryClient.setQueryData(
-				[
-					"bookmark",
-					session?.user.id,
-					pageId,
-					pageType,
-				],
+				["bookmark", session?.user.id, pageId, pageType],
 				shouldAddBookmark,
 			)
 
@@ -57,12 +49,7 @@ export const useBookmark = (
 		},
 		onError: (err, shouldAddBookmark, context) => {
 			queryClient.setQueryData(
-				[
-					"bookmark",
-					session?.user.id,
-					pageId,
-					pageType,
-				],
+				["bookmark", session?.user.id, pageId, pageType],
 				context?.previousIsBookmarked ?? false,
 			)
 		},

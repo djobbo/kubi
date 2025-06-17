@@ -11,24 +11,30 @@ import { LandingArticles } from "@/features/brawlhalla/components/LandingArticle
 import { WeeklyRotation } from "@/features/brawlhalla/components/WeeklyRotation"
 import { FavoritesGrid } from "@/features/brawlhalla/components/favorites/FavoritesGrid"
 import { SearchButton } from "@/features/brawlhalla/components/search/SearchButton"
+import { useSession } from "@/hooks/use-session"
 import { css } from "@/panda/css"
 import { Button } from "@/ui/components/button"
 import { cn } from "@/ui/lib/utils"
-import { useSession } from '@/hooks/use-session'
 
 export const Route = createFileRoute("/")({
 	component: Home,
 	loader: async ({ context: { apiClient } }) => {
 		const [articles, weeklyRotation] = await Promise.all([
-			apiClient.brawlhalla.getArticles({
-				param: {
-					category: undefined,
-				},
-				query: {
-					first: 3,
-				},
-			}).then(res => res.json()).then(res => res.data),
-			apiClient.brawlhalla.getWeeklyRotation().then(res => res.json()).then(res => res.data),
+			apiClient.brawlhalla
+				.getArticles({
+					param: {
+						category: undefined,
+					},
+					query: {
+						first: 3,
+					},
+				})
+				.then((res) => res.json())
+				.then((res) => res.data),
+			apiClient.brawlhalla
+				.getWeeklyRotation()
+				.then((res) => res.json())
+				.then((res) => res.data),
 		])
 		return {
 			articles,

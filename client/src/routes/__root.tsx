@@ -27,10 +27,14 @@ import { SidebarProvider } from "@/ui/components/sidebar"
 import { seo } from "@dair/common/src/helpers/seo"
 
 export const Route = createRootRouteWithContext<RouterContext>()({
-	loader: async ({ context: {apiClient} }) => {
-		const session = await apiClient.auth.getSession().then(res => res.json()).then(res => res.session).catch(() => null)
+	loader: async ({ context: { apiClient } }) => {
+		const session = await apiClient.auth
+			.getSession()
+			.then((res) => res.json())
+			.then((res) => res.session)
+			.catch(() => null)
 		return {
-			lang: 'en',
+			lang: "en",
 			session,
 		}
 	},

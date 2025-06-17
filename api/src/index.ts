@@ -1,18 +1,21 @@
 import { swaggerUI } from "@hono/swagger-ui"
 import { Hono } from "hono"
 import { openAPISpecs } from "hono-openapi"
+import { cors } from "hono/cors"
 import { register } from "prom-client"
 import { env } from "./env"
 import { logger } from "./helpers/logger"
 import { collectMetrics } from "./metrics"
 import { v1Route } from "./routes/v1"
-import { cors } from "hono/cors"
 
 const app = new Hono()
-	.use("*", cors({
-		origin: env.CLIENT_URL,
-		allowMethods: ["GET", "POST", "DELETE", "OPTIONS"],
-	}))
+	.use(
+		"*",
+		cors({
+			origin: env.CLIENT_URL,
+			allowMethods: ["GET", "POST", "DELETE", "OPTIONS"],
+		}),
+	)
 	.use("*", async (c, next) => {
 		const start = Date.now()
 		await next()

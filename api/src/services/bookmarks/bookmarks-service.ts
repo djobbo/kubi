@@ -71,18 +71,21 @@ export const bookmarksService = {
 			})
 		).flat()
 
-		return bookmarks.map((bookmark) => {
-			const bookmarkData = bookmarksData.find(
-				(b) => b.pageId === bookmark.pageId && b.pageType === bookmark.pageType,
-			)
+		return bookmarks
+			.map((bookmark) => {
+				const bookmarkData = bookmarksData.find(
+					(b) =>
+						b.pageId === bookmark.pageId && b.pageType === bookmark.pageType,
+				)
 
-			if (!bookmarkData) return null
+				if (!bookmarkData) return null
 
-			return {
-				...bookmark,
-				...bookmarkData,
-			}
-		}).filter(b => b !== null)
+				return {
+					...bookmark,
+					...bookmarkData,
+				}
+			})
+			.filter((b) => b !== null)
 	},
 	deleteBookmark: async (
 		userId: string,

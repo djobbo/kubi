@@ -13,10 +13,10 @@ import { cn } from "@/ui/lib/utils"
 import { cleanString } from "@dair/common/src/helpers/clean-string"
 import type { NewBookmark } from "@dair/schema"
 
+import { useSession } from "@/hooks/use-session"
 import { MAX_SHOWN_ALIASES } from "@dair/brawlhalla-api/src/constants/aliases"
 import type { MiscStat } from "./MiscStatGroup"
 import { MiscStatGroup } from "./MiscStatGroup"
-import { useSession } from "@/hooks/use-session"
 
 interface StatsHeaderProps {
 	name: string
@@ -38,7 +38,10 @@ export const StatsHeader = ({
 	bookmarkPageType,
 }: StatsHeaderProps) => {
 	const { isLoggedIn, logInWithDiscord } = useSession()
-	const { bookmark, toggleBookmark } = useBookmark(bookmarkPageId, bookmarkPageType)
+	const { bookmark, toggleBookmark } = useBookmark(
+		bookmarkPageId,
+		bookmarkPageType,
+	)
 	const copyToClipboard = useCopyToClipboard()
 
 	return (

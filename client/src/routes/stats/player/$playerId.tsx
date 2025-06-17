@@ -51,20 +51,20 @@ const tabClassName = cn(
 export const Route = createFileRoute("/stats/player/$playerId")({
 	component: RouteComponent,
 	loader: async ({ params: { playerId }, context: { apiClient } }) => {
-		const playerData = await apiClient.brawlhalla.getPlayerById({
+		const playerData = await apiClient.brawlhalla
+			.getPlayerById({
 				param: {
 					playerId,
 				},
-			}).then((res) => res.json())
+			})
+			.then((res) => res.json())
 
 		return playerData
 	},
 	head: ({ loaderData }) => {
 		if (!loaderData) return {}
 
-		const {
-				aliases,
-			} = loaderData
+		const { aliases } = loaderData
 
 		const name = aliases[0].alias
 
@@ -82,10 +82,7 @@ function RouteComponent() {
 
 	const playerName = cleanString(stats.name)
 
-	const fullLegends = getFullLegends(
-		stats?.legends,
-		ranked?.legends,
-	)
+	const fullLegends = getFullLegends(stats?.legends, ranked?.legends)
 
 	const { matchtime, kos, falls, suicides, teamkos, damagedealt, damagetaken } =
 		getLegendsAccumulativeData(fullLegends)
@@ -168,9 +165,7 @@ function RouteComponent() {
 				id={stats.brawlhalla_id}
 				aliases={aliases
 					.map((alias) => alias.alias)
-					.filter(
-						(alias) => alias !== playerName && alias !== stats.name,
-					)}
+					.filter((alias) => alias !== playerName && alias !== stats.name)}
 				miscStats={accountStats}
 				icon={
 					ranked?.region && (

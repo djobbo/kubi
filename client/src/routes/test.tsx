@@ -2,8 +2,8 @@ import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
 import { createFileRoute, useRouter } from "@tanstack/react-router"
 
+import { useSession } from "@/hooks/use-session"
 import { Button } from "@/ui/components/button"
-import { useSession } from '@/hooks/use-session'
 
 export const Route = createFileRoute("/test")({
 	component: Home,

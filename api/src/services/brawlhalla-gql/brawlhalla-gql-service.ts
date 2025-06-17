@@ -1,10 +1,10 @@
 import { Client, cacheExchange, fetchExchange, gql } from "@urql/core"
 
+import type { z } from "zod"
 import { env } from "../../env"
 import { withCache } from "../../helpers/with-cache"
 import { parseWeeklyRotation } from "./helpers/parse-weekly-rotation"
 import { articlesSchema } from "./helpers/schema"
-import type { z } from "zod"
 
 export const BRAWLHALLA_GRAPHQL_API_URL = "https://cms.brawlhalla.com/graphql"
 
@@ -97,17 +97,17 @@ export const brawlhallaGqlService = {
 			"brawlhalla-weekly-rotation",
 			async () => {
 				const articles = await getArticles({
-			first: 1,
-			category: "weekly-rotation",
-			withContent: true,
-		})
+					first: 1,
+					category: "weekly-rotation",
+					withContent: true,
+				})
 
-			const content = articles.data[0]?.content
-			return parseWeeklyRotation(content)
-		},
-		env.CACHE_MAX_AGE_OVERRIDE ?? 15 * 60 * 1000,
-	)
+				const content = articles.data[0]?.content
+				return parseWeeklyRotation(content)
+			},
+			env.CACHE_MAX_AGE_OVERRIDE ?? 15 * 60 * 1000,
+		)
 
-	return articles
-}
+		return articles
+	},
 }

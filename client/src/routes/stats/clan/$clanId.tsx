@@ -11,11 +11,13 @@ import { seo } from "@dair/common/src/helpers/seo"
 export const Route = createFileRoute("/stats/clan/$clanId")({
 	component: RouteComponent,
 	loader: async ({ params: { clanId }, context: { apiClient } }) => {
-		const clanData = await apiClient.brawlhalla.getClanById({
-			param: {
-				clanId,
-			},
-		}).then((res) => res.json())
+		const clanData = await apiClient.brawlhalla
+			.getClanById({
+				param: {
+					clanId,
+				},
+			})
+			.then((res) => res.json())
 
 		return clanData
 	},

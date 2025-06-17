@@ -7,6 +7,7 @@ import {
 	LogOutIcon,
 } from "lucide-react"
 
+import { useSession } from "@/hooks/use-session"
 import { Avatar, AvatarFallback, AvatarImage } from "@/ui/components/avatar"
 import {
 	DropdownMenu,
@@ -23,7 +24,6 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from "@/ui/components/sidebar"
-import { useSession } from '@/hooks/use-session'
 
 export const NavUser = () => {
 	const { isMobile } = useSidebar()

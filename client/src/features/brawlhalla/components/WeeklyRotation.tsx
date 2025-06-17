@@ -5,7 +5,9 @@ import { Tooltip } from "@/components/base/Tooltip"
 import { LegendIcon } from "@/features/brawlhalla/components/Image"
 import type { LegendType } from "@dair/brawlhalla-api/src/constants/legends"
 
-export const WeeklyRotation = ({ weeklyRotation }: { weeklyRotation: LegendType[] }) => {
+export const WeeklyRotation = ({
+	weeklyRotation,
+}: { weeklyRotation: LegendType[] }) => {
 	return (
 		<div className="flex flex-col items-center">
 			<div className="mx-auto grid gap-4 grid-cols-3 md:grid-cols-9 p-4 rounded-2xl bg-secondary border border-border">

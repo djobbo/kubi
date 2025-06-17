@@ -1,5 +1,5 @@
-import type { Provider } from '@dair/schema'
-import { useRootContext } from './use-root-context'
+import type { Provider } from "@dair/schema"
+import { useRootContext } from "./use-root-context"
 
 export const useSession = () => {
 	const { session, apiClient } = useRootContext()
@@ -17,6 +17,6 @@ export const useSession = () => {
 		logInWithGoogle: () => logIn("google"),
 		logOut: () => {
 			apiClient.auth.logout()
-		}
+		},
 	}
 }

@@ -25,7 +25,7 @@ export const Route = createFileRoute("/rankings/1v1/$")({
 		deps: { player },
 		context: { apiClient },
 	}) => {
-		const [region, page = "1"] = _splat?.split("/") ?? []
+		const [region = "all", page = "1"] = _splat?.split("/") ?? []
 		const { data: rankings, updatedAt } = await apiClient.brawlhalla
 			.get1v1Rankings({
 				param: {

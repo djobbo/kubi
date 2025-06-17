@@ -3,13 +3,13 @@ import { describeRoute } from "hono-openapi"
 import { resolver, validator } from "hono-openapi/zod"
 import { z } from "zod"
 import { getIp } from "../../helpers/get-ip"
+import { optionalAuthMiddleware } from "../../middlewares/auth-middleware"
 import { archiveService } from "../../services/archive"
+import { bookmarksService } from "../../services/bookmarks/bookmarks-service"
 import { brawlhallaGqlService } from "../../services/brawlhalla-gql/brawlhalla-gql-service"
 import { brawlhallaService } from "../../services/brawlhalla/brawlhalla-service"
 import { brawltoolsService } from "../../services/brawltools/brawltools-service"
 import { getRegion } from "../../services/locate"
-import { optionalAuthMiddleware } from '../../middlewares/auth-middleware'
-import { bookmarksService } from '../../services/bookmarks/bookmarks-service'
 
 export const brawlhallaRoute = new Hono()
 	.use(optionalAuthMiddleware)
@@ -53,7 +53,10 @@ export const brawlhallaRoute = new Hono()
 				{ pageId: playerId, pageType: "player_stats" },
 			]),
 		])
-		const updatedAt = stats.updatedAt.getTime() > ranked.updatedAt.getTime() ? stats.updatedAt : ranked.updatedAt
+		const updatedAt =
+			stats.updatedAt.getTime() > ranked.updatedAt.getTime()
+				? stats.updatedAt
+				: ranked.updatedAt
 
 		return c.json({
 			stats: stats.data,

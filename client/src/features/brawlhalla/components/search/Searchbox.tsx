@@ -151,7 +151,7 @@ export const Searchbox = () => {
 										{data.map(({ playerId, aliases, ranked }) => {
 											const mainAlias = aliases[0]
 											const otherAliases = aliases.slice(1)
-											
+
 											return (
 												<SearchboxItem
 													key={`alias-${playerId}`}
@@ -160,13 +160,19 @@ export const Searchbox = () => {
 													title={cleanString(mainAlias.alias)}
 													subtitle={
 														<>
-															{ranked && <Trans>
-																{ranked.rating} / {ranked.peak_rating} peak ({ranked.tier})
-															</Trans>}
-														<AliasesSubtitle
-															immediateSearch={immediateSearch}
-															aliases={otherAliases.map((alias) => alias.alias)}
-														/></>
+															{ranked && (
+																<Trans>
+																	{ranked.rating} / {ranked.peak_rating} peak (
+																	{ranked.tier})
+																</Trans>
+															)}
+															<AliasesSubtitle
+																immediateSearch={immediateSearch}
+																aliases={otherAliases.map(
+																	(alias) => alias.alias,
+																)}
+															/>
+														</>
 													}
 												/>
 											)

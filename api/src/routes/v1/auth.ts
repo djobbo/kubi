@@ -5,13 +5,13 @@ import {
 } from "@dair/schema/src/auth/oauth-accounts"
 import { Hono } from "hono"
 import { env } from "../../env"
+import { optionalAuthMiddleware } from "../../middlewares/auth-middleware"
 import {
 	createAuthorizationURL,
 	createSession,
 	deleteSession,
 	validateOAuthCallback,
 } from "../../services/auth"
-import { optionalAuthMiddleware } from "../../middlewares/auth-middleware"
 
 export const authRoute = new Hono()
 	.get("/session", optionalAuthMiddleware, async (c) => {

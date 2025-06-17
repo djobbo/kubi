@@ -1,5 +1,5 @@
-import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
 import { useRootContext } from "@/hooks/use-root-context"
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query"
 
 export const useBookmarks = () => {
 	const { session, apiClient } = useRootContext()
@@ -9,7 +9,8 @@ export const useBookmarks = () => {
 			queryFn: async () => {
 				if (!session) return []
 
-				const {bookmarks} = await apiClient.bookmarks.getBookmarks()
+				const { bookmarks } = await apiClient.bookmarks
+					.getBookmarks()
 					.then((res) => res.json())
 				return bookmarks
 			},
