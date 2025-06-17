@@ -77,6 +77,9 @@ const config = defineConfig({
 			},
 		}),
 	],
+	server: {
+		host: true,
+	},
 })
 
 export default config

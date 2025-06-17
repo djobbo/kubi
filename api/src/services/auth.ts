@@ -21,13 +21,13 @@ import { env } from "../env"
 export const google = new Google(
 	env.GOOGLE_CLIENT_ID,
 	env.GOOGLE_CLIENT_SECRET,
-	`${env.API_URL}/auth/callback/${GOOGLE_PROVIDER_ID}`,
+	`${env.API_URL}/v1/auth/callback/${GOOGLE_PROVIDER_ID}`,
 )
 
 export const discord = new Discord(
 	env.DISCORD_CLIENT_ID,
 	env.DISCORD_CLIENT_SECRET,
-	`${env.API_URL}/auth/callback/${DISCORD_PROVIDER_ID}`,
+	`${env.API_URL}/v1/auth/callback/${DISCORD_PROVIDER_ID}`,
 )
 
 interface GoogleUserInfo {
