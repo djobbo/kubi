@@ -25,12 +25,12 @@ export const typesafeFetch =
 		const response = await fetch(url, options)
 
 		if (!response.ok) {
-			console.error("Brawlhalla API - Fetch Error", {
+			console.error(`${name} - Fetch Error`, {
 				status: response.status,
 				path,
 			})
 
-			throw new Error(`Failed to fetch Brawlhalla API: ${response.statusText}`)
+			throw new Error(`Failed to fetch ${name}: ${response.statusText}`)
 		}
 
 		const json = await response.json()
@@ -38,7 +38,7 @@ export const typesafeFetch =
 		const safeParseResult = schema.safeParse(json)
 
 		if (!safeParseResult.success) {
-			console.error("Brawlhalla API - Parse Error", {
+			console.error(`${name} - Parse Error`, {
 				path,
 				error: safeParseResult.error,
 			})

@@ -1,0 +1,170 @@
+diff --git a/node_modules/hono/.bun-tag-26bdadda0852d016 b/.bun-tag-26bdadda0852d016
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/node_modules/hono/.bun-tag-368f0336c8c5b739 b/.bun-tag-368f0336c8c5b739
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/node_modules/hono/.bun-tag-37175ed835171e36 b/.bun-tag-37175ed835171e36
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/node_modules/hono/.bun-tag-403f91e5b9602fb6 b/.bun-tag-403f91e5b9602fb6
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/node_modules/hono/.bun-tag-42833c3d3c9f761c b/.bun-tag-42833c3d3c9f761c
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/node_modules/hono/.bun-tag-45258acd9afa01a4 b/.bun-tag-45258acd9afa01a4
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/node_modules/hono/.bun-tag-4888a9d0e518dc6a b/.bun-tag-4888a9d0e518dc6a
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/node_modules/hono/.bun-tag-8d56b46551e232e4 b/.bun-tag-8d56b46551e232e4
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/node_modules/hono/.bun-tag-8e1c0e270abe3da0 b/.bun-tag-8e1c0e270abe3da0
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/node_modules/hono/.bun-tag-d197d40906afabdf b/.bun-tag-d197d40906afabdf
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/node_modules/hono/.bun-tag-d7071df6dc4df7be b/.bun-tag-d7071df6dc4df7be
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/node_modules/hono/.bun-tag-df5228f67e64d5d3 b/.bun-tag-df5228f67e64d5d3
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/node_modules/hono/.bun-tag-e35517b246bcf3f4 b/.bun-tag-e35517b246bcf3f4
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/dist/context.js b/dist/context.js
+index 48e701500b480172115deeda5c05503976d5b2fa..7d8a1a28ac1d87b9872a36d86b002064571fd1cd 100644
+--- a/dist/context.js
++++ b/dist/context.js
+@@ -214,12 +214,19 @@ var Context = class {
+     }
+     return this.#newResponse(text, arg);
+   };
+-  json = (object, arg, headers) => {
++  json = new Proxy((object, arg, headers) => {
+     const body = JSON.stringify(object);
+     this.#preparedHeaders ??= {};
+     this.#preparedHeaders["content-type"] = "application/json";
+     return typeof arg === "number" ? this.#newResponse(body, arg, headers) : this.#newResponse(body, arg);
+-  };
++  }, {
++    get: (target, prop) => {
++      return (object, headers) => {
++        console.log("JSON", prop)
++        return target(object, prop, headers);
++      }
++    }
++  });
+   html = (html, arg, headers) => {
+     this.#preparedHeaders ??= {};
+     this.#preparedHeaders["content-type"] = "text/html; charset=UTF-8";
+diff --git a/dist/types/context.d.ts b/dist/types/context.d.ts
+index 304082ed7dea377a45eb88b085dab053c1f51ee6..c553819dd86d5298e7b2e34a5dc1e4ecf4f5b108 100644
+--- a/dist/types/context.d.ts
++++ b/dist/types/context.d.ts
+@@ -5,7 +5,7 @@ import type { ResponseHeader } from './utils/headers';
+ import type { ContentfulStatusCode, RedirectStatusCode, StatusCode } from './utils/http-status';
+ import type { BaseMime } from './utils/mime';
+ import type { InvalidJSONValue, IsAny, JSONParsed, JSONValue, SimplifyDeepArray } from './utils/types';
+-type HeaderRecord = Record<"Content-Type", BaseMime> | Record<ResponseHeader, string | string[]> | Record<string, string | string[]>;
++export type HeaderRecord = Record<"Content-Type", BaseMime> | Record<ResponseHeader, string | string[]> | Record<string, string | string[]>;
+ /**
+  * Data type can be a string, ArrayBuffer, Uint8Array (buffer), or ReadableStream.
+  */
+@@ -110,6 +110,8 @@ interface TextRespond {
+     <T extends string, U extends ContentfulStatusCode = ContentfulStatusCode>(text: T, status?: U, headers?: HeaderRecord): Response & TypedResponse<T, U, "text">;
+     <T extends string, U extends ContentfulStatusCode = ContentfulStatusCode>(text: T, init?: ResponseOrInit<U>): Response & TypedResponse<T, U, "text">;
+ }
++
++export type JSONRespondValue = JSONValue | SimplifyDeepArray<unknown> | InvalidJSONValue
+ /**
+  * Interface for responding with JSON.
+  *
+@@ -123,9 +125,11 @@ interface TextRespond {
+  *
+  * @returns {JSONRespondReturn<T, U>} - The response after rendering the JSON object, typed with the provided object and status code types.
+  */
+-interface JSONRespond {
+-    <T extends JSONValue | SimplifyDeepArray<unknown> | InvalidJSONValue, U extends ContentfulStatusCode = ContentfulStatusCode>(object: T, status?: U, headers?: HeaderRecord): JSONRespondReturn<T, U>;
+-    <T extends JSONValue | SimplifyDeepArray<unknown> | InvalidJSONValue, U extends ContentfulStatusCode = ContentfulStatusCode>(object: T, init?: ResponseOrInit<U>): JSONRespondReturn<T, U>;
++export interface JSONRespond<
++    T extends JSONRespondValue = JSONRespondValue,
++    U extends ContentfulStatusCode = ContentfulStatusCode
++> {
++    (object: T, headers?: HeaderRecord): JSONRespondReturn<T, U>;
+ }
+ /**
+  * @template T - The type of the JSON value or simplified unknown type.
+@@ -133,7 +137,7 @@ interface JSONRespond {
+  *
+  * @returns {Response & TypedResponse<SimplifyDeepArray<T> extends JSONValue ? (JSONValue extends SimplifyDeepArray<T> ? never : JSONParsed<T>) : never, U, 'json'>} - The response after rendering the JSON object, typed with the provided object and status code types.
+  */
+-type JSONRespondReturn<T extends JSONValue | SimplifyDeepArray<unknown> | InvalidJSONValue, U extends ContentfulStatusCode> = Response & TypedResponse<SimplifyDeepArray<T> extends JSONValue ? JSONValue extends SimplifyDeepArray<T> ? never : JSONParsed<T> : never, U, "json">;
++export type JSONRespondReturn<T extends JSONValue | SimplifyDeepArray<unknown> | InvalidJSONValue, U extends ContentfulStatusCode> = Response & TypedResponse<SimplifyDeepArray<T> extends JSONValue ? JSONValue extends SimplifyDeepArray<T> ? never : JSONParsed<T> : never, U, "json">;
+ /**
+  * Interface representing a function that responds with HTML content.
+  *
+@@ -330,7 +334,7 @@ export declare class Context<E extends Env = any, P extends string = any, I exte
+      * ```
+      */
+     header: SetHeaders;
+-    status: (status: StatusCode) => void;
++    status: (status: I['status']) => void;
+     /**
+      * `.set()` can set the value specified by the key.
+      *
+@@ -422,7 +426,9 @@ export declare class Context<E extends Env = any, P extends string = any, I exte
+      * })
+      * ```
+      */
+-    json: JSONRespond;
++    json: I['json'] extends never ? never : {
++        [K in keyof I["json"]]: JSONRespond<I["json"][K], K>
++    }
+     html: HTMLRespond;
+     /**
+      * `.redirect()` can Redirect, default status code is 302.
+diff --git a/dist/types/index.d.ts b/dist/types/index.d.ts
+index af64121229eea1eb18381bb8df0d4686bafb000c..795f8435b0da125e0143acd8ac53ddaa36866127 100644
+--- a/dist/types/index.d.ts
++++ b/dist/types/index.d.ts
+@@ -21,7 +21,7 @@ export type { Env, ErrorHandler, Handler, MiddlewareHandler, Next, NotFoundHandl
+ /**
+  * Types for context, context variable map, context renderer, and execution context.
+  */
+-export type { Context, ContextVariableMap, ContextRenderer, ExecutionContext } from './context';
++export type { Context, ContextVariableMap, ContextRenderer, ExecutionContext, HeaderRecord, JSONRespondReturn } from './context';
+ /**
+  * Type for HonoRequest.
+  */
+diff --git a/dist/types/types.d.ts b/dist/types/types.d.ts
+index 8d68786a43c492965ed2179e17fb5f74edfc23c2..3d75c6f1b44bac4fc7b0f46bdbc7f9364c03a48e 100644
+--- a/dist/types/types.d.ts
++++ b/dist/types/types.d.ts
+@@ -2,10 +2,10 @@
+  * @module
+  * This module contains some type definitions for the Hono modules.
+  */
+-import type { Context } from './context';
++import type { Context, JSONRespondValue } from './context';
+ import type { HonoBase } from './hono-base';
+ import type { CustomHeader, RequestHeader } from './utils/headers';
+-import type { StatusCode } from './utils/http-status';
++import type { StatusCode, ContentfulStatusCode, ContentlessStatusCode } from './utils/http-status';
+ import type { IfAnyThenEmptyObject, IsAny, JSONValue, RemoveBlankRecord, Simplify, UnionToIntersection } from './utils/types';
+ export type Bindings = object;
+ export type Variables = object;
+@@ -19,6 +19,8 @@ export type ExtractInput<I extends Input | Input["in"]> = I extends Input ? unkn
+ export type Input = {
+     in?: {};
+     out?: {};
++    json?: Partial<Record<ContentfulStatusCode, JSONRespondValue>>;
++    status?: ContentlessStatusCode;
+     outputFormat?: ResponseFormat;
+ };
+ export type BlankSchema = {};

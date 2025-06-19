@@ -53,6 +53,20 @@ app.get(
 				description: "dair.gg API",
 			},
 			servers: [{ url: env.API_URL, description: "dair.gg" }],
+			tags: [
+				{
+					name: "Auth",
+					description: "Authentication endpoints",
+				},
+				{
+					name: "Brawlhalla",
+					description: "Brawlhalla endpoints",
+				},
+				{
+					name: "Bookmarks",
+					description: "Bookmarks endpoints",
+				},
+			],
 		},
 	}),
 )

@@ -26,5 +26,6 @@
 		"emitDeclarationOnly": true,
 		"composite": true,
 		"outDir": "./dist"
-	}
+	},
+	"include": ["src/**/*.ts", "src/**/*.tsx"]
 }
