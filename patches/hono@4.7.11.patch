@@ -19,10 +19,16 @@ index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2
 diff --git a/node_modules/hono/.bun-tag-4888a9d0e518dc6a b/.bun-tag-4888a9d0e518dc6a
 new file mode 100644
 index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/node_modules/hono/.bun-tag-5132400c89dbb159 b/.bun-tag-5132400c89dbb159
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
 diff --git a/node_modules/hono/.bun-tag-8d56b46551e232e4 b/.bun-tag-8d56b46551e232e4
 new file mode 100644
 index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
 diff --git a/node_modules/hono/.bun-tag-8e1c0e270abe3da0 b/.bun-tag-8e1c0e270abe3da0
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/node_modules/hono/.bun-tag-ac61e06a0e56da5 b/.bun-tag-ac61e06a0e56da5
 new file mode 100644
 index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
 diff --git a/node_modules/hono/.bun-tag-d197d40906afabdf b/.bun-tag-d197d40906afabdf
@@ -38,10 +44,10 @@ diff --git a/node_modules/hono/.bun-tag-e35517b246bcf3f4 b/.bun-tag-e35517b246bc
 new file mode 100644
 index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
 diff --git a/dist/context.js b/dist/context.js
-index 48e701500b480172115deeda5c05503976d5b2fa..7d8a1a28ac1d87b9872a36d86b002064571fd1cd 100644
+index 48e701500b480172115deeda5c05503976d5b2fa..19c9970479033feb450e9d55383547b623630b6f 100644
 --- a/dist/context.js
 +++ b/dist/context.js
-@@ -214,12 +214,19 @@ var Context = class {
+@@ -214,12 +214,18 @@ var Context = class {
      }
      return this.#newResponse(text, arg);
    };
@@ -55,7 +61,6 @@ index 48e701500b480172115deeda5c05503976d5b2fa..7d8a1a28ac1d87b9872a36d86b002064
 +  }, {
 +    get: (target, prop) => {
 +      return (object, headers) => {
-+        console.log("JSON", prop)
 +        return target(object, prop, headers);
 +      }
 +    }

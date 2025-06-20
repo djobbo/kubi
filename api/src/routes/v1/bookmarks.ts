@@ -67,30 +67,6 @@ export const bookmarksRoute = new Hono()
 			summary: "Get a specific bookmark by page type and page ID",
 			tags: ["Bookmarks"],
 			responses: {
-				// 200: {
-				// 	description: "Bookmark retrieved successfully",
-				// 	content: {
-				// 		"application/json": {
-				// 			schema: resolver(
-				// 				z.object({
-				// 					data: z.any(),
-				// 					meta: z.object({
-				// 						timestamp: z.string(),
-				// 					}),
-				// 				}),
-				// 			),
-				// 		},
-				// 	},
-				// },
-				// 400: {
-				// 	description: "Invalid page type",
-				// },
-				// 404: {
-				// 	description: "Bookmark not found",
-				// },
-				// 500: {
-				// 	description: "Failed to fetch bookmark",
-				// },
 				200: jsonResponse(
 					"Bookmark retrieved successfully",
 					z.object({

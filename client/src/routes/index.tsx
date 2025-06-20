@@ -22,11 +22,8 @@ export const Route = createFileRoute("/")({
 		const [articles, weeklyRotation] = await Promise.all([
 			apiClient.brawlhalla
 				.getArticles({
-					param: {
-						category: undefined,
-					},
 					query: {
-						first: 3,
+						first: "3",
 					},
 				})
 				.then((res) => res.json())
@@ -36,6 +33,7 @@ export const Route = createFileRoute("/")({
 				.then((res) => res.json())
 				.then((res) => res.data),
 		])
+
 		return {
 			articles,
 			weeklyRotation,

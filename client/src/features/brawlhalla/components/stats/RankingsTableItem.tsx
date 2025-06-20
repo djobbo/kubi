@@ -60,7 +60,7 @@ export const RankingsTableItem = ({
 					/>
 				</div>
 				<div className={cn("mt-2 flex flex-col", className)}>
-					<p className="flex gap-2 items-baseline text-2xl font-bold">
+					<div className="flex gap-2 items-baseline text-2xl font-bold">
 						<FlagIcon
 							region={region}
 							alt={region}
@@ -73,7 +73,7 @@ export const RankingsTableItem = ({
 						<span className="ml-2 text-xs font-normal uppercase text-muted-foreground">
 							<Trans>peak ({tier})</Trans>
 						</span>
-					</p>
+					</div>
 					<Progress
 						value={(wins / games) * 100}
 						className="h-1 rounded-full mt-2 overflow-hidden bg-danger"

@@ -1,8 +1,4 @@
-import {
-	useLoaderData,
-	useRouteContext,
-	useRouter,
-} from "@tanstack/react-router"
+import { useLoaderData, useRouteContext } from "@tanstack/react-router"
 
 export const useRootContext = () => {
 	const context = useRouteContext({ from: "__root__" })

@@ -107,9 +107,7 @@ export const describeRoute = <
 			: never
 	> = async (c, next) => {
 		return openApiSpecs(c, async () => {
-			console.log("openApiSpecs")
 			return queryValidator(c, async () => {
-				console.log("queryValidator")
 				return next()
 			})
 		})

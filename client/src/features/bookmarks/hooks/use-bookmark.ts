@@ -2,6 +2,7 @@ import { useRootContext } from "@/hooks/use-root-context"
 import type { NewBookmark } from "@dair/schema"
 import { useMutation } from "@tanstack/react-query"
 import { useRouter } from "@tanstack/react-router"
+import { useMemo } from "react"
 import { useBookmarks } from "./use-bookmarks"
 
 export const useBookmark = (
@@ -10,8 +11,9 @@ export const useBookmark = (
 ) => {
 	const { apiClient, session, queryClient } = useRootContext()
 	const bookmarks = useBookmarks()
-	const bookmark = bookmarks.find(
-		(b) => b.pageId === pageId && b.pageType === pageType,
+	const bookmark = useMemo(
+		() => bookmarks.find((b) => b.pageId === pageId && b.pageType === pageType),
+		[bookmarks, pageId, pageType],
 	)
 	const router = useRouter()
 

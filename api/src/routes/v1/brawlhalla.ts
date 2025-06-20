@@ -10,6 +10,7 @@ import {
 	describeRoute,
 	jsonErrorResponse,
 	jsonResponse,
+	queryParam,
 } from "../../helpers/describe-route"
 import { getIp } from "../../helpers/get-ip"
 import { optionalAuthMiddleware } from "../../middlewares/auth-middleware"
@@ -715,6 +716,7 @@ export const brawlhallaRoute = new Hono()
 						data: z.any(),
 						meta: z.object({
 							timestamp: z.string(),
+							updatedAt: z.date(),
 						}),
 					}),
 				),
@@ -728,9 +730,10 @@ export const brawlhallaRoute = new Hono()
 				const weeklyRotation = await brawlhallaGqlService.getWeeklyRotation()
 
 				return c.json[200]({
-					data: weeklyRotation,
+					data: weeklyRotation.data,
 					meta: {
 						timestamp: new Date().toISOString(),
+						updatedAt: weeklyRotation.updatedAt,
 					},
 				})
 			} catch (error) {
@@ -753,6 +756,12 @@ export const brawlhallaRoute = new Hono()
 			description: "Get articles with pagination and filtering",
 			summary: "Get articles with pagination and filtering",
 			tags: ["Brawlhalla"],
+			query: {
+				category: queryParam(z.string().optional()),
+				first: queryParam(z.coerce.number().min(1).optional().default(10)),
+				after: queryParam(z.string().optional()),
+				withContent: queryParam(z.boolean().optional()),
+			},
 			responses: {
 				200: jsonResponse(
 					"Articles retrieved successfully",
@@ -782,11 +791,9 @@ export const brawlhallaRoute = new Hono()
 		}),
 		async (c) => {
 			try {
-				const { category, first, after, withContent } = c.req.query()
+				const { category, first, after, withContent } = c.req.valid("query")
 
-				const firstNumber = first ? Number.parseInt(first) : 10
-
-				if (firstNumber < 1 || firstNumber > 100) {
+				if (first < 1 || first > 100) {
 					return c.json[400]({
 						error: {
 							code: "INVALID_LIMIT",
@@ -798,7 +805,7 @@ export const brawlhallaRoute = new Hono()
 
 				const articlesResult = await brawlhallaGqlService.getArticles({
 					category,
-					first: firstNumber,
+					first,
 					after,
 					withContent: !!withContent,
 				})
@@ -806,9 +813,9 @@ export const brawlhallaRoute = new Hono()
 				return c.json[200]({
 					data: articlesResult.data,
 					pagination: {
-						first: firstNumber,
+						first,
 						after,
-						hasMore: articlesResult.data.length === firstNumber,
+						hasMore: articlesResult.data.length === first,
 					},
 					meta: {
 						category,

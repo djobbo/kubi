@@ -31,7 +31,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 		const session = await apiClient.auth
 			.getSession()
 			.then((res) => res.json())
-			.then((res) => res.session)
+			.then((res) => res.data.session)
 			.catch(() => null)
 		return {
 			lang: "en",

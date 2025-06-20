@@ -60,12 +60,12 @@ export const StatsHeader = ({
 			<div className="flex flex-col sm:flex-row justify-end py-2 gap-2">
 				{isLoggedIn ? (
 					<Button
-						variant={bookmark.bookmarked ? "outline" : "primary"}
+						variant={bookmark?.bookmarked ? "outline" : "primary"}
 						onClick={() => {
-							toggleBookmark(!bookmark.bookmarked)
+							toggleBookmark(!bookmark?.bookmarked)
 						}}
 					>
-						{bookmark.bookmarked ? (
+						{bookmark?.bookmarked ? (
 							<>
 								<Trans>Remove Favorite</Trans>
 								<UserRoundMinus className="ml-2 w-4 h-4" />
@@ -97,8 +97,8 @@ export const StatsHeader = ({
 			</div>
 			<div
 				className={cn("flex flex-col justify-center items-center", {
-					"mt-8": !bookmark.bookmarked,
-					"mt-4": bookmark.bookmarked,
+					"mt-8": !bookmark?.bookmarked,
+					"mt-4": bookmark?.bookmarked,
 				})}
 			>
 				<h1 className="font-bold text-3xl lg:text-5xl flex items-center">

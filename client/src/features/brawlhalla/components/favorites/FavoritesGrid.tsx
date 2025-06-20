@@ -60,7 +60,7 @@ const BookmarkDisplay = ({ pageId, pageType }: BookmarkDisplayProps) => {
 
 	let icon: ReactNode = <BookmarkIcon className="w-8 h-8" />
 
-	if (!bookmark.bookmarked) return null
+	if (!bookmark?.bookmarked) return null
 
 	const favoriteName = cleanString(bookmark.name)
 	const bookmarkLinkData = getBookmarkLinkData(bookmark)

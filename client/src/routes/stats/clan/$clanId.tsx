@@ -18,6 +18,7 @@ export const Route = createFileRoute("/stats/clan/$clanId")({
 				},
 			})
 			.then((res) => res.json())
+			.then((res) => res.data)
 
 		return clanData
 	},
@@ -87,17 +88,8 @@ function RouteComponent() {
 				name={cleanString(clan.clan_name)}
 				id={clan.clan_id}
 				miscStats={clanStats}
-				bookmark={{
-					pageType: "clan_stats",
-					pageId: clan.clan_id.toString(),
-					name: cleanString(clan.clan_name),
-					meta: {
-						version: "1",
-						data: {
-							icon: null,
-						},
-					},
-				}}
+				bookmarkPageId={clan.clan_id}
+				bookmarkPageType="clan_stats"
 			/>
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
 				{sortedMembers.map((member) => (

@@ -11,30 +11,30 @@ export function getContext() {
 			auth: {
 				getSession: apiClient.v1.auth.session.$get,
 				getLoginUrl: (provider: Provider) => {
-					return apiClient.v1.auth.login[":provider"].$url({
+					return apiClient.v1.auth.providers[":provider"].authorize.$get({
 						param: { provider },
+						query: {
+							// TODO: Add redirectTo
+						},
 					})
 				},
-				logout: apiClient.v1.auth.logout.$post,
+				logout: apiClient.v1.auth.session.$delete,
 			},
 			brawlhalla: {
-				get1v1Rankings:
-					apiClient.v1.brawlhalla.rankings["1v1"][":region?"][":page?"].$get,
-				get2v2Rankings:
-					apiClient.v1.brawlhalla.rankings["2v2"][":region?"][":page?"].$get,
-				getClansSearch: apiClient.v1.brawlhalla.clans.search[":page?"].$get,
+				get1v1Rankings: apiClient.v1.brawlhalla.rankings["1v1"].$get,
+				get2v2Rankings: apiClient.v1.brawlhalla.rankings["2v2"].$get,
+				getClansSearch: apiClient.v1.brawlhalla.clans.search.$get,
 				getClanById: apiClient.v1.brawlhalla.clans[":clanId"].$get,
-				getPowerRankings:
-					apiClient.v1.brawlhalla.rankings.power[":region?"][":page?"].$get,
+				getPowerRankings: apiClient.v1.brawlhalla.rankings.power.$get,
 				searchPlayer: apiClient.v1.brawlhalla.players.search.$get,
 				getPlayerById: apiClient.v1.brawlhalla.players[":playerId"].$get,
-				getArticles: apiClient.v1.brawlhalla.articles[":category?"].$get,
+				getArticles: apiClient.v1.brawlhalla.articles.$get,
 				getWeeklyRotation: apiClient.v1.brawlhalla["weekly-rotation"].$get,
 			},
 			bookmarks: {
 				getBookmarkByPageId:
 					apiClient.v1.bookmarks[":pageType"][":pageId"].$get,
-				addBookmark: apiClient.v1.bookmarks[":pageType"][":pageId"].$post,
+				addBookmark: apiClient.v1.bookmarks[":pageType"][":pageId"].$put,
 				deleteBookmark: apiClient.v1.bookmarks[":pageType"][":pageId"].$delete,
 				getBookmarks: apiClient.v1.bookmarks.$get,
 			},
