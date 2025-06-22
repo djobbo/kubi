@@ -38,3 +38,15 @@ jobs:
           platforms: linux/amd64
           build-args: |
             VITE_CLIENT_URL=${{ secrets.CLIENT_URL }}
+      
+      - name: Trigger Dokploy Deployment
+        run: |
+            curl -X 'POST' '${{ secrets.DOKPLOY_URL }}/api/trpc/compose.deploy' \
+            -d '{
+                "json":{
+                    "composeId": "${{ secrets.DOKPLOY_API_COMPOSE_ID }}"
+                }
+            }' \
+            -H 'accept: application/json' \
+            -H 'x-api-key: ${{ secrets.DOKPLOY_API_KEY }}' \
+            -H 'Content-Type: application/json'
