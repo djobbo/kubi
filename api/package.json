@@ -7,7 +7,7 @@
 		"start": "bun run db:migrate && bun run src/index.ts",
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "bun db:generate && drizzle-kit migrate",
-		"studio": "bunx drizzle-kit studio",
+		"studio": "drizzle-kit studio",
 		"check:types": "tsc --noEmit",
 		"build": "tsc"
 	},
@@ -21,7 +21,7 @@
 		"@t3-oss/env-core": "^0.13.8",
 		"arctic": "^3.7.0",
 		"drizzle-orm": "^0.44.2",
-		"hono": "^4.7.11",
+		"hono": "^4.8.2",
 		"hono-openapi": "^0.4.8",
 		"pino": "^9.7.0",
 		"pino-pretty": "^13.0.0",
