@@ -1,6 +1,7 @@
 services:
   api:
     image: ${DOCKERHUB_USERNAME}/dair-api:latest
+    pull_policy: always
     ports:
       - "${API_PORT:-3000}:3000"
     environment:
