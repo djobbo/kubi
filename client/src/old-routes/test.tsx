@@ -5,7 +5,7 @@ import { createFileRoute, useRouter } from "@tanstack/react-router"
 import { useSession } from "@/hooks/use-session"
 import { Button } from "@/ui/components/button"
 
-export const Route = createFileRoute("/test")({
+export const Route = createFileRoute("/old-routes/test")({
 	component: Home,
 })
 

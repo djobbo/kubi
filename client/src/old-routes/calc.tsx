@@ -13,7 +13,7 @@ import {
 	getPersonalEloReset,
 } from "@dair/brawlhalla-api/src/helpers/season-reset"
 
-export const Route = createFileRoute("/calc")({
+export const Route = createFileRoute("/old-routes/calc")({
 	component: RouteComponent,
 })
 

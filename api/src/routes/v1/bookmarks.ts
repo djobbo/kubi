@@ -1,6 +1,5 @@
 import { Hono } from "hono"
-import { resolver } from "hono-openapi/zod"
-import { z } from "zod"
+import { z } from "zod/v4"
 import {
 	contentlessResponse,
 	describeRoute,
@@ -29,6 +28,7 @@ export const bookmarksRoute = new Hono()
 						}),
 					}),
 				),
+				401: jsonErrorResponse("Unauthorized", ["UNAUTHORIZED"] as const),
 				500: jsonErrorResponse("Failed to fetch bookmarks", [
 					"FETCH_BOOKMARKS_FAILED",
 				] as const),
@@ -79,6 +79,7 @@ export const bookmarksRoute = new Hono()
 				400: jsonErrorResponse("Invalid page type", [
 					"INVALID_PAGE_TYPE",
 				] as const),
+				401: jsonErrorResponse("Unauthorized", ["UNAUTHORIZED"] as const),
 				404: jsonErrorResponse("Bookmark not found", [
 					"BOOKMARK_NOT_FOUND",
 				] as const),
@@ -162,6 +163,7 @@ export const bookmarksRoute = new Hono()
 					"VALIDATION_FAILED",
 					"INVALID_PAGE_TYPE",
 				] as const),
+				401: jsonErrorResponse("Unauthorized", ["UNAUTHORIZED"] as const),
 				500: jsonErrorResponse("Failed to create bookmark", [
 					"CREATE_BOOKMARK_FAILED",
 				] as const),
@@ -242,6 +244,7 @@ export const bookmarksRoute = new Hono()
 				400: jsonErrorResponse("Invalid page type", [
 					"INVALID_PAGE_TYPE",
 				] as const),
+				401: jsonErrorResponse("Unauthorized", ["UNAUTHORIZED"] as const),
 				404: jsonErrorResponse("Bookmark not found", [
 					"BOOKMARK_NOT_FOUND",
 				] as const),
@@ -329,6 +332,7 @@ export const bookmarksRoute = new Hono()
 				400: jsonErrorResponse("Invalid page type", [
 					"INVALID_PAGE_TYPE",
 				] as const),
+				401: jsonErrorResponse("Unauthorized", ["UNAUTHORIZED"] as const),
 				404: jsonErrorResponse("Bookmark not found", [
 					"BOOKMARK_NOT_FOUND",
 				] as const),
@@ -413,6 +417,7 @@ export const bookmarksRoute = new Hono()
 						}),
 					}),
 				),
+				401: jsonErrorResponse("Unauthorized", ["UNAUTHORIZED"] as const),
 				500: jsonErrorResponse("Failed to migrate bookmarks", [
 					"MIGRATION_FAILED",
 				] as const),

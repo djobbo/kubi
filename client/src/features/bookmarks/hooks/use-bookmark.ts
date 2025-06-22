@@ -62,6 +62,7 @@ export const useBookmark = (
 
 	return {
 		bookmark,
-		toggleBookmark: toggleBookmarkMutation.mutate,
+		toggleBookmark: (bookmarked = !bookmark) =>
+			toggleBookmarkMutation.mutate(bookmarked),
 	}
 }

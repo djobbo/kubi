@@ -4,8 +4,8 @@ import {
 	text,
 	uniqueIndex,
 } from "drizzle-orm/sqlite-core"
-import { createInsertSchema } from "drizzle-zod"
-import { z } from "zod"
+import { createInsertSchema, createSelectSchema } from "drizzle-zod"
+import { z } from "zod/v4"
 
 import { legendsMap } from "@dair/brawlhalla-api/src/constants/legends"
 import { usersTable } from "../auth/users"
@@ -67,6 +67,7 @@ export const bookmarksTable = sqliteTable(
 export type Bookmark = typeof bookmarksTable.$inferSelect
 export type NewBookmark = typeof bookmarksTable.$inferInsert
 
+export const bookmarkSelectSchema = createSelectSchema(bookmarksTable)
 export const bookmarksInsertSchema = createInsertSchema(bookmarksTable, {
 	pageType: pageTypeSchema,
 	meta: metaSchema,

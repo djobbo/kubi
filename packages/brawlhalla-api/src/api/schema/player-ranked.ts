@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "zod/v4"
 
 import { rankedRegionSchema } from "../../constants/ranked/regions"
 import { rankedTierSchema } from "../../constants/ranked/tiers"

@@ -1,7 +1,7 @@
 import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
 import { Link, createFileRoute } from "@tanstack/react-router"
-import { z } from "zod"
+import { z } from "zod/v4"
 
 import { RankingsLayout } from "@/features/brawlhalla/components/stats/rankings/RankingsLayout"
 import { useDebouncedState } from "@/hooks/useDebouncedState"
@@ -9,7 +9,7 @@ import { cn } from "@/ui/lib/utils"
 import { cleanString } from "@dair/common/src/helpers/clean-string"
 import { seo } from "@dair/common/src/helpers/seo"
 
-export const Route = createFileRoute("/rankings/clans/$")({
+export const Route = createFileRoute("/old-routes/rankings/clans/$")({
 	component: RouteComponent,
 	validateSearch: (search) =>
 		z
@@ -125,7 +125,7 @@ function RouteComponent() {
 								<div className="w-40 flex items-center justify-center">
 									{clan.createdAt
 										? clan.createdAt.toLocaleDateString()
-										: t`N/A`}
+										: t"N/A"}
 								</div>
 								<p className="w-20 text-center">{clan.xp}</p>
 							</div>

@@ -7,7 +7,7 @@ import {
 import { uniqueSymbol as openApiSpecsSymbol } from "hono-openapi"
 import { resolver } from "hono-openapi/zod"
 import type { ContentlessStatusCode, StatusCode } from "hono/utils/http-status"
-import { z } from "zod"
+import { z } from "zod/v4"
 
 interface DescribeRouteExtendedOptions<
 	TQuery extends Record<

@@ -27,9 +27,11 @@ export const createRouter = () => {
 			routeTree,
 			context,
 			defaultPreload: "intent",
-			defaultPreloadDelay: 300,
-			scrollRestoration: true,
 			defaultPreloadStaleTime: 0,
+			defaultPreloadDelay: 50,
+			scrollRestoration: true,
+			defaultStaleTime: 5 * 60 * 1000, // 5 minutes
+			defaultGcTime: 10 * 60 * 1000, // 10 minutes
 			defaultErrorComponent: DefaultCatchBoundary,
 			defaultNotFoundComponent: NotFound,
 			defaultStructuralSharing: true,

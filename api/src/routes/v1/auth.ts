@@ -1,9 +1,15 @@
 import {
+	bookmarkSelectSchema,
+	sessionSelectSchema,
+	userSelectSchema,
+} from "@dair/schema"
+import {
 	DISCORD_PROVIDER_ID,
 	GOOGLE_PROVIDER_ID,
+	oauthAccountSelectSchema,
 } from "@dair/schema/src/auth/oauth-accounts"
 import { Hono } from "hono"
-import { z } from "zod"
+import { z } from "zod/v4"
 import {
 	contentlessResponse,
 	describeRoute,
@@ -32,7 +38,14 @@ export const authRoute = new Hono()
 					"Session retrieved successfully",
 					z.object({
 						data: z.object({
-							session: z.any().optional(),
+							session: sessionSelectSchema
+								.extend({
+									user: userSelectSchema.extend({
+										oauthAccounts: z.array(oauthAccountSelectSchema),
+										bookmarks: z.array(bookmarkSelectSchema),
+									}),
+								})
+								.nullable(),
 						}),
 						meta: z.object({
 							timestamp: z.string(),

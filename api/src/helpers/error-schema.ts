@@ -1,5 +1,5 @@
 import { resolver } from "hono-openapi/zod"
-import { z } from "zod"
+import { z } from "zod/v4"
 
 export const getOpenAPIErrorResponse = (message: string) => {
 	return {

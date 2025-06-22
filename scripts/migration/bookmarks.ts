@@ -1,6 +1,6 @@
 import { sql as drizzleSql } from "drizzle-orm"
 import postgres from "postgres"
-import { z } from "zod"
+import { z } from "zod/v4"
 
 import { PRE_MIGRATION_DISCORD_USER_ID_PREFIX } from "@/features/bookmarks/constants"
 import type { NewBookmark } from "@dair/schema"

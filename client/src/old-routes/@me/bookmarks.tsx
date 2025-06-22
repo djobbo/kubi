@@ -5,7 +5,7 @@ import { useBookmarks } from "@/features/bookmarks/hooks/use-bookmarks"
 import { FavoritesGrid } from "@/features/brawlhalla/components/favorites/FavoritesGrid"
 import { SectionTitle } from "@/features/brawlhalla/components/layout/SectionTitle"
 
-export const Route = createFileRoute("/@me/bookmarks")({
+export const Route = createFileRoute("/old-routes/@me/bookmarks")({
 	component: RouteComponent,
 })
 

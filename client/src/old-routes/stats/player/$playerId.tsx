@@ -48,7 +48,7 @@ const tabClassName = cn(
 	}),
 )
 
-export const Route = createFileRoute("/stats/player/$playerId")({
+export const Route = createFileRoute("/old/stats/player/$playerId")({
 	component: RouteComponent,
 	loader: async ({ params: { playerId }, context: { apiClient } }) => {
 		const playerData = await apiClient.brawlhalla

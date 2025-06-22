@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm"
 import { sqliteTable, text } from "drizzle-orm/sqlite-core"
+import { createSelectSchema } from "drizzle-zod"
 import { bookmarksTable } from "../bookmarks/bookmarks"
 import { withTimestamp } from "../helpers/with-timestamp"
 import { oauthAccountsTable } from "./oauth-accounts"
@@ -15,6 +16,8 @@ export const usersTable = sqliteTable("users", {
 
 export type User = typeof usersTable.$inferSelect
 export type NewUser = typeof usersTable.$inferInsert
+
+export const userSelectSchema = createSelectSchema(usersTable)
 
 export const usersRelations = relations(usersTable, ({ many }) => ({
 	oauthAccounts: many(oauthAccountsTable),

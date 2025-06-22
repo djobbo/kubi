@@ -6,30 +6,24 @@ import {
 } from "@tanstack/react-router"
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools"
 
-import TanStackQueryLayout from "../integrations/tanstack-query/layout.tsx"
+import TanStackQueryLayout from "@/integrations/tanstack-query/layout"
 
-import styles from "../styles.css?url"
+import styles from "@/styles.css?url"
 
-import { t } from "@lingui/core/macro"
-import { Trans } from "@lingui/react/macro"
-import { KBarProvider } from "kbar"
-
-import { AnimatedLogo } from "@/components/base/AnimatedLogo"
-import { PageLoader } from "@/components/base/PageLoader"
-import { BackToTopButton } from "@/features/brawlhalla/components/BackToTopButton"
-import { Layout } from "@/features/brawlhalla/components/layout/Layout"
-import { Searchbox } from "@/features/brawlhalla/components/search/Searchbox"
-import { SideNavProvider } from "@/features/sidebar/sidenav-provider"
-import { Toaster } from "@/features/toaster/index.tsx"
+import { SiteHeader } from "@/components/layout/header"
+import { AppSidebar } from "@/features/sidebar/components/app-sidebar"
 import { activateLocale } from "@/locales/activate"
 import type { RouterContext } from "@/router.tsx"
-import { SidebarProvider } from "@/ui/components/sidebar"
+import { SidebarInset, SidebarProvider } from "@/ui/components/sidebar"
 import { seo } from "@dair/common/src/helpers/seo"
+import { t } from "@lingui/core/macro"
 
 export const Route = createRootRouteWithContext<RouterContext>()({
 	loader: async ({ context: { apiClient } }) => {
 		const session = await apiClient.auth
-			.getSession()
+			.getSession({
+				query: {},
+			})
 			.then((res) => res.json())
 			.then((res) => res.data.session)
 			.catch(() => null)
@@ -38,6 +32,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 			session,
 		}
 	},
+	staleTime: Number.POSITIVE_INFINITY,
 	head: ({ loaderData }) => {
 		const { lang } = loaderData ?? {}
 		activateLocale(lang)
@@ -87,25 +82,24 @@ function RootComponent() {
 		<RootDocument>
 			{/* TODO: GAscripts */}
 			{/* <GAScripts /> */}
-			<SidebarProvider>
-				<KBarProvider actions={[]} options={{}}>
-					<SideNavProvider>
-						<PageLoader>
-							<div className="flex items-center gap-4">
-								<span className="text-sm">
-									<Trans>Loading...</Trans>
-								</span>
-								<AnimatedLogo size={32} />
-							</div>
-						</PageLoader>
-						<Toaster />
-						<Layout>
+			<SidebarProvider
+				style={
+					{
+						"--sidebar-width": "calc(var(--spacing) * 72)",
+						"--header-height": "calc(var(--spacing) * 12)",
+					} as React.CSSProperties
+				}
+				defaultOpen={false}
+			>
+				<AppSidebar variant="inset" />
+				<SidebarInset>
+					<SiteHeader />
+					<div className="@container/main flex flex-1 flex-col gap-2 py-4 md:py-6">
+						<div className="px-4 lg:px-6 w-full max-w-7xl mx-auto">
 							<Outlet />
-						</Layout>
-						<Searchbox />
-						<BackToTopButton />
-					</SideNavProvider>
-				</KBarProvider>
+						</div>
+					</div>
+				</SidebarInset>
 			</SidebarProvider>
 			<TanStackQueryLayout />
 			<TanStackRouterDevtools />

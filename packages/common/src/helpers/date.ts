@@ -45,7 +45,8 @@ export const formatTime = (seconds: number) =>
 	getHMSStringFromSeconds(
 		seconds,
 		// eslint-disable-next-line lingui/no-unlocalized-strings
-		({ hours, minutes, seconds }) => `${hours}h ${minutes}m ${seconds}s`,
+		({ hours, minutes, seconds }) =>
+			`${hours.toLocaleString()}h ${minutes.toLocaleString()}m ${seconds.toLocaleString()}s`,
 	)
 
 export const formatUnixTime = (unixTime: number) =>

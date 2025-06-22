@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "zod/v4"
 
 export enum PowerRankingsGameMode {
 	Power1v1 = "1v1",

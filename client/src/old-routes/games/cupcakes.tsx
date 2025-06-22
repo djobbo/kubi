@@ -9,7 +9,7 @@ import cupcakesStyles from "@/features/games/cupcakes/cupcakes.css?url"
 import { useCupcakesStore } from "@/features/games/cupcakes/store"
 import { seo } from "@dair/common/src/helpers/seo"
 
-export const Route = createFileRoute("/games/cupcakes")({
+export const Route = createFileRoute("/old-routes/games/cupcakes")({
 	component: RouteComponent,
 	head: () => {
 		return {

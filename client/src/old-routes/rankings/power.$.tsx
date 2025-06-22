@@ -1,7 +1,7 @@
 import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
 import { createFileRoute } from "@tanstack/react-router"
-import { z } from "zod"
+import { z } from "zod/v4"
 
 import { Tooltip } from "@/components/base/Tooltip"
 import {
@@ -18,7 +18,7 @@ import {
 import { cleanString } from "@dair/common/src/helpers/clean-string"
 import { seo } from "@dair/common/src/helpers/seo"
 
-export const Route = createFileRoute("/rankings/power/$")({
+export const Route = createFileRoute("/old-routes/rankings/power/$")({
 	component: RouteComponent,
 	validateSearch: (search) =>
 		z

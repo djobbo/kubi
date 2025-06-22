@@ -37,7 +37,11 @@ export const AppSidebar = ({
 							className="object-contain object-center h-6"
 						/>
 					) : (
-						<>CH</>
+						<SafeImage
+							src="/assets/images/brand/logos/logo-192x192.png"
+							alt={t`Corehalla logo`}
+							className="object-contain object-center h-6"
+						/>
 					)}
 				</Link>
 			</SidebarHeader>

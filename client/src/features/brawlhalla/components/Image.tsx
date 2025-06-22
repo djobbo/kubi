@@ -1,4 +1,4 @@
-import type { ImgHTMLAttributes } from "react"
+import type { CSSProperties, ImgHTMLAttributes } from "react"
 
 import type { SafeAsset } from "@/assetsTree.gen"
 import { cn } from "@/ui/lib/utils"
@@ -15,6 +15,7 @@ export type ImagePropsWithoutSrc = Omit<
 	containerClassName?: string
 	Container?: "div" | "span"
 	position?: "absolute" | "relative" | "fixed" | string
+	containerStyle?: CSSProperties
 }
 
 type UnsafeImageProps = ImagePropsWithoutSrc & {
@@ -25,10 +26,14 @@ export const UnsafeImage = ({
 	containerClassName,
 	Container = "div",
 	position = "relative",
+	containerStyle,
 	...props
 }: UnsafeImageProps) => {
 	return (
-		<Container className={cn(position, containerClassName)}>
+		<Container
+			className={cn(position, containerClassName)}
+			style={containerStyle}
+		>
 			<img {...props} />
 		</Container>
 	)
@@ -75,14 +80,16 @@ export const WeaponIcon = ({ weapon, ...props }: WeaponIconProps) => {
 }
 
 type RankedTierImageProps = ImagePropsWithoutSrc & {
-	tier: RankedTier
+	tier: RankedTier | null
 }
 
 export const RankedTierBanner = ({ tier, ...props }: RankedTierImageProps) => {
+	const nonNullTier = tier ?? "Valhallan"
+
 	return (
 		<SafeImage
-			src={`/assets/images/ranked/banners/${tier}.png`}
-			alt={tier}
+			src={`/assets/images/ranked/banners/${nonNullTier}.png`}
+			alt={nonNullTier}
 			{...props}
 		/>
 	)

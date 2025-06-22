@@ -5,7 +5,7 @@ import type {
 } from "@dair/brawlhalla-api/src/constants/power/order-by"
 import { Hono } from "hono"
 import { resolver, validator } from "hono-openapi/zod"
-import { z } from "zod"
+import { z } from "zod/v4"
 import {
 	describeRoute,
 	jsonErrorResponse,

@@ -1,45 +1,30 @@
 import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
 import { Link, createFileRoute } from "@tanstack/react-router"
-import { z } from "zod"
 
-import { LegendIcon } from "@/features/brawlhalla/components/Image"
 import { RankingsTableItem } from "@/features/brawlhalla/components/stats/RankingsTableItem"
 import { RankingsLayout } from "@/features/brawlhalla/components/stats/rankings/RankingsLayout"
-import { useDebouncedState } from "@/hooks/useDebouncedState"
-import { legendsMap } from "@dair/brawlhalla-api/src/constants/legends"
+import { getTeamPlayers } from "@dair/brawlhalla-api/src/helpers/team-players"
 import { cleanString } from "@dair/common/src/helpers/clean-string"
 import { seo } from "@dair/common/src/helpers/seo"
 
-export const Route = createFileRoute("/rankings/1v1/$")({
+export const Route = createFileRoute("/old-routes/rankings/2v2/$")({
 	component: RouteComponent,
-	validateSearch: (search) =>
-		z
-			.object({
-				player: z.string().optional(),
-			})
-			.parse(search),
-	loaderDeps: ({ search: { player } }) => ({ player }),
-	loader: async ({
-		params: { _splat },
-		deps: { player },
-		context: { apiClient },
-	}) => {
+
+	loader: async ({ params: { _splat }, context: { apiClient } }) => {
 		const [region = "all", page = "1"] = _splat?.split("/") ?? []
 		const { data: rankings, updatedAt } = await apiClient.brawlhalla
-			.get1v1Rankings({
+			.get2v2Rankings({
 				param: {
 					page,
 					region,
 				},
-				query: { name: player },
 			})
 			.then((res) => res.json())
 
 		return {
 			rankings,
 			updatedAt,
-			player,
 			region,
 			page,
 		}
@@ -47,26 +32,21 @@ export const Route = createFileRoute("/rankings/1v1/$")({
 	head: ({ loaderData }) => {
 		if (!loaderData) return {}
 
-		const { region, page, player } = loaderData
+		const { region, page } = loaderData
 
 		const formatedRegion = region === "all" ? t`Global` : region.toUpperCase()
-		const formatedSearch = player ? ` - ${player}` : ""
 
 		return {
 			meta: seo({
-				title: t`Brawlhalla ${formatedRegion} 1v1 Rankings - Page ${page} ${formatedSearch} • Corehalla`,
-				description: t`Brawlhalla ${formatedRegion} 1v1 Rankings - Page ${page} ${formatedSearch} • Corehalla`,
+				title: t`Brawlhalla ${formatedRegion} 2v2 Rankings - Page ${page} • Corehalla`,
+				description: t`Brawhalla ${formatedRegion} 2v2 Rankings - Page ${page} • Corehalla`,
 			}),
 		}
 	},
 })
 
 function RouteComponent() {
-	const { player, region, page, rankings } = Route.useLoaderData()
-	const [search, setSearch, immediateSearch] = useDebouncedState(
-		player ?? "",
-		500,
-	)
+	const { region, page, rankings } = Route.useLoaderData()
 
 	return (
 		<RankingsLayout
@@ -78,7 +58,7 @@ function RouteComponent() {
 				{ page: "power/2v2", label: t`Power 2v2` },
 				{ page: "clans", label: t`Clans` },
 			]}
-			currentBracket="1v1"
+			currentBracket="2v2"
 			regions={[
 				{ page: "all", label: t`Global` },
 				{ page: "us-e", label: t`US-E` },
@@ -93,14 +73,9 @@ function RouteComponent() {
 			]}
 			currentRegion={region}
 			currentPage={page}
-			hasPagination={!search}
-			hasSearch
-			search={immediateSearch}
-			setSearch={setSearch}
-			searchPlaceholder={t`Search player...`}
-			searchSubtitle={t`Search must start with exact match. Only players that have completed their 10 placement matches are shown.`}
+			hasPagination
 		>
-			<div className="py-4 w-full h-full items-center gap-4 hidden md:flex">
+			<div className="py-4 w-full h-full hidden md:flex items-center gap-4">
 				<p className="w-16 text-center">
 					<Trans>Rank</Trans>
 				</p>
@@ -111,7 +86,10 @@ function RouteComponent() {
 					<Trans>Region</Trans>
 				</p>
 				<p className="flex-1">
-					<Trans>Name</Trans>
+					<Trans>Player 1</Trans>
+				</p>
+				<p className="flex-1">
+					<Trans>Player 2</Trans>
 				</p>
 				<p className="w-16 text-center">
 					<Trans>Games</Trans>
@@ -126,40 +104,41 @@ function RouteComponent() {
 					<Trans>Elo</Trans>
 				</p>
 			</div>
-
 			<div className="rounded-lg overflow-hidden border border-border mb-4 flex flex-col">
-				{rankings
-					.filter((player) =>
-						player.name.toLowerCase().startsWith(immediateSearch),
-					)
-					.map((player, i) => {
-						const legend = legendsMap[player.best_legend]
+				{rankings.map((team, i) => {
+					const players = getTeamPlayers(team)
+					if (!players) return null
 
-						return (
-							<RankingsTableItem
-								key={player.brawlhalla_id}
-								index={i}
-								content={
-									<Link
-										to="/stats/player/$playerId"
-										params={{ playerId: player.brawlhalla_id.toString() }}
-										className="flex flex-1 items-center gap-2 md:gap-3"
-									>
-										{legend && (
-											<LegendIcon
-												legendNameKey={legend.legend_name_key}
-												alt={legend.bio_name}
-												containerClassName="w-6 h-6 rounded-lg overflow-hidden"
-												className="object-cover object-center"
-											/>
-										)}
-										{cleanString(player.name)}
-									</Link>
-								}
-								{...player}
-							/>
-						)
-					})}
+					const [player1, player2] = players
+
+					return (
+						<RankingsTableItem
+							key={`${player1.id}-${player2.id}`}
+							index={i}
+							content={
+								<>
+									<p className="flex flex-1 items-center">
+										<Link
+											to="/stats/player/$playerId"
+											params={{ playerId: player1.id.toString() }}
+										>
+											{cleanString(player1.name)}
+										</Link>
+									</p>
+									<p className="flex flex-1 items-center">
+										<Link
+											to="/stats/player/$playerId"
+											params={{ playerId: player2.id.toString() }}
+										>
+											{cleanString(player2.name)}
+										</Link>
+									</p>
+								</>
+							}
+							{...team}
+						/>
+					)
+				})}
 			</div>
 		</RankingsLayout>
 	)

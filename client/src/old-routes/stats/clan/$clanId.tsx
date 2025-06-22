@@ -8,7 +8,7 @@ import { cleanString } from "@dair/common/src/helpers/clean-string"
 import { formatUnixTime } from "@dair/common/src/helpers/date"
 import { seo } from "@dair/common/src/helpers/seo"
 
-export const Route = createFileRoute("/stats/clan/$clanId")({
+export const Route = createFileRoute("/old-routes/stats/clan/$clanId")({
 	component: RouteComponent,
 	loader: async ({ params: { clanId }, context: { apiClient } }) => {
 		const clanData = await apiClient.brawlhalla

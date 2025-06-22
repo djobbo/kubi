@@ -2,8 +2,8 @@ import { createFileRoute, redirect } from "@tanstack/react-router"
 
 import { env } from "@/env"
 
-export const Route = createFileRoute("/(social)/wiki")({
+export const Route = createFileRoute("/old-routes/(social)/github")({
 	beforeLoad: () => {
-		throw redirect({ href: env.VITE_BRAWLHALLA_WIKI_URL })
+		throw redirect({ href: env.VITE_SOCIAL_GITHUB_URL })
 	},
 })

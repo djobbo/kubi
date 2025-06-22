@@ -20,7 +20,7 @@ import {
 
 import { apiCacheTable } from "@dair/schema/src/cache/api-cache"
 import { desc, inArray } from "drizzle-orm"
-import z from "zod"
+import z from "zod/v4"
 import { db } from "../../db"
 import { env } from "../../env"
 import { typesafeFetch } from "../../helpers/typesafe-fetch"
