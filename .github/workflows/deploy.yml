@@ -17,9 +17,6 @@ jobs:
           - service: api
             dockerfile: ./api/Dockerfile
             tag: dair-api:latest
-          - service: client
-            dockerfile: ./client/Dockerfile
-            tag: dair-client:latest
  
     steps:
       - name: Checkout repository
