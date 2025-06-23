@@ -42,8 +42,15 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.tag }}
           platforms: linux/amd64
           build-args: |
-            VITE_CLIENT_URL=${{ secrets.CLIENT_URL }}
-      
+            CLIENT_URL=${{ vars.CLIENT_URL }}
+            API_URL=${{ vars.API_URL }}
+            SOCIAL_DISCORD_URL=${{ vars.SOCIAL_DISCORD_URL }}
+            SOCIAL_GITHUB_URL=${{ vars.SOCIAL_GITHUB_URL }}
+            SOCIAL_TWITTER_URL=${{ vars.SOCIAL_TWITTER_URL }}
+            SOCIAL_KOFI_URL=${{ vars.SOCIAL_KOFI_URL }}
+            BRAWLHALLA_WIKI_URL=${{ vars.BRAWLHALLA_WIKI_URL }}
+            GOOGLE_ANALYTICS_TRACKING_ID=${{ vars.GOOGLE_ANALYTICS_TRACKING_ID }}
+            GOOGLE_ADSENSE_ID=${{ vars.GOOGLE_ADSENSE_ID }}
       - name: Trigger Dokploy Deployment
         run: |
             curl -X 'POST' '${{ secrets.DOKPLOY_URL }}/api/trpc/compose.deploy' \

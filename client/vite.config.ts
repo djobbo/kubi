@@ -1,21 +1,11 @@
 import { lingui } from "@lingui/vite-plugin"
-import { createEnv } from "@t3-oss/env-core"
 import tailwindcss from "@tailwindcss/vite"
 import { tanstackStart } from "@tanstack/react-start/plugin/vite"
 import { defineConfig } from "vite"
 import { VitePWA } from "vite-plugin-pwa"
 import viteTsConfigPaths from "vite-tsconfig-paths"
-import { z } from "zod/v4"
 import safeAssetsPlugin from "./plugins/safe-assets-plugin"
-
-export const env = createEnv({
-	clientPrefix: "VITE_",
-	client: {
-		VITE_CLIENT_URL: z.url(),
-	},
-	runtimeEnv: import.meta.env,
-	emptyStringAsUndefined: true,
-})
+import { env } from './src/env'
 
 const pwaConfig = VitePWA({
 	injectRegister: "auto",
