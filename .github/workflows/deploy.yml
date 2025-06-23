@@ -12,12 +12,17 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [api]
+        service: [api, client]
         include:
           - service: api
             dockerfile: ./api/Dockerfile
             tag: dair-api:latest
- 
+            compose_id_name: DOKPLOY_API_COMPOSE_ID
+
+          - service: client
+            dockerfile: ./client/Dockerfile
+            tag: dair-client:latest
+            compose_id_name: DOKPLOY_CLIENT_COMPOSE_ID
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -44,7 +49,7 @@ jobs:
             curl -X 'POST' '${{ secrets.DOKPLOY_URL }}/api/trpc/compose.deploy' \
             -d '{
                 "json":{
-                    "composeId": "${{ secrets.DOKPLOY_API_COMPOSE_ID }}"
+                    "composeId": "${{ secrets[matrix.compose_id_name] }}"
                 }
             }' \
             -H 'accept: application/json' \
