@@ -1,8 +1,7 @@
 services:
   client:
-    env_file:
-      - .env
     image: ${DOCKERHUB_USERNAME}/dair-client:latest
+    pull_policy: always
     ports:
       - "${CLIENT_PORT:-3000}:3000"
     networks:
