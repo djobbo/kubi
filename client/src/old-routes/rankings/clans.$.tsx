@@ -125,7 +125,7 @@ function RouteComponent() {
 								<div className="w-40 flex items-center justify-center">
 									{clan.createdAt
 										? clan.createdAt.toLocaleDateString()
-										: t"N/A"}
+										: t`N/A`}
 								</div>
 								<p className="w-20 text-center">{clan.xp}</p>
 							</div>
