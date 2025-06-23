@@ -1,8 +1,8 @@
 import { Client, cacheExchange, fetchExchange, gql } from "@urql/core"
 
+import { env } from "@/env"
+import { withCache } from "@/helpers/with-cache"
 import type { z } from "zod/v4"
-import { env } from "../../env"
-import { withCache } from "../../helpers/with-cache"
 import { parseWeeklyRotation } from "./helpers/parse-weekly-rotation"
 import { articlesSchema } from "./helpers/schema"
 

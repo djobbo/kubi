@@ -1,3 +1,4 @@
+import { withCache } from "@/helpers/with-cache"
 import { clanSchema } from "@dair/brawlhalla-api/src/api/schema/clan"
 import {
 	type PlayerRanked,
@@ -9,7 +10,6 @@ import {
 	ranking2v2Schema,
 } from "@dair/brawlhalla-api/src/api/schema/rankings"
 import { getTeamPlayers } from "@dair/brawlhalla-api/src/helpers/team-players"
-import { withCache } from "../../helpers/with-cache"
 import {
 	clanMock,
 	playerRankedMock,
@@ -18,13 +18,13 @@ import {
 	rankings2v2Mock,
 } from "./mocks"
 
+import { db } from "@/db"
+import { env } from "@/env"
+import { typesafeFetch } from "@/helpers/typesafe-fetch"
+import { archiveService } from "@/services/archive"
 import { apiCacheTable } from "@dair/schema/src/cache/api-cache"
 import { desc, inArray } from "drizzle-orm"
 import z from "zod/v4"
-import { db } from "../../db"
-import { env } from "../../env"
-import { typesafeFetch } from "../../helpers/typesafe-fetch"
-import { archiveService } from "../archive"
 
 const BRAWLHALLA_API_URL = "https://api.brawlhalla.com"
 

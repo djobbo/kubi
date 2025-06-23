@@ -1,9 +1,9 @@
 import { desc, eq } from "drizzle-orm"
 
+import { db } from "@/db"
+import { env } from "@/env"
+import { logger } from "@/helpers/logger"
 import { apiCacheTable } from "@dair/schema/src/cache/api-cache"
-import { db } from "../db"
-import { env } from "../env"
-import { logger } from "../helpers/logger"
 
 export const DEFAULT_CACHE_MAX_AGE = 15 * 60 * 1000
 

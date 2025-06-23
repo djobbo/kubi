@@ -1,3 +1,6 @@
+import { env } from "@/env"
+import { typesafeFetch } from "@/helpers/typesafe-fetch"
+import { withCache } from "@/helpers/with-cache"
 import { powerRankingsSchema } from "@dair/brawlhalla-api/src/api/schema/power-rankings"
 import {
 	type PowerRankedGameMode,
@@ -9,9 +12,6 @@ import {
 	PowerRankingsOrderBy,
 } from "@dair/brawlhalla-api/src/constants/power/order-by"
 import { PowerRankingsRegion } from "@dair/brawlhalla-api/src/constants/power/regions"
-import { env } from "../../env"
-import { typesafeFetch } from "../../helpers/typesafe-fetch"
-import { withCache } from "../../helpers/with-cache"
 import { powerRankingsMock } from "./mocks"
 
 const BRAWLTOOLS_API_URL = "https://api.brawltools.com"

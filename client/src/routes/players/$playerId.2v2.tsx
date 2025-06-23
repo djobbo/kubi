@@ -1,5 +1,11 @@
 import { FlagIcon } from "@/features/brawlhalla/components/Image"
-import { Card, CardContent, CardHeader, CardTitle } from "@/ui/components/card"
+import {
+	Card,
+	CardContent,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "@/ui/components/card"
 import { rankedRegions } from "@dair/brawlhalla-api/src/constants/ranked/regions"
 import { getTierFromRating } from "@dair/brawlhalla-api/src/constants/ranked/tiers"
 import { getLegendEloReset } from "@dair/brawlhalla-api/src/helpers/season-reset"
@@ -137,8 +143,10 @@ function RouteComponent() {
 									wins={team.wins}
 									games={team.games}
 								/>
-
+							</CardContent>
+							<CardFooter>
 								<StatsGrid
+									className="w-full"
 									stats={[
 										{
 											name: t`Games`,
@@ -155,11 +163,10 @@ function RouteComponent() {
 											value: eloReset,
 											desc: t`Elo reset for next season (${eloResetTier})`,
 										},
-										// center grid elements
 									]}
 									gridOverride="grid-cols-3"
 								/>
-							</CardContent>
+							</CardFooter>
 						</Card>
 					)
 				})}

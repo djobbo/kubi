@@ -1,6 +1,6 @@
+import { logger } from "@/helpers/logger"
 import { legends } from "@dair/brawlhalla-api/src/constants/legends"
 import { load as loadHtml } from "cheerio"
-import { logger } from "../../../helpers/logger"
 
 export const parseWeeklyRotation = (content?: string) => {
 	if (!content) return []

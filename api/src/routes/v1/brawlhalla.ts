@@ -1,47 +1,38 @@
+import { getIp } from "@/helpers/get-ip"
+import HttpStatus from "@/helpers/http-status"
+import { jsonContent, jsonErrorContent } from "@/helpers/json-content"
+import { optionalAuthMiddleware } from "@/middlewares/auth-middleware"
+import { archiveService } from "@/services/archive"
+import { bookmarksService } from "@/services/bookmarks/bookmarks-service"
+import { brawlhallaGqlService } from "@/services/brawlhalla-gql/brawlhalla-gql-service"
+import { brawlhallaService } from "@/services/brawlhalla/brawlhalla-service"
+import { brawltoolsService } from "@/services/brawltools/brawltools-service"
+import { getRegion } from "@/services/locate"
 import type { PowerRankingsGameMode } from "@dair/brawlhalla-api/src/constants/power/game-mode"
 import type {
 	PowerRankingsOrder,
 	PowerRankingsOrderBy,
 } from "@dair/brawlhalla-api/src/constants/power/order-by"
-import { Hono } from "hono"
-import { resolver, validator } from "hono-openapi/zod"
-import { z } from "zod/v4"
-import {
-	describeRoute,
-	jsonErrorResponse,
-	jsonResponse,
-	queryParam,
-} from "../../helpers/describe-route"
-import { getIp } from "../../helpers/get-ip"
-import { optionalAuthMiddleware } from "../../middlewares/auth-middleware"
-import { archiveService } from "../../services/archive"
-import { bookmarksService } from "../../services/bookmarks/bookmarks-service"
-import { brawlhallaGqlService } from "../../services/brawlhalla-gql/brawlhalla-gql-service"
-import { brawlhallaService } from "../../services/brawlhalla/brawlhalla-service"
-import { brawltoolsService } from "../../services/brawltools/brawltools-service"
-import { getRegion } from "../../services/locate"
+import { OpenAPIHono as Hono, createRoute, z } from "@hono/zod-openapi"
 
 export const brawlhallaRoute = new Hono()
-	.use(optionalAuthMiddleware)
-
 	// GET /brawlhalla/players/search - Search for players by name
-	.get(
-		"/players/search",
-		describeRoute({
+	.openapi(
+		createRoute({
+			method: "get",
+			path: "/players/search",
 			description: "Search for players by name",
 			summary: "Search for players by name",
 			tags: ["Brawlhalla"],
-			query: {
-				name: {
-					required: true,
-					schema: z
+			request: {
+				query: z.object({
+					name: z
 						.string()
 						.min(3, "Name parameter must be at least 3 characters long"),
-				},
+				}),
 			},
 			responses: {
-				200: jsonResponse(
-					"Successful response",
+				[HttpStatus.OK]: jsonContent(
 					z.object({
 						data: z.array(z.any()),
 						meta: z.object({
@@ -50,52 +41,66 @@ export const brawlhallaRoute = new Hono()
 							timestamp: z.string(),
 						}),
 					}),
+					"Successful response",
 				),
-				400: jsonErrorResponse(
-					"Bad request - missing or invalid search parameter",
+				[HttpStatus.BAD_REQUEST]: jsonErrorContent(
 					["INVALID_SEARCH_PARAMETER"] as const,
+					"Bad request - missing or invalid search parameter",
 				),
-				500: jsonErrorResponse("Failed to search players", [
-					"SEARCH_PLAYERS_FAILED",
-				] as const),
+				[HttpStatus.INTERNAL_SERVER_ERROR]: jsonErrorContent(
+					["SEARCH_PLAYERS_FAILED"] as const,
+					"Failed to search players",
+				),
 			},
+			middleware: optionalAuthMiddleware,
 		}),
 		async (c) => {
 			try {
 				const { name } = c.req.valid("query")
 				const aliases = await archiveService.searchAliases(name)
 
-				return c.json[200]({
-					data: aliases,
-					meta: {
-						query: name,
-						count: aliases.length,
-						timestamp: new Date().toISOString(),
+				return c.json(
+					{
+						data: aliases,
+						meta: {
+							query: name,
+							count: aliases.length,
+							timestamp: new Date().toISOString(),
+						},
 					},
-				})
+					HttpStatus.OK,
+				)
 			} catch (error) {
 				console.error("Error searching players:", error)
-				return c.json[500]({
-					error: {
-						code: "SEARCH_PLAYERS_FAILED",
-						message: "Failed to search players",
-						details: ["An error occurred while searching for players"],
+				return c.json(
+					{
+						error: {
+							code: "SEARCH_PLAYERS_FAILED" as const,
+							message: "Failed to search players",
+							details: ["An error occurred while searching for players"],
+						},
 					},
-				})
+					HttpStatus.INTERNAL_SERVER_ERROR,
+				)
 			}
 		},
 	)
 
 	// GET /brawlhalla/players/:playerId - Get player stats and ranked data
-	.get(
-		"/players/:playerId",
-		describeRoute({
+	.openapi(
+		createRoute({
+			method: "get",
+			path: "/players/{playerId}",
 			description: "Get player stats and ranked data by player ID",
 			summary: "Get player stats and ranked data by player ID",
 			tags: ["Brawlhalla"],
+			request: {
+				params: z.object({
+					playerId: z.string(),
+				}),
+			},
 			responses: {
-				200: jsonResponse(
-					"Player data retrieved successfully",
+				[HttpStatus.OK]: jsonContent(
 					z.object({
 						data: z.object({
 							stats: z.any(),
@@ -109,11 +114,14 @@ export const brawlhallaRoute = new Hono()
 							timestamp: z.string(),
 						}),
 					}),
+					"Player stats and ranked data retrieved successfully",
 				),
-				404: jsonErrorResponse("Player not found", [
-					"PLAYER_NOT_FOUND",
-				] as const),
+				[HttpStatus.NOT_FOUND]: jsonErrorContent(
+					["PLAYER_NOT_FOUND"] as const,
+					"Player not found",
+				),
 			},
+			middleware: optionalAuthMiddleware,
 		}),
 		async (c) => {
 			try {
@@ -138,42 +146,53 @@ export const brawlhallaRoute = new Hono()
 						? stats.updatedAt
 						: ranked.updatedAt
 
-				return c.json[200]({
-					data: {
-						stats: stats.data,
-						ranked: ranked.data,
-						aliases,
-						bookmark: bookmark ?? null,
+				return c.json(
+					{
+						data: {
+							stats: stats.data,
+							ranked: ranked.data,
+							aliases,
+							bookmark: bookmark ?? null,
+						},
+						meta: {
+							playerId,
+							updatedAt,
+							timestamp: new Date().toISOString(),
+						},
 					},
-					meta: {
-						playerId,
-						updatedAt,
-						timestamp: new Date().toISOString(),
-					},
-				})
+					HttpStatus.OK,
+				)
 			} catch (error) {
 				console.error("Error fetching player data:", error)
-				return c.json[404]({
-					error: {
-						code: "PLAYER_NOT_FOUND",
-						message: "Player not found",
-						details: ["The requested player could not be found"],
+				return c.json(
+					{
+						error: {
+							code: "PLAYER_NOT_FOUND" as const,
+							message: "Player not found",
+							details: ["The requested player could not be found"],
+						},
 					},
-				})
+					HttpStatus.NOT_FOUND,
+				)
 			}
 		},
 	)
 
 	// GET /brawlhalla/players/:playerId/aliases - Get player aliases with pagination
-	.get(
-		"/players/:playerId/aliases",
-		describeRoute({
+	.openapi(
+		createRoute({
+			method: "get",
+			path: "/players/{playerId}/aliases",
 			description: "Get player aliases with pagination",
 			summary: "Get player aliases with pagination",
 			tags: ["Brawlhalla"],
+			request: {
+				params: z.object({
+					playerId: z.string(),
+				}),
+			},
 			responses: {
-				200: jsonResponse(
-					"Player aliases retrieved successfully",
+				[HttpStatus.OK]: jsonContent(
 					z.object({
 						data: z.array(z.any()),
 						pagination: z.object({
@@ -187,14 +206,18 @@ export const brawlhallaRoute = new Hono()
 							timestamp: z.string(),
 						}),
 					}),
+					"Player aliases retrieved successfully",
 				),
-				400: jsonErrorResponse("Invalid pagination parameters", [
-					"INVALID_PAGINATION",
-				] as const),
-				500: jsonErrorResponse("Failed to fetch player aliases", [
-					"FETCH_ALIASES_FAILED",
-				] as const),
+				[HttpStatus.BAD_REQUEST]: jsonErrorContent(
+					["INVALID_PAGINATION"] as const,
+					"Invalid pagination parameters",
+				),
+				[HttpStatus.INTERNAL_SERVER_ERROR]: jsonErrorContent(
+					["FETCH_ALIASES_FAILED"] as const,
+					"Failed to fetch player aliases",
+				),
 			},
+			middleware: optionalAuthMiddleware,
 		}),
 		async (c) => {
 			try {
@@ -205,53 +228,69 @@ export const brawlhallaRoute = new Hono()
 				const limitNumber = limit ? Number.parseInt(limit) : 10
 
 				if (pageNumber < 1 || limitNumber < 1 || limitNumber > 100) {
-					return c.json[400]({
-						error: {
-							code: "INVALID_PAGINATION",
-							message: "Invalid pagination parameters",
-							details: ["Page must be >= 1, limit must be between 1 and 100"],
+					return c.json(
+						{
+							error: {
+								code: "INVALID_PAGINATION" as const,
+								message: "Invalid pagination parameters",
+								details: ["Page must be >= 1, limit must be between 1 and 100"],
+							},
 						},
-					})
+						HttpStatus.BAD_REQUEST,
+					)
 				}
 
 				const aliases = await archiveService.getAliases(playerId, pageNumber)
 
-				return c.json[200]({
-					data: aliases,
-					pagination: {
-						page: pageNumber,
-						limit: limitNumber,
-						hasMore: aliases.length === limitNumber,
+				return c.json(
+					{
+						data: aliases,
+						pagination: {
+							page: pageNumber,
+							limit: limitNumber,
+							hasMore: aliases.length === limitNumber,
+						},
+						meta: {
+							playerId,
+							count: aliases.length,
+							timestamp: new Date().toISOString(),
+						},
 					},
-					meta: {
-						playerId,
-						count: aliases.length,
-						timestamp: new Date().toISOString(),
-					},
-				})
+					HttpStatus.OK,
+				)
 			} catch (error) {
 				console.error("Error fetching player aliases:", error)
-				return c.json[500]({
-					error: {
-						code: "FETCH_ALIASES_FAILED",
-						message: "Failed to fetch player aliases",
-						details: ["An error occurred while retrieving player aliases"],
+				return c.json(
+					{
+						error: {
+							code: "FETCH_ALIASES_FAILED" as const,
+							message: "Failed to fetch player aliases",
+							details: ["An error occurred while retrieving player aliases"],
+						},
 					},
-				})
+					HttpStatus.INTERNAL_SERVER_ERROR,
+				)
 			}
 		},
 	)
 
 	// GET /brawlhalla/clans/search - Search for clans with pagination and filtering
-	.get(
-		"/clans/search",
-		describeRoute({
+	.openapi(
+		createRoute({
+			method: "get",
+			path: "/clans/search",
 			description: "Search for clans with pagination and filtering",
 			summary: "Search for clans with pagination and filtering",
 			tags: ["Brawlhalla"],
+			request: {
+				query: z.object({
+					page: z.coerce.number().min(1).default(1),
+					limit: z.coerce.number().min(1).max(100).default(50),
+					name: z.string().optional(),
+				}),
+			},
 			responses: {
-				200: jsonResponse(
-					"Clans retrieved successfully",
+				[HttpStatus.OK]: jsonContent(
 					z.object({
 						data: z.array(z.any()),
 						pagination: z.object({
@@ -268,74 +307,84 @@ export const brawlhallaRoute = new Hono()
 							timestamp: z.string(),
 						}),
 					}),
+					"Clans retrieved successfully",
 				),
-				400: jsonErrorResponse("Invalid pagination parameters", [
-					"INVALID_PAGINATION",
-				] as const),
-				500: jsonErrorResponse("Failed to search clans", [
-					"SEARCH_CLANS_FAILED",
-				] as const),
+				[HttpStatus.BAD_REQUEST]: jsonErrorContent(
+					["INVALID_PAGINATION"] as const,
+					"Invalid pagination parameters",
+				),
+				[HttpStatus.INTERNAL_SERVER_ERROR]: jsonErrorContent(
+					["SEARCH_CLANS_FAILED"] as const,
+					"Failed to search clans",
+				),
 			},
+			middleware: optionalAuthMiddleware,
 		}),
 		async (c) => {
 			try {
-				const { page, limit, name } = c.req.query()
+				const { page, limit, name } = c.req.valid("query")
 
-				const pageNumber = page ? Number.parseInt(page) : 1
-				const limitNumber = limit ? Number.parseInt(limit) : 50
-
-				if (pageNumber < 1 || limitNumber < 1 || limitNumber > 100) {
-					return c.json[400]({
-						error: {
-							code: "INVALID_PAGINATION",
-							message: "Invalid pagination parameters",
-							details: ["Page must be >= 1, limit must be between 1 and 100"],
+				if (page < 1 || limit < 1 || limit > 100) {
+					return c.json(
+						{
+							error: {
+								code: "INVALID_PAGINATION" as const,
+								message: "Invalid pagination parameters",
+								details: ["Page must be >= 1, limit must be between 1 and 100"],
+							},
 						},
-					})
+						HttpStatus.BAD_REQUEST,
+					)
 				}
 
 				const clansResult = await archiveService.getClans({
-					page: pageNumber,
+					page,
 					name,
 				})
 
-				return c.json[200]({
-					data: clansResult.clans,
-					pagination: {
-						page: pageNumber,
-						limit: limitNumber,
-						hasMore: clansResult.clans.length === limitNumber,
-						total: clansResult.total,
+				return c.json(
+					{
+						data: clansResult.clans,
+						pagination: {
+							page,
+							limit,
+							hasMore: clansResult.clans.length === limit,
+							total: clansResult.total,
+						},
+						meta: {
+							query: { name },
+							count: clansResult.clans.length,
+							timestamp: new Date().toISOString(),
+						},
 					},
-					meta: {
-						query: { name },
-						count: clansResult.clans.length,
-						timestamp: new Date().toISOString(),
-					},
-				})
+					HttpStatus.OK,
+				)
 			} catch (error) {
 				console.error("Error searching clans:", error)
-				return c.json[500]({
-					error: {
-						code: "SEARCH_CLANS_FAILED",
-						message: "Failed to search clans",
-						details: ["An error occurred while searching for clans"],
+				return c.json(
+					{
+						error: {
+							code: "SEARCH_CLANS_FAILED" as const,
+							message: "Failed to search clans",
+							details: ["An error occurred while searching for clans"],
+						},
 					},
-				})
+					HttpStatus.INTERNAL_SERVER_ERROR,
+				)
 			}
 		},
 	)
 
 	// GET /brawlhalla/clans/:clanId - Get clan details
-	.get(
-		"/clans/:clanId",
-		describeRoute({
+	.openapi(
+		createRoute({
+			method: "get",
+			path: "/clans/{clanId}",
 			description: "Get clan details by clan ID",
 			summary: "Get clan details by clan ID",
 			tags: ["Brawlhalla"],
 			responses: {
-				200: jsonResponse(
-					"Clan details retrieved successfully",
+				[HttpStatus.OK]: jsonContent(
 					z.object({
 						data: z.any(),
 						meta: z.object({
@@ -343,45 +392,56 @@ export const brawlhallaRoute = new Hono()
 							timestamp: z.string(),
 						}),
 					}),
+					"Clan details retrieved successfully",
 				),
-				404: jsonErrorResponse("Clan not found", ["CLAN_NOT_FOUND"] as const),
+				[HttpStatus.NOT_FOUND]: jsonErrorContent(
+					["CLAN_NOT_FOUND"] as const,
+					"Clan not found",
+				),
 			},
+			middleware: optionalAuthMiddleware,
 		}),
 		async (c) => {
 			try {
 				const { clanId } = c.req.param()
 				const clan = await brawlhallaService.getClanById(clanId)
 
-				return c.json[200]({
-					data: clan,
-					meta: {
-						clanId,
-						timestamp: new Date().toISOString(),
+				return c.json(
+					{
+						data: clan,
+						meta: {
+							clanId,
+							timestamp: new Date().toISOString(),
+						},
 					},
-				})
+					HttpStatus.OK,
+				)
 			} catch (error) {
 				console.error("Error fetching clan:", error)
-				return c.json[404]({
-					error: {
-						code: "CLAN_NOT_FOUND",
-						message: "Clan not found",
-						details: ["The requested clan could not be found"],
+				return c.json(
+					{
+						error: {
+							code: "CLAN_NOT_FOUND" as const,
+							message: "Clan not found",
+							details: ["The requested clan could not be found"],
+						},
 					},
-				})
+					HttpStatus.NOT_FOUND,
+				)
 			}
 		},
 	)
 
 	// GET /brawlhalla/rankings/1v1 - Get 1v1 rankings with pagination and filtering
-	.get(
-		"/rankings/1v1",
-		describeRoute({
+	.openapi(
+		createRoute({
+			method: "get",
+			path: "/rankings/1v1",
 			description: "Get 1v1 rankings with pagination and filtering",
 			summary: "Get 1v1 rankings with pagination and filtering",
 			tags: ["Brawlhalla"],
 			responses: {
-				200: jsonResponse(
-					"1v1 rankings retrieved successfully",
+				[HttpStatus.OK]: jsonContent(
 					z.object({
 						data: z.array(z.any()),
 						pagination: z.object({
@@ -399,14 +459,18 @@ export const brawlhallaRoute = new Hono()
 							timestamp: z.string(),
 						}),
 					}),
+					"1v1 rankings retrieved successfully",
 				),
-				400: jsonErrorResponse("Invalid pagination parameters", [
-					"INVALID_PAGINATION",
-				] as const),
-				500: jsonErrorResponse("Failed to fetch 1v1 rankings", [
-					"FETCH_RANKINGS_FAILED",
-				] as const),
+				[HttpStatus.BAD_REQUEST]: jsonErrorContent(
+					["INVALID_PAGINATION"] as const,
+					"Invalid pagination parameters",
+				),
+				[HttpStatus.INTERNAL_SERVER_ERROR]: jsonErrorContent(
+					["FETCH_RANKINGS_FAILED"] as const,
+					"Failed to fetch 1v1 rankings",
+				),
 			},
+			middleware: optionalAuthMiddleware,
 		}),
 		async (c) => {
 			try {
@@ -417,13 +481,16 @@ export const brawlhallaRoute = new Hono()
 				const regionParam = region || "all"
 
 				if (pageNumber < 1 || limitNumber < 1 || limitNumber > 100) {
-					return c.json[400]({
-						error: {
-							code: "INVALID_PAGINATION",
-							message: "Invalid pagination parameters",
-							details: ["Page must be >= 1, limit must be between 1 and 100"],
+					return c.json(
+						{
+							error: {
+								code: "INVALID_PAGINATION" as const,
+								message: "Invalid pagination parameters",
+								details: ["Page must be >= 1, limit must be between 1 and 100"],
+							},
 						},
-					})
+						HttpStatus.BAD_REQUEST,
+					)
 				}
 
 				const rankingsResult = await brawlhallaService.getRankings1v1(
@@ -432,44 +499,50 @@ export const brawlhallaRoute = new Hono()
 					name,
 				)
 
-				return c.json[200]({
-					data: rankingsResult.data,
-					pagination: {
-						page: pageNumber,
-						limit: limitNumber,
-						hasMore: rankingsResult.data.length === limitNumber,
+				return c.json(
+					{
+						data: rankingsResult.data,
+						pagination: {
+							page: pageNumber,
+							limit: limitNumber,
+							hasMore: rankingsResult.data.length === limitNumber,
+						},
+						meta: {
+							region: regionParam,
+							query: { name },
+							count: rankingsResult.data.length,
+							updatedAt: rankingsResult.updatedAt,
+							timestamp: new Date().toISOString(),
+						},
 					},
-					meta: {
-						region: regionParam,
-						query: { name },
-						count: rankingsResult.data.length,
-						updatedAt: rankingsResult.updatedAt,
-						timestamp: new Date().toISOString(),
-					},
-				})
+					HttpStatus.OK,
+				)
 			} catch (error) {
 				console.error("Error fetching 1v1 rankings:", error)
-				return c.json[500]({
-					error: {
-						code: "FETCH_RANKINGS_FAILED",
-						message: "Failed to fetch 1v1 rankings",
-						details: ["An error occurred while retrieving rankings"],
+				return c.json(
+					{
+						error: {
+							code: "FETCH_RANKINGS_FAILED" as const,
+							message: "Failed to fetch 1v1 rankings",
+							details: ["An error occurred while retrieving rankings"],
+						},
 					},
-				})
+					HttpStatus.INTERNAL_SERVER_ERROR,
+				)
 			}
 		},
 	)
 
 	// GET /brawlhalla/rankings/2v2 - Get 2v2 rankings with pagination
-	.get(
-		"/rankings/2v2",
-		describeRoute({
+	.openapi(
+		createRoute({
+			method: "get",
+			path: "/rankings/2v2",
 			description: "Get 2v2 rankings with pagination",
 			summary: "Get 2v2 rankings with pagination",
 			tags: ["Brawlhalla"],
 			responses: {
-				200: jsonResponse(
-					"2v2 rankings retrieved successfully",
+				[HttpStatus.OK]: jsonContent(
 					z.object({
 						data: z.array(z.any()),
 						pagination: z.object({
@@ -484,14 +557,18 @@ export const brawlhallaRoute = new Hono()
 							timestamp: z.string(),
 						}),
 					}),
+					"2v2 rankings retrieved successfully",
 				),
-				400: jsonErrorResponse("Invalid pagination parameters", [
-					"INVALID_PAGINATION",
-				] as const),
-				500: jsonErrorResponse("Failed to fetch 2v2 rankings", [
-					"FETCH_RANKINGS_FAILED",
-				] as const),
+				[HttpStatus.BAD_REQUEST]: jsonErrorContent(
+					["INVALID_PAGINATION"] as const,
+					"Invalid pagination parameters",
+				),
+				[HttpStatus.INTERNAL_SERVER_ERROR]: jsonErrorContent(
+					["FETCH_RANKINGS_FAILED"] as const,
+					"Failed to fetch 2v2 rankings",
+				),
 			},
+			middleware: optionalAuthMiddleware,
 		}),
 		async (c) => {
 			try {
@@ -502,13 +579,16 @@ export const brawlhallaRoute = new Hono()
 				const regionParam = region || "all"
 
 				if (pageNumber < 1 || limitNumber < 1 || limitNumber > 100) {
-					return c.json[400]({
-						error: {
-							code: "INVALID_PAGINATION",
-							message: "Invalid pagination parameters",
-							details: ["Page must be >= 1, limit must be between 1 and 100"],
+					return c.json(
+						{
+							error: {
+								code: "INVALID_PAGINATION" as const,
+								message: "Invalid pagination parameters",
+								details: ["Page must be >= 1, limit must be between 1 and 100"],
+							},
 						},
-					})
+						HttpStatus.BAD_REQUEST,
+					)
 				}
 
 				const rankingsResult = await brawlhallaService.getRankings2v2(
@@ -516,48 +596,64 @@ export const brawlhallaRoute = new Hono()
 					pageNumber,
 				)
 
-				return c.json[200]({
-					data: rankingsResult.data,
-					pagination: {
-						page: pageNumber,
-						limit: limitNumber,
-						hasMore: rankingsResult.data.length === limitNumber,
+				return c.json(
+					{
+						data: rankingsResult.data,
+						pagination: {
+							page: pageNumber,
+							limit: limitNumber,
+							hasMore: rankingsResult.data.length === limitNumber,
+						},
+						meta: {
+							region: regionParam,
+							count: rankingsResult.data.length,
+							updatedAt: rankingsResult.updatedAt,
+							timestamp: new Date().toISOString(),
+						},
 					},
-					meta: {
-						region: regionParam,
-						count: rankingsResult.data.length,
-						updatedAt: rankingsResult.updatedAt,
-						timestamp: new Date().toISOString(),
-					},
-				})
+					HttpStatus.OK,
+				)
 			} catch (error) {
 				console.error("Error fetching 2v2 rankings:", error)
-				return c.json[500]({
-					error: {
-						code: "FETCH_RANKINGS_FAILED",
-						message: "Failed to fetch 2v2 rankings",
-						details: ["An error occurred while retrieving rankings"],
+				return c.json(
+					{
+						error: {
+							code: "FETCH_RANKINGS_FAILED" as const,
+							message: "Failed to fetch 2v2 rankings",
+							details: ["An error occurred while retrieving rankings"],
+						},
 					},
-				})
+					HttpStatus.INTERNAL_SERVER_ERROR,
+				)
 			}
 		},
 	)
 
 	// GET /brawlhalla/rankings/power - Get power rankings with filtering and sorting
-	.get(
-		"/rankings/power",
-		describeRoute({
+	.openapi(
+		createRoute({
+			method: "get",
+			path: "/rankings/power",
 			description: "Get power rankings with filtering and sorting",
 			summary: "Get power rankings with filtering and sorting",
 			tags: ["Brawlhalla"],
+			request: {
+				query: z.object({
+					region: z.string().optional(),
+					page: z.coerce.number().min(1).default(1),
+					limit: z.coerce.number().min(1).max(100).default(50),
+					orderBy: z.string().optional(),
+					order: z.string().optional(),
+					gameMode: z.string().optional(),
+				}),
+			},
 			responses: {
-				200: jsonResponse(
-					"Power rankings retrieved successfully",
+				[HttpStatus.OK]: jsonContent(
 					z.object({
 						data: z.array(z.any()),
 						pagination: z.object({
-							page: z.number(),
-							limit: z.number(),
+							page: z.coerce.number().min(1).default(1),
+							limit: z.coerce.number().min(1).max(100).default(50),
 							hasMore: z.boolean(),
 							totalPages: z.number(),
 						}),
@@ -573,79 +669,90 @@ export const brawlhallaRoute = new Hono()
 							timestamp: z.string(),
 						}),
 					}),
+					"Power rankings retrieved successfully",
 				),
-				400: jsonErrorResponse("Invalid pagination parameters", [
-					"INVALID_PAGINATION",
-				] as const),
-				500: jsonErrorResponse("Failed to fetch power rankings", [
-					"FETCH_POWER_RANKINGS_FAILED",
-				] as const),
+				[HttpStatus.BAD_REQUEST]: jsonErrorContent(
+					["INVALID_PAGINATION"] as const,
+					"Invalid pagination parameters",
+				),
+				[HttpStatus.INTERNAL_SERVER_ERROR]: jsonErrorContent(
+					["FETCH_POWER_RANKINGS_FAILED"] as const,
+					"Failed to fetch power rankings",
+				),
 			},
+			middleware: optionalAuthMiddleware,
 		}),
 		async (c) => {
 			try {
-				const { region, page, limit, orderBy, order, gameMode } = c.req.query()
+				const { region, page, limit, orderBy, order, gameMode } =
+					c.req.valid("query")
 
-				const pageNumber = page ? Number.parseInt(page) : 1
-				const limitNumber = limit ? Number.parseInt(limit) : 50
-
-				if (pageNumber < 1 || limitNumber < 1 || limitNumber > 100) {
-					return c.json[400]({
-						error: {
-							code: "INVALID_PAGINATION",
-							message: "Invalid pagination parameters",
-							details: ["Page must be >= 1, limit must be between 1 and 100"],
+				if (page < 1 || limit < 1 || limit > 100) {
+					return c.json(
+						{
+							error: {
+								code: "INVALID_PAGINATION" as const,
+								message: "Invalid pagination parameters",
+								details: ["Page must be >= 1, limit must be between 1 and 100"],
+							},
 						},
-					})
+						HttpStatus.BAD_REQUEST,
+					)
 				}
 
 				const rankingsResult = await brawltoolsService.getPowerRankings({
 					region,
-					page: pageNumber,
+					page,
 					orderBy: orderBy as PowerRankingsOrderBy,
 					order: order as PowerRankingsOrder,
 					gameMode: gameMode as PowerRankingsGameMode,
 				})
 
-				return c.json[200]({
-					data: rankingsResult.rankings.prPlayers,
-					pagination: {
-						page: pageNumber,
-						limit: limitNumber,
-						hasMore: rankingsResult.rankings.prPlayers.length === limitNumber,
-						totalPages: rankingsResult.rankings.totalPages,
+				return c.json(
+					{
+						data: rankingsResult.rankings.prPlayers,
+						pagination: {
+							page,
+							limit,
+							hasMore: rankingsResult.rankings.prPlayers.length === limit,
+							totalPages: rankingsResult.rankings.totalPages,
+						},
+						meta: {
+							region,
+							filters: { orderBy, order, gameMode },
+							count: rankingsResult.rankings.prPlayers.length,
+							lastUpdated: rankingsResult.rankings.lastUpdated,
+							timestamp: new Date().toISOString(),
+						},
 					},
-					meta: {
-						region,
-						filters: { orderBy, order, gameMode },
-						count: rankingsResult.rankings.prPlayers.length,
-						lastUpdated: rankingsResult.rankings.lastUpdated,
-						timestamp: new Date().toISOString(),
-					},
-				})
+					HttpStatus.OK,
+				)
 			} catch (error) {
 				console.error("Error fetching power rankings:", error)
-				return c.json[500]({
-					error: {
-						code: "FETCH_POWER_RANKINGS_FAILED",
-						message: "Failed to fetch power rankings",
-						details: ["An error occurred while retrieving power rankings"],
+				return c.json(
+					{
+						error: {
+							code: "FETCH_POWER_RANKINGS_FAILED" as const,
+							message: "Failed to fetch power rankings",
+							details: ["An error occurred while retrieving power rankings"],
+						},
 					},
-				})
+					HttpStatus.INTERNAL_SERVER_ERROR,
+				)
 			}
 		},
 	)
 
 	// GET /brawlhalla/location - Get user's region based on IP
-	.get(
-		"/location",
-		describeRoute({
+	.openapi(
+		createRoute({
+			method: "get",
+			path: "/location",
 			description: "Get user's region based on IP address",
 			summary: "Get user's region based on IP address",
 			tags: ["Brawlhalla"],
 			responses: {
-				200: jsonResponse(
-					"Location determined successfully",
+				[HttpStatus.OK]: jsonContent(
 					z.object({
 						data: z.object({
 							region: z.string().nullable(),
@@ -655,63 +762,76 @@ export const brawlhallaRoute = new Hono()
 							timestamp: z.string(),
 						}),
 					}),
+					"Location determined successfully",
 				),
-				400: jsonErrorResponse("Could not determine IP address", [
-					"IP_NOT_FOUND",
-				] as const),
-				500: jsonErrorResponse("Failed to determine location", [
-					"LOCATION_DETECTION_FAILED",
-				] as const),
+				[HttpStatus.BAD_REQUEST]: jsonErrorContent(
+					["IP_NOT_FOUND"] as const,
+					"Could not determine IP address",
+				),
+				[HttpStatus.INTERNAL_SERVER_ERROR]: jsonErrorContent(
+					["LOCATION_DETECTION_FAILED"] as const,
+					"Failed to determine location",
+				),
 			},
+			middleware: optionalAuthMiddleware,
 		}),
 		async (c) => {
 			try {
 				const ip = getIp(c)
 
 				if (!ip) {
-					return c.json[400]({
-						error: {
-							code: "IP_NOT_FOUND",
-							message: "Could not determine IP address",
-							details: [
-								"Unable to determine your IP address for region detection",
-							],
+					return c.json(
+						{
+							error: {
+								code: "IP_NOT_FOUND" as const,
+								message: "Could not determine IP address",
+								details: [
+									"Unable to determine your IP address for region detection",
+								],
+							},
 						},
-					})
+						HttpStatus.BAD_REQUEST,
+					)
 				}
 
 				const region = await getRegion(ip)
 
-				return c.json[200]({
-					data: { region },
-					meta: {
-						ip,
-						timestamp: new Date().toISOString(),
+				return c.json(
+					{
+						data: { region },
+						meta: {
+							ip,
+							timestamp: new Date().toISOString(),
+						},
 					},
-				})
+					HttpStatus.OK,
+				)
 			} catch (error) {
 				console.error("Error determining location:", error)
-				return c.json[500]({
-					error: {
-						code: "LOCATION_DETECTION_FAILED",
-						message: "Failed to determine location",
-						details: ["An error occurred while determining your location"],
+				return c.json(
+					{
+						error: {
+							code: "LOCATION_DETECTION_FAILED" as const,
+							message: "Failed to determine location",
+							details: ["An error occurred while determining your location"],
+						},
 					},
-				})
+					HttpStatus.INTERNAL_SERVER_ERROR,
+				)
 			}
 		},
 	)
 
 	// GET /brawlhalla/weekly-rotation - Get weekly legend rotation
-	.get(
-		"/weekly-rotation",
-		describeRoute({
+	.openapi(
+		createRoute({
+			method: "get",
+			path: "/weekly-rotation",
 			description: "Get weekly legend rotation",
 			summary: "Get weekly legend rotation",
 			tags: ["Brawlhalla"],
 			responses: {
-				200: jsonResponse(
-					"Weekly rotation retrieved successfully",
+				[HttpStatus.OK]: jsonContent(
 					z.object({
 						data: z.any(),
 						meta: z.object({
@@ -719,52 +839,65 @@ export const brawlhallaRoute = new Hono()
 							updatedAt: z.date(),
 						}),
 					}),
+					"Weekly rotation retrieved successfully",
 				),
-				500: jsonErrorResponse("Failed to fetch weekly rotation", [
-					"FETCH_ROTATION_FAILED",
-				] as const),
+				[HttpStatus.INTERNAL_SERVER_ERROR]: jsonErrorContent(
+					["FETCH_ROTATION_FAILED"] as const,
+					"Failed to fetch weekly rotation",
+				),
 			},
+			middleware: optionalAuthMiddleware,
 		}),
 		async (c) => {
 			try {
 				const weeklyRotation = await brawlhallaGqlService.getWeeklyRotation()
 
-				return c.json[200]({
-					data: weeklyRotation.data,
-					meta: {
-						timestamp: new Date().toISOString(),
-						updatedAt: weeklyRotation.updatedAt,
+				return c.json(
+					{
+						data: weeklyRotation.data,
+						meta: {
+							timestamp: new Date().toISOString(),
+							updatedAt: weeklyRotation.updatedAt,
+						},
 					},
-				})
+					HttpStatus.OK,
+				)
 			} catch (error) {
 				console.error("Error fetching weekly rotation:", error)
-				return c.json[500]({
-					error: {
-						code: "FETCH_ROTATION_FAILED",
-						message: "Failed to fetch weekly rotation",
-						details: ["An error occurred while retrieving the weekly rotation"],
+				return c.json(
+					{
+						error: {
+							code: "FETCH_ROTATION_FAILED" as const,
+							message: "Failed to fetch weekly rotation",
+							details: [
+								"An error occurred while retrieving the weekly rotation",
+							],
+						},
 					},
-				})
+					HttpStatus.INTERNAL_SERVER_ERROR,
+				)
 			}
 		},
 	)
 
 	// GET /brawlhalla/articles - Get articles with pagination and filtering
-	.get(
-		"/articles",
-		describeRoute({
+	.openapi(
+		createRoute({
+			method: "get",
+			path: "/articles",
 			description: "Get articles with pagination and filtering",
 			summary: "Get articles with pagination and filtering",
 			tags: ["Brawlhalla"],
-			query: {
-				category: queryParam(z.string().optional()),
-				first: queryParam(z.coerce.number().min(1).optional().default(10)),
-				after: queryParam(z.string().optional()),
-				withContent: queryParam(z.boolean().optional()),
+			request: {
+				query: z.object({
+					category: z.string().optional(),
+					first: z.coerce.number().min(1).optional().default(10),
+					after: z.string().optional(),
+					withContent: z.boolean().optional(),
+				}),
 			},
 			responses: {
-				200: jsonResponse(
-					"Articles retrieved successfully",
+				[HttpStatus.OK]: jsonContent(
 					z.object({
 						data: z.array(z.any()),
 						pagination: z.object({
@@ -780,27 +913,34 @@ export const brawlhallaRoute = new Hono()
 							timestamp: z.string(),
 						}),
 					}),
+					"Articles retrieved successfully",
 				),
-				400: jsonErrorResponse("Invalid limit parameter", [
-					"INVALID_LIMIT",
-				] as const),
-				500: jsonErrorResponse("Failed to fetch articles", [
-					"FETCH_ARTICLES_FAILED",
-				] as const),
+				[HttpStatus.BAD_REQUEST]: jsonErrorContent(
+					["INVALID_LIMIT"] as const,
+					"Invalid limit parameter",
+				),
+				[HttpStatus.INTERNAL_SERVER_ERROR]: jsonErrorContent(
+					["FETCH_ARTICLES_FAILED"] as const,
+					"Failed to fetch articles",
+				),
 			},
+			middleware: optionalAuthMiddleware,
 		}),
 		async (c) => {
 			try {
 				const { category, first, after, withContent } = c.req.valid("query")
 
 				if (first < 1 || first > 100) {
-					return c.json[400]({
-						error: {
-							code: "INVALID_LIMIT",
-							message: "Invalid limit parameter",
-							details: ["First parameter must be between 1 and 100"],
+					return c.json(
+						{
+							error: {
+								code: "INVALID_LIMIT" as const,
+								message: "Invalid limit parameter",
+								details: ["First parameter must be between 1 and 100"],
+							},
 						},
-					})
+						HttpStatus.BAD_REQUEST,
+					)
 				}
 
 				const articlesResult = await brawlhallaGqlService.getArticles({
@@ -810,30 +950,36 @@ export const brawlhallaRoute = new Hono()
 					withContent: !!withContent,
 				})
 
-				return c.json[200]({
-					data: articlesResult.data,
-					pagination: {
-						first,
-						after,
-						hasMore: articlesResult.data.length === first,
+				return c.json(
+					{
+						data: articlesResult.data,
+						pagination: {
+							first,
+							after,
+							hasMore: articlesResult.data.length === first,
+						},
+						meta: {
+							category,
+							withContent: !!withContent,
+							count: articlesResult.data.length,
+							updatedAt: articlesResult.updatedAt,
+							timestamp: new Date().toISOString(),
+						},
 					},
-					meta: {
-						category,
-						withContent: !!withContent,
-						count: articlesResult.data.length,
-						updatedAt: articlesResult.updatedAt,
-						timestamp: new Date().toISOString(),
-					},
-				})
+					HttpStatus.OK,
+				)
 			} catch (error) {
 				console.error("Error fetching articles:", error)
-				return c.json[500]({
-					error: {
-						code: "FETCH_ARTICLES_FAILED",
-						message: "Failed to fetch articles",
-						details: ["An error occurred while retrieving articles"],
+				return c.json(
+					{
+						error: {
+							code: "FETCH_ARTICLES_FAILED" as const,
+							message: "Failed to fetch articles",
+							details: ["An error occurred while retrieving articles"],
+						},
 					},
-				})
+					HttpStatus.INTERNAL_SERVER_ERROR,
+				)
 			}
 		},
 	)

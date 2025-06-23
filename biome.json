@@ -11,7 +11,10 @@
 			".turbo",
 			"dist",
 			"node_modules",
-			".vinxi",
+			".nitro",
+			".tanstack",
+			".output",
+			"dev-dist",
 			"assetsTree.gen.ts",
 			"routeTree.gen.ts"
 		],

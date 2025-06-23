@@ -6,11 +6,17 @@ type StatsGridProps = {
 	stats: MiscStat[]
 	cards?: boolean
 	gridOverride?: string
+	className?: string
 }
 
-export function StatsGrid({ stats, cards, gridOverride = "" }: StatsGridProps) {
+export function StatsGrid({
+	stats,
+	cards,
+	gridOverride = "",
+	className,
+}: StatsGridProps) {
 	return (
-		<div className="@container/statsgrid">
+		<div className={cn("@container/statsgrid", className)}>
 			<div
 				className={cn("grid grid-cols-1 gap-3", {
 					[gridOverride]: gridOverride,

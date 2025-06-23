@@ -1,4 +1,6 @@
 import { randomUUID } from "node:crypto"
+import { db } from "@/db"
+import { env } from "@/env"
 import {
 	DISCORD_PROVIDER_ID,
 	GOOGLE_PROVIDER_ID,
@@ -14,8 +16,6 @@ import { Discord, Google, generateState } from "arctic"
 import { and, eq, gt } from "drizzle-orm"
 import type { Context } from "hono"
 import { getCookie, setCookie } from "hono/cookie"
-import { db } from "../db"
-import { env } from "../env"
 
 // Initialize OAuth providers
 export const google = new Google(

@@ -1,3 +1,5 @@
+import { db } from "@/db"
+import type { Session } from "@/services/auth"
 import {
 	type Bookmark,
 	DISCORD_PROVIDER_ID,
@@ -6,8 +8,6 @@ import {
 	legacyBookmarksTable,
 } from "@dair/schema"
 import { and, eq } from "drizzle-orm"
-import { db } from "../../db"
-import type { Session } from "../auth"
 
 export const bookmarksService = {
 	getBookmarks: async (userId: string) => {

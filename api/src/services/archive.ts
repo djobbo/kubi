@@ -1,9 +1,9 @@
+import { db } from "@/db"
+import { brawlhallaService } from "@/services/brawlhalla"
 import { cleanString } from "@dair/common/src/helpers/clean-string"
 import { type NewArchivedClan, clansTable } from "@dair/schema"
 import { type NewAlias, aliasesTable } from "@dair/schema/src/archive/aliases"
 import { and, count, desc, eq, inArray, like, sql } from "drizzle-orm"
-import { db } from "../db"
-import { brawlhallaService } from "./brawlhalla"
 
 const MIN_ALIAS_SEARCH_LENGTH = 3
 const MAX_ALIASES_PER_PLAYER = 10

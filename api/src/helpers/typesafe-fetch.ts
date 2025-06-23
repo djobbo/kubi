@@ -1,5 +1,5 @@
+import { env } from "@/env"
 import type z from "zod/v4"
-import { env } from "../env"
 
 export const typesafeFetch =
 	(name: string, baseUrl: string, searchParams?: Record<string, string>) =>

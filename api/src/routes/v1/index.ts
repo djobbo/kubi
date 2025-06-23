@@ -1,4 +1,4 @@
-import { Hono } from "hono"
+import { OpenAPIHono as Hono } from "@hono/zod-openapi"
 import { authRoute } from "./auth"
 import { bookmarksRoute } from "./bookmarks"
 import { brawlhallaRoute } from "./brawlhalla"
