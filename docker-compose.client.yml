@@ -1,6 +1,6 @@
 services:
   client:
-    image: dair-client:latest
+    image: ${DOCKERHUB_USERNAME}/dair-client:latest
     ports:
       - "${CLIENT_PORT:-3000}:${CLIENT_PORT:-3000}"
     environment:
