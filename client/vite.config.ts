@@ -80,6 +80,9 @@ const config = defineConfig({
 	server: {
 		host: true,
 	},
+	preview: {
+		host: true,
+	}
 })
 
 export default config

@@ -2,9 +2,8 @@ services:
   client:
     image: ${DOCKERHUB_USERNAME}/dair-client:latest
     ports:
-      - "${CLIENT_PORT:-3000}:${CLIENT_PORT:-3000}"
+      - "${CLIENT_PORT:-3000}:3000"
     environment:
-      - PORT=${CLIENT_PORT:-3000}
       - VITE_CLIENT_URL=${CLIENT_URL}
       - VITE_API_URL=${API_URL}
       - VITE_SOCIAL_DISCORD_URL=${SOCIAL_DISCORD_URL}
