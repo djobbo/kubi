@@ -5,7 +5,7 @@ import { defineConfig } from "vite"
 import { VitePWA } from "vite-plugin-pwa"
 import viteTsConfigPaths from "vite-tsconfig-paths"
 import safeAssetsPlugin from "./plugins/safe-assets-plugin"
-import { env } from './src/env'
+import { env } from "./src/env"
 
 const pwaConfig = VitePWA({
 	injectRegister: "auto",
@@ -72,7 +72,7 @@ const config = defineConfig({
 	},
 	preview: {
 		host: true,
-	}
+	},
 })
 
 export default config
