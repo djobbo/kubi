@@ -20,6 +20,7 @@ export function getContext() {
 				},
 				logout: apiClient.v1.auth.session.$delete,
 			},
+			checkHealth: apiClient.health.$get,
 			brawlhalla: {
 				get1v1Rankings: apiClient.v1.brawlhalla.rankings["1v1"].$get,
 				get2v2Rankings: apiClient.v1.brawlhalla.rankings["2v2"].$get,

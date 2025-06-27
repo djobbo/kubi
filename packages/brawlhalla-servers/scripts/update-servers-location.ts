@@ -1,6 +1,6 @@
+import { lookup } from "node:dns/promises"
+import { writeFile } from "node:fs/promises"
 import type { RankedRegion } from "@dair/brawlhalla-api/src/constants/ranked/regions"
-import { lookup } from "dns/promises"
-import { writeFile } from "fs/promises"
 
 const servers = [
 	{

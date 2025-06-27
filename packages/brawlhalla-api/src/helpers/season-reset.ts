@@ -3,9 +3,9 @@ import type { PlayerRanked } from "../api/schema/player-ranked"
 export const getGloryFromWins = (wins: number): number =>
 	wins <= 150
 		? 20 * wins
-		: Math.floor(10 * (45 * Math.pow(Math.log10(wins * 2), 2)) + 245)
+		: Math.floor(10 * (45 * Math.log10(wins * 2) ** 2) + 245)
 
-export const getGloryFromBestRating = (bestRating: number): number =>
+export const getGloryFromPeakRating = (bestRating: number): number =>
 	Math.floor(
 		(() => {
 			if (bestRating < 1200) return 250
@@ -23,19 +23,7 @@ export const getGloryFromBestRating = (bestRating: number): number =>
 		})(),
 	)
 
-export const getGlory = (
-	playerRanked: PlayerRanked,
-):
-	| { hasPlayedEnoughGames: false }
-	| {
-			totalGames: number
-			totalWins: number
-			bestRating: number
-			gloryFromWins: number
-			gloryFromBestRating: number
-			totalGlory: number
-			hasPlayedEnoughGames: true
-	  } => {
+export const getSeasonStats = (playerRanked: PlayerRanked) => {
 	const games = [
 		playerRanked.games,
 		...playerRanked["2v2"].map((team) => team.games),
@@ -52,26 +40,22 @@ export const getGlory = (
 
 	const totalWins = wins.reduce((a, b) => a + b, 0)
 	const totalGames = games.reduce((a, b) => a + b, 0)
-
-	if (totalGames < 10)
-		return {
-			hasPlayedEnoughGames: false,
-		}
-
 	const bestRating = Math.max(...ratings)
 
-	const gloryFromWins = getGloryFromWins(totalWins)
-	const gloryFromBestRating = getGloryFromBestRating(bestRating)
-	const totalGlory = gloryFromWins + gloryFromBestRating
+	const hasPlayedEnoughGames = totalGames >= 10
+	const gloryFromWins = hasPlayedEnoughGames ? getGloryFromWins(totalWins) : 0
+	const gloryFromPeakRating = hasPlayedEnoughGames
+		? getGloryFromPeakRating(bestRating)
+		: 0
+	const totalGlory = gloryFromWins + gloryFromPeakRating
 
 	return {
 		totalWins,
 		totalGames,
 		gloryFromWins,
-		gloryFromBestRating,
+		gloryFromPeakRating,
 		bestRating,
 		totalGlory,
-		hasPlayedEnoughGames: true,
 	}
 }
 
@@ -80,12 +64,12 @@ export const getGlory = (
  * @param rating Rating
  * @returns Elo Reset
  */
-export const getLegendEloReset = (rating: number): number =>
+export const getLegendOrTeamRatingReset = (rating: number): number =>
 	rating < 2000
 		? Math.floor((rating + 375) / 1.5)
 		: Math.floor(1583 + (rating - 2000) / 10)
 
-export const getPersonalEloReset = (rating: number): number =>
+export const getPersonalRatingReset = (rating: number): number =>
 	rating >= 1400
 		? Math.floor(1400 + (rating - 1400.0) / (3.0 - (3000 - rating) / 800.0))
 		: rating

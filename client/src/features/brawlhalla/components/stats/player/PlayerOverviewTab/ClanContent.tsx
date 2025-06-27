@@ -34,7 +34,7 @@ export const PlayerOverviewClanContent = ({
 		>
 			<p>
 				<Link
-					to={`/stats/clan/$clanId`}
+					to="stats/clan/$clanId"
 					params={{ clanId: clan.clan_id.toString() }}
 					className={cn("inline-block font-bold text-3xl mt-2 hover:underline")}
 				>

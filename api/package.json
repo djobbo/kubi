@@ -1,7 +1,11 @@
 {
 	"name": "@dair/api",
 	"type": "module",
-	"types": "./src/index.ts",
+	"exports": {
+		".": {
+			"types": "./dist/src/index.d.ts"
+		}
+	},
 	"scripts": {
 		"dev": "bun run db:migrate && bun run --hot src/index.ts",
 		"start": "bun run db:migrate && bun run src/index.ts",
@@ -9,7 +13,7 @@
 		"db:migrate": "bun db:generate && drizzle-kit migrate",
 		"studio": "drizzle-kit studio",
 		"check:types": "tsc --noEmit",
-		"build": "tsc"
+		"build": "tsc --build"
 	},
 	"dependencies": {
 		"@dair/brawlhalla-api": "workspace:*",
@@ -23,7 +27,6 @@
 		"arctic": "^3.7.0",
 		"drizzle-orm": "^0.44.2",
 		"hono": "4.8.2",
-		"hono-openapi": "^0.4.8",
 		"pino": "^9.7.0",
 		"pino-pretty": "^13.0.0",
 		"prom-client": "^15.1.3",

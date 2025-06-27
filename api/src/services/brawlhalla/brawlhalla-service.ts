@@ -206,4 +206,29 @@ export const brawlhallaService = {
 				}),
 			env.CACHE_MAX_AGE_OVERRIDE ?? 5 * 60 * 1000,
 		),
+	getAllLegendsData: () => {
+		return withCache(
+			"brawlhalla-legend-all",
+			() => {
+				return fetchBrawlhallaApi({
+					path: "legend/all",
+					schema: z.array(
+						z.object({
+							legend_id: z.number(),
+							legend_name_key: z.string(),
+							bio_name: z.string(),
+							bio_aka: z.string(),
+							weapon_one: z.string(),
+							weapon_two: z.string(),
+							strength: z.coerce.number(),
+							dexterity: z.coerce.number(),
+							defense: z.coerce.number(),
+							speed: z.coerce.number(),
+						}),
+					),
+				})
+			},
+			env.CACHE_MAX_AGE_OVERRIDE ?? 60 * 60 * 1000,
+		)
+	},
 }

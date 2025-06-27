@@ -1,22 +1,6 @@
-import { RankedTierBanner } from "@/features/brawlhalla/components/Image"
-import type { MiscStat } from "@/features/brawlhalla/components/stats/MiscStatGroup"
-import { Badge } from "@/ui/components/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/ui/components/card"
 import { type ChartConfig, ChartContainer } from "@/ui/components/chart"
 import { Progress } from "@/ui/components/progress"
-import type { PlayerRanked } from "@dair/brawlhalla-api/src/api/schema/player-ranked"
-import type { PlayerStats } from "@dair/brawlhalla-api/src/api/schema/player-stats"
-import type { RankedTier } from "@dair/brawlhalla-api/src/constants/ranked/tiers"
-import {
-	getFullLegends,
-	getLegendsAccumulativeData,
-	getWeaponlessData,
-} from "@dair/brawlhalla-api/src/helpers/parser"
-import {
-	getGlory,
-	getPersonalEloReset,
-} from "@dair/brawlhalla-api/src/helpers/season-reset"
-import { getTeamPlayers } from "@dair/brawlhalla-api/src/helpers/team-players"
 import { calculateWinrate } from "@dair/brawlhalla-api/src/helpers/winrate"
 import { formatTime } from "@dair/common/src/helpers/date"
 import { t } from "@lingui/core/macro"
@@ -40,16 +24,14 @@ export const Route = createFileRoute("/players/$playerId/$")({
 	component: RouteComponent,
 })
 
-type RankedSeasonProps = {
-	rankedSeason: PlayerRanked
+type Ranked1v1CardProps = {
+	ranked: ReturnType<typeof PlayerRoute.useLoaderData>["data"]["ranked"]
 }
 
-function RankedSeasonCard({ rankedSeason }: RankedSeasonProps) {
-	if (!rankedSeason) return null
-
-	const winrate = calculateWinrate(rankedSeason.wins, rankedSeason.games)
-	const glory = getGlory(rankedSeason)
-	const rankedSeasonEloReset = getPersonalEloReset(rankedSeason.rating)
+function Ranked1v1Card({ ranked }: Ranked1v1CardProps) {
+	if (!ranked) return null
+	const ranked1v1 = ranked["1v1"]
+	const winrate = calculateWinrate(ranked1v1.wins, ranked1v1.games)
 
 	const TEST_rankedEvolution = [
 		{ timestamp: 1704067200000, rating: 2000 },
@@ -139,49 +121,47 @@ function RankedSeasonCard({ rankedSeason }: RankedSeasonProps) {
 			</CardHeader>
 			<CardContent className="space-y-4 sm:space-y-6">
 				<RankedDisplay
-					tier={rankedSeason.tier}
-					rating={rankedSeason.rating}
-					peak_rating={rankedSeason.peak_rating}
-					wins={rankedSeason.wins}
-					games={rankedSeason.games}
+					tier={ranked1v1.tier}
+					rating={ranked1v1.rating}
+					peak_rating={ranked1v1.peak_rating}
+					wins={ranked1v1.wins}
+					games={ranked1v1.games}
 				/>
 
 				<div className="grid grid-cols-2 gap-3 text-xs sm:gap-4 sm:text-sm">
 					<div>
 						<p className="text-muted-foreground">1v1 Games</p>
-						<p className="font-semibold">
-							{rankedSeason.games.toLocaleString()}
-						</p>
+						<p className="font-semibold">{ranked1v1.games.toLocaleString()}</p>
 					</div>
 					<div>
 						<p className="text-muted-foreground">Winrate</p>
 						<p className="font-semibold">{winrate.toFixed(1)}%</p>
 					</div>
-					{glory.hasPlayedEnoughGames && (
+					{ranked.stats.games >= 10 && (
 						<>
 							<div>
 								<p className="text-muted-foreground">Total Glory</p>
 								<p className="font-semibold">
-									{glory.totalGlory.toLocaleString()}
+									{ranked.stats.glory.total.toLocaleString()}
 								</p>
 							</div>
 							<div>
 								<p className="text-muted-foreground">Glory from rating</p>
 								<p className="font-semibold">
-									{glory.gloryFromBestRating.toLocaleString()}
+									{ranked.stats.glory.from_peak_rating.toLocaleString()}
 								</p>
 							</div>
 							<div>
 								<p className="text-muted-foreground">Glory from wins</p>
 								<p className="font-semibold">
-									{glory.gloryFromWins.toLocaleString()}
+									{ranked.stats.glory.from_wins.toLocaleString()}
 								</p>
 							</div>
 						</>
 					)}
 					<div>
 						<p className="text-muted-foreground">Elo reset</p>
-						<p className="font-semibold">{rankedSeasonEloReset}</p>
+						<p className="font-semibold">{ranked.stats.rating_reset}</p>
 					</div>
 				</div>
 			</CardContent>
@@ -190,15 +170,13 @@ function RankedSeasonCard({ rankedSeason }: RankedSeasonProps) {
 }
 
 interface ClanInfoProps {
-	clan: PlayerStats["clan"]
+	clan: ReturnType<typeof PlayerRoute.useLoaderData>["data"]["clan"]
 }
 
 function ClanInfoCard({ clan }: ClanInfoProps) {
 	if (!clan) return null
 
-	const clanXP = Number.parseInt(clan.clan_xp, 10)
-
-	const contribution = calculateWinrate(clan.personal_xp, clanXP)
+	const contribution = calculateWinrate(clan.personal_xp, clan.xp)
 
 	return (
 		<Card className="h-full">
@@ -206,9 +184,9 @@ function ClanInfoCard({ clan }: ClanInfoProps) {
 				<CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
 					<ShieldIcon className="h-4 w-4 text-green-500 sm:h-5 sm:w-5" />
 					<span>
-						{clan.clan_name}{" "}
+						{clan.name}{" "}
 						<span className="text-xs text-muted-foreground sm:text-sm">
-							#{clan.clan_id}
+							#{clan.id}
 						</span>
 					</span>
 				</CardTitle>
@@ -221,7 +199,7 @@ function ClanInfoCard({ clan }: ClanInfoProps) {
 					<div>
 						<p className="text-xs text-muted-foreground sm:text-sm">Clan XP</p>
 						<p className="text-base font-semibold sm:text-lg">
-							{clanXP.toLocaleString()}
+							{clan.xp.toLocaleString()}
 						</p>
 					</div>
 					<div>
@@ -239,30 +217,24 @@ function ClanInfoCard({ clan }: ClanInfoProps) {
 }
 
 interface Ranked2v2Props {
-	ranked: PlayerRanked
+	ranked: ReturnType<typeof PlayerRoute.useLoaderData>["data"]["ranked"]
 }
 
 function Ranked2v2Card({ ranked }: Ranked2v2Props) {
 	if (!ranked) return null
 
-	const teams = ranked["2v2"]
-
+	const teams = ranked["2v2"]?.teams ?? []
 	if (teams.length === 0) return null
 
-	const currentBestTeam = teams.sort((a, b) => b.rating - a.rating)[0]
-	const players = getTeamPlayers(currentBestTeam)
-
-	if (!players) return null
-	const [player1, player2] = players
-
-	const teammate = player1.id === ranked.brawlhalla_id ? player2 : player1
+	const bestTeam = teams[0] ?? null
+	if (!bestTeam) return null
 
 	return (
 		<Card className="h-full">
 			<CardHeader className="flex justify-between">
 				<CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
 					<UsersIcon className="h-4 w-4 text-blue-500 sm:h-5 sm:w-5" />
-					{teammate.name}
+					{bestTeam.teammate.name}
 				</CardTitle>
 				<div className="text-xs uppercase text-muted-foreground font-bold">
 					Best 2v2 Team
@@ -270,11 +242,11 @@ function Ranked2v2Card({ ranked }: Ranked2v2Props) {
 			</CardHeader>
 			<CardContent>
 				<RankedDisplay
-					tier={currentBestTeam.tier}
-					rating={currentBestTeam.rating}
-					peak_rating={currentBestTeam.peak_rating}
-					wins={currentBestTeam.wins}
-					games={currentBestTeam.games}
+					tier={bestTeam.tier}
+					rating={bestTeam.rating}
+					peak_rating={bestTeam.peak_rating}
+					wins={bestTeam.wins}
+					games={bestTeam.games}
 				/>
 			</CardContent>
 		</Card>
@@ -282,16 +254,10 @@ function Ranked2v2Card({ ranked }: Ranked2v2Props) {
 }
 
 interface GeneralStatsProps {
-	stats: PlayerStats
+	stats: ReturnType<typeof PlayerRoute.useLoaderData>["data"]["stats"]
 }
 
 export function GeneralStatsCards({ stats }: GeneralStatsProps) {
-	const { games, wins, legends } = stats
-	// TODO: API level
-	const fullLegends = getFullLegends(legends)
-	const { kos, falls, suicides, teamkos, damagedealt, damagetaken } =
-		getLegendsAccumulativeData(fullLegends)
-
 	return (
 		<div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-3">
 			<Card>
@@ -303,9 +269,9 @@ export function GeneralStatsCards({ stats }: GeneralStatsProps) {
 				</CardHeader>
 				<CardContent>
 					<div className="text-2xl font-bold sm:text-3xl">
-						{games.toLocaleString()}
+						{stats.games.toLocaleString()}
 					</div>
-					<WinrateProgress wins={wins} games={games} />
+					<WinrateProgress wins={stats.wins} games={stats.games} />
 				</CardContent>
 			</Card>
 			<Card>
@@ -318,22 +284,26 @@ export function GeneralStatsCards({ stats }: GeneralStatsProps) {
 				<CardContent className="space-y-2">
 					<div>
 						<div className="text-base font-semibold sm:text-lg">
-							{kos.toLocaleString()} KOs
+							{stats.kos.toLocaleString()} KOs
 						</div>
 						<Progress value={75} className="h-1 mt-1" />
 					</div>
 					<div>
 						<div className="text-base font-semibold sm:text-lg">
-							{falls.toLocaleString()} Falls
+							{stats.falls.toLocaleString()} Falls
 						</div>
 						<Progress value={60} className="h-1 mt-1" />
 					</div>
 					<div>
-						<div className="text-sm">{suicides.toLocaleString()} Suicides</div>
+						<div className="text-sm">
+							{stats.suicides.toLocaleString()} Suicides
+						</div>
 						<Progress value={20} className="h-1 mt-1" />
 					</div>
 					<div>
-						<div className="text-sm">{teamkos.toLocaleString()} Team KOs</div>
+						<div className="text-sm">
+							{stats.team_kos.toLocaleString()} Team KOs
+						</div>
 						<Progress value={10} className="h-1 mt-1" />
 					</div>
 				</CardContent>
@@ -348,13 +318,13 @@ export function GeneralStatsCards({ stats }: GeneralStatsProps) {
 				<CardContent className="space-y-2">
 					<div>
 						<div className="text-base font-semibold sm:text-lg">
-							{damagedealt.toLocaleString()} Damage dealt
+							{stats.damage_dealt.toLocaleString()} Damage dealt
 						</div>
 						<Progress value={85} className="h-1 mt-1" />
 					</div>
 					<div>
 						<div className="text-base font-semibold sm:text-lg">
-							{damagetaken.toLocaleString()} Damage taken
+							{stats.damage_taken.toLocaleString()} Damage taken
 						</div>
 						<Progress value={70} className="h-1 mt-1" />
 					</div>
@@ -365,22 +335,13 @@ export function GeneralStatsCards({ stats }: GeneralStatsProps) {
 }
 
 function RouteComponent() {
-	const {
-		data: { ranked, stats },
-	} = PlayerRoute.useLoaderData()
-	const { clan } = stats
-
-	// TODO: API level
-	const fullLegends = getFullLegends(stats.legends)
-	const { matchtime, damagedealt, damagetaken, kos, falls, suicides, teamkos } =
-		getLegendsAccumulativeData(fullLegends)
-	const { games } = stats
-	const { unarmed, gadgets, throws } = getWeaponlessData(fullLegends)
+	const { data: playerData } = PlayerRoute.useLoaderData()
+	const { clan, stats, ranked, unarmed, gadgets, weapon_throws } = playerData
 
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
-				<RankedSeasonCard rankedSeason={ranked} />
+				{ranked && <Ranked1v1Card ranked={ranked} />}
 				<div className="flex flex-col gap-4">
 					<Ranked2v2Card ranked={ranked} />
 					<ClanInfoCard clan={clan} />
@@ -401,57 +362,57 @@ function RouteComponent() {
 					stats={[
 						{
 							name: t`Damage dealt per second`,
-							value: `${(damagedealt / matchtime).toFixed(1)} dmg/s`,
+							value: `${(stats.damage_dealt / stats.matchtime).toFixed(1)} dmg/s`,
 							desc: t`Damage dealt per second`,
 						},
 						{
 							name: t`Damage taken per second`,
-							value: `${(damagetaken / matchtime).toFixed(1)} dmg/s`,
+							value: `${(stats.damage_taken / stats.matchtime).toFixed(1)} dmg/s`,
 							desc: t`Damage taken per second`,
 						},
 						{
 							name: t`Time between each KO`,
-							value: `${(matchtime / kos).toFixed(1)}s/KO`,
+							value: `${(stats.matchtime / stats.kos).toFixed(1)}s/KO`,
 							desc: t`Time between each KO`,
 						},
 						{
 							name: t`Time between each fall`,
-							value: `${(matchtime / falls).toFixed(1)}s/fall`,
+							value: `${(stats.matchtime / stats.falls).toFixed(1)}s/fall`,
 							desc: t`Time between each fall`,
 						},
 						{
 							name: t`Average KOs per game`,
-							value: (kos / games).toFixed(1),
+							value: (stats.kos / stats.games).toFixed(1),
 							desc: t`Average KOs per game`,
 						},
 						{
 							name: t`Average falls per game`,
-							value: (falls / games).toFixed(1),
+							value: (stats.falls / stats.games).toFixed(1),
 							desc: t`Average falls per game`,
 						},
 						{
 							name: t`Average games between each suicide`,
-							value: `${(games / suicides).toFixed(1)} games`,
+							value: `${(stats.games / stats.suicides).toFixed(1)} games`,
 							desc: t`Average games between each suicide`,
 						},
 						{
 							name: t`Average games between each Team KO`,
-							value: `${(games / teamkos).toFixed(1)} games`,
+							value: `${(stats.games / stats.team_kos).toFixed(1)} games`,
 							desc: t`Average games between each Team KO`,
 						},
 						{
 							name: t`Average damage dealt per game`,
-							value: (damagedealt / games).toFixed(1),
+							value: (stats.damage_dealt / stats.games).toFixed(1),
 							desc: t`Average damage dealt per game`,
 						},
 						{
 							name: t`Average damage taken per game`,
-							value: (damagetaken / games).toFixed(1),
+							value: (stats.damage_taken / stats.games).toFixed(1),
 							desc: t`Average damage taken per game`,
 						},
 						{
 							name: t`Average game length`,
-							value: `${(matchtime / games).toFixed(1)}s`,
+							value: `${(stats.matchtime / stats.games).toFixed(1)}s`,
 							desc: t`Average game length in seconds`,
 						},
 					]}
@@ -469,12 +430,12 @@ function RouteComponent() {
 						stats={[
 							{
 								name: t`Time unarmed`,
-								value: `${formatTime(unarmed.matchtime)}`,
+								value: `${formatTime(unarmed.time_held)}`,
 								desc: t`Time played unarmed`,
 							},
 							{
 								name: t`Time unarmed (%)`,
-								value: `${((unarmed.matchtime / matchtime) * 100).toFixed(2)}%`,
+								value: `${((unarmed.time_held / stats.matchtime) * 100).toFixed(2)}%`,
 								desc: t`Time played unarmed (percentage of total time)`,
 							},
 							{
@@ -489,17 +450,17 @@ function RouteComponent() {
 							},
 							{
 								name: t`Damage Dealt`,
-								value: unarmed.damageDealt,
+								value: unarmed.damage_dealt,
 								desc: t`Damage dealt unarmed`,
 							},
 							{
 								name: "DPS",
-								value: `${(unarmed.damageDealt / unarmed.matchtime).toFixed(2)} dmg/s`,
+								value: `${(unarmed.damage_dealt / unarmed.time_held).toFixed(2)} dmg/s`,
 								desc: t`Damage dealt unarmed per second`,
 							},
 							{
 								name: t`Avg. dmg dealt per game`,
-								value: (unarmed.damageDealt / stats.games).toFixed(2),
+								value: (unarmed.damage_dealt / stats.games).toFixed(2),
 								desc: t`Average damage dealt unarmed per game`,
 							},
 						]}
@@ -529,12 +490,12 @@ function RouteComponent() {
 								},
 								{
 									name: t`Damage Dealt`,
-									value: gadgets.damageDealt,
+									value: gadgets.damage_dealt,
 									desc: t`Damage dealt with gadgets`,
 								},
 								{
 									name: t`Avg. dmg dealt per game`,
-									value: (gadgets.damageDealt / stats.games).toFixed(2),
+									value: (gadgets.damage_dealt / stats.games).toFixed(2),
 									desc: t`Average damage dealt with gadgets per game`,
 								},
 							]}
@@ -553,22 +514,22 @@ function RouteComponent() {
 							stats={[
 								{
 									name: t`KOs`,
-									value: throws.kos,
+									value: weapon_throws.kos,
 									desc: t`KOs with thrown items`,
 								},
 								{
 									name: t`1 Ko every`,
-									value: `${(stats.games / throws.kos).toFixed(1)} games`,
+									value: `${(stats.games / weapon_throws.kos).toFixed(1)} games`,
 									desc: t`Average games between each thrown item KO`,
 								},
 								{
 									name: t`Damage Dealt`,
-									value: throws.damageDealt,
+									value: weapon_throws.damage_dealt,
 									desc: t`Damage dealt with thrown items`,
 								},
 								{
 									name: t`Avg. dmg dealt per game`,
-									value: (throws.damageDealt / stats.games).toFixed(2),
+									value: (weapon_throws.damage_dealt / stats.games).toFixed(2),
 									desc: t`Damage dealt with thrown items per game`,
 								},
 							]}

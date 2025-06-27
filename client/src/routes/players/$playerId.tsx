@@ -6,20 +6,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/ui/components/avatar"
 import { Badge } from "@/ui/components/badge"
 import { Button } from "@/ui/components/button"
 import { ScrollArea, ScrollBar } from "@/ui/components/scroll-area"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui/components/tabs"
+import { Tabs, TabsList, TabsTrigger } from "@/ui/components/tabs"
 import { cn } from "@/ui/lib/utils"
-import {
-	getFullLegends,
-	getFullWeapons,
-	getLegendsAccumulativeData,
-} from "@dair/brawlhalla-api/src/helpers/parser"
 import { cleanString } from "@dair/common/src/helpers/clean-string"
 import { formatTime } from "@dair/common/src/helpers/date"
 import { seo } from "@dair/common/src/helpers/seo"
 import type { NewBookmark } from "@dair/schema"
 import { t } from "@lingui/core/macro"
 import {
-	Link,
 	Outlet,
 	createFileRoute,
 	notFound,
@@ -43,15 +37,15 @@ export const Route = createFileRoute("/players/$playerId")({
 			throw notFound({ throw: true })
 		}
 
-		const playerData = await apiClient.brawlhalla
-			.getPlayerById({
-				param: {
-					playerId,
-				},
-				query: {},
-			})
-			.then((res) => res.json())
-			.then((res) => res.data)
+		const playerDataRes = await apiClient.brawlhalla.getPlayerById({
+			param: {
+				playerId,
+			},
+		})
+		if (!playerDataRes.ok) {
+			throw notFound({ throw: true })
+		}
+		const playerData = (await playerDataRes.json()).data
 
 		const activeTabIndex = location.pathname
 			.split("/")
@@ -62,17 +56,15 @@ export const Route = createFileRoute("/players/$playerId")({
 		return {
 			data: playerData,
 			activeTab,
-			playerId: `${playerId}-${sluggify(playerData.stats.name).slice(0, 24)}`,
+			playerId: `${playerId}-${sluggify(playerData.name).slice(0, 24)}`,
 		}
 	},
 	staleTime: 5 * 60 * 1000, // 5 minutes
 	head: ({ loaderData }) => {
 		if (!loaderData) return {}
 		const {
-			data: { aliases },
+			data: { name },
 		} = loaderData
-
-		const name = aliases[0].alias
 
 		return {
 			meta: seo({
@@ -184,34 +176,10 @@ function ProfileHeader({
 
 function RouteComponent() {
 	const navigate = useNavigate()
-	const {
-		data: { stats, ranked, aliases },
-		playerId,
-		activeTab,
-	} = Route.useLoaderData()
-	const playerName = cleanString(stats.name)
-	// TODO: API level
-	const fullLegends = getFullLegends(stats?.legends, ranked?.legends)
-	const { matchtime } = getLegendsAccumulativeData(fullLegends)
+	const { data: playerData, playerId, activeTab } = Route.useLoaderData()
+	const playerName = cleanString(playerData.name)
 
-	const weapons = getFullWeapons(fullLegends)
-
-	const legendsSortedByLevel = fullLegends.toSorted(
-		(a, b) => (b.stats?.matchtime ?? 0) - (a.stats?.matchtime ?? 0),
-	)
-
-	const weaponsSortedByMatchtime = weapons
-		.map(({ weapon, legends }) => ({
-			weapon,
-			matchtime: legends.reduce((acc, legend) => {
-				const matchtime =
-					weapon === legend.weapon_one
-						? legend.stats?.timeheldweaponone
-						: legend.stats?.timeheldweapontwo
-				return acc + (matchtime ?? 0)
-			}, 0),
-		}))
-		.toSorted((a, b) => b.matchtime - a.matchtime)
+	const { aliases, stats, ranked, legends, weapons } = playerData
 
 	const accountStats: MiscStat[] = [
 		{
@@ -226,21 +194,21 @@ function RouteComponent() {
 		},
 		{
 			name: t`Game time`,
-			value: formatTime(matchtime),
+			value: formatTime(stats.matchtime),
 			desc: t`Time ${playerName} spent in game`,
 		},
 		{
 			name: t`Main legends`,
 			value: (
 				<div className="flex justify-center relative z-0">
-					{legendsSortedByLevel.slice(0, 5).map((legend, i) => {
-						const level = legend.stats?.level ?? 0
+					{legends.slice(0, 5).map((legend, i) => {
+						const level = legend.stats.level ?? 0
 
 						return (
 							<LegendIcon
-								key={legend.legend_name_key}
-								legendNameKey={legend.legend_name_key}
-								alt={legend.bio_name}
+								key={legend.name_key}
+								legendNameKey={legend.name_key}
+								alt={legend.name}
 								containerClassName="w-8 h-8 rounded-lg object-contain object-center -mr-2 shadow-md"
 								className={cn(
 									"w-8 h-8 rounded-lg object-contain object-center",
@@ -253,7 +221,7 @@ function RouteComponent() {
 									},
 								)}
 								containerStyle={{
-									zIndex: legendsSortedByLevel.length - i,
+									zIndex: legends.length - i,
 								}}
 							/>
 						)
@@ -275,11 +243,11 @@ function RouteComponent() {
 			name: t`Main weapons`,
 			value: (
 				<div className="flex gap-1 justify-center">
-					{weaponsSortedByMatchtime.slice(0, 3).map((weapon) => (
+					{weapons.slice(0, 3).map((weapon) => (
 						<WeaponIcon
-							key={weapon.weapon}
-							weapon={weapon.weapon}
-							alt={weapon.weapon}
+							key={weapon.name}
+							weapon={weapon.name}
+							alt={weapon.name}
 							containerClassName="w-8 h-8"
 							className="object-contain object-center"
 						/>
@@ -296,9 +264,9 @@ function RouteComponent() {
 				avatar=""
 				stats={accountStats}
 				name={playerName}
-				profileId={stats.brawlhalla_id}
+				profileId={playerData.id.toString()}
 				profileType="player_stats"
-				aliases={aliases.map((alias) => alias.alias)}
+				aliases={aliases}
 			/>
 
 			<Tabs

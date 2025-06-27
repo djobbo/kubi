@@ -6,8 +6,13 @@
 		"vite.config.ts",
 		"pwa-assets.config.ts"
 	],
+	"references": [
+		{
+			"path": "../api"
+		}
+	],
 	"compilerOptions": {
-		"target": "ES2022",
+		"target": "ESNext",
 		"jsx": "react-jsx",
 		"module": "ESNext",
 		"lib": ["ESNext", "DOM", "DOM.Iterable"],

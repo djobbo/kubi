@@ -1,6 +1,5 @@
 import { swaggerUI } from "@hono/swagger-ui"
 import { OpenAPIHono as Hono, createRoute, z } from "@hono/zod-openapi"
-import { openAPISpecs } from "hono-openapi"
 import { cors } from "hono/cors"
 import { register } from "prom-client"
 import { env } from "./env"
@@ -11,6 +10,7 @@ import { collectMetrics } from "./metrics"
 import { v1Route } from "./routes/v1"
 
 const app = new Hono()
+app
 	.use(
 		"*",
 		cors({
@@ -38,6 +38,8 @@ const app = new Hono()
 			`${method} ${path} ${status} ${duration}ms`,
 		)
 	})
+
+const publicRoutes = app
 	.openapi(
 		createRoute({
 			method: "get",
@@ -101,4 +103,4 @@ app.get("/metrics", async (c) => {
 
 export default app
 
-export type App = typeof app
+export type App = typeof publicRoutes

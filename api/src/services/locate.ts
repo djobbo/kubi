@@ -1,4 +1,5 @@
 import { servers } from "@dair/brawlhalla-servers"
+import { z } from "@hono/zod-openapi"
 
 // Haversine formula to calculate distance
 function getDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
@@ -13,15 +14,22 @@ function getDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
 	return R * c
 }
 
+const ipApiResponseSchema = z.object({
+	data: z.object({
+		status: z.literal("success"),
+		lat: z.number(),
+		lon: z.number(),
+	}),
+})
+
 export const getRegion = async (ip: string) => {
 	const res = await fetch(`http://ip-api.com/json/${ip}`) // TODO: use typesafe-fetch
-	const data = await res.json()
-
-	if ("status" in data && data.status !== "success") {
+	const parsedRes = ipApiResponseSchema.safeParse(await res.json())
+	if (!parsedRes.data) {
 		return null
 	}
 
-	const { lat, lon } = data
+	const { lat, lon } = parsedRes.data.data
 
 	const closestServer = servers.reduce<{
 		server: (typeof servers)[number]

@@ -16,7 +16,8 @@
 			".output",
 			"dev-dist",
 			"assetsTree.gen.ts",
-			"routeTree.gen.ts"
+			"routeTree.gen.ts",
+			"styled-system"
 		],
 		"include": ["./*"]
 	},

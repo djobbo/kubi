@@ -43,10 +43,7 @@ export const TeamCard = ({ playerId, team }: TeamCardProps) => {
 	const eloResetTier = getTierFromRating(eloReset)
 
 	return (
-		<Link
-			to={`/stats/player/$playerId`}
-			params={{ playerId: teammate.id.toString() }}
-		>
+		<Link to="players/$playerId" params={{ playerId: teammate.id.toString() }}>
 			<Card
 				className="relative overflow-hidden z-0 hover:bg-secondary border border-border"
 				title={

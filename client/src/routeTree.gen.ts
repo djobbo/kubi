@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PlayersPlayerIdRouteImport } from './routes/players/$playerId'
+import { Route as PlayersPlayerIdLegendsRouteImport } from './routes/players/$playerId.legends'
 import { Route as PlayersPlayerId2v2RouteImport } from './routes/players/$playerId.2v2'
 import { Route as PlayersPlayerIdSplatRouteImport } from './routes/players/$playerId.$'
 
@@ -23,6 +24,11 @@ const PlayersPlayerIdRoute = PlayersPlayerIdRouteImport.update({
   id: '/players/$playerId',
   path: '/players/$playerId',
   getParentRoute: () => rootRouteImport,
+} as any)
+const PlayersPlayerIdLegendsRoute = PlayersPlayerIdLegendsRouteImport.update({
+  id: '/legends',
+  path: '/legends',
+  getParentRoute: () => PlayersPlayerIdRoute,
 } as any)
 const PlayersPlayerId2v2Route = PlayersPlayerId2v2RouteImport.update({
   id: '/2v2',
@@ -40,12 +46,14 @@ export interface FileRoutesByFullPath {
   '/players/$playerId': typeof PlayersPlayerIdRouteWithChildren
   '/players/$playerId/$': typeof PlayersPlayerIdSplatRoute
   '/players/$playerId/2v2': typeof PlayersPlayerId2v2Route
+  '/players/$playerId/legends': typeof PlayersPlayerIdLegendsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/players/$playerId': typeof PlayersPlayerIdRouteWithChildren
   '/players/$playerId/$': typeof PlayersPlayerIdSplatRoute
   '/players/$playerId/2v2': typeof PlayersPlayerId2v2Route
+  '/players/$playerId/legends': typeof PlayersPlayerIdLegendsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,6 +61,7 @@ export interface FileRoutesById {
   '/players/$playerId': typeof PlayersPlayerIdRouteWithChildren
   '/players/$playerId/$': typeof PlayersPlayerIdSplatRoute
   '/players/$playerId/2v2': typeof PlayersPlayerId2v2Route
+  '/players/$playerId/legends': typeof PlayersPlayerIdLegendsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -61,18 +70,21 @@ export interface FileRouteTypes {
     | '/players/$playerId'
     | '/players/$playerId/$'
     | '/players/$playerId/2v2'
+    | '/players/$playerId/legends'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/players/$playerId'
     | '/players/$playerId/$'
     | '/players/$playerId/2v2'
+    | '/players/$playerId/legends'
   id:
     | '__root__'
     | '/'
     | '/players/$playerId'
     | '/players/$playerId/$'
     | '/players/$playerId/2v2'
+    | '/players/$playerId/legends'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -96,6 +108,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlayersPlayerIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/players/$playerId/legends': {
+      id: '/players/$playerId/legends'
+      path: '/legends'
+      fullPath: '/players/$playerId/legends'
+      preLoaderRoute: typeof PlayersPlayerIdLegendsRouteImport
+      parentRoute: typeof PlayersPlayerIdRoute
+    }
     '/players/$playerId/2v2': {
       id: '/players/$playerId/2v2'
       path: '/2v2'
@@ -116,11 +135,13 @@ declare module '@tanstack/react-router' {
 interface PlayersPlayerIdRouteChildren {
   PlayersPlayerIdSplatRoute: typeof PlayersPlayerIdSplatRoute
   PlayersPlayerId2v2Route: typeof PlayersPlayerId2v2Route
+  PlayersPlayerIdLegendsRoute: typeof PlayersPlayerIdLegendsRoute
 }
 
 const PlayersPlayerIdRouteChildren: PlayersPlayerIdRouteChildren = {
   PlayersPlayerIdSplatRoute: PlayersPlayerIdSplatRoute,
   PlayersPlayerId2v2Route: PlayersPlayerId2v2Route,
+  PlayersPlayerIdLegendsRoute: PlayersPlayerIdLegendsRoute,
 }
 
 const PlayersPlayerIdRouteWithChildren = PlayersPlayerIdRoute._addFileChildren(
