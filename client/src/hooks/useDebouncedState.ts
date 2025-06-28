@@ -12,7 +12,7 @@ export const useDebouncedState = <T>(defaultValue: T, delay = 500) => {
 		return () => {
 			clearTimeout(timeout)
 		}
-	}, [defaultValue, delay, value])
+	}, [delay, value])
 
 	return [debouncedValue, setValue, value, value !== debouncedValue] as const
 }
