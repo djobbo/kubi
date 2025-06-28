@@ -11,6 +11,7 @@ import TanStackQueryLayout from "@/integrations/tanstack-query/layout"
 import styles from "@/styles.css?url"
 
 import { SiteHeader } from "@/components/layout/header"
+import { LandingBackground } from "@/features/brawlhalla/components/layout/LandingBackground"
 import { AppSidebar } from "@/features/sidebar/components/app-sidebar"
 import { activateLocale } from "@/locales/activate"
 import type { RouterContext } from "@/router.tsx"
@@ -95,7 +96,8 @@ function RootComponent() {
 				<SidebarInset>
 					<SiteHeader />
 					<div className="@container/main flex flex-1 flex-col gap-2 py-4 md:py-6">
-						<div className="px-4 lg:px-6 w-full max-w-7xl mx-auto">
+						<div className="px-4 lg:px-6 w-full max-w-7xl mx-auto z-0">
+							<LandingBackground className="absolute top-0 left-0 w-full h-5/6 -z-10 opacity-50 pointer-events-none" />
 							<Outlet />
 						</div>
 					</div>
@@ -114,11 +116,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 			<head>
 				<HeadContent />
 			</head>
-			<body>
+			<body className="dark">
 				{children}
 				<div
 					style={{
-						opacity: 0.02,
+						opacity: 0.01,
 						backgroundSize: "128px",
 						backgroundRepeat: "repeat",
 						backgroundImage: "url(/assets/images/grain.png)",

@@ -10,6 +10,7 @@ import { getTierFromRating } from "@dair/brawlhalla-api/src/constants/ranked/tie
 import { calculateWinrate } from "@dair/brawlhalla-api/src/helpers/winrate"
 import { t } from "@lingui/core/macro"
 import { createFileRoute } from "@tanstack/react-router"
+import { Link } from "@tanstack/react-router"
 import { Route as PlayerRoute } from "./$playerId"
 import { RankedDisplay } from "./-ranked-display"
 import { StatsGrid } from "./-stats-grid"
@@ -96,7 +97,9 @@ function RouteComponent() {
 									<CardTitle className="flex justify-between text-lg font-bold">
 										<div>
 											<p className="flex items-center gap-1">
-												{team.teammate.name}
+												<Link to={`/players/${team.teammate.id}`}>
+													{team.teammate.name}
+												</Link>
 											</p>
 											<p className="text-muted-foreground text-sm">
 												& {playerName}

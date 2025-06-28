@@ -139,13 +139,13 @@ function ProfileHeader({
 
 				{aliases && (
 					<div className="mb-4 flex flex-wrap gap-1 sm:mb-6 sm:gap-2">
-						{aliases.slice(0, 3).map((alias, index) => (
+						{aliases.slice(0, 3).map((alias) => (
 							<Badge
-								key={index}
+								key={alias}
 								variant="secondary"
 								className="bg-white/10 text-white text-xs"
 							>
-								{alias.length > 20 ? `${alias.slice(0, 20)}...` : alias}
+								{alias}
 							</Badge>
 						))}
 						{aliases.length > 3 && (
@@ -193,7 +193,7 @@ function RouteComponent() {
 			desc: t`${playerName}'s account XP`,
 		},
 		{
-			name: t`Game time`,
+			name: t`In-game time`,
 			value: formatTime(stats.matchtime),
 			desc: t`Time ${playerName} spent in game`,
 		},
@@ -282,7 +282,7 @@ function RouteComponent() {
 				}}
 			>
 				<ScrollArea className="w-full whitespace-nowrap">
-					<TabsList className="inline-flex h-9 items-center justify-start rounded-lg bg-muted p-1 text-muted-foreground w-full sm:w-auto">
+					<TabsList>
 						<TabsTrigger value="overview" className="text-xs sm:text-sm">
 							Overview
 						</TabsTrigger>

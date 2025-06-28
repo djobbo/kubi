@@ -1,16 +1,15 @@
+import { DiscordCard } from "@/features/brawlhalla/components/DiscordCard"
+import { LandingArticles } from "@/features/brawlhalla/components/LandingArticles"
+import { WeeklyRotation } from "@/features/brawlhalla/components/WeeklyRotation"
+import { CommandMenu } from "@/features/command/components/command-menu"
+import { css } from "@/panda/css"
+import { Button } from "@/ui/components/button"
+import { cn } from "@/ui/lib/utils"
 import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
 import { Link, createFileRoute } from "@tanstack/react-router"
 import { ArrowRight } from "lucide-react"
 import { Suspense } from "react"
-import { SearchButton } from "@/features/brawlhalla/components/search/SearchButton"
-import { DiscordCard } from "@/features/brawlhalla/components/DiscordCard"
-import { LandingArticles } from "@/features/brawlhalla/components/LandingArticles"
-import { WeeklyRotation } from "@/features/brawlhalla/components/WeeklyRotation"
-import { css } from "@/panda/css"
-import { Button } from "@/ui/components/button"
-import { cn } from "@/ui/lib/utils"
-import { CommandMenu } from "@/features/command/components/command-menu"
 
 export const Route = createFileRoute("/")({
 	component: Home,
@@ -93,7 +92,6 @@ function Home() {
 						</Trans>
 					</p>
 					<div className="mt-8 flex items-center gap-3 sm:gap-6 flex-col sm:flex-row">
-						{/* <SearchButton /> */}
 						<CommandMenu title={t`Search player...`} />
 						<span className="text-muted-foreground text-sm sm:text-base">
 							or
@@ -129,26 +127,8 @@ function Home() {
 					</a>
 				</div>
 			</div>
-			<Suspense
-				fallback={
-					<Trans>
-						Loading
-						<span className="animate-pulse">...</span>
-					</Trans>
-				}
-			>
-				<WeeklyRotation weeklyRotation={weeklyRotation} />
-			</Suspense>
-			<Suspense
-				fallback={
-					<Trans>
-						Loading
-						<span className="animate-pulse">...</span>
-					</Trans>
-				}
-			>
-				<LandingArticles articles={articles} />
-			</Suspense>
+			<WeeklyRotation weeklyRotation={weeklyRotation} />
+			<LandingArticles articles={articles} />
 		</>
 	)
 }

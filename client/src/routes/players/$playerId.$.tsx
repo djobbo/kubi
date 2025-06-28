@@ -5,6 +5,7 @@ import { calculateWinrate } from "@dair/brawlhalla-api/src/helpers/winrate"
 import { formatTime } from "@dair/common/src/helpers/date"
 import { t } from "@lingui/core/macro"
 import { createFileRoute } from "@tanstack/react-router"
+import { Link } from "@tanstack/react-router"
 import {
 	BarChartIcon,
 	BombIcon,
@@ -183,12 +184,12 @@ function ClanInfoCard({ clan }: ClanInfoProps) {
 			<CardHeader className="flex justify-between">
 				<CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
 					<ShieldIcon className="h-4 w-4 text-green-500 sm:h-5 sm:w-5" />
-					<span>
+					<Link to={`/clans/${clan.id}`}>
 						{clan.name}{" "}
 						<span className="text-xs text-muted-foreground sm:text-sm">
 							#{clan.id}
 						</span>
-					</span>
+					</Link>
 				</CardTitle>
 				<div className="text-xs uppercase text-muted-foreground font-bold">
 					Clan
@@ -234,7 +235,9 @@ function Ranked2v2Card({ ranked }: Ranked2v2Props) {
 			<CardHeader className="flex justify-between">
 				<CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
 					<UsersIcon className="h-4 w-4 text-blue-500 sm:h-5 sm:w-5" />
-					{bestTeam.teammate.name}
+					<Link to={`/players/${bestTeam.teammate.id}`}>
+						{bestTeam.teammate.name}
+					</Link>
 				</CardTitle>
 				<div className="text-xs uppercase text-muted-foreground font-bold">
 					Best 2v2 Team
