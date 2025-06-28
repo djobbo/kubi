@@ -23,7 +23,7 @@ const findAllFiles = async (dir: string): Promise<string[]> => {
 		}),
 	)
 
-	return files.flat()
+	return files.flat().toSorted()
 }
 
 interface AssetsTree {

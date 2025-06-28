@@ -6,6 +6,7 @@ import { FloatingCupcakes } from "./FloatingCupcakes"
 const CupcakeSVG = () => {
 	return (
 		<svg viewBox="0 0 266.0 244.35" className="w-full h-full">
+			<title>Cupcake</title>
 			<g transform="matrix(1, 0, 0, 1, 0.0, 0.0)">
 				<use
 					height="244.35"

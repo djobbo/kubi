@@ -98,7 +98,7 @@ export const RankedTierBanner = ({ tier, ...props }: RankedTierImageProps) => {
 export const RankedTierIcon = ({ tier, ...props }: RankedTierImageProps) => {
 	const src =
 		tier === "Valhallan"
-			? `/assets/images/ranked/icons/Valhallan.webp`
+			? "/assets/images/ranked/icons/Valhallan.webp"
 			: (`/assets/images/ranked/icons/${tier}.png` as const)
 
 	return <SafeImage src={src} alt={tier} {...props} />

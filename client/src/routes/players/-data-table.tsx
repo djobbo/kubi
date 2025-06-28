@@ -163,10 +163,10 @@ export function LegendsDataTable({ legends }: { legends: Legend[] }) {
 	])
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
-        name: true,
+		name: true,
 		xp: true,
 		matchtime: true,
-    })
+	})
 	const [rowSelection, setRowSelection] = useState({})
 
 	const table = useReactTable({
@@ -187,8 +187,6 @@ export function LegendsDataTable({ legends }: { legends: Legend[] }) {
 			rowSelection,
 		},
 	})
-
-	console.log(table.getState().sorting)
 
 	return (
 		<div className="w-full">
@@ -241,7 +239,7 @@ export function LegendsDataTable({ legends }: { legends: Legend[] }) {
 									{
 										id: value,
 										desc:
-											table.getColumn(value)?.columnDef.meta.defaultSort ===
+											table.getColumn(value)?.columnDef.meta?.defaultSort ===
 											"desc",
 									},
 								])
@@ -270,7 +268,7 @@ export function LegendsDataTable({ legends }: { legends: Legend[] }) {
 											className="capitalize"
 											value={column.id}
 										>
-											{column.columnDef.meta.name}
+											{column.columnDef.meta?.name ?? column.id}
 										</DropdownMenuRadioItem>
 									)
 								})}

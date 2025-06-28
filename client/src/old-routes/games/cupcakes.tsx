@@ -34,7 +34,7 @@ function RouteComponent() {
 		}, 100)
 
 		return () => clearInterval(interval)
-	}, [])
+	}, [onInterval])
 
 	const formattedCupcakes = cupcakes.toFixed(0)
 

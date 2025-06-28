@@ -95,7 +95,7 @@ function ProfileHeader({
 	const { bookmark, toggleBookmark } = useBookmark(profileId, profileType)
 	return (
 		<div className="relative overflow-hidden rounded-lg bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4 text-white sm:p-6 lg:p-8">
-			<div className="absolute inset-0 bg-[url('/assets/images/brand/backgrounds/background-no-text.jpg')] bg-cover bg-center opacity-80" />
+			<div className="absolute inset-0 bg-[url('/assets/images/brand/backgrounds/background-no-text.webp')] bg-cover bg-center opacity-80" />
 			<div className="relative z-10">
 				<div className="mb-4 flex flex-col gap-4 sm:mb-6 sm:flex-row sm:items-center sm:justify-between">
 					<div className="flex items-center gap-3 sm:gap-4">
@@ -179,7 +179,7 @@ function RouteComponent() {
 	const { data: playerData, playerId, activeTab } = Route.useLoaderData()
 	const playerName = cleanString(playerData.name)
 
-	const { aliases, stats, ranked, legends, weapons } = playerData
+	const { aliases, stats, legends, weapons } = playerData
 
 	const accountStats: MiscStat[] = [
 		{
@@ -226,15 +226,6 @@ function RouteComponent() {
 							/>
 						)
 					})}
-					{/* {legendsSortedByLevel.slice(0, 3).map((legend) => (
-						<LegendIcon
-							key={legend.legend_id}
-							legendNameKey={legend.legend_name_key}
-							alt={legend.bio_name}
-							containerClassName="w-8 h-8 overflow-hidden rounded-sm"
-							className="object-contain object-center"
-						/>
-					))} */}
 				</div>
 			),
 			desc: t`${playerName}'s main legends`,
