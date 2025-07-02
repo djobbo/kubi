@@ -1,0 +1,17 @@
+{
+	"name": "effect-ts",
+	"module": "index.ts",
+	"type": "module",
+	"private": true,
+	"dependencies": {
+		"@dair/brawlhalla-api": "workspace:*",
+		"@dair/common": "workspace:*",
+		"@effect/platform-bun": "^0.72.4"
+	},
+	"devDependencies": {
+		"@types/bun": "latest"
+	},
+	"peerDependencies": {
+		"typescript": "^5"
+	}
+}
