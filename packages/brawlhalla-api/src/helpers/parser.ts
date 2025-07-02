@@ -176,7 +176,7 @@ export const getWeaponsData = (legends: ParsedLegend[]) => {
 					wins: acc.wins + (legend.stats?.wins ?? 0),
 					kos: acc.kos + (legend.weapon.kos ?? 0),
 					damage_dealt: acc.damage_dealt + (legend.weapon.damage_dealt ?? 0),
-					matchtime: acc.matchtime + (legend.weapon.time_held ?? 0),
+					time_held: acc.time_held + (legend.weapon.time_held ?? 0),
 					level: acc.level + (legend.stats?.level ?? 0),
 					xp: acc.xp + (legend.stats?.xp ?? 0),
 				}
@@ -186,7 +186,7 @@ export const getWeaponsData = (legends: ParsedLegend[]) => {
 				wins: 0,
 				kos: 0,
 				damage_dealt: 0,
-				matchtime: 0,
+				time_held: 0,
 				level: 0,
 				xp: 0,
 			},
@@ -201,7 +201,7 @@ export const getWeaponsData = (legends: ParsedLegend[]) => {
 					name: legend.name,
 					kos: legend.weapon.kos,
 					damage_dealt: legend.weapon.damage_dealt,
-					matchtime: legend.weapon.time_held,
+					time_held: legend.weapon.time_held,
 				}
 			}),
 		}

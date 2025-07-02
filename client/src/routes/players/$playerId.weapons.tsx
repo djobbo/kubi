@@ -1,15 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { Route as PlayerRoute } from "./$playerId"
-import { LegendsDataTable } from "./-legends-data-table"
+import { WeaponsDataTable } from "./-weapons-data-table"
 
-export const Route = createFileRoute("/players/$playerId/legends")({
+export const Route = createFileRoute("/players/$playerId/weapons")({
 	component: RouteComponent,
 })
 
 function RouteComponent() {
 	const {
-		data: { legends },
+		data: { weapons },
 	} = PlayerRoute.useLoaderData()
 
-	return <LegendsDataTable legends={legends} />
+	return <WeaponsDataTable weapons={weapons} />
 }

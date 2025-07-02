@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PlayersPlayerIdRouteImport } from './routes/players/$playerId'
+import { Route as PlayersPlayerIdWeaponsRouteImport } from './routes/players/$playerId.weapons'
 import { Route as PlayersPlayerIdLegendsRouteImport } from './routes/players/$playerId.legends'
 import { Route as PlayersPlayerId2v2RouteImport } from './routes/players/$playerId.2v2'
 import { Route as PlayersPlayerIdSplatRouteImport } from './routes/players/$playerId.$'
@@ -24,6 +25,11 @@ const PlayersPlayerIdRoute = PlayersPlayerIdRouteImport.update({
   id: '/players/$playerId',
   path: '/players/$playerId',
   getParentRoute: () => rootRouteImport,
+} as any)
+const PlayersPlayerIdWeaponsRoute = PlayersPlayerIdWeaponsRouteImport.update({
+  id: '/weapons',
+  path: '/weapons',
+  getParentRoute: () => PlayersPlayerIdRoute,
 } as any)
 const PlayersPlayerIdLegendsRoute = PlayersPlayerIdLegendsRouteImport.update({
   id: '/legends',
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/players/$playerId/$': typeof PlayersPlayerIdSplatRoute
   '/players/$playerId/2v2': typeof PlayersPlayerId2v2Route
   '/players/$playerId/legends': typeof PlayersPlayerIdLegendsRoute
+  '/players/$playerId/weapons': typeof PlayersPlayerIdWeaponsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/players/$playerId/$': typeof PlayersPlayerIdSplatRoute
   '/players/$playerId/2v2': typeof PlayersPlayerId2v2Route
   '/players/$playerId/legends': typeof PlayersPlayerIdLegendsRoute
+  '/players/$playerId/weapons': typeof PlayersPlayerIdWeaponsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,6 +70,7 @@ export interface FileRoutesById {
   '/players/$playerId/$': typeof PlayersPlayerIdSplatRoute
   '/players/$playerId/2v2': typeof PlayersPlayerId2v2Route
   '/players/$playerId/legends': typeof PlayersPlayerIdLegendsRoute
+  '/players/$playerId/weapons': typeof PlayersPlayerIdWeaponsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -71,6 +80,7 @@ export interface FileRouteTypes {
     | '/players/$playerId/$'
     | '/players/$playerId/2v2'
     | '/players/$playerId/legends'
+    | '/players/$playerId/weapons'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -78,6 +88,7 @@ export interface FileRouteTypes {
     | '/players/$playerId/$'
     | '/players/$playerId/2v2'
     | '/players/$playerId/legends'
+    | '/players/$playerId/weapons'
   id:
     | '__root__'
     | '/'
@@ -85,6 +96,7 @@ export interface FileRouteTypes {
     | '/players/$playerId/$'
     | '/players/$playerId/2v2'
     | '/players/$playerId/legends'
+    | '/players/$playerId/weapons'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -107,6 +119,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/players/$playerId'
       preLoaderRoute: typeof PlayersPlayerIdRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/players/$playerId/weapons': {
+      id: '/players/$playerId/weapons'
+      path: '/weapons'
+      fullPath: '/players/$playerId/weapons'
+      preLoaderRoute: typeof PlayersPlayerIdWeaponsRouteImport
+      parentRoute: typeof PlayersPlayerIdRoute
     }
     '/players/$playerId/legends': {
       id: '/players/$playerId/legends'
@@ -136,12 +155,14 @@ interface PlayersPlayerIdRouteChildren {
   PlayersPlayerIdSplatRoute: typeof PlayersPlayerIdSplatRoute
   PlayersPlayerId2v2Route: typeof PlayersPlayerId2v2Route
   PlayersPlayerIdLegendsRoute: typeof PlayersPlayerIdLegendsRoute
+  PlayersPlayerIdWeaponsRoute: typeof PlayersPlayerIdWeaponsRoute
 }
 
 const PlayersPlayerIdRouteChildren: PlayersPlayerIdRouteChildren = {
   PlayersPlayerIdSplatRoute: PlayersPlayerIdSplatRoute,
   PlayersPlayerId2v2Route: PlayersPlayerId2v2Route,
   PlayersPlayerIdLegendsRoute: PlayersPlayerIdLegendsRoute,
+  PlayersPlayerIdWeaponsRoute: PlayersPlayerIdWeaponsRoute,
 }
 
 const PlayersPlayerIdRouteWithChildren = PlayersPlayerIdRoute._addFileChildren(

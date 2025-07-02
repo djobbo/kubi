@@ -50,14 +50,41 @@ export const usePlayerSearch = (name: string, enabled: boolean) => {
 	)
 }
 
+const SearchResults = ({
+	search,
+	enabled,
+	setOpen,
+}: { search: string; enabled: boolean; setOpen: (open: boolean) => void }) => {
+	const navigate = useNavigate()
+	const playerSearchQuery = usePlayerSearch(search, enabled)
+	return (
+		<>
+			{playerSearchQuery.data && playerSearchQuery.data.length > 0 && (
+				<CommandGroup heading="Players">
+					{playerSearchQuery.data?.map((player) => (
+						<CommandItem
+							key={player.playerId}
+							value={player.playerId}
+							keywords={player.aliases.map((alias) => alias.alias)}
+							onSelect={() => {
+								setOpen(false)
+								navigate({ to: `/players/${player.playerId}` })
+							}}
+						>
+							<User className="mr-2 h-4 w-4" />
+							{player.aliases[0].alias}
+						</CommandItem>
+					))}
+				</CommandGroup>
+			)}
+		</>
+	)
+}
+
 export function CommandMenu() {
 	const [open, setOpen] = useState(false)
-	const [search, setSearch, immediateSearch, isDebouncingSearch] =
-		useDebouncedState("", 250)
-	const navigate = useNavigate()
-
+	const [search, setSearch, immediateSearch] = useDebouncedState("", 250)
 	const enableSearch = search.length > 2 && open
-	const playerSearchQuery = usePlayerSearch(search, enableSearch)
 
 	useEffect(() => {
 		const down = (e: KeyboardEvent) => {
@@ -69,8 +96,6 @@ export function CommandMenu() {
 		document.addEventListener("keydown", down)
 		return () => document.removeEventListener("keydown", down)
 	}, [])
-
-	console.log(playerSearchQuery.data)
 
 	return (
 		<>
@@ -91,24 +116,11 @@ export function CommandMenu() {
 				/>
 				<CommandList>
 					<CommandEmpty>No results found.</CommandEmpty>
-					{playerSearchQuery.data && playerSearchQuery.data.length > 0 && (
-						<CommandGroup heading="Players">
-							{playerSearchQuery.data?.map((player) => (
-								<CommandItem
-									key={player.playerId}
-									value={player.playerId}
-									keywords={player.aliases.map((alias) => alias.alias)}
-									onSelect={() => {
-										setOpen(false)
-										navigate({ to: `/players/${player.playerId}` })
-									}}
-								>
-									<User className="mr-2 h-4 w-4" />
-									{player.aliases[0].alias}
-								</CommandItem>
-							))}
-						</CommandGroup>
-					)}
+					<SearchResults
+						search={immediateSearch}
+						enabled={enableSearch}
+						setOpen={setOpen}
+					/>
 				</CommandList>
 			</CommandDialog>
 		</>
