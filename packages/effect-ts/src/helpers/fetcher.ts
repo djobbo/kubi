@@ -1,28 +1,51 @@
-import { Context, Data, Effect, Layer, Schedule, Schema } from "effect"
+import { apiCacheTable } from "@dair/schema"
+import { desc, eq } from "drizzle-orm"
+import { Config, Context, Data, Effect, Layer, Schedule, Schema } from "effect"
+import { DB } from "../services/db"
 
 export class FetcherError extends Data.TaggedError("FetcherError")<{
 	cause?: unknown
 	message?: string
 }> {}
 
+export class FetcherCacheError extends Data.TaggedError("FetcherCacheError")<{
+	cause?: unknown
+	message?: string
+}> {}
+
 interface FetcherImpl {
 	fetchFresh: typeof fetchFresh
-	fetchCache: typeof fetchCache
-	fetchRevalidate: typeof fetchRevalidate
+	fetchCache: ReturnType<typeof fetchCache>
+	fetchRevalidate: ReturnType<typeof fetchRevalidate>
 }
 export class Fetcher extends Context.Tag("Fetcher")<Fetcher, FetcherImpl>() {}
 
-export const make = () => {
+type FetcherOptions = {
+	cacheVersion: number
+}
+
+export const make = (options: FetcherOptions) => {
 	return Effect.succeed(
 		Fetcher.of({
 			fetchFresh,
-			fetchCache,
-			fetchRevalidate,
+			fetchCache: fetchCache(options),
+			fetchRevalidate: fetchRevalidate(options),
 		}),
 	)
 }
 
-export const layer = () => Layer.scoped(Fetcher, make())
+export const layer = (options: FetcherOptions) =>
+	Layer.scoped(Fetcher, make(options))
+
+export const fromEnv = Layer.scoped(
+	Fetcher,
+	Effect.gen(function* () {
+		const fetcher = yield* make({
+			cacheVersion: yield* Config.number("CACHE_VERSION"),
+		})
+		return fetcher
+	}),
+)
 
 const DEFAULT_RETRIES = 3
 const DEFAULT_TIMEOUT = 10000
@@ -31,6 +54,7 @@ type FetchJsonOptions = {
 	retries?: number
 	timeout?: number
 	init?: RequestInit
+	cacheName?: string
 }
 
 export const fetchJson = <T, U>(
@@ -56,7 +80,7 @@ export const fetchJson = <T, U>(
 				new FetcherError({ cause: error, message: "Failed to parse JSON" }),
 		})
 		const parsed = yield* Schema.decodeUnknown(schema)(data)
-		return parsed
+		return { parsed, raw: data }
 	}).pipe(
 		Effect.retry({
 			times: options.retries ?? DEFAULT_RETRIES,
@@ -74,32 +98,86 @@ export const fetchFresh = <T, U>(
 ) => {
 	return Effect.gen(function* () {
 		const response = yield* fetchJson(schema, url, options)
-		return response
+		return response.parsed
 	})
 }
 
-export const fetchCache = <T, U>(
-	schema: Schema.Schema<T, U>,
-	url: string,
-	options: FetchJsonOptions = {},
-	ttl: number = 1000 * 60 * 60 * 24,
-) => {
-	// TODO: Add cache and revalidation using DB Layer
-	return Effect.gen(function* () {
-		const response = yield* fetchJson(schema, url, options)
-		return response
-	})
-}
+export const fetchCache =
+	(options: FetcherOptions) =>
+	<T, U>(schema: Schema.Schema<T, U>, cacheName: string) => {
+		return Effect.gen(function* () {
+			const db = yield* DB
+			const cacheVersion = options.cacheVersion
+			if (!cacheName) {
+				return yield* Effect.fail(
+					new FetcherCacheError({ message: "No cache name provided" }),
+				)
+			}
+			const hi = yield* db.use(async (client) => {
+				const cached = await client
+					.select()
+					.from(apiCacheTable)
+					.where(eq(apiCacheTable.cacheName, cacheName))
+					.orderBy(desc(apiCacheTable.createdAt))
+					.limit(1)
+					.execute()
 
-export const fetchRevalidate = <T, U>(
-	schema: Schema.Schema<T, U>,
-	url: string,
-	options: FetchJsonOptions = {},
-	ttl: number = 1000 * 60 * 60 * 24,
-) => {
-	// TODO: Add cache and revalidation using DB Layer
-	return Effect.gen(function* () {
-		const response = yield* fetchJson(schema, url, options)
-		return response
-	})
-}
+				return cached
+			})
+			const cached = hi[0]
+			if (cached) {
+				const data = yield* Schema.decodeUnknown(schema)(cached.data)
+				return {
+					data,
+					updatedAt: cached.createdAt,
+				}
+			}
+
+			return yield* Effect.fail(
+				new FetcherCacheError({ message: "No cached data found" }),
+			)
+		})
+	}
+
+export const fetchRevalidate =
+	(fetcherOptions: FetcherOptions) =>
+	<T, U>(
+		schema: Schema.Schema<T, U>,
+		url: string,
+		options: FetchJsonOptions = {},
+	) => {
+		return Effect.gen(function* () {
+			const db = yield* DB
+			const { cacheName } = options
+			if (!cacheName) {
+				return yield* Effect.fail(
+					new FetcherCacheError({ message: "No cache name provided" }),
+				)
+			}
+			const cached = yield* fetchCache(fetcherOptions)(schema, cacheName).pipe(
+				Effect.catchAll((error) => Effect.succeed(null)),
+			)
+			if (cached) {
+				return cached
+			}
+
+			const response = yield* fetchJson(schema, url, options)
+			yield* db.use(async (client) => {
+				await client
+					.insert(apiCacheTable)
+					.values({
+						cacheName,
+						cacheId: `${cacheName}-${Date.now()}`,
+						data: response.raw,
+						version: fetcherOptions.cacheVersion,
+					})
+					.onConflictDoNothing()
+					.execute()
+			})
+
+			return {
+				data: response.parsed,
+				updatedAt: new Date(),
+			}
+		})
+	}

@@ -2,8 +2,8 @@ import { arrayToMap } from "@dair/common/src/helpers/arrayToMap"
 
 import type { PlayerRanked } from "../api/schema/player-ranked"
 import type { PlayerStats } from "../api/schema/player-stats"
-import { type Legend, legends, legendsMap } from "../constants/legends"
-import type { Weapon } from "../constants/weapons"
+// TODO: Dont use "legends" here, use "allLegends" instead
+import { type Legend, legends } from "../constants/legends"
 import { getLegendOrTeamRatingReset } from "./season-reset"
 
 export type FullLegend = Legend & {
@@ -47,7 +47,7 @@ export const parsePlayerLegends = (
 			stats: {
 				xp: stats?.xp ?? 0,
 				level: stats?.level ?? 0,
-				xp_percentage: stats?.xp_percentage ?? 0,
+				xp_percentage: stats?.level === 100 ? 100 : (stats?.xp_percentage ?? 0),
 				damage_dealt: Number.parseInt(stats?.damagedealt ?? "0", 10),
 				damage_taken: Number.parseInt(stats?.damagetaken ?? "0", 10),
 				kos: stats?.kos ?? 0,

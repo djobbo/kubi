@@ -36,14 +36,20 @@ const tiers = [
 // Api returns `null` for Valhallan tier
 const Tier = Schema.transformOrFail(
 	Schema.NullOr(Schema.NonEmptyTrimmedString),
-	Schema.Literal(...tiers),
+	Schema.NullOr(Schema.Literal(...tiers)),
 	{
 		strict: true,
 		decode: (input, _, ast) => {
 			if (input === null) {
 				return ParseResult.succeed("Valhallan")
 			}
+
+			if (input === "none") {
+				return ParseResult.succeed(null)
+			}
+
 			if (!tiers.includes(input)) {
+				console.log("Invalid ranked tier", { input })
 				return ParseResult.fail(
 					new ParseResult.Type(ast, input, "Invalid ranked tier"),
 				)
@@ -68,7 +74,7 @@ const regions = [
 
 const Region = Schema.transformOrFail(
 	Schema.Union(Schema.NonEmptyTrimmedString, Schema.Number),
-	Schema.Literal(...regions),
+	Schema.NullOr(Schema.Literal(...regions)),
 	{
 		strict: true,
 		decode: (input, _, ast) => {
@@ -77,6 +83,11 @@ const Region = Schema.transformOrFail(
 				typeof input === "number"
 					? regions[input - 1]
 					: (input.toLowerCase() as (typeof regions)[number])
+
+			if (input === "none") {
+				return ParseResult.succeed(null)
+			}
+
 			if (!region || !regions.includes(region)) {
 				return ParseResult.fail(
 					new ParseResult.Type(ast, input, "Invalid ranked region"),

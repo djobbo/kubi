@@ -13,7 +13,7 @@ export const make = (options: HonoApiOptions) => {
 	return Effect.gen(function* () {
 		const app = new Hono()
 
-		app.route("/brawlhalla/players", playersRoute)
+		app.route("/brawlhalla/players", yield* playersRoute)
 
 		return yield* Effect.acquireRelease(
 			Effect.sync(() =>
@@ -34,9 +34,9 @@ export const layer = (options: HonoApiOptions) => {
 export const fromEnv = Layer.scoped(
 	HonoApi,
 	Effect.gen(function* () {
-		const client = yield* make({
+		const api = yield* make({
 			port: yield* Config.number("API_PORT"),
 		})
-		return client
+		return api
 	}),
 )

@@ -24,16 +24,32 @@ export const getGloryFromPeakRating = (bestRating: number): number =>
 	)
 
 export const getSeasonStats = (playerRanked: PlayerRanked) => {
+	const rotatingRanked =
+		!playerRanked.rotating_ranked || Array.isArray(playerRanked.rotating_ranked)
+			? {
+					games: 0,
+					wins: 0,
+					peak_rating: 0,
+				}
+			: {
+					games: playerRanked.rotating_ranked.games,
+					wins: playerRanked.rotating_ranked.wins,
+					peak_rating: playerRanked.rotating_ranked.peak_rating,
+				}
+
 	const games = [
 		playerRanked.games,
+		rotatingRanked.games,
 		...playerRanked["2v2"].map((team) => team.games),
 	]
 	const wins = [
 		playerRanked.wins,
+		rotatingRanked.wins,
 		...playerRanked["2v2"].map((team) => team.wins),
 	]
 	const ratings = [
 		playerRanked.peak_rating,
+		rotatingRanked.peak_rating,
 		...playerRanked["2v2"].map((team) => team.peak_rating),
 		...playerRanked.legends.map((legend) => legend.peak_rating),
 	]
