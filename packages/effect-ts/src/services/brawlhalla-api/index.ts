@@ -10,7 +10,7 @@ const BASE_URL = "https://api.brawlhalla.com"
 export class BrawlhallaApiError extends Schema.TaggedError<BrawlhallaApiError>(
 	"BrawlhallaApiError",
 )("BrawlhallaApiError", {
-	cause: Schema.optional(Schema.Any),
+	cause: Schema.optional(Schema.Unknown),
 	message: Schema.optional(Schema.String),
 }) {}
 
@@ -119,13 +119,3 @@ export const make = (options: BrawlhallaApiOptions) => {
 export const layer = (options: BrawlhallaApiOptions) => {
 	return Layer.scoped(BrawlhallaApi, make(options))
 }
-
-export const fromEnv = Layer.scoped(
-	BrawlhallaApi,
-	Effect.gen(function* () {
-		const client = yield* make({
-			apiKey: yield* Config.string("BRAWLHALLA_API_KEY"),
-		})
-		return client
-	}),
-)

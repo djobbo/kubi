@@ -6,7 +6,7 @@ import * as DB from "../db"
 export class ArchiveError extends Schema.TaggedError<ArchiveError>(
 	"ArchiveError",
 )("ArchiveError", {
-	cause: Schema.optional(Schema.Any),
+	cause: Schema.optional(Schema.Unknown),
 	message: Schema.optional(Schema.String),
 }) {}
 
@@ -20,8 +20,8 @@ const archive = () => {
 		getAliases: (playerId: number) =>
 			Effect.gen(function* () {
 				const db = yield* DB.DB
-				const aliases = yield* db.use((db) =>
-					db
+				const aliases = yield* db.use(async (db) => {
+					return await db
 						.select()
 						.from(aliasesTable)
 						.where(
@@ -30,8 +30,8 @@ const archive = () => {
 								eq(aliasesTable.public, true),
 							),
 						)
-						.execute(),
-				)
+						.execute()
+				})
 				return aliases
 			}).pipe(
 				Effect.catchAll((error) => {

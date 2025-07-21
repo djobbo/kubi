@@ -37,16 +37,6 @@ export const make = (options: FetcherOptions) => {
 export const layer = (options: FetcherOptions) =>
 	Layer.scoped(Fetcher, make(options))
 
-export const fromEnv = Layer.scoped(
-	Fetcher,
-	Effect.gen(function* () {
-		const fetcher = yield* make({
-			cacheVersion: yield* Config.number("CACHE_VERSION"),
-		})
-		return fetcher
-	}),
-)
-
 const DEFAULT_RETRIES = 3
 const DEFAULT_TIMEOUT = 10000
 
@@ -158,7 +148,10 @@ export const fetchRevalidate =
 				Effect.catchAll((error) => Effect.succeed(null)),
 			)
 			if (cached) {
-				return cached
+				return {
+					...cached,
+					cached: true,
+				}
 			}
 
 			const response = yield* fetchJson(schema, url, options)
@@ -178,6 +171,7 @@ export const fetchRevalidate =
 			return {
 				data: response.parsed,
 				updatedAt: new Date(),
+				cached: false,
 			}
 		})
 	}

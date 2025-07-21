@@ -7,7 +7,7 @@ import { usersTable } from "./users"
 export const DISCORD_PROVIDER_ID = "discord"
 export const GOOGLE_PROVIDER_ID = "google"
 
-const providers = [DISCORD_PROVIDER_ID, GOOGLE_PROVIDER_ID] as const
+export const providers = [DISCORD_PROVIDER_ID, GOOGLE_PROVIDER_ID] as const
 export type Provider = (typeof providers)[number]
 
 export const oauthAccountsTable = sqliteTable("oauth_accounts", {

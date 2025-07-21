@@ -8,6 +8,7 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod"
 import { z } from "zod/v4"
 
 import { legendsMap } from "@dair/brawlhalla-api/src/constants/legends"
+import { relations } from "drizzle-orm"
 import { usersTable } from "../auth/users"
 import { withTimestamp } from "../helpers/with-timestamp"
 
@@ -63,6 +64,13 @@ export const bookmarksTable = sqliteTable(
 		),
 	],
 )
+
+export const bookmarksRelations = relations(bookmarksTable, ({ one }) => ({
+	user: one(usersTable, {
+		fields: [bookmarksTable.userId],
+		references: [usersTable.id],
+	}),
+}))
 
 export type Bookmark = typeof bookmarksTable.$inferSelect
 export type NewBookmark = typeof bookmarksTable.$inferInsert
