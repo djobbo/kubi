@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm"
 import {
 	integer,
 	sqliteTable,
@@ -63,6 +64,13 @@ export const bookmarksTable = sqliteTable(
 		),
 	],
 )
+
+export const bookmarksRelations = relations(bookmarksTable, ({ one }) => ({
+	user: one(usersTable, {
+		fields: [bookmarksTable.userId],
+		references: [usersTable.id],
+	}),
+}))
 
 export type Bookmark = typeof bookmarksTable.$inferSelect
 export type NewBookmark = typeof bookmarksTable.$inferInsert

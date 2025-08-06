@@ -1,4 +1,3 @@
-import { swaggerUI } from "@hono/swagger-ui"
 import { OpenAPIHono as Hono, createRoute, z } from "@hono/zod-openapi"
 import { cors } from "hono/cors"
 import { register } from "prom-client"
@@ -43,20 +42,9 @@ const publicRoutes = app
 	.openapi(
 		createRoute({
 			method: "get",
-			path: "/",
-			responses: {
-				[HttpStatus.OK]: jsonContent(
-					z.object({ message: z.string() }),
-					"Welcome to the dair.gg api!",
-				),
-			},
-		}),
-		(c) => c.json({ message: "Welcome to the dair.gg api!" }, HttpStatus.OK),
-	)
-	.openapi(
-		createRoute({
-			method: "get",
 			path: "/health",
+			description: "Health check",
+			summary: "Health check",
 			responses: {
 				[HttpStatus.OK]: jsonContent(z.object({ message: z.string() }), "OK"),
 			},
@@ -65,7 +53,7 @@ const publicRoutes = app
 	)
 	.route("/v1", v1Route)
 
-app.doc("/doc", {
+app.doc("/openapi", {
 	openapi: "3.0.0",
 	info: {
 		version: "1.0.0",
@@ -88,13 +76,30 @@ app.doc("/doc", {
 	],
 })
 
-app.get(
-	"/ui",
-	swaggerUI({
-		url: "/doc",
-		title: "dair.gg API",
-	}),
-)
+const SCALAR_URL = "https://cdn.jsdelivr.net/npm/@scalar/api-reference"
+
+app.get("/", (c) => {
+	return c.html(`
+			<!doctype html>
+<html>
+  <head>
+    <title>dair.gg API Reference</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="${SCALAR_URL}"></script>
+    <script>
+      Scalar.createApiReference('#app', {
+        url: '/openapi',
+      })
+    </script>
+  </body>
+</html>`)
+})
 
 app.get("/metrics", async (c) => {
 	c.header("Content-Type", register.contentType)
