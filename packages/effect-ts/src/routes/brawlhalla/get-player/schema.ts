@@ -24,6 +24,7 @@ export const PlayerStats = Schema.Struct({
 export const PlayerRanked1v1 = Schema.Struct({
 	rating: Schema.Number,
 	peak_rating: Schema.Number,
+	is_placement_matches: Schema.Boolean,
 	tier: Schema.NullOr(Schema.String),
 	wins: Schema.Number,
 	games: Schema.Number,

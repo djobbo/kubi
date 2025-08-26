@@ -123,7 +123,8 @@ export const getPlayer = (playerId: number) =>
 			playerRanked.data.games > 0
 				? {
 						rating: playerRanked.data.rating,
-						peak_rating: playerRanked.data.peak_rating,
+						peak_rating: playerRanked.data.peak_rating || playerRanked.data.rating,
+						is_placement_matches: !playerRanked.data.peak_rating,
 						tier: playerRanked.data.tier ?? "Valhallan",
 						wins: playerRanked.data.wins,
 						games: playerRanked.data.games,
