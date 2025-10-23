@@ -30,7 +30,8 @@ type Ranked1v1CardProps = {
 }
 
 function Ranked1v1Card({ ranked }: Ranked1v1CardProps) {
-	if (!ranked) return null
+	if (!ranked?.['1v1']) return null
+
 	const ranked1v1 = ranked["1v1"]
 	const winrate = calculateWinrate(ranked1v1.wins, ranked1v1.games)
 
@@ -222,7 +223,7 @@ interface Ranked2v2Props {
 }
 
 function Ranked2v2Card({ ranked }: Ranked2v2Props) {
-	if (!ranked) return null
+	if (!ranked?.['2v2']) return null
 
 	const teams = ranked["2v2"]?.teams ?? []
 	if (teams.length === 0) return null

@@ -21,16 +21,16 @@ import { t } from "@lingui/core/macro"
 
 export const Route = createRootRouteWithContext<RouterContext>()({
 	loader: async ({ context: { apiClient } }) => {
-		const session = await apiClient.auth
-			.getSession({
-				query: {},
-			})
-			.then((res) => res.json())
-			.then((res) => res.data.session)
-			.catch(() => null)
+		// const session = await apiClient.auth
+		// 	.getSession({
+		// 		query: {},
+		// 	})
+		// 	.then((res) => res.json())
+		// 	.then((res) => res.data.session)
+		// 	.catch(() => null)
 		return {
 			lang: "en",
-			session,
+			session: null,
 		}
 	},
 	staleTime: Number.POSITIVE_INFINITY,

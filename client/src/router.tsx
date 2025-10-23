@@ -1,4 +1,4 @@
-import { createRouter as createTanstackRouter } from "@tanstack/react-router"
+import { createRouter } from "@tanstack/react-router"
 import { routerWithQueryClient } from "@tanstack/react-router-with-query"
 import * as ApiClient from "./integrations/api-client/context"
 import * as Lingui from "./integrations/lingui/root-provider"
@@ -15,7 +15,7 @@ export type RouterContext = TanstackQuery.Context &
 	Lingui.Context &
 	ApiClient.Context
 
-export const createRouter = () => {
+export const getRouter = () => {
 	const context: RouterContext = {
 		...TanstackQuery.getContext(),
 		...Lingui.getContext(),
@@ -23,7 +23,7 @@ export const createRouter = () => {
 	}
 
 	const router = routerWithQueryClient(
-		createTanstackRouter({
+		createRouter({
 			routeTree,
 			context,
 			defaultPreload: "intent",
@@ -51,6 +51,6 @@ export const createRouter = () => {
 
 declare module "@tanstack/react-router" {
 	interface Register {
-		router: ReturnType<typeof createRouter>
+		router: ReturnType<typeof getRouter>
 	}
 }

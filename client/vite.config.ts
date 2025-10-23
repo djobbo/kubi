@@ -6,6 +6,7 @@ import { VitePWA } from "vite-plugin-pwa"
 import viteTsConfigPaths from "vite-tsconfig-paths"
 import safeAssetsPlugin from "./plugins/safe-assets-plugin"
 import { env } from "./src/env"
+import react from '@vitejs/plugin-react'
 
 const pwaConfig = VitePWA({
 	injectRegister: "auto",
@@ -59,12 +60,11 @@ const config = defineConfig({
 				enabled: true,
 				host: env.VITE_CLIENT_URL,
 			},
-			target: "bun",
-			react: {
-				babel: {
-					plugins: ["@lingui/babel-plugin-lingui-macro"],
-				},
-			},
+		}),
+		react({
+			babel: {
+				plugins: ["@lingui/babel-plugin-lingui-macro"],
+			}
 		}),
 	],
 	server: {

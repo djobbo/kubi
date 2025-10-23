@@ -1,5 +1,5 @@
 {
-	"name": "effect-ts",
+	"name": "@dair/effect-ts",
 	"module": "index.ts",
 	"type": "module",
 	"private": true,
