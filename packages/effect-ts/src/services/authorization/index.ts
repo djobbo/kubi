@@ -9,10 +9,10 @@ import type {
 	RequestError,
 	ResponseError,
 } from "@effect/platform/HttpClientError"
-import { Discord, Google, type OAuth2Tokens, generateState } from "arctic"
-import { Config, Context, Effect, Layer, Redacted, Schema } from "effect"
+import { Discord, Google, type OAuth2Tokens } from "arctic"
+import { Context, Effect, Layer, Redacted, Schema } from "effect"
 import type { ParseError } from "effect/ParseResult"
-import { State } from "../../routes/auth/providers/callback/handler"
+import { State } from "../../routes/auth/providers/callback/schema"
 import { createSession, deleteSession, getSession } from "./session"
 import { validateOAuthCallback } from "./validate-oauth-callback"
 

@@ -1,12 +1,7 @@
 import type { Provider } from "@dair/schema"
 import { HttpServerResponse } from "@effect/platform"
-import { Effect, Schema } from "effect"
+import { Effect } from "effect"
 import { Authorization } from "../../../../services/authorization"
-
-export const State = Schema.Struct({
-	path: Schema.UndefinedOr(Schema.String),
-	baseUrl: Schema.UndefinedOr(Schema.String),
-})
 
 export const providerCallback = (
 	provider: Provider,

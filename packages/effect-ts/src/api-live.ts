@@ -1,0 +1,56 @@
+import { HttpApiBuilder } from "@effect/platform";
+import { Effect, Layer } from "effect";
+
+import {
+  InternalServerError,
+  NotFound,
+  ServiceUnavailable,
+} from "@effect/platform/HttpApiError";
+import { deleteSession } from "./routes/auth/deleteSession/handler";
+import { getSession } from "./routes/auth/getSession/handler";
+import { authorize } from "./routes/auth/providers/authorize/handler";
+import { providerCallback } from "./routes/auth/providers/callback/handler";
+import { getPlayerById } from "./routes/brawlhalla/get-player-by-id/handler";
+import { Api } from "./api";
+import { getClanById } from "./routes/brawlhalla/get-clan-by-id/handler";
+
+const HealthLive = HttpApiBuilder.group(Api, "health", (handlers) =>
+  handlers.handle("health", () => Effect.succeed("OK"))
+);
+
+const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
+  handlers
+    .handle("get-player-by-id", ({ path }) => getPlayerById(path.id))
+    .handle("get-clan-by-id", ({ path }) => getClanById(path.id))
+);
+
+const AuthLive = HttpApiBuilder.group(Api, "auth", (handlers) =>
+  handlers
+    .handle("authorize", ({ path, urlParams }) =>
+      authorize(path.provider, urlParams)
+    )
+    .handle("get_session", () =>
+      getSession().pipe(
+        Effect.catchTag("DBError", () => Effect.fail(new InternalServerError()))
+      )
+    )
+    .handle("delete_session", () =>
+      deleteSession().pipe(
+        Effect.catchTag("DBError", () => Effect.fail(new InternalServerError()))
+      )
+    )
+    .handle("logout", () =>
+      deleteSession().pipe(
+        Effect.catchTag("DBError", () => Effect.fail(new InternalServerError()))
+      )
+    )
+    .handle("callback", ({ path, urlParams }) =>
+      providerCallback(path.provider, urlParams.code, urlParams.state)
+    )
+);
+
+export const ApiLive = HttpApiBuilder.api(Api).pipe(
+  Layer.provide(HealthLive),
+  Layer.provide(BrawlhallaLive),
+  Layer.provide(AuthLive)
+);

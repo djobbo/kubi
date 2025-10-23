@@ -201,9 +201,9 @@ export const Player = Schema.Struct({
 	bookmark: Schema.NullOr(Bookmark),
 })
 
-export const GetPlayerResponse = Schema.Struct({
+export const GetPlayerByIdResponse = Schema.Struct({
 	data: Player,
 	meta: Schema.Struct({
-		updatedAt: Schema.Date,
+		updated_at: Schema.Date,
 	}),
 })

@@ -14,11 +14,7 @@ import { seo } from "@dair/common/src/helpers/seo";
 import type { NewBookmark } from "@dair/schema";
 import { t } from "@lingui/core/macro";
 import { Schema, Effect } from "effect";
-import {
-  Outlet,
-  createFileRoute,
-  useNavigate,
-} from "@tanstack/react-router";
+import { Outlet, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { BookmarkCheckIcon, BookmarkPlusIcon, ShareIcon } from "lucide-react";
 import { FetchHttpClient, HttpApiClient } from "@effect/platform";
 import { Api } from "@dair/effect-ts/src/api";
@@ -318,9 +314,11 @@ function RouteComponent() {
             <TabsTrigger value="overview" className="text-xs sm:text-sm">
               Overview
             </TabsTrigger>
-            <TabsTrigger value="2v2" className="text-xs sm:text-sm">
-              2v2
-            </TabsTrigger>
+            {(playerData.ranked?.["2v2"]?.teams?.length ?? 0) > 0 && (
+              <TabsTrigger value="2v2" className="text-xs sm:text-sm">
+                2v2
+              </TabsTrigger>
+            )}
             <TabsTrigger value="legends" className="text-xs sm:text-sm">
               Legends
             </TabsTrigger>
