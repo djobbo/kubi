@@ -7,7 +7,6 @@ import {
 import { createInsertSchema, createSelectSchema } from "drizzle-zod"
 import { z } from "zod/v4"
 
-import { legendsMap } from "@dair/brawlhalla-api/src/constants/legends"
 import { relations } from "drizzle-orm"
 import { usersTable } from "../auth/users"
 import { withTimestamp } from "../helpers/with-timestamp"
