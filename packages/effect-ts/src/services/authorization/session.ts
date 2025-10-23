@@ -24,7 +24,6 @@ export const createSession = (userId: string) =>
 			client.insert(sessionsTable).values(newSession).execute(),
 		)
 
-
 		yield* HttpApiBuilder.securitySetCookie(
 			sessionApiKey,
 			Redacted.make(sessionId),
@@ -85,7 +84,6 @@ export const getSession = (sessionId: string) =>
 				}),
 		)
 
-
 		// Get session from database
 		const session = yield* db.use(
 			async (client) =>
@@ -106,7 +104,6 @@ export const getSession = (sessionId: string) =>
 					})
 					.execute(),
 		)
-
 
 		if (!session) {
 			// Session not found or expired, clear cookie

@@ -31,7 +31,6 @@ export const validateOAuthCallback =
 
 			const db = yield* DB
 
-
 			// Check if user exists with this OAuth account
 			const existingOAuthAccount = yield* db.use((client) =>
 				client.query.oauthAccountsTable

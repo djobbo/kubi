@@ -10,13 +10,18 @@
 	"dependencies": {
 		"@dair/brawlhalla-api": "workspace:*",
 		"@dair/common": "workspace:*",
-		"@effect/platform-bun": "^0.72.4"
+		"@dair/schema": "workspace:*",
+		"@effect/platform": "^0.92.1",
+		"@effect/platform-bun": "^0.81.1",
+		"arctic": "^3.7.0",
+		"drizzle-orm": "^0.44.6",
+		"effect": "^3.18.4"
 	},
 	"devDependencies": {
-		"@effect/language-service": "^0.23.5",
+		"@effect/language-service": "^0.47.3",
 		"@types/bun": "latest"
 	},
 	"peerDependencies": {
-		"typescript": "^5"
+		"typescript": "^5.8.3"
 	}
 }

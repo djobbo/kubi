@@ -1,121 +1,71 @@
-import { Config, Context, Effect, Layer, Schema } from "effect"
-import * as Fetcher from "../../helpers/fetcher"
-import { BrawlhallaApiClan } from "./schema/clan"
-import { BrawlhallaApiLegends } from "./schema/legends"
-import { BrawlhallaApiPlayerRanked } from "./schema/player-ranked"
-import { BrawlhallaApiPlayerStats } from "./schema/player-stats"
+import { Config, Effect, Schema } from "effect";
+import { fetchRevalidate } from "../../helpers/fetcher";
+import { BrawlhallaApiClan } from "./schema/clan";
+import { BrawlhallaApiLegends } from "./schema/legends";
+import { BrawlhallaApiPlayerRanked } from "./schema/player-ranked";
+import { BrawlhallaApiPlayerStats } from "./schema/player-stats";
 
-const BASE_URL = "https://api.brawlhalla.com"
+const BASE_URL = "https://api.brawlhalla.com";
 
-export class BrawlhallaApiError extends Schema.TaggedError<BrawlhallaApiError>(
-	"BrawlhallaApiError",
-)("BrawlhallaApiError", {
-	cause: Schema.optional(Schema.Unknown),
-	message: Schema.optional(Schema.String),
-}) {}
+type FetchBrawlhallaApiOptions<T, U> = {
+  name: string;
+  schema: Schema.Schema<T, U>;
+  path: string;
+  searchParams?: Record<string, string>;
+  cacheName: string;
+};
 
-const fetchBrawlhallaApi = <T, U>(
-	name: string,
-	schema: Schema.Schema<T, U>,
-	path: string,
-	searchParams: Record<string, string>,
-	cacheName: string,
-	init: RequestInit = {},
-) => {
-	const url = new URL(path, BASE_URL)
-	for (const [key, value] of Object.entries(searchParams)) {
-		url.searchParams.set(key, value)
-	}
+const fetchBrawlhallaApi = <T, U>({
+  name,
+  schema,
+  path,
+  searchParams = {},
+  cacheName,
+}: FetchBrawlhallaApiOptions<T, U>) =>
+  Effect.gen(function* () {
+    // TODO: use env.BRAWLHALLA_API_KEY
+    const apiKey = yield* Config.nonEmptyString("BRAWLHALLA_API_KEY");
 
-	return {
-		fetch: () =>
-			Effect.gen(function* () {
-				const fetcher = yield* Fetcher.Fetcher
-				const response = yield* fetcher.fetchRevalidate(
-					schema,
-					url.toString(),
-					{
-						init,
-						cacheName,
-					},
-				)
-				return response
-			}).pipe(
-				Effect.mapError(
-					(error) =>
-						new BrawlhallaApiError({
-							cause: error,
-							message: `Failed to fetch ${name}`,
-						}),
-				),
-				Effect.withLogSpan(`BrawlhallaApi.${name}`),
-			),
-		fetchCache: () =>
-			Effect.gen(function* () {
-				const fetcher = yield* Fetcher.Fetcher
-				const response = yield* fetcher.fetchCache(schema, cacheName)
-				return response
-			}),
-	}
-}
+    const url = new URL(path, BASE_URL);
+    for (const [key, value] of Object.entries(searchParams)) {
+      url.searchParams.set(key, value);
+    }
+    url.searchParams.set("api_key", apiKey);
 
-const brawlhallaApi = (options: BrawlhallaApiOptions) => ({
-	playerStatsById: (playerId: number) =>
-		fetchBrawlhallaApi(
-			"getPlayerStatsById",
-			BrawlhallaApiPlayerStats,
-			`/player/${playerId}/stats`,
-			{
-				api_key: options.apiKey,
-			},
-			`brawlhalla-player-stats-${playerId}`,
-		),
-	playerRankedById: (playerId: number) =>
-		fetchBrawlhallaApi(
-			"getPlayerRankedById",
-			BrawlhallaApiPlayerRanked,
-			`/player/${playerId}/ranked`,
-			{
-				api_key: options.apiKey,
-			},
-			`brawlhalla-player-ranked-${playerId}`,
-		),
-	clanById: (clanId: number) =>
-		fetchBrawlhallaApi(
-			"getClanById",
-			BrawlhallaApiClan,
-			`/clan/${clanId}`,
-			{
-				api_key: options.apiKey,
-			},
-			`brawlhalla-clan-${clanId}`,
-		),
-	allLegendsData: () =>
-		fetchBrawlhallaApi(
-			"getAllLegendsData",
-			BrawlhallaApiLegends,
-			"/legend/all",
-			{
-				api_key: options.apiKey,
-			},
-			"brawlhalla-legend-all",
-		),
-})
+    return yield* fetchRevalidate(schema, {
+      method: "GET",
+      url: url.toString(),
+      cacheName,
+    });
+  }).pipe(Effect.withSpan(`BrawlhallaApi.${name}`));
 
-export class BrawlhallaApi extends Context.Tag("BrawlhallaApi")<
-	BrawlhallaApi,
-	ReturnType<typeof brawlhallaApi>
->() {}
-
-interface BrawlhallaApiOptions {
-	apiKey: string
-}
-
-export const make = (options: BrawlhallaApiOptions) => {
-	const api = brawlhallaApi(options)
-	return Effect.succeed(BrawlhallaApi.of(api))
-}
-
-export const layer = (options: BrawlhallaApiOptions) => {
-	return Layer.scoped(BrawlhallaApi, make(options))
+export const brawlhallaApi = {
+  getPlayerStatsById: (playerId: number) =>
+    fetchBrawlhallaApi({
+      name: "getPlayerStatsById",
+      schema: BrawlhallaApiPlayerStats,
+      path: `/player/${playerId}/stats`,
+      cacheName: `brawlhalla-player-stats-${playerId}`,
+    }),
+  getPlayerRankedById: (playerId: number) =>
+    fetchBrawlhallaApi({
+      name: "getPlayerRankedById",
+      schema: BrawlhallaApiPlayerRanked,
+      path: `/player/${playerId}/ranked`,
+      cacheName: `brawlhalla-player-ranked-${playerId}`,
+    }),
+  getClanById: (clanId: number) =>
+    fetchBrawlhallaApi({
+      name: "getClanById",
+      schema: BrawlhallaApiClan,
+      path: `/clan/${clanId}`,
+      cacheName: `brawlhalla-clan-${clanId}`,
+    }),
+  getAllLegendsData: () =>
+    fetchBrawlhallaApi({
+      name: "getAllLegendsData",
+      schema: BrawlhallaApiLegends,
+      path: "/legend/all",
+      cacheName: "brawlhalla-legend-all",
+    }),
 }

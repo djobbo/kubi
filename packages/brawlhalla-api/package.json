@@ -10,6 +10,7 @@
 		"typescript": "^5"
 	},
 	"dependencies": {
+		"@dair/common": "workspace:*",
 		"zod": "^3.25.63"
 	}
 }
