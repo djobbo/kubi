@@ -14,6 +14,7 @@ import {
   getRankings2v2,
 } from "./routes/brawlhalla/get-rankings/handler";
 import { getWeeklyRotation } from "./routes/brawlhalla/get-weekly-rotation/handler";
+import { getPreviewArticles } from "./routes/brawlhalla/get-preview-articles/handler";
 
 const HealthLive = HttpApiBuilder.group(Api, "health", (handlers) =>
   handlers.handle("health", () => Effect.succeed("OK"))
@@ -30,6 +31,7 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
       getRankings2v2(path.region, path.page)
     )
     .handle("get-weekly-rotation", () => getWeeklyRotation())
+    .handle("get-preview-articles", () => getPreviewArticles())
 );
 
 const AuthLive = HttpApiBuilder.group(Api, "auth", (handlers) =>

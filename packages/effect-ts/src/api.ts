@@ -25,6 +25,7 @@ import {
 } from "./routes/brawlhalla/get-rankings/schema";
 import { AnyRegion } from "./services/brawlhalla-api/schema/region";
 import { GetWeeklyRotationResponse } from './routes/brawlhalla/get-weekly-rotation/schema';
+import { GetPreviewArticlesResponse } from './routes/brawlhalla/get-preview-articles/schema';
 
 const idParam = HttpApiSchema.param("id", Schema.NumberFromString);
 const pageParam = HttpApiSchema.param(
@@ -78,6 +79,13 @@ class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
       "get-rankings-2v2"
     )`/rankings/2v2/${regionParam}/${pageParam}`
       .addSuccess(GetRankings2v2Response)
+      .addError(NotFound, { status: 404 })
+      .addError(ServiceUnavailable, { status: 429 })
+      .addError(InternalServerError, { status: 500 })
+  )
+  .add(
+    HttpApiEndpoint.get("get-preview-articles")`/articles/preview`
+      .addSuccess(GetPreviewArticlesResponse)
       .addError(NotFound, { status: 404 })
       .addError(ServiceUnavailable, { status: 429 })
       .addError(InternalServerError, { status: 500 })

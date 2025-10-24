@@ -56,7 +56,7 @@ const getArticles = Effect.fn(function* (query: {
   category?: string;
   after?: string;
   withContent?: boolean;
-}) {
+} = {}) {
   const articles = yield* fetchRevalidate(Articles, {
     method: "POST",
     url: BRAWLHALLA_GRAPHQL_API_URL,
