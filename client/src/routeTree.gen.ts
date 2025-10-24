@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as EffectRouteImport } from './routes/effect'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PlayersPlayerIdRouteImport } from './routes/players/$playerId'
 import { Route as PlayersPlayerIdWeaponsRouteImport } from './routes/players/$playerId.weapons'
@@ -16,6 +17,11 @@ import { Route as PlayersPlayerIdLegendsRouteImport } from './routes/players/$pl
 import { Route as PlayersPlayerId2v2RouteImport } from './routes/players/$playerId.2v2'
 import { Route as PlayersPlayerIdSplatRouteImport } from './routes/players/$playerId.$'
 
+const EffectRoute = EffectRouteImport.update({
+  id: '/effect',
+  path: '/effect',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -49,6 +55,7 @@ const PlayersPlayerIdSplatRoute = PlayersPlayerIdSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/effect': typeof EffectRoute
   '/players/$playerId': typeof PlayersPlayerIdRouteWithChildren
   '/players/$playerId/$': typeof PlayersPlayerIdSplatRoute
   '/players/$playerId/2v2': typeof PlayersPlayerId2v2Route
@@ -57,6 +64,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/effect': typeof EffectRoute
   '/players/$playerId': typeof PlayersPlayerIdRouteWithChildren
   '/players/$playerId/$': typeof PlayersPlayerIdSplatRoute
   '/players/$playerId/2v2': typeof PlayersPlayerId2v2Route
@@ -66,6 +74,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/effect': typeof EffectRoute
   '/players/$playerId': typeof PlayersPlayerIdRouteWithChildren
   '/players/$playerId/$': typeof PlayersPlayerIdSplatRoute
   '/players/$playerId/2v2': typeof PlayersPlayerId2v2Route
@@ -76,6 +85,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/effect'
     | '/players/$playerId'
     | '/players/$playerId/$'
     | '/players/$playerId/2v2'
@@ -84,6 +94,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/effect'
     | '/players/$playerId'
     | '/players/$playerId/$'
     | '/players/$playerId/2v2'
@@ -92,6 +103,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/effect'
     | '/players/$playerId'
     | '/players/$playerId/$'
     | '/players/$playerId/2v2'
@@ -101,11 +113,19 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  EffectRoute: typeof EffectRoute
   PlayersPlayerIdRoute: typeof PlayersPlayerIdRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/effect': {
+      id: '/effect'
+      path: '/effect'
+      fullPath: '/effect'
+      preLoaderRoute: typeof EffectRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -171,6 +191,7 @@ const PlayersPlayerIdRouteWithChildren = PlayersPlayerIdRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  EffectRoute: EffectRoute,
   PlayersPlayerIdRoute: PlayersPlayerIdRouteWithChildren,
 }
 export const routeTree = rootRouteImport

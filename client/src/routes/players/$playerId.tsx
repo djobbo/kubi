@@ -16,9 +16,6 @@ import { t } from "@lingui/core/macro";
 import { Schema, Effect } from "effect";
 import { Outlet, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { BookmarkCheckIcon, BookmarkPlusIcon, ShareIcon } from "lucide-react";
-import { FetchHttpClient, HttpApiClient } from "@effect/platform";
-import { Api } from "@dair/effect-ts/src/api";
-import { env } from "@/env";
 
 const playerIdRegex = /(^\d+).*/;
 /**
@@ -54,7 +51,7 @@ const ParamsSchema = Schema.Struct({
 
 export const Route = createFileRoute("/players/$playerId")({
   component: RouteComponent,
-  loader: ({ params, location }) =>
+  loader: ({ params, location, context: { ApiClient } }) =>
     Effect.runPromise(
       Effect.gen(function* () {
         const { playerId } = yield* Schema.decodeUnknown(ParamsSchema)(params);
@@ -63,11 +60,7 @@ export const Route = createFileRoute("/players/$playerId")({
           return yield* Effect.fail(new Error("Player ID is required"));
         }
 
-        const apiClient = yield* HttpApiClient.make(Api, {
-          baseUrl: env.VITE_API_URL,
-        });
-
-        const playerData = yield* apiClient.brawlhalla["get-player-by-id"]({
+        const playerData = yield* ApiClient.brawlhalla["get-player-by-id"]({
           path: { id: playerId },
         });
 
@@ -85,7 +78,7 @@ export const Route = createFileRoute("/players/$playerId")({
           )}`,
           ...playerData,
         };
-      }).pipe(Effect.provide(FetchHttpClient.layer))
+      })
     ),
   staleTime: 5 * 60 * 1000, // 5 minutes
   head: ({ loaderData }) => {
@@ -122,7 +115,7 @@ function ProfileHeader({
 }: ProfileHeaderProps) {
   const { bookmark, toggleBookmark } = useBookmark(profileId, profileType);
   return (
-    <div className="relative overflow-hidden rounded-lg bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4 text-white sm:p-6 lg:p-8">
+    <div className="relative overflow-hidden rounded-lg bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 p-4 text-white sm:p-6 lg:p-8 border">
       <div className="absolute inset-0 bg-[url('/assets/images/brand/backgrounds/background-no-text.webp')] bg-cover bg-center opacity-80" />
       <div className="relative z-10">
         <div className="mb-4 flex flex-col gap-4 sm:mb-6 sm:flex-row sm:items-center sm:justify-between">

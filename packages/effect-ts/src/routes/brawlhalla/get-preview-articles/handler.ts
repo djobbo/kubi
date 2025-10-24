@@ -22,7 +22,13 @@ export const getPreviewArticles = () =>
         slug: node.slug,
         date_gmt: node.dateGmt,
         excerpt: node.excerpt,
-        thumbnail: node.featuredImage.node.sourceUrl,
+        thumbnail: {
+          src: node.featuredImage.node.sourceUrl,
+        },
+        categories: node.categories.nodes.map((category) => ({
+          name: category.name,
+          slug: category.slug,
+        })),
       })),
       meta: {
         updated_at: articles.updatedAt,

@@ -3,20 +3,20 @@ import { CircleHelp } from "lucide-react"
 
 import { Tooltip } from "@/components/base/Tooltip"
 import { LegendIcon } from "@/features/brawlhalla/components/Image"
-import type { LegendType } from "@dair/brawlhalla-api/src/constants/legends"
+import { GetWeeklyRotationResponse } from "@dair/effect-ts/src/routes/brawlhalla/get-weekly-rotation/schema"
 
 export const WeeklyRotation = ({
 	weeklyRotation,
-}: { weeklyRotation: LegendType[] }) => {
+}: { weeklyRotation: typeof GetWeeklyRotationResponse.Type['data'] }) => {
 	return (
 		<div className="flex flex-col items-center mt-8">
 			<div className="mx-auto grid gap-4 grid-cols-3 md:grid-cols-9 p-4 rounded-2xl bg-secondary border border-border">
 				{weeklyRotation.length > 0
 					? weeklyRotation.map((legend) => (
-							<Tooltip key={legend.legend_id} content={legend.bio_name}>
+							<Tooltip key={legend.id} content={legend.name}>
 								<LegendIcon
-									legendNameKey={legend.legend_name_key}
-									alt={legend.bio_name}
+									legendNameKey={legend.name_key}
+									alt={legend.name}
 									containerClassName="w-16 h-16 rounded-md"
 									className="object-contain object-center border border-border rounded-lg transition-transform scale-100 hover:scale-105"
 								/>

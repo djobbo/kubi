@@ -1,14 +1,14 @@
-import type { BrawlhallaArticle } from "@/features/bh-articles/functions/getBrawlhallaArticles"
 import { UnsafeImage } from "@/features/brawlhalla/components/Image"
+import type { GetPreviewArticlesResponse } from '@dair/effect-ts/src/routes/brawlhalla/get-preview-articles/schema'
 
 interface ArticlePreviewProps {
-	article: BrawlhallaArticle
+	article: typeof GetPreviewArticlesResponse.Type['data'][number]
 }
 
 const BASE_BRAWLHALLA_ARTICLE_URL = "https://brawlhalla.com/news/"
 
 export const ArticlePreview = ({ article }: ArticlePreviewProps) => {
-	const { title, featuredImage, categories } = article
+	const { title, thumbnail, categories } = article
 
 	const href = `${BASE_BRAWLHALLA_ARTICLE_URL}${article.slug}`
 
@@ -21,7 +21,7 @@ export const ArticlePreview = ({ article }: ArticlePreviewProps) => {
 				rel="noreferrer"
 			>
 				<UnsafeImage
-					src={featuredImage.sourceUrl}
+					src={thumbnail.src}
 					alt={title}
 					className="object-cover object-center"
 				/>

@@ -1,7 +1,8 @@
 import { env } from "@/env";
 import { Api } from "@dair/effect-ts/src/api";
-import { FetchHttpClient } from "@effect/platform";
+import { FetchHttpClient, HttpApiClient } from "@effect/platform";
 import { AtomHttpApi } from "@effect-atom/atom-react";
+import { Effect } from 'effect';
 
 class ApiClient extends AtomHttpApi.Tag<ApiClient>()("ApiClient", {
   api: Api,
@@ -12,6 +13,9 @@ class ApiClient extends AtomHttpApi.Tag<ApiClient>()("ApiClient", {
 
 export function getContext() {
   return {
+    ApiClient: Effect.runSync(HttpApiClient.make(Api, {
+      baseUrl: env.VITE_API_URL,
+    }).pipe(Effect.provide(FetchHttpClient.layer))),
     apiClient: {
       auth: {
         // getSession: apiClient.v1.auth.session.$get,

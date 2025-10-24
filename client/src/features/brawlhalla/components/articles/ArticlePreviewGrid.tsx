@@ -1,9 +1,8 @@
-import type { BrawlhallaArticle } from "@/features/bh-articles/functions/getBrawlhallaArticles"
-
 import { ArticlePreview } from "./ArticlePreview"
+import type { GetPreviewArticlesResponse } from '@dair/effect-ts/src/routes/brawlhalla/get-preview-articles/schema'
 
 interface ArticlePreviewGridProps {
-	articles: BrawlhallaArticle[]
+	articles: typeof GetPreviewArticlesResponse.Type['data']
 }
 
 export const ArticlePreviewGrid = ({ articles }: ArticlePreviewGridProps) => {
