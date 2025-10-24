@@ -94,6 +94,7 @@ Effect.runFork(
     Effect.catchTag("ConfigError", (error) => {
       console.error("Missing environment variable:", error.message);
       return Effect.die(error);
-    })
+    }),
+    Effect.catchAll(Effect.logError)
   )
 );

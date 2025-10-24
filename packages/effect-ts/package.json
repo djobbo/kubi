@@ -14,7 +14,7 @@
 		"@effect/platform": "^0.92.1",
 		"@effect/platform-bun": "^0.81.1",
 		"arctic": "^3.7.0",
-		"drizzle-orm": "^0.44.6",
+		"drizzle-orm": "^0.44.7",
 		"effect": "^3.18.4"
 	},
 	"devDependencies": {
@@ -23,6 +23,6 @@
 		"drizzle-kit": "^0.31.5"
 	},
 	"peerDependencies": {
-		"typescript": "^5.8.3"
+		"typescript": "^5.9.3"
 	}
 }

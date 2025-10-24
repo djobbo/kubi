@@ -4,6 +4,7 @@ import { BrawlhallaApiClan } from "./schema/clan";
 import { BrawlhallaApiLegends } from "./schema/legends";
 import { BrawlhallaApiPlayerRanked } from "./schema/player-ranked";
 import { BrawlhallaApiPlayerStats } from "./schema/player-stats";
+import { BrawlhallaApiRankings1v1, BrawlhallaApiRankings2v2 } from './schema/rankings';
 
 const BASE_URL = "https://api.brawlhalla.com";
 
@@ -53,6 +54,20 @@ export const brawlhallaApi = {
       schema: BrawlhallaApiPlayerRanked,
       path: `/player/${playerId}/ranked`,
       cacheName: `brawlhalla-player-ranked-${playerId}`,
+    }),
+  getRankings1v1: (region: string, page: number, name?: string) =>
+    fetchBrawlhallaApi({
+      name: "getRankings1v1",
+      schema: BrawlhallaApiRankings1v1,
+      path: `/rankings/1v1/${region.toLowerCase()}/${page}${name ? `?name=${name}` : ""}`,
+      cacheName: `brawlhalla-rankings-1v1-${region}-${page}-${name}`,
+    }),
+  getRankings2v2: (region: string, page: number) =>
+    fetchBrawlhallaApi({
+      name: "getRankings2v2",
+      schema: BrawlhallaApiRankings2v2,
+      path: `/rankings/2v2/${region.toLowerCase()}/${page}`,
+      cacheName: `brawlhalla-rankings-2v2-${region}-${page}`,
     }),
   getClanById: (clanId: number) =>
     fetchBrawlhallaApi({

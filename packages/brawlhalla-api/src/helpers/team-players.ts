@@ -6,9 +6,7 @@ import type { Ranking2v2 } from "../api/schema/rankings"
 export const getTeamPlayers = (
 	team: PlayerRanked["2v2"][number] | Ranking2v2,
 ) => {
-	const [player1, player2] = cleanString(team.teamname).split("+")
-
-	if (!player1 || !player2) return null
+	const [player1 = team.teamname, player2 = team.teamname] = cleanString(team.teamname).split("+")
 
 	return [
 		{

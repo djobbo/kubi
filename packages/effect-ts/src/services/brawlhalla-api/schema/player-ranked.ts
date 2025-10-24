@@ -1,110 +1,15 @@
 import { ParseResult, Schema } from "effect"
 import { CleanString } from "../../../helpers/clean-string"
 import { NumberFromString } from "../../../helpers/number-from-string"
-
-const tiers = [
-	"Valhallan",
-	"Diamond",
-	"Platinum 5",
-	"Platinum 4",
-	"Platinum 3",
-	"Platinum 2",
-	"Platinum 1",
-	"Gold 5",
-	"Gold 4",
-	"Gold 3",
-	"Gold 2",
-	"Gold 1",
-	"Silver 5",
-	"Silver 4",
-	"Silver 3",
-	"Silver 2",
-	"Silver 1",
-	"Bronze 5",
-	"Bronze 4",
-	"Bronze 3",
-	"Bronze 2",
-	"Bronze 1",
-	"Tin 5",
-	"Tin 4",
-	"Tin 3",
-	"Tin 2",
-	"Tin 1",
-	"Tin 0",
-] as const
-
-// Api returns `null` for Valhallan tier
-const Tier = Schema.transformOrFail(
-	Schema.NullOr(Schema.NonEmptyTrimmedString),
-	Schema.NullOr(Schema.Literal(...tiers)),
-	{
-		strict: true,
-		decode: (input, _, ast) => {
-			if (input === null) {
-				return ParseResult.succeed("Valhallan")
-			}
-
-			if (input === "none") {
-				return ParseResult.succeed(null)
-			}
-
-			if (!tiers.includes(input)) {
-				console.log("Invalid ranked tier", { input })
-				return ParseResult.fail(
-					new ParseResult.Type(ast, input, "Invalid ranked tier"),
-				)
-			}
-			return ParseResult.succeed(input as (typeof tiers)[number])
-		},
-		encode: (input) => ParseResult.succeed(input),
-	},
-)
-
-const regions = [
-	"us-e",
-	"eu",
-	"sea",
-	"brz",
-	"aus",
-	"us-w",
-	"jpn",
-	"sa",
-	"me",
-] as const
-
-const Region = Schema.transformOrFail(
-	Schema.Union(Schema.NonEmptyTrimmedString, Schema.Number),
-	Schema.NullOr(Schema.Literal(...regions)),
-	{
-		strict: true,
-		decode: (input, _, ast) => {
-			// Region is sometimes a number, sometimes a string
-			const region =
-				typeof input === "number"
-					? regions[input - 1]
-					: (input.toLowerCase() as (typeof regions)[number])
-
-			if (input === "none") {
-				return ParseResult.succeed(null)
-			}
-
-			if (!region || !regions.includes(region)) {
-				return ParseResult.fail(
-					new ParseResult.Type(ast, input, "Invalid ranked region"),
-				)
-			}
-			return ParseResult.succeed(region)
-		},
-		encode: (input) => ParseResult.succeed(input),
-	},
-)
+import { BrawlhallaApiTier } from './tier'
+import { BrawlhallaApiRegion } from './region'
 
 const Legend = Schema.Struct({
 	legend_id: Schema.Number,
 	legend_name_key: Schema.String,
 	rating: Schema.Number,
 	peak_rating: Schema.Number,
-	tier: Tier,
+	tier: BrawlhallaApiTier,
 	wins: Schema.Number,
 	games: Schema.Number,
 })
@@ -114,7 +19,7 @@ const Ranked2v2Team = Schema.Struct({
 	brawlhalla_id_two: NumberFromString,
 	rating: Schema.Number,
 	peak_rating: Schema.Number,
-	tier: Tier,
+	tier: BrawlhallaApiTier,
 	wins: Schema.Number,
 	games: Schema.Number,
 	teamname: CleanString,
@@ -127,10 +32,10 @@ const RotatingRanked = Schema.Struct({
 	brawlhalla_id: NumberFromString,
 	rating: Schema.Number,
 	peak_rating: Schema.Number,
-	tier: Tier,
+	tier: BrawlhallaApiTier,
 	wins: Schema.Number,
 	games: Schema.Number,
-	region: Region,
+	region: BrawlhallaApiRegion,
 })
 
 const ApiRotatingRanked = Schema.transformOrFail(
@@ -157,10 +62,10 @@ export const BrawlhallaApiPlayerRanked = Schema.Struct({
 	"2v2": Schema.Array(Ranked2v2Team),
 	rating: Schema.Number,
 	peak_rating: Schema.Number,
-	tier: Tier,
+	tier: BrawlhallaApiTier,
 	wins: Schema.Number,
 	games: Schema.Number,
-	region: Region,
+	region: BrawlhallaApiRegion,
 	rotating_ranked: ApiRotatingRanked,
 })
 
