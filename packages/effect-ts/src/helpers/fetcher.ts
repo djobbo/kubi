@@ -1,5 +1,5 @@
 import { apiCacheTable } from "@dair/schema";
-import { HttpClient, HttpClientRequest } from "@effect/platform";
+import { HttpBody, HttpClient, HttpClientRequest } from "@effect/platform";
 import type { HttpMethod } from "@effect/platform/HttpMethod";
 import { desc, eq, and, gte } from "drizzle-orm";
 import { Config, Data, Effect, Schedule, Schema } from "effect";
@@ -17,6 +17,7 @@ const DEFAULT_CACHE_MAX_AGE = 15 * 60 * 1000;
 type FetchJsonOptions = {
   method: HttpMethod;
   url: string;
+  body?: unknown;
   retries?: number;
   timeout?: number;
   cacheName?: string;
@@ -77,17 +78,23 @@ const fetchJson = Effect.fn("Fetcher.fetchJson")(function* <T, U>(
 ) {
   const client = yield* HttpClient.HttpClient;
   const json = yield* HttpClientRequest.make(options.method)(options.url).pipe(
-    client.execute,
+   Effect.fn(function* (request) {
+    if (options.body) {
+      return yield* request.pipe(HttpClientRequest.bodyJson(options.body));
+    }
+    return request;
+   }),
+    Effect.flatMap(client.execute),
     Effect.timeout(options.timeout ?? DEFAULT_TIMEOUT),
     Effect.retry({
       times: options.retries ?? DEFAULT_RETRIES,
       schedule: Schedule.exponential(1000),
     }),
-    Effect.andThen((res) => res.json)
+    Effect.flatMap((res) => res.json)
   );
 
   const parsed = yield* Schema.decodeUnknown(schema)(json);
-
+  
   return {
     data: parsed,
     updatedAt: new Date(),
@@ -119,10 +126,10 @@ const cache = Effect.fn("Fetcher.cache")(function* <T, U>(
   });
 });
 
-export const fetchRevalidate = Effect.fn("Fetcher.fetchRevalidate")(function* <T, U>(
-  schema: Schema.Schema<T, U>,
-  options: FetchJsonOptions
-) {
+export const fetchRevalidate = Effect.fn("Fetcher.fetchRevalidate")(function* <
+  T,
+  U
+>(schema: Schema.Schema<T, U>, options: FetchJsonOptions) {
   const db = yield* DB;
   return yield* fetchCache(schema, options).pipe(
     Effect.orElse(() =>
@@ -130,9 +137,7 @@ export const fetchRevalidate = Effect.fn("Fetcher.fetchRevalidate")(function* <T
         Effect.tap(({ data }) =>
           // Fire and forget cache operation
           Effect.runFork(
-            cache(schema, options, data).pipe(
-              Effect.provideService(DB, db)
-            )
+            cache(schema, options, data).pipe(Effect.provideService(DB, db))
           )
         )
       )

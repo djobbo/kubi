@@ -1,5 +1,5 @@
 import { Effect } from "effect";
-import { brawlhallaApi } from "../../../services/brawlhalla-api";
+import { BrawlhallaApi } from "../../../services/brawlhalla-api";
 
 import {
   InternalServerError,
@@ -16,7 +16,7 @@ export const getRankings1v1 = (region: typeof AnyRegion.Type, page: number, name
     // TODO: const session = yield* Authorization.getSession();
 
     const [rankings] = yield* Effect.all(
-      [brawlhallaApi.getRankings1v1(region, page, name)],
+      [BrawlhallaApi.getRankings1v1(region, page, name)],
       {
         concurrency: 1,
       }
@@ -72,6 +72,7 @@ export const getRankings1v1 = (region: typeof AnyRegion.Type, page: number, name
       ParseError: () => Effect.fail(new InternalServerError()),
       RequestError: () => Effect.fail(new InternalServerError()),
       TimeoutException: () => Effect.fail(new InternalServerError()),
+      HttpBodyError: () => Effect.fail(new InternalServerError()),
       ConfigError: Effect.die,
     })
   );
@@ -82,7 +83,7 @@ export const getRankings2v2 = (region: typeof AnyRegion.Type, page: number) =>
     // TODO: const session = yield* Authorization.getSession();
 
     const [rankings] = yield* Effect.all(
-      [brawlhallaApi.getRankings2v2(region, page)],
+      [BrawlhallaApi.getRankings2v2(region, page)],
       {
         concurrency: 1,
       }
@@ -130,6 +131,7 @@ export const getRankings2v2 = (region: typeof AnyRegion.Type, page: number) =>
       ParseError: () => Effect.fail(new InternalServerError()),
       RequestError: () => Effect.fail(new InternalServerError()),
       TimeoutException: () => Effect.fail(new InternalServerError()),
+      HttpBodyError: () => Effect.fail(new InternalServerError()),
       ConfigError: Effect.die,
     })
   );

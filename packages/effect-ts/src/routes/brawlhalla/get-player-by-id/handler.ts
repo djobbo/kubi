@@ -14,7 +14,7 @@ import { getTeamPlayers } from "@dair/brawlhalla-api/src/helpers/team-players";
 import { calculateWinrate } from "@dair/brawlhalla-api/src/helpers/winrate";
 import { Effect } from "effect";
 import * as Archive from "../../../services/archive";
-import { brawlhallaApi } from "../../../services/brawlhalla-api";
+import { BrawlhallaApi } from "../../../services/brawlhalla-api";
 
 import { cleanString } from "@dair/common/src/helpers/clean-string";
 import { Authorization } from "../../../services/authorization";
@@ -41,9 +41,9 @@ export const getPlayerById = (playerId: number) =>
 
     const [playerStats, playerRanked, allLegends] = yield* Effect.all(
       [
-        brawlhallaApi.getPlayerStatsById(playerId),
-        brawlhallaApi.getPlayerRankedById(playerId),
-        brawlhallaApi.getAllLegendsData(),
+        BrawlhallaApi.getPlayerStatsById(playerId),
+        BrawlhallaApi.getPlayerRankedById(playerId),
+        BrawlhallaApi.getAllLegendsData(),
       ],
       { concurrency: 3 }
     );
@@ -51,7 +51,7 @@ export const getPlayerById = (playerId: number) =>
     const archiveService = yield* Archive.Archive;
     const [aliases, clan, [bookmark], [clanBookmark]] = yield* Effect.all([
       archiveService.getAliases(playerId),
-      clanId ? brawlhallaApi.getClanById(clanId) : Effect.succeed(null),
+      clanId ? BrawlhallaApi.getClanById(clanId) : Effect.succeed(null),
       Effect.succeed([null]), // TODO: bookmark service,
       Effect.succeed([null]), // TODO: bookmark service,
     ]);
@@ -284,6 +284,7 @@ export const getPlayerById = (playerId: number) =>
 
     return response;
   }).pipe(
+    Effect.tapError(Effect.logError),
     Effect.catchTags({
       ResponseError: Effect.fn(function* (error) {
         switch (error.response.status) {
@@ -300,6 +301,7 @@ export const getPlayerById = (playerId: number) =>
       ParseError: () => Effect.fail(new InternalServerError()),
       RequestError: () => Effect.fail(new InternalServerError()),
       TimeoutException: () => Effect.fail(new InternalServerError()),
+      HttpBodyError: () => Effect.fail(new InternalServerError()),
       ConfigError: Effect.die,
     })
   );

@@ -1,11 +1,7 @@
 import { HttpApiBuilder } from "@effect/platform";
 import { Effect, Layer } from "effect";
 
-import {
-  InternalServerError,
-  NotFound,
-  ServiceUnavailable,
-} from "@effect/platform/HttpApiError";
+import { InternalServerError } from "@effect/platform/HttpApiError";
 import { deleteSession } from "./routes/auth/deleteSession/handler";
 import { getSession } from "./routes/auth/getSession/handler";
 import { authorize } from "./routes/auth/providers/authorize/handler";
@@ -13,7 +9,11 @@ import { providerCallback } from "./routes/auth/providers/callback/handler";
 import { getPlayerById } from "./routes/brawlhalla/get-player-by-id/handler";
 import { Api } from "./api";
 import { getClanById } from "./routes/brawlhalla/get-clan-by-id/handler";
-import { getRankings1v1, getRankings2v2 } from "./routes/brawlhalla/get-rankings/handler";
+import {
+  getRankings1v1,
+  getRankings2v2,
+} from "./routes/brawlhalla/get-rankings/handler";
+import { getWeeklyRotation } from "./routes/brawlhalla/get-weekly-rotation/handler";
 
 const HealthLive = HttpApiBuilder.group(Api, "health", (handlers) =>
   handlers.handle("health", () => Effect.succeed("OK"))
@@ -23,8 +23,13 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
   handlers
     .handle("get-player-by-id", ({ path }) => getPlayerById(path.id))
     .handle("get-clan-by-id", ({ path }) => getClanById(path.id))
-    .handle("get-rankings-1v1", ({ path, urlParams }) => getRankings1v1(path.region, path.page, urlParams.name))
-    .handle("get-rankings-2v2", ({ path }) => getRankings2v2(path.region, path.page))
+    .handle("get-rankings-1v1", ({ path, urlParams }) =>
+      getRankings1v1(path.region, path.page, urlParams.name)
+    )
+    .handle("get-rankings-2v2", ({ path }) =>
+      getRankings2v2(path.region, path.page)
+    )
+    .handle("get-weekly-rotation", () => getWeeklyRotation())
 );
 
 const AuthLive = HttpApiBuilder.group(Api, "auth", (handlers) =>

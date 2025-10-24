@@ -40,7 +40,7 @@ const fetchBrawlhallaApi = <T, U>({
     });
   }).pipe(Effect.withSpan(`BrawlhallaApi.${name}`));
 
-export const brawlhallaApi = {
+export const BrawlhallaApi = {
   getPlayerStatsById: (playerId: number) =>
     fetchBrawlhallaApi({
       name: "getPlayerStatsById",

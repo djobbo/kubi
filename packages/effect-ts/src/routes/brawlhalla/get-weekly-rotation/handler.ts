@@ -1,39 +1,22 @@
 import { Effect } from "effect";
-import { BrawlhallaApi } from "../../../services/brawlhalla-api";
-import type { Clan, GetClanByIdResponse } from "./schema";
 import {
   InternalServerError,
   NotFound,
   ServiceUnavailable,
 } from "@effect/platform/HttpApiError";
+import { BrawlhallaGql } from "../../../services/brawlhalla-gql";
+import type { GetWeeklyRotationResponse } from "./schema";
 
-export const getClanById = (clanId: number) =>
+export const getWeeklyRotation = () =>
   Effect.gen(function* () {
     // TODO: const session = yield* Authorization.getSession();
 
-    const [clanStats] = yield* Effect.all([BrawlhallaApi.getClanById(clanId)], {
-      concurrency: 1,
-    });
+    const weeklyRotation = yield* BrawlhallaGql.getWeeklyRotation();
 
-    const clanData: typeof Clan.Type = {
-      id: clanStats.data.clan_id,
-      name: clanStats.data.clan_name,
-      created_at: clanStats.data.clan_create_date,
-      xp: clanStats.data.clan_xp,
-      members: clanStats.data.clan.map(member => ({
-        id: member.brawlhalla_id,
-        name: member.name,
-        rank: member.rank,
-        joined_at: member.join_date,
-        xp: member.xp,
-      })),
-      bookmark: null,
-    };
-
-    const response: typeof GetClanByIdResponse.Type = {
-      data: clanData,
+    const response: typeof GetWeeklyRotationResponse.Type = {
+      data: weeklyRotation.data,
       meta: {
-        updated_at: clanStats.updatedAt,
+        updated_at: weeklyRotation.updatedAt,
       },
     };
 
@@ -56,6 +39,7 @@ export const getClanById = (clanId: number) =>
       RequestError: () => Effect.fail(new InternalServerError()),
       TimeoutException: () => Effect.fail(new InternalServerError()),
       HttpBodyError: () => Effect.fail(new InternalServerError()),
+      WeeklyRotationError: () => Effect.fail(new NotFound()),
       ConfigError: Effect.die,
     })
   );
