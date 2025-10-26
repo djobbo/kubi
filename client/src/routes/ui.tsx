@@ -46,11 +46,7 @@ const nav = [
     id: "rankings-2v2",
     title: "2v2 Rankings",
     icon: (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        className="h-8"
-      >
+      <svg viewBox="0 0 24 24" fill="none" className="h-8">
         <path
           d="M13.5 13.5C15.433 13.5 17 15.067 17 17C17 18.933 15.433 20.5 13.5 20.5H5.5C3.567 20.5 2 18.933 2 17C2 15.067 3.567 13.5 5.5 13.5H13.5Z"
           className="fill-text stroke-bg-root"
@@ -155,7 +151,7 @@ function RouteComponent() {
                 ? "/assets/images/brand/logos/logo-text.png"
                 : "/assets/images/brand/logos/logo-192x192.png"
             }
-            alt="Silkpost"
+            alt="Corehalla Logo"
             className="w-full h-full object-contain transition-all"
           />
         </div>
@@ -235,65 +231,135 @@ function RouteComponent() {
         </button>
       </header>
       <div className="[grid-area:main] pr-1 pb-1 rounded-tl-2xl">
-        <div className="rounded-xl p-4 h-full bg-bg-dark border border-border">
-          <div className="rounded-lg p-4 bg-bg flex flex-col gap-4 shadow-lg">
-            <div>
-              <div className="flex items-center gap-4">
-                <img
-                  src="/assets/images/brand/logos/logo-256x256.png"
-                  alt="Silkpost"
-                  className="w-12 h-12 rounded-lg border border-border"
-                />
-                <div className="flex flex-col">
-                  <h1 className="text-2xl font-semibold">Silkpost</h1>
-                  <span className="text-xs text-primary-light">#4281946</span>
+        <div className="rounded-xl h-full bg-bg border border-border">
+          <div className="px-8 pt-4 flex flex-col gap-2">
+            <div className="flex items-center gap-2 uppercase text-text-muted text-xs">
+              <span>players</span>
+              {"/"}
+              <span>#4281946</span>
+            </div>
+            <div className="flex items-center gap-2 mt-2">
+              <img
+                src="/assets/images/brand/logos/logo-256x256.png"
+                alt="Silkpost"
+                className="w-6 h-6 rounded-lg border border-border"
+              />
+              <h1 className="text-3xl font-semibold">Silkpost</h1>
+            </div>
+            <div className="flex gap-x-1 gap-y-2 flex-wrap -ml-0.5">
+              {[
+                "Arona",
+                "passo bem solto",
+                "l'électrissien..",
+                "Sigma Boy Oupi Goupi",
+              ].map((alias) => (
+                <span
+                  key={alias}
+                  className="text-xs text-text-muted bg-bg-light rounded-full px-2 py-0.5 border border-border hover:bg-bg-light/60"
+                >
+                  {alias}
+                </span>
+              ))}
+            </div>
+            <div className="rounded-lg border border-border p-4 bg-bg-dark grid grid-cols-4 gap-4 mt-4">
+              {[{
+                title: "Account level",
+                value: 100,
+              }, {
+                title: "Account XP",
+                value: '9,724,828',
+              },
+              {
+                title: "In-game time",
+                value: '3,773h 57m 16s',
+              }
+            ].map((item) => (
+                <div key={item.title} className="flex flex-col">
+                  <span className="text-xs text-text-muted uppercase">{item.title}</span>
+                  <span className="">{item.value}</span>
                 </div>
-              </div>
-              <div className="flex gap-x-1 gap-y-2 mt-4 flex-wrap">
-                {/* badges */}
-                {[
-                  "Arona",
-                  "passo bem solto",
-                  "l'électrissien..",
-                  "Sigma Boy Oupi Goupi",
-                ].map((alias) => (
-                  <span
-                    key={alias}
-                    className="text-xs text-text-muted bg-bg-light rounded-full px-2 py-0.5 border border-border hover:bg-bg-light/60"
+              ))}
+            </div>
+            <nav className="flex gap-2">
+              <ul>
+                <li>
+                  <Link
+                    to="/ui"
+                    className={cn(
+                      "relative text-sm text-text-muted h-12 flex items-center justify-center px-4",
+                      "hover:bg-linear-to-b hover:from-bg hover:to-primary/25",
+                      "after:content-[''] after:absolute after:inset-x-0 after:bottom-0 after:h-1 after:border-b after:border-primary-light/25 hover:after:h-px hover:after:-bottom-1.5 after:transition-all",
+                      "after:bg-primary-light after:pointer-events-none"
+                    )}
                   >
-                    {alias}
-                  </span>
-                ))}
+                    Overview
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+          </div>
+          <div className="p-4 bg-bg-dark">
+          <div className="rounded-lg p-4 bg-bg flex flex-col gap-4 shadow-lg">
+              <hr className="border-border" />
+              <p className="text-sm text-text-muted">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              </p>
+              <div className="flex gap-2 justify-end">
+                <button
+                  className={cn(
+                    "relative rounded-lg px-4 py-1 cursor-pointer shadow-sm",
+                    "bg-linear-to-b from-primary to-primary-dark border border-primary border-t-primary-light text-primary-foreground",
+                    "hover:from-primary-light",
+                    "active:from-primary-dark active:to-primary active:border-primary-dark active:border-b-primary-dark",
+                    "after:content-[''] after:absolute after:inset-0 after:border after:border-primary-light/25 after:opacity-0 hover:after:opacity-100 hover:after:-inset-1.5 after:transition-all after:rounded-xl"
+                  )}
+                >
+                  Primary
+                </button>
+                <button
+                  className={cn(
+                    "relative rounded-lg px-4 py-1 cursor-pointer shadow-sm",
+                    "bg-linear-to-b from-secondary to-secondary-dark border border-secondary border-t-secondary-light text-secondary-foreground",
+                    "hover:from-secondary-light",
+                    "active:from-secondary-dark active:to-secondary active:border-secondary-dark active:border-b-secondary-dark",
+                    "after:content-[''] after:absolute after:inset-0 after:border after:border-secondary-light/25 after:opacity-0 hover:after:opacity-100 hover:after:-inset-1.5 after:transition-all after:rounded-xl"
+                  )}
+                >
+                  Secondary
+                </button>
               </div>
             </div>
-            <hr className="border-border" />
-            <p className="text-sm text-text-muted">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            </p>
-            <div className="flex gap-2 justify-end">
-              <button
-                className={cn(
-                  "relative rounded-lg px-4 py-1 cursor-pointer shadow-sm",
-                  "bg-linear-to-b from-primary to-primary-dark border border-primary border-t-primary-light text-primary-foreground",
-                  "hover:from-primary-light",
-                  "active:from-primary-dark active:to-primary active:border-primary-dark active:border-b-primary-dark",
-                  "after:content-[''] after:absolute after:inset-0 after:border after:border-primary-light/25 after:opacity-0 hover:after:opacity-100 hover:after:-inset-1.5 after:transition-all after:rounded-xl"
-                )}
-              >
-                Primary
-              </button>
-              <button
-                className={cn(
-                  "relative rounded-lg px-4 py-1 cursor-pointer shadow-sm",
-                  "bg-linear-to-b from-secondary to-secondary-dark border border-secondary border-t-secondary-light text-secondary-foreground",
-                  "hover:from-secondary-light",
-                  "active:from-secondary-dark active:to-secondary active:border-secondary-dark active:border-b-secondary-dark",
-                  "after:content-[''] after:absolute after:inset-0 after:border after:border-secondary-light/25 after:opacity-0 hover:after:opacity-100 hover:after:-inset-1.5 after:transition-all after:rounded-xl"
-                )}
-              >
-                Secondary
-              </button>
+            <div className="rounded-lg p-4 bg-bg flex flex-col gap-4 shadow-lg mt-4">
+              <hr className="border-border" />
+              <p className="text-sm text-text-muted">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              </p>
+              <div className="flex gap-2 justify-end">
+                <button
+                  className={cn(
+                    "relative rounded-lg px-4 py-1 cursor-pointer shadow-sm",
+                    "bg-linear-to-b from-primary to-primary-dark border border-primary border-t-primary-light text-primary-foreground",
+                    "hover:from-primary-light",
+                    "active:from-primary-dark active:to-primary active:border-primary-dark active:border-b-primary-dark",
+                    "after:content-[''] after:absolute after:inset-0 after:border after:border-primary-light/25 after:opacity-0 hover:after:opacity-100 hover:after:-inset-1.5 after:transition-all after:rounded-xl"
+                  )}
+                >
+                  Primary
+                </button>
+                <button
+                  className={cn(
+                    "relative rounded-lg px-4 py-1 cursor-pointer shadow-sm",
+                    "bg-linear-to-b from-secondary to-secondary-dark border border-secondary border-t-secondary-light text-secondary-foreground",
+                    "hover:from-secondary-light",
+                    "active:from-secondary-dark active:to-secondary active:border-secondary-dark active:border-b-secondary-dark",
+                    "after:content-[''] after:absolute after:inset-0 after:border after:border-secondary-light/25 after:opacity-0 hover:after:opacity-100 hover:after:-inset-1.5 after:transition-all after:rounded-xl"
+                  )}
+                >
+                  Secondary
+                </button>
+              </div>
             </div>
           </div>
         </div>

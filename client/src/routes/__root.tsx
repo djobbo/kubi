@@ -14,6 +14,9 @@ import { activateLocale } from "@/locales/activate"
 import type { RouterContext } from "@/router.tsx"
 import { seo } from "@dair/common/src/helpers/seo"
 import { t } from "@lingui/core/macro"
+import { Atom, useAtomValue } from '@effect-atom/atom-react'
+
+const themeAtom = Atom.make<"light" | "dark">("dark")
 
 export const Route = createRootRouteWithContext<RouterContext>()({
 	loader: async ({ context: { apiClient } }) => {
@@ -88,12 +91,14 @@ function RootComponent() {
 
 function RootDocument({ children }: { children: React.ReactNode }) {
 	const { lang } = Route.useLoaderData()
+	const theme = useAtomValue(themeAtom)
+
 	return (
 		<html lang={lang}>
 			<head>
 				<HeadContent />
 			</head>
-			<body className="dark">
+			<body className={theme}>
 				{children}
 				<div
 					style={{
