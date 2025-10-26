@@ -4,7 +4,7 @@
 
 :root {
 	/* Colors */
-	--bg-root: oklch(0.2 0.018 272);
+	--bg-root: oklch(0.205 0.019 272);
     --bg-dark: oklch(0.23 0.023 272);
     --bg: oklch(0.25 0.027 272);
     --bg-light: oklch(0.3 0.032 272);
@@ -17,6 +17,11 @@
 	--secondary-dark: oklch(0.55 0.2 330);
 	--secondary: oklch(0.65 0.2 330);
 	--secondary-light: oklch(0.75 0.2 330);
+
+	--success: oklch(0.75 0.17 155);
+	--danger: oklch(0.74 0.16 38);
+	--warning: oklch(0.92 0.15 98);
+	--info: var(--primary-light);
 
 	/* Fonts */
 	--font-sans: Rubik, sans-serif;
@@ -59,6 +64,10 @@
 	--color-secondary-dark: var(--secondary-dark);
 	--color-secondary: var(--secondary);
 	--color-secondary-light: var(--secondary-light);
+	--color-success: var(--success);
+	--color-danger: var(--danger);
+	--color-warning: var(--warning);
+	--color-info: var(--info);
 }
 
 @layer base {

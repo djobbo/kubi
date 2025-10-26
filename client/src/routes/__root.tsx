@@ -102,7 +102,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				{children}
 				<div
 					style={{
-						opacity: 0.01,
+						opacity: 0.012,
 						backgroundSize: "128px",
 						backgroundRepeat: "repeat",
 						backgroundImage: "url(/assets/images/grain.png)",

@@ -1,11 +1,20 @@
+import { RankedTierBanner } from "@/features/brawlhalla/components/Image";
 import { cn } from "@/ui/lib/utils";
 import { Atom, useAtom } from "@effect-atom/atom-react";
+import { t } from "@lingui/core/macro";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { type VariantProps, cva } from "class-variance-authority";
+import type { ReactNode } from "react";
+import { Pie, PieChart, Cell, LabelList } from "recharts";
 
 export const Route = createFileRoute("/ui")({
   component: RouteComponent,
 });
+
+const testPieData = [
+  { name: "W", value: 51618 },
+  { name: "L", value: 29391 },
+];
 
 const sidebarExpandedAtom = Atom.make(false);
 
@@ -172,11 +181,11 @@ const buttonVariants = cva(
         false: "px-4",
       },
       size: {
-        sm: 'h-6',
+        sm: "h-6",
         md: "h-8",
         lg: "h-10",
         xl: "h-12",
-      }
+      },
     },
     defaultVariants: {
       intent: "primary",
@@ -206,6 +215,82 @@ const Button = ({
     >
       {children}
     </button>
+  );
+};
+
+type StatsGridProps = React.ComponentProps<"div"> & {
+  stats: { title: string; value: ReactNode }[];
+};
+
+const StatsGrid = ({ stats, className, ...props }: StatsGridProps) => {
+  return (
+    <div
+      {...props}
+      className={cn(
+        "grid grid-cols-1 gap-4 @sm:grid-cols-2 @md:grid-cols-3 @xl:grid-cols-4 @5xl:grid-cols-6",
+        className
+      )}
+    >
+      {stats.map((stat) => (
+        <div key={stat.title} className="flex flex-col">
+          <span className="text-xs text-text-muted uppercase">
+            {stat.title}
+          </span>
+          <span>{stat.value}</span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const progressBarVariants = cva(
+  "relative w-full h-2 bg-bg-light rounded-full",
+  {
+    variants: {
+      intent: {
+        info: "[--bar-color:var(--primary-light)]",
+        success: "[--bar-color:var(--success)]",
+        danger: "[--bar-color:var(--danger)]",
+        warning: "[--bar-color:var(--warning)]",
+      },
+      size: {
+        sm: "h-1",
+        md: "h-2",
+        lg: "h-3",
+        xl: "h-4",
+      },
+    },
+    defaultVariants: {
+      intent: "info",
+      size: "md",
+    },
+  }
+);
+
+type ProgressBarProps = React.ComponentProps<"div"> &
+  VariantProps<typeof progressBarVariants> & {
+    value: number;
+    max: number;
+  };
+
+const ProgressBar = ({
+  value,
+  max,
+  intent,
+  size,
+  className,
+  ...props
+}: ProgressBarProps) => {
+  return (
+    <div
+      className={cn(progressBarVariants({ intent, size }), className)}
+      {...props}
+    >
+      <span
+        className="absolute top-0 left-0 h-full rounded-full bg-(--bar-color)"
+        style={{ width: `${(value / max) * 100}%` }}
+      />
+    </div>
   );
 };
 
@@ -274,11 +359,7 @@ function RouteComponent() {
         </ul>
       </aside>
       <header className="[grid-area:header] flex items-center gap-4">
-        <Button
-          empty
-          icon
-          onClick={() => setSidebarExpanded(!sidebarExpanded)}
-        >
+        <Button empty icon onClick={() => setSidebarExpanded(!sidebarExpanded)}>
           <svg
             width="24"
             height="24"
@@ -312,10 +393,14 @@ function RouteComponent() {
       <div className="[grid-area:main] pr-1 pb-1 rounded-tl-2xl">
         <div className="rounded-xl h-full bg-bg border border-border">
           <div className="px-8 pt-4 flex flex-col gap-2">
-            <div className="flex items-center gap-2 uppercase text-text-muted text-xs">
-              <span>players</span>
-              {"/"}
-              <span>#4281946</span>
+            <div>
+              <div className="flex items-center gap-2 uppercase text-text-muted text-xs">
+                <span>brawlhalla</span>
+                {"/"}
+                <span>players</span>
+                {"/"}
+                <span>#4281946</span>
+              </div>
             </div>
             <div className="flex items-center gap-2 mt-2">
               <img
@@ -340,28 +425,23 @@ function RouteComponent() {
                 </span>
               ))}
             </div>
-            <Card variant="inset" className="grid grid-cols-4 gap-4 mt-4">
-              {[
-                {
-                  title: "Account level",
-                  value: 100,
-                },
-                {
-                  title: "Account XP",
-                  value: "9,724,828",
-                },
-                {
-                  title: "In-game time",
-                  value: "3,773h 57m 16s",
-                },
-              ].map((item) => (
-                <div key={item.title} className="flex flex-col">
-                  <span className="text-xs text-text-muted uppercase">
-                    {item.title}
-                  </span>
-                  <span className="">{item.value}</span>
-                </div>
-              ))}
+            <Card variant="inset" className="@container mt-4">
+              <StatsGrid
+                stats={[
+                  {
+                    title: "Account level",
+                    value: 100,
+                  },
+                  {
+                    title: "Account XP",
+                    value: "9,724,828",
+                  },
+                  {
+                    title: "In-game time",
+                    value: "3,773h 57m 16s",
+                  },
+                ]}
+              />
             </Card>
             <nav className="flex gap-2">
               <ul>
@@ -381,31 +461,364 @@ function RouteComponent() {
               </ul>
             </nav>
           </div>
-          <div className="p-4 bg-bg-dark">
+          <div className="@container p-4 bg-bg-dark">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Card className="flex flex-col gap-4">
+                <h3 className="text-sm uppercase text-text-muted font-semibold">
+                  Ranked 1v1
+                </h3>
+                <div className="flex gap-2">
+                  <RankedTierBanner
+                    tier={"Valhallan"}
+                    alt={t`Valhallan`}
+                    containerClassName="h-24 w-16"
+                    className="object-contain object-center [grid-area:banner]"
+                  />
+                  <div className="flex flex-1 flex-col gap-1">
+                    <span>Valhallan</span>
+                    <span className="text-4xl font-bold">
+                      2435
+                      <span className="text-sm text-text-muted font-normal ml-1">
+                        / 2576 peak
+                      </span>
+                    </span>
+                    <ProgressBar value={50} max={100} intent="success" />
+                    <div className="flex justify-between">
+                      <span>
+                        74W{" "}
+                        <span className="text-text-muted font-normal text-sm">
+                          (74%)
+                        </span>
+                      </span>
+                      <span>
+                        26L{" "}
+                        <span className="text-text-muted font-normal text-sm">
+                          (26%)
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <Card variant="inset" className="@container mt-4">
+                  <StatsGrid
+                    stats={[
+                      {
+                        title: "Account level",
+                        value: "100",
+                      },
+                      {
+                        title: "Account XP",
+                        value: "9,724,828",
+                      },
+                      {
+                        title: "In-game time",
+                        value: "3,773h 57m 16s",
+                      },
+                    ]}
+                  />
+                </Card>
+              </Card>
+              <Card className="flex flex-col gap-4">
+                <h3 className="text-sm uppercase text-text-muted font-semibold">
+                  Ranked 2v2
+                </h3>
+                <div className="flex gap-2">
+                  <RankedTierBanner
+                    tier={"Valhallan"}
+                    alt={t`Valhallan`}
+                    containerClassName="h-24 w-16"
+                    className="object-contain object-center [grid-area:banner]"
+                  />
+                  <div className="flex flex-1 flex-col gap-1">
+                    <span>Valhallan</span>
+                    <span className="text-4xl font-bold">
+                      2435
+                      <span className="text-sm text-text-muted font-normal ml-1">
+                        / 2576 peak
+                      </span>
+                    </span>
+                    <ProgressBar value={50} max={100} intent="success" />
+                    <div className="flex justify-between">
+                      <span>
+                        74W{" "}
+                        <span className="text-text-muted font-normal text-sm">
+                          (74%)
+                        </span>
+                      </span>
+                      <span>
+                        26L{" "}
+                        <span className="text-text-muted font-normal text-sm">
+                          (26%)
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <Card variant="inset" className="@container mt-4">
+                  <StatsGrid
+                    stats={[
+                      {
+                        title: "Account level",
+                        value: "100",
+                      },
+                      {
+                        title: "Account XP",
+                        value: "9,724,828",
+                      },
+                      {
+                        title: "In-game time",
+                        value: "3,773h 57m 16s",
+                      },
+                    ]}
+                  />
+                </Card>
+              </Card>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+              <Card>
+                <h3 className="text-sm uppercase text-text-muted font-semibold">
+                  Games
+                </h3>
+                <div
+                  className="grid place-items-center"
+                  style={{ gridTemplateAreas: '"content"' }}
+                >
+                  <div className="[grid-area:content] flex flex-col items-center">
+                    <span className="text-3xl font-bold">81009</span>
+                    <span className="text-sm text-text-muted font-normal ml-1">
+                      games
+                    </span>
+                  </div>
+                  <PieChart
+                    className="[grid-area:content] w-full h-full max-h-56 aspect-square"
+                    responsive
+                  >
+                    <Pie
+                      data={testPieData}
+                      dataKey="value"
+                      cx="50%"
+                      cy="50%"
+                      paddingAngle={10}
+                      cornerRadius={9}
+                      innerRadius="60%"
+                      outerRadius="80%"
+                      className="fill-success"
+                      isAnimationActive={false}
+                    >
+                      <LabelList
+                        position="outside"
+                        offset={12}
+                        valueAccessor={(_, i) => {
+                          const data = testPieData[i];
+                          return `${data.value}${data.name}`;
+                        }}
+                        className="fill-text-muted"
+                      />
+                      <LabelList
+                        position="insideEnd"
+                        offset={4}
+                        valueAccessor={(_, i) => {
+                          const data = testPieData[i];
+                          return `${(
+                            (data.value /
+                              testPieData.reduce(
+                                (acc, curr) => acc + curr.value,
+                                0
+                              )) *
+                            100
+                          ).toFixed(2)}%`;
+                        }}
+                        className="fill-bg"
+                      />
+                      {testPieData.map((_entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          className={cn("stroke-none fill-success", {
+                            "fill-danger": index === 1,
+                          })}
+                        />
+                      ))}
+                    </Pie>
+                  </PieChart>
+                </div>
+              </Card>
+              <Card>
+                <h3 className="text-sm uppercase text-text-muted font-semibold">
+                  KOs
+                </h3>
+                <div className="flex flex-col gap-2 justify-between items-center mt-4">
+                  {(
+                    [
+                      {
+                        title: t`KOs`,
+                        value: 234061,
+                        max: 234061,
+                        large: true,
+                      },
+                      {
+                        title: t`Falls`,
+                        value: 172247,
+                        max: 234061,
+                        large: true,
+                      },
+                      {
+                        title: t`Suicides`,
+                        value: 8191,
+                        max: 234061,
+                        large: false,
+                      },
+                      {
+                        title: t`Team KOs`,
+                        value: 7265,
+                        max: 234061,
+                        large: false,
+                      },
+                    ] as const
+                  ).map((stat) => {
+                    return (
+                      <div key={stat.title} className="w-full">
+                        <p>
+                          <span
+                            className={cn("text-sm", {
+                              "text-lg": stat.large,
+                            })}
+                          >
+                            {stat.value.toLocaleString()}{" "}
+                            <span className="text-sm text-text-muted">
+                              {stat.title}
+                            </span>
+                          </span>
+                        </p>
+                        <ProgressBar
+                          value={stat.value}
+                          max={stat.max}
+                          size="sm"
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              </Card>
+              <Card className="flex flex-col gap-4">
+                <h3 className="text-sm uppercase text-text-muted font-semibold">
+                  Damage
+                </h3>
+                <div className="flex flex-col gap-2 flex-1">
+                  {(
+                    [
+                      {
+                        title: t`Damage dealt`,
+                        value: 42617792,
+                        max: 42617792,
+                      },
+                      {
+                        title: t`Damage taken`,
+                        value: 34793592,
+                        max: 42617792,
+                      },
+                    ] as const
+                  ).map((stat) => {
+                    return (
+                      <div key={stat.title} className="w-full">
+                        <p>
+                          <span className="text-lg">
+                            {stat.value.toLocaleString()}{" "}
+                            <span className="text-sm text-text-muted">
+                              {stat.title}
+                            </span>
+                          </span>
+                        </p>
+                        <ProgressBar
+                          value={stat.value}
+                          max={stat.max}
+                          size="sm"
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+                <Card variant="inset" className="@container mt-4">
+                  <StatsGrid
+                    stats={[
+                      {
+                        title: "Account level",
+                        value: "100",
+                      },
+                      {
+                        title: "Account XP",
+                        value: "9,724,828",
+                      },
+                      {
+                        title: "In-game time",
+                        value: "3,773h 57m 16s",
+                      },
+                    ]}
+                  />
+                </Card>
+              </Card>
+            </div>
+            <StatsGrid
+              stats={[
+                {
+                  title: "Account level",
+                  value: "100",
+                },
+                {
+                  title: "Account XP",
+                  value: "9,724,828",
+                },
+                {
+                  title: "In-game time",
+                  value: "3,773h 57m 16s",
+                },
+                {
+                  title: "Account levelI",
+                  value: "100",
+                },
+                {
+                  title: "Account XPI",
+                  value: "9,724,828",
+                },
+                {
+                  title: "In-game timeI",
+                  value: "3,773h 57m 16s",
+                },
+                {
+                  title: "Account levelII",
+                  value: "100",
+                },
+                {
+                  title: "Account XPII",
+                  value: "9,724,828",
+                },
+                {
+                  title: "In-game timeII",
+                  value: "3,773h 57m 16s",
+                },
+                {
+                  title: "Account levelIII",
+                  value: "100",
+                },
+                {
+                  title: "Account XPIII",
+                  value: "9,724,828",
+                },
+                {
+                  title: "In-game timeIII",
+                  value: "3,773h 57m 16s",
+                },
+              ]}
+              className="mt-4 p-4"
+            />
             <Card className="flex flex-col gap-4">
               <hr className="border-border" />
               <p className="text-sm text-text-muted">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua.
               </p>
-              <div className="flex gap-2 justify-end">
+              <div className="flex gap-2 justify-end flex-wrap">
                 <Button>Primary</Button>
                 <Button intent="secondary">Secondary</Button>
-              </div>
-            </Card>
-            <Card className="flex flex-col gap-4 mt-4">
-              <hr className="border-border" />
-              <p className="text-sm text-text-muted">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              </p>
-              <div className="flex gap-2 justify-end">
-                <Button empty size="sm">Primary</Button>
-                <Button intent="secondary" empty>
-                  Secondary
-                </Button>
-                <Button size="lg">Primary</Button>
-                <Button intent="secondary" size="xl">Secondary</Button>
               </div>
             </Card>
           </div>
