@@ -10,12 +10,8 @@ import TanStackQueryLayout from "@/integrations/tanstack-query/layout"
 
 import styles from "@/styles.css?url"
 
-import { SiteHeader } from "@/components/layout/header"
-import { LandingBackground } from "@/features/brawlhalla/components/layout/LandingBackground"
-import { AppSidebar } from "@/features/sidebar/components/app-sidebar"
 import { activateLocale } from "@/locales/activate"
 import type { RouterContext } from "@/router.tsx"
-import { SidebarInset, SidebarProvider } from "@/ui/components/sidebar"
 import { seo } from "@dair/common/src/helpers/seo"
 import { t } from "@lingui/core/macro"
 
@@ -63,7 +59,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 				},
 				{
 					rel: "stylesheet",
-					href: "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap",
+					href: "https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap",
 				},
 				{ rel: "icon", type: "image/png", href: "/favicon.png" },
 				{
@@ -83,26 +79,7 @@ function RootComponent() {
 		<RootDocument>
 			{/* TODO: GAscripts */}
 			{/* <GAScripts /> */}
-			<SidebarProvider
-				style={
-					{
-						"--sidebar-width": "calc(var(--spacing) * 72)",
-						"--header-height": "calc(var(--spacing) * 12)",
-					} as React.CSSProperties
-				}
-				defaultOpen={false}
-			>
-				<AppSidebar variant="inset" />
-				<SidebarInset>
-					<SiteHeader />
-					<div className="@container/main flex flex-1 flex-col gap-2 py-4 md:py-6">
-						<div className="px-4 lg:px-6 w-full max-w-7xl mx-auto z-0">
-							<LandingBackground className="absolute top-0 left-0 w-full h-5/6 -z-10 opacity-50 pointer-events-none" />
-							<Outlet />
-						</div>
-					</div>
-				</SidebarInset>
-			</SidebarProvider>
+			<Outlet />
 			<TanStackQueryLayout />
 			<TanStackRouterDevtools />
 		</RootDocument>

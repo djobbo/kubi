@@ -98,7 +98,7 @@ export const DiscordCard = () => {
 							aria-label="Join our Discord server to share your thoughts"
 							rel="noreferrer"
 						>
-							<span className="flex justify-end items-center gap-1 font-semibold bg-gradient-to-l from-accent-foreground to-accent-secondary-foreground bg-clip-text text-fill-none">
+							<span className="flex justify-end items-center gap-1 font-semibold bg-linear-to-l from-accent-foreground to-accent-secondary-foreground bg-clip-text text-fill-none">
 								<Trans>Share your thoughts</Trans>
 								<ArrowRight className="w-4 h-4" />
 							</span>

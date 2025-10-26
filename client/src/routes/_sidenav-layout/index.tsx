@@ -11,7 +11,7 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { Effect } from "effect";
 import { ArrowRight } from "lucide-react";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_sidenav-layout/")({
   component: Home,
   loader: ({ context: { ApiClient } }) =>
     Effect.runPromise(

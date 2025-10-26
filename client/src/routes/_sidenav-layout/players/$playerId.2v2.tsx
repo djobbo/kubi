@@ -15,7 +15,7 @@ import { Route as PlayerRoute } from "./$playerId"
 import { RankedDisplay } from "./-ranked-display"
 import { StatsGrid } from "./-stats-grid"
 
-export const Route = createFileRoute("/players/$playerId/2v2")({
+export const Route = createFileRoute("/_sidenav-layout/players/$playerId/2v2")({
 	component: RouteComponent,
 })
 

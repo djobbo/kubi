@@ -21,7 +21,7 @@ import { RankedDisplay } from "./-ranked-display"
 import { StatsGrid } from "./-stats-grid"
 import { WinrateProgress } from "./-winrate-progress"
 
-export const Route = createFileRoute("/players/$playerId/$")({
+export const Route = createFileRoute("/_sidenav-layout/players/$playerId/$")({
 	component: RouteComponent,
 })
 
@@ -458,7 +458,7 @@ function RouteComponent() {
 								desc: t`Damage dealt unarmed`,
 							},
 							{
-								name: "DPS",
+								name: t`DPS`,
 								value: `${(unarmed.damage_dealt / unarmed.time_held).toFixed(2)} dmg/s`,
 								desc: t`Damage dealt unarmed per second`,
 							},

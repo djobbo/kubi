@@ -9,83 +9,94 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as EffectRouteImport } from './routes/effect'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as PlayersPlayerIdRouteImport } from './routes/players/$playerId'
-import { Route as PlayersPlayerIdWeaponsRouteImport } from './routes/players/$playerId.weapons'
-import { Route as PlayersPlayerIdLegendsRouteImport } from './routes/players/$playerId.legends'
-import { Route as PlayersPlayerId2v2RouteImport } from './routes/players/$playerId.2v2'
-import { Route as PlayersPlayerIdSplatRouteImport } from './routes/players/$playerId.$'
+import { Route as UiRouteImport } from './routes/ui'
+import { Route as SidenavLayoutRouteRouteImport } from './routes/_sidenav-layout/route'
+import { Route as SidenavLayoutIndexRouteImport } from './routes/_sidenav-layout/index'
+import { Route as SidenavLayoutPlayersPlayerIdRouteImport } from './routes/_sidenav-layout/players/$playerId'
+import { Route as SidenavLayoutPlayersPlayerIdWeaponsRouteImport } from './routes/_sidenav-layout/players/$playerId.weapons'
+import { Route as SidenavLayoutPlayersPlayerIdLegendsRouteImport } from './routes/_sidenav-layout/players/$playerId.legends'
+import { Route as SidenavLayoutPlayersPlayerId2v2RouteImport } from './routes/_sidenav-layout/players/$playerId.2v2'
+import { Route as SidenavLayoutPlayersPlayerIdSplatRouteImport } from './routes/_sidenav-layout/players/$playerId.$'
 
-const EffectRoute = EffectRouteImport.update({
-  id: '/effect',
-  path: '/effect',
+const UiRoute = UiRouteImport.update({
+  id: '/ui',
+  path: '/ui',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const SidenavLayoutRouteRoute = SidenavLayoutRouteRouteImport.update({
+  id: '/_sidenav-layout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SidenavLayoutIndexRoute = SidenavLayoutIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => SidenavLayoutRouteRoute,
 } as any)
-const PlayersPlayerIdRoute = PlayersPlayerIdRouteImport.update({
-  id: '/players/$playerId',
-  path: '/players/$playerId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PlayersPlayerIdWeaponsRoute = PlayersPlayerIdWeaponsRouteImport.update({
-  id: '/weapons',
-  path: '/weapons',
-  getParentRoute: () => PlayersPlayerIdRoute,
-} as any)
-const PlayersPlayerIdLegendsRoute = PlayersPlayerIdLegendsRouteImport.update({
-  id: '/legends',
-  path: '/legends',
-  getParentRoute: () => PlayersPlayerIdRoute,
-} as any)
-const PlayersPlayerId2v2Route = PlayersPlayerId2v2RouteImport.update({
-  id: '/2v2',
-  path: '/2v2',
-  getParentRoute: () => PlayersPlayerIdRoute,
-} as any)
-const PlayersPlayerIdSplatRoute = PlayersPlayerIdSplatRouteImport.update({
-  id: '/$',
-  path: '/$',
-  getParentRoute: () => PlayersPlayerIdRoute,
-} as any)
+const SidenavLayoutPlayersPlayerIdRoute =
+  SidenavLayoutPlayersPlayerIdRouteImport.update({
+    id: '/players/$playerId',
+    path: '/players/$playerId',
+    getParentRoute: () => SidenavLayoutRouteRoute,
+  } as any)
+const SidenavLayoutPlayersPlayerIdWeaponsRoute =
+  SidenavLayoutPlayersPlayerIdWeaponsRouteImport.update({
+    id: '/weapons',
+    path: '/weapons',
+    getParentRoute: () => SidenavLayoutPlayersPlayerIdRoute,
+  } as any)
+const SidenavLayoutPlayersPlayerIdLegendsRoute =
+  SidenavLayoutPlayersPlayerIdLegendsRouteImport.update({
+    id: '/legends',
+    path: '/legends',
+    getParentRoute: () => SidenavLayoutPlayersPlayerIdRoute,
+  } as any)
+const SidenavLayoutPlayersPlayerId2v2Route =
+  SidenavLayoutPlayersPlayerId2v2RouteImport.update({
+    id: '/2v2',
+    path: '/2v2',
+    getParentRoute: () => SidenavLayoutPlayersPlayerIdRoute,
+  } as any)
+const SidenavLayoutPlayersPlayerIdSplatRoute =
+  SidenavLayoutPlayersPlayerIdSplatRouteImport.update({
+    id: '/$',
+    path: '/$',
+    getParentRoute: () => SidenavLayoutPlayersPlayerIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/effect': typeof EffectRoute
-  '/players/$playerId': typeof PlayersPlayerIdRouteWithChildren
-  '/players/$playerId/$': typeof PlayersPlayerIdSplatRoute
-  '/players/$playerId/2v2': typeof PlayersPlayerId2v2Route
-  '/players/$playerId/legends': typeof PlayersPlayerIdLegendsRoute
-  '/players/$playerId/weapons': typeof PlayersPlayerIdWeaponsRoute
+  '/ui': typeof UiRoute
+  '/': typeof SidenavLayoutIndexRoute
+  '/players/$playerId': typeof SidenavLayoutPlayersPlayerIdRouteWithChildren
+  '/players/$playerId/$': typeof SidenavLayoutPlayersPlayerIdSplatRoute
+  '/players/$playerId/2v2': typeof SidenavLayoutPlayersPlayerId2v2Route
+  '/players/$playerId/legends': typeof SidenavLayoutPlayersPlayerIdLegendsRoute
+  '/players/$playerId/weapons': typeof SidenavLayoutPlayersPlayerIdWeaponsRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/effect': typeof EffectRoute
-  '/players/$playerId': typeof PlayersPlayerIdRouteWithChildren
-  '/players/$playerId/$': typeof PlayersPlayerIdSplatRoute
-  '/players/$playerId/2v2': typeof PlayersPlayerId2v2Route
-  '/players/$playerId/legends': typeof PlayersPlayerIdLegendsRoute
-  '/players/$playerId/weapons': typeof PlayersPlayerIdWeaponsRoute
+  '/ui': typeof UiRoute
+  '/': typeof SidenavLayoutIndexRoute
+  '/players/$playerId': typeof SidenavLayoutPlayersPlayerIdRouteWithChildren
+  '/players/$playerId/$': typeof SidenavLayoutPlayersPlayerIdSplatRoute
+  '/players/$playerId/2v2': typeof SidenavLayoutPlayersPlayerId2v2Route
+  '/players/$playerId/legends': typeof SidenavLayoutPlayersPlayerIdLegendsRoute
+  '/players/$playerId/weapons': typeof SidenavLayoutPlayersPlayerIdWeaponsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/effect': typeof EffectRoute
-  '/players/$playerId': typeof PlayersPlayerIdRouteWithChildren
-  '/players/$playerId/$': typeof PlayersPlayerIdSplatRoute
-  '/players/$playerId/2v2': typeof PlayersPlayerId2v2Route
-  '/players/$playerId/legends': typeof PlayersPlayerIdLegendsRoute
-  '/players/$playerId/weapons': typeof PlayersPlayerIdWeaponsRoute
+  '/_sidenav-layout': typeof SidenavLayoutRouteRouteWithChildren
+  '/ui': typeof UiRoute
+  '/_sidenav-layout/': typeof SidenavLayoutIndexRoute
+  '/_sidenav-layout/players/$playerId': typeof SidenavLayoutPlayersPlayerIdRouteWithChildren
+  '/_sidenav-layout/players/$playerId/$': typeof SidenavLayoutPlayersPlayerIdSplatRoute
+  '/_sidenav-layout/players/$playerId/2v2': typeof SidenavLayoutPlayersPlayerId2v2Route
+  '/_sidenav-layout/players/$playerId/legends': typeof SidenavLayoutPlayersPlayerIdLegendsRoute
+  '/_sidenav-layout/players/$playerId/weapons': typeof SidenavLayoutPlayersPlayerIdWeaponsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/ui'
     | '/'
-    | '/effect'
     | '/players/$playerId'
     | '/players/$playerId/$'
     | '/players/$playerId/2v2'
@@ -93,8 +104,8 @@ export interface FileRouteTypes {
     | '/players/$playerId/weapons'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/ui'
     | '/'
-    | '/effect'
     | '/players/$playerId'
     | '/players/$playerId/$'
     | '/players/$playerId/2v2'
@@ -102,97 +113,122 @@ export interface FileRouteTypes {
     | '/players/$playerId/weapons'
   id:
     | '__root__'
-    | '/'
-    | '/effect'
-    | '/players/$playerId'
-    | '/players/$playerId/$'
-    | '/players/$playerId/2v2'
-    | '/players/$playerId/legends'
-    | '/players/$playerId/weapons'
+    | '/_sidenav-layout'
+    | '/ui'
+    | '/_sidenav-layout/'
+    | '/_sidenav-layout/players/$playerId'
+    | '/_sidenav-layout/players/$playerId/$'
+    | '/_sidenav-layout/players/$playerId/2v2'
+    | '/_sidenav-layout/players/$playerId/legends'
+    | '/_sidenav-layout/players/$playerId/weapons'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  EffectRoute: typeof EffectRoute
-  PlayersPlayerIdRoute: typeof PlayersPlayerIdRouteWithChildren
+  SidenavLayoutRouteRoute: typeof SidenavLayoutRouteRouteWithChildren
+  UiRoute: typeof UiRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/effect': {
-      id: '/effect'
-      path: '/effect'
-      fullPath: '/effect'
-      preLoaderRoute: typeof EffectRouteImport
+    '/ui': {
+      id: '/ui'
+      path: '/ui'
+      fullPath: '/ui'
+      preLoaderRoute: typeof UiRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/_sidenav-layout': {
+      id: '/_sidenav-layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof SidenavLayoutRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_sidenav-layout/': {
+      id: '/_sidenav-layout/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof SidenavLayoutIndexRouteImport
+      parentRoute: typeof SidenavLayoutRouteRoute
     }
-    '/players/$playerId': {
-      id: '/players/$playerId'
+    '/_sidenav-layout/players/$playerId': {
+      id: '/_sidenav-layout/players/$playerId'
       path: '/players/$playerId'
       fullPath: '/players/$playerId'
-      preLoaderRoute: typeof PlayersPlayerIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof SidenavLayoutPlayersPlayerIdRouteImport
+      parentRoute: typeof SidenavLayoutRouteRoute
     }
-    '/players/$playerId/weapons': {
-      id: '/players/$playerId/weapons'
+    '/_sidenav-layout/players/$playerId/weapons': {
+      id: '/_sidenav-layout/players/$playerId/weapons'
       path: '/weapons'
       fullPath: '/players/$playerId/weapons'
-      preLoaderRoute: typeof PlayersPlayerIdWeaponsRouteImport
-      parentRoute: typeof PlayersPlayerIdRoute
+      preLoaderRoute: typeof SidenavLayoutPlayersPlayerIdWeaponsRouteImport
+      parentRoute: typeof SidenavLayoutPlayersPlayerIdRoute
     }
-    '/players/$playerId/legends': {
-      id: '/players/$playerId/legends'
+    '/_sidenav-layout/players/$playerId/legends': {
+      id: '/_sidenav-layout/players/$playerId/legends'
       path: '/legends'
       fullPath: '/players/$playerId/legends'
-      preLoaderRoute: typeof PlayersPlayerIdLegendsRouteImport
-      parentRoute: typeof PlayersPlayerIdRoute
+      preLoaderRoute: typeof SidenavLayoutPlayersPlayerIdLegendsRouteImport
+      parentRoute: typeof SidenavLayoutPlayersPlayerIdRoute
     }
-    '/players/$playerId/2v2': {
-      id: '/players/$playerId/2v2'
+    '/_sidenav-layout/players/$playerId/2v2': {
+      id: '/_sidenav-layout/players/$playerId/2v2'
       path: '/2v2'
       fullPath: '/players/$playerId/2v2'
-      preLoaderRoute: typeof PlayersPlayerId2v2RouteImport
-      parentRoute: typeof PlayersPlayerIdRoute
+      preLoaderRoute: typeof SidenavLayoutPlayersPlayerId2v2RouteImport
+      parentRoute: typeof SidenavLayoutPlayersPlayerIdRoute
     }
-    '/players/$playerId/$': {
-      id: '/players/$playerId/$'
+    '/_sidenav-layout/players/$playerId/$': {
+      id: '/_sidenav-layout/players/$playerId/$'
       path: '/$'
       fullPath: '/players/$playerId/$'
-      preLoaderRoute: typeof PlayersPlayerIdSplatRouteImport
-      parentRoute: typeof PlayersPlayerIdRoute
+      preLoaderRoute: typeof SidenavLayoutPlayersPlayerIdSplatRouteImport
+      parentRoute: typeof SidenavLayoutPlayersPlayerIdRoute
     }
   }
 }
 
-interface PlayersPlayerIdRouteChildren {
-  PlayersPlayerIdSplatRoute: typeof PlayersPlayerIdSplatRoute
-  PlayersPlayerId2v2Route: typeof PlayersPlayerId2v2Route
-  PlayersPlayerIdLegendsRoute: typeof PlayersPlayerIdLegendsRoute
-  PlayersPlayerIdWeaponsRoute: typeof PlayersPlayerIdWeaponsRoute
+interface SidenavLayoutPlayersPlayerIdRouteChildren {
+  SidenavLayoutPlayersPlayerIdSplatRoute: typeof SidenavLayoutPlayersPlayerIdSplatRoute
+  SidenavLayoutPlayersPlayerId2v2Route: typeof SidenavLayoutPlayersPlayerId2v2Route
+  SidenavLayoutPlayersPlayerIdLegendsRoute: typeof SidenavLayoutPlayersPlayerIdLegendsRoute
+  SidenavLayoutPlayersPlayerIdWeaponsRoute: typeof SidenavLayoutPlayersPlayerIdWeaponsRoute
 }
 
-const PlayersPlayerIdRouteChildren: PlayersPlayerIdRouteChildren = {
-  PlayersPlayerIdSplatRoute: PlayersPlayerIdSplatRoute,
-  PlayersPlayerId2v2Route: PlayersPlayerId2v2Route,
-  PlayersPlayerIdLegendsRoute: PlayersPlayerIdLegendsRoute,
-  PlayersPlayerIdWeaponsRoute: PlayersPlayerIdWeaponsRoute,
+const SidenavLayoutPlayersPlayerIdRouteChildren: SidenavLayoutPlayersPlayerIdRouteChildren =
+  {
+    SidenavLayoutPlayersPlayerIdSplatRoute:
+      SidenavLayoutPlayersPlayerIdSplatRoute,
+    SidenavLayoutPlayersPlayerId2v2Route: SidenavLayoutPlayersPlayerId2v2Route,
+    SidenavLayoutPlayersPlayerIdLegendsRoute:
+      SidenavLayoutPlayersPlayerIdLegendsRoute,
+    SidenavLayoutPlayersPlayerIdWeaponsRoute:
+      SidenavLayoutPlayersPlayerIdWeaponsRoute,
+  }
+
+const SidenavLayoutPlayersPlayerIdRouteWithChildren =
+  SidenavLayoutPlayersPlayerIdRoute._addFileChildren(
+    SidenavLayoutPlayersPlayerIdRouteChildren,
+  )
+
+interface SidenavLayoutRouteRouteChildren {
+  SidenavLayoutIndexRoute: typeof SidenavLayoutIndexRoute
+  SidenavLayoutPlayersPlayerIdRoute: typeof SidenavLayoutPlayersPlayerIdRouteWithChildren
 }
 
-const PlayersPlayerIdRouteWithChildren = PlayersPlayerIdRoute._addFileChildren(
-  PlayersPlayerIdRouteChildren,
-)
+const SidenavLayoutRouteRouteChildren: SidenavLayoutRouteRouteChildren = {
+  SidenavLayoutIndexRoute: SidenavLayoutIndexRoute,
+  SidenavLayoutPlayersPlayerIdRoute:
+    SidenavLayoutPlayersPlayerIdRouteWithChildren,
+}
+
+const SidenavLayoutRouteRouteWithChildren =
+  SidenavLayoutRouteRoute._addFileChildren(SidenavLayoutRouteRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  EffectRoute: EffectRoute,
-  PlayersPlayerIdRoute: PlayersPlayerIdRouteWithChildren,
+  SidenavLayoutRouteRoute: SidenavLayoutRouteRouteWithChildren,
+  UiRoute: UiRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
