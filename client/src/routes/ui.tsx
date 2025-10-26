@@ -1,6 +1,7 @@
 import { cn } from "@/ui/lib/utils";
 import { Atom, useAtom } from "@effect-atom/atom-react";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { type VariantProps, cva } from "class-variance-authority";
 
 export const Route = createFileRoute("/ui")({
   component: RouteComponent,
@@ -123,6 +124,91 @@ const nav = [
   },
 ];
 
+const cardVariants = cva("rounded-lg p-4", {
+  variants: {
+    variant: {
+      default: "bg-bg shadow-lg",
+      inset: "bg-bg-dark border border-border",
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+  },
+});
+
+type CardProps = React.ComponentProps<"div"> &
+  VariantProps<typeof cardVariants>;
+
+const Card = ({ children, className, variant, ...props }: CardProps) => {
+  return (
+    <div className={cn(cardVariants({ variant }), className)} {...props}>
+      {children}
+    </div>
+  );
+};
+
+const buttonVariants = cva(
+  cn(
+    "relative group/button cursor-pointer flex items-center justify-center rounded-lg text-text",
+    "hover:bg-linear-to-b hover:from-(--button-color-light) hover:to-(--button-color-dark)",
+    "active:from-(--button-color-dark) active:to-(--button-color) active:border-(--button-color-dark) active:border-b-(--button-color-dark)",
+    "after:content-[''] after:absolute after:inset-0 after:border after:border-(--button-color-light)/25 after:opacity-0 hover:after:opacity-100 hover:after:-inset-1.5 after:transition-all after:rounded-xl"
+  ),
+  {
+    variants: {
+      intent: {
+        primary:
+          "[--button-color:var(--primary)] [--button-color-dark:var(--primary-dark)] [--button-color-light:var(--primary-light)]",
+        secondary:
+          "[--button-color:var(--secondary)] [--button-color-dark:var(--secondary-dark)] [--button-color-light:var(--secondary-light)]",
+      },
+      empty: {
+        true: "border border-border",
+        false:
+          "shadow-sm bg-linear-to-b from-(--button-color) to-(--button-color-dark) border border-(--button-color) border-t-(--button-color-light)",
+      },
+      icon: {
+        true: "aspect-square",
+        false: "px-4",
+      },
+      size: {
+        sm: 'h-6',
+        md: "h-8",
+        lg: "h-10",
+        xl: "h-12",
+      }
+    },
+    defaultVariants: {
+      intent: "primary",
+      empty: false,
+      icon: false,
+      size: "md",
+    },
+  }
+);
+
+type ButtonProps = React.ComponentProps<"button"> &
+  VariantProps<typeof buttonVariants>;
+
+const Button = ({
+  children,
+  className,
+  intent,
+  empty,
+  icon,
+  size,
+  ...props
+}: ButtonProps) => {
+  return (
+    <button
+      className={cn(buttonVariants({ intent, empty, icon, size }), className)}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+};
+
 function RouteComponent() {
   const [sidebarExpanded, setSidebarExpanded] = useAtom(sidebarExpandedAtom);
 
@@ -130,12 +216,9 @@ function RouteComponent() {
     <div
       style={
         {
-          "--sidebar-expanded-width": "16rem",
-          "--sidebar-minimized-width": "4rem",
           "--sidebar-width": sidebarExpanded
             ? "var(--sidebar-expanded-width)"
             : "var(--sidebar-minimized-width)",
-          "--header-height": "3rem",
           gridTemplateAreas: '"sidebar header" "sidebar main"',
           gridTemplateColumns: "var(--sidebar-width) 1fr",
           gridTemplateRows: "var(--header-height) 1fr",
@@ -191,14 +274,10 @@ function RouteComponent() {
         </ul>
       </aside>
       <header className="[grid-area:header] flex items-center gap-4">
-        <button
+        <Button
+          empty
+          icon
           onClick={() => setSidebarExpanded(!sidebarExpanded)}
-          className={cn(
-            "relative group cursor-pointer w-8 h-8 flex items-center justify-center rounded-lg",
-            "hover:bg-linear-to-b hover:from-primary-light hover:to-primary-dark hover:border hover:border-primary hover:border-t-primary-light",
-            "active:bg-linear-to-t active:border-primary-dark active:border-b-primary-dark",
-            "after:content-[''] after:absolute after:inset-0 after:border after:border-primary-light/20 after:opacity-0 hover:after:opacity-100 hover:after:-inset-1.5 after:transition-all after:rounded-xl"
-          )}
         >
           <svg
             width="24"
@@ -214,8 +293,8 @@ function RouteComponent() {
               rx="1.5"
               fill="currentcolor"
               className={cn("transition-all duration-100", {
-                "w-[7.5px] group-hover:w-[3px]": sidebarExpanded,
-                "w-[3px] group-hover:w-[7.5px]": !sidebarExpanded,
+                "w-[7.5px] group-hover/button:w-[3px]": sidebarExpanded,
+                "w-[3px] group-hover/button:w-[7.5px]": !sidebarExpanded,
               })}
             />
             <rect
@@ -228,7 +307,7 @@ function RouteComponent() {
               strokeWidth={2}
             />
           </svg>
-        </button>
+        </Button>
       </header>
       <div className="[grid-area:main] pr-1 pb-1 rounded-tl-2xl">
         <div className="rounded-xl h-full bg-bg border border-border">
@@ -261,25 +340,29 @@ function RouteComponent() {
                 </span>
               ))}
             </div>
-            <div className="rounded-lg border border-border p-4 bg-bg-dark grid grid-cols-4 gap-4 mt-4">
-              {[{
-                title: "Account level",
-                value: 100,
-              }, {
-                title: "Account XP",
-                value: '9,724,828',
-              },
-              {
-                title: "In-game time",
-                value: '3,773h 57m 16s',
-              }
-            ].map((item) => (
+            <Card variant="inset" className="grid grid-cols-4 gap-4 mt-4">
+              {[
+                {
+                  title: "Account level",
+                  value: 100,
+                },
+                {
+                  title: "Account XP",
+                  value: "9,724,828",
+                },
+                {
+                  title: "In-game time",
+                  value: "3,773h 57m 16s",
+                },
+              ].map((item) => (
                 <div key={item.title} className="flex flex-col">
-                  <span className="text-xs text-text-muted uppercase">{item.title}</span>
+                  <span className="text-xs text-text-muted uppercase">
+                    {item.title}
+                  </span>
                   <span className="">{item.value}</span>
                 </div>
               ))}
-            </div>
+            </Card>
             <nav className="flex gap-2">
               <ul>
                 <li>
@@ -299,68 +382,32 @@ function RouteComponent() {
             </nav>
           </div>
           <div className="p-4 bg-bg-dark">
-          <div className="rounded-lg p-4 bg-bg flex flex-col gap-4 shadow-lg">
+            <Card className="flex flex-col gap-4">
               <hr className="border-border" />
               <p className="text-sm text-text-muted">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua.
               </p>
               <div className="flex gap-2 justify-end">
-                <button
-                  className={cn(
-                    "relative rounded-lg px-4 py-1 cursor-pointer shadow-sm",
-                    "bg-linear-to-b from-primary to-primary-dark border border-primary border-t-primary-light text-primary-foreground",
-                    "hover:from-primary-light",
-                    "active:from-primary-dark active:to-primary active:border-primary-dark active:border-b-primary-dark",
-                    "after:content-[''] after:absolute after:inset-0 after:border after:border-primary-light/25 after:opacity-0 hover:after:opacity-100 hover:after:-inset-1.5 after:transition-all after:rounded-xl"
-                  )}
-                >
-                  Primary
-                </button>
-                <button
-                  className={cn(
-                    "relative rounded-lg px-4 py-1 cursor-pointer shadow-sm",
-                    "bg-linear-to-b from-secondary to-secondary-dark border border-secondary border-t-secondary-light text-secondary-foreground",
-                    "hover:from-secondary-light",
-                    "active:from-secondary-dark active:to-secondary active:border-secondary-dark active:border-b-secondary-dark",
-                    "after:content-[''] after:absolute after:inset-0 after:border after:border-secondary-light/25 after:opacity-0 hover:after:opacity-100 hover:after:-inset-1.5 after:transition-all after:rounded-xl"
-                  )}
-                >
-                  Secondary
-                </button>
+                <Button>Primary</Button>
+                <Button intent="secondary">Secondary</Button>
               </div>
-            </div>
-            <div className="rounded-lg p-4 bg-bg flex flex-col gap-4 shadow-lg mt-4">
+            </Card>
+            <Card className="flex flex-col gap-4 mt-4">
               <hr className="border-border" />
               <p className="text-sm text-text-muted">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua.
               </p>
               <div className="flex gap-2 justify-end">
-                <button
-                  className={cn(
-                    "relative rounded-lg px-4 py-1 cursor-pointer shadow-sm",
-                    "bg-linear-to-b from-primary to-primary-dark border border-primary border-t-primary-light text-primary-foreground",
-                    "hover:from-primary-light",
-                    "active:from-primary-dark active:to-primary active:border-primary-dark active:border-b-primary-dark",
-                    "after:content-[''] after:absolute after:inset-0 after:border after:border-primary-light/25 after:opacity-0 hover:after:opacity-100 hover:after:-inset-1.5 after:transition-all after:rounded-xl"
-                  )}
-                >
-                  Primary
-                </button>
-                <button
-                  className={cn(
-                    "relative rounded-lg px-4 py-1 cursor-pointer shadow-sm",
-                    "bg-linear-to-b from-secondary to-secondary-dark border border-secondary border-t-secondary-light text-secondary-foreground",
-                    "hover:from-secondary-light",
-                    "active:from-secondary-dark active:to-secondary active:border-secondary-dark active:border-b-secondary-dark",
-                    "after:content-[''] after:absolute after:inset-0 after:border after:border-secondary-light/25 after:opacity-0 hover:after:opacity-100 hover:after:-inset-1.5 after:transition-all after:rounded-xl"
-                  )}
-                >
+                <Button empty size="sm">Primary</Button>
+                <Button intent="secondary" empty>
                   Secondary
-                </button>
+                </Button>
+                <Button size="lg">Primary</Button>
+                <Button intent="secondary" size="xl">Secondary</Button>
               </div>
-            </div>
+            </Card>
           </div>
         </div>
       </div>

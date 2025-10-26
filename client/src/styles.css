@@ -22,6 +22,11 @@
 	--font-sans: Rubik, sans-serif;
 	--font-serif: Georgia, serif;
 	--font-mono: Fira Code, monospace;
+
+	/* Layout */
+	--sidebar-expanded-width: 16rem;
+	--sidebar-minimized-width: 4rem;
+	--header-height: 3rem;
 }
 
 .light {
