@@ -4,7 +4,7 @@ import { LandingBackground } from "@/features/brawlhalla/components/layout/Landi
 import { AppSidebar } from "@/features/sidebar/components/app-sidebar"
 import { SidebarInset, SidebarProvider } from "@/ui/components/sidebar"
 
-export const Route = createFileRoute('/_sidenav-layout')({
+export const Route = createFileRoute('/sidenav-layout')({
   component: RouteComponent,
 })
 

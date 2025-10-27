@@ -21,7 +21,7 @@ import { RankedDisplay } from "./-ranked-display"
 import { StatsGrid } from "./-stats-grid"
 import { WinrateProgress } from "./-winrate-progress"
 
-export const Route = createFileRoute("/_sidenav-layout/players/$playerId/$")({
+export const Route = createFileRoute("/sidenav-layout/players/$playerId/$")({
 	component: RouteComponent,
 })
 

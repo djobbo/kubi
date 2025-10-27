@@ -49,7 +49,7 @@ const ParamsSchema = Schema.Struct({
   playerId: PlayerIdParamSchema,
 });
 
-export const Route = createFileRoute("/_sidenav-layout/players/$playerId")({
+export const Route = createFileRoute("/sidenav-layout/players/$playerId")({
   component: RouteComponent,
   loader: ({ params, location, context: { ApiClient } }) =>
     Effect.runPromise(

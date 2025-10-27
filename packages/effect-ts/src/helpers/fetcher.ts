@@ -1,5 +1,5 @@
 import { apiCacheTable } from "@dair/schema";
-import { HttpBody, HttpClient, HttpClientRequest } from "@effect/platform";
+import { HttpClient, HttpClientRequest } from "@effect/platform";
 import type { HttpMethod } from "@effect/platform/HttpMethod";
 import { desc, eq, and, gte } from "drizzle-orm";
 import { Config, Data, Effect, Schedule, Schema } from "effect";
@@ -96,6 +96,7 @@ const fetchJson = Effect.fn("Fetcher.fetchJson")(function* <T, U>(
   const parsed = yield* Schema.decodeUnknown(schema)(json);
   
   return {
+    rawData: json,
     data: parsed,
     updatedAt: new Date(),
     cached: false,
@@ -105,20 +106,22 @@ const fetchJson = Effect.fn("Fetcher.fetchJson")(function* <T, U>(
 const cache = Effect.fn("Fetcher.cache")(function* <T, U>(
   schema: Schema.Schema<T, U>,
   options: FetchJsonOptions,
-  data: T
+  rawData: unknown
 ) {
   const cacheVersion = yield* Config.number("DATABASE_CACHE_VERSION");
   const { cacheName } = options;
   if (!cacheName) return;
 
   const db = yield* DB;
+  // Check if the raw data is valid for the schema
+  yield* Schema.decodeUnknown(schema)(rawData);
   yield* db.use(async (client) => {
     await client
       .insert(apiCacheTable)
       .values({
         cacheName: cacheName,
         cacheId: `${cacheName}-${Date.now()}`,
-        data: Schema.encode(schema)(data),
+        data: rawData,
         version: cacheVersion,
       })
       .onConflictDoNothing()
@@ -134,10 +137,10 @@ export const fetchRevalidate = Effect.fn("Fetcher.fetchRevalidate")(function* <
   return yield* fetchCache(schema, options).pipe(
     Effect.orElse(() =>
       fetchJson(schema, options).pipe(
-        Effect.tap(({ data }) =>
+        Effect.tap(({ rawData }) =>
           // Fire and forget cache operation
           Effect.runFork(
-            cache(schema, options, data).pipe(Effect.provideService(DB, db))
+            cache(schema, options, rawData).pipe(Effect.provideService(DB, db))
           )
         )
       )
