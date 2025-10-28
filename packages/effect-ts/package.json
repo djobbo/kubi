@@ -5,6 +5,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "bun drizzle-kit generate && bun drizzle-kit push && bun --watch run ./src/index.ts",
+		"studio": "drizzle-kit studio",
 		"check:types": "tsc --noEmit"
 	},
 	"dependencies": {
