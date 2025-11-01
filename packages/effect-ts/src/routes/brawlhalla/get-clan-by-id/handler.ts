@@ -20,7 +20,7 @@ export const getClanById = (clanId: number) =>
       name: clanStats.data.clan_name,
       created_at: clanStats.data.clan_create_date,
       xp: clanStats.data.clan_xp,
-      members: clanStats.data.clan.map(member => ({
+      members: clanStats.data.clan.map((member) => ({
         id: member.brawlhalla_id,
         name: member.name,
         rank: member.rank,
@@ -57,5 +57,6 @@ export const getClanById = (clanId: number) =>
       TimeoutException: () => Effect.fail(new InternalServerError()),
       HttpBodyError: () => Effect.fail(new InternalServerError()),
       ConfigError: Effect.die,
-    })
+    }),
+    Effect.withSpan("get-clan-by-id")
   );

@@ -61,9 +61,9 @@ const fetchCache = Effect.fn("Fetcher.fetchCache")(function* <T, U>(
     );
   }
 
-  const parsed = yield* Schema.decodeUnknown(Schema.parseJson(schema))(
+  const parsed = yield* Schema.decodeUnknown(schema)(
     cached.data
-  );
+  )
 
   return {
     data: parsed,
@@ -144,6 +144,7 @@ export const fetchRevalidate = Effect.fn("Fetcher.fetchRevalidate")(function* <
           )
         )
       )
-    )
+    ),
+    // Effect.cachedWithTTL(options.cacheMaxAge ?? DEFAULT_CACHE_MAX_AGE)
   );
 });

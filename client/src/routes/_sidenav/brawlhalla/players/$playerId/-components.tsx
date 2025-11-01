@@ -37,6 +37,7 @@ const cardVariants = cva("rounded-lg p-4", {
     variant: {
       default: "bg-bg shadow-lg",
       inset: "bg-bg-dark border border-border",
+      dashed: "border border-border border-dashed"
     },
   },
   defaultVariants: {

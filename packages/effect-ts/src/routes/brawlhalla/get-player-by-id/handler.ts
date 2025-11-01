@@ -303,5 +303,6 @@ export const getPlayerById = (playerId: number) =>
       TimeoutException: () => Effect.fail(new InternalServerError()),
       HttpBodyError: () => Effect.fail(new InternalServerError()),
       ConfigError: Effect.die,
-    })
+    }),
+    Effect.withSpan("get-player-by-id")
   );

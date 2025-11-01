@@ -41,5 +41,6 @@ export const getWeeklyRotation = () =>
       HttpBodyError: () => Effect.fail(new InternalServerError()),
       WeeklyRotationError: () => Effect.fail(new NotFound()),
       ConfigError: Effect.die,
-    })
+    }),
+    Effect.withSpan("get-weekly-rotation")
   );

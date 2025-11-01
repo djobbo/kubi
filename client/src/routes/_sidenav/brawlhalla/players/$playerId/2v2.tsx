@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/brawlhalla/players/$playerId/2v2')({
+export const Route = createFileRoute('/_sidenav/brawlhalla/players/$playerId/2v2')({
   component: RouteComponent,
 })
 

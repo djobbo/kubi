@@ -22,7 +22,12 @@ const HealthLive = HttpApiBuilder.group(Api, "health", (handlers) =>
 
 const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
   handlers
-    .handle("get-player-by-id", ({ path }) => getPlayerById(path.id))
+    .handle(
+      "get-player-by-id",
+      Effect.fn("get-player-by-id")(function* ({ path }) {
+        return yield* getPlayerById(path.id);
+      })
+    )
     .handle("get-clan-by-id", ({ path }) => getClanById(path.id))
     .handle("get-rankings-1v1", ({ path, urlParams }) =>
       getRankings1v1(path.region, path.page, urlParams.name)

@@ -55,5 +55,6 @@ export const getPreviewArticles = () =>
       TimeoutException: () => Effect.fail(new InternalServerError()),
       HttpBodyError: () => Effect.fail(new InternalServerError()),
       ConfigError: Effect.die,
-    })
+    }),
+    Effect.withSpan("get-preview-articles")
   );

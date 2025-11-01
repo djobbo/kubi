@@ -1,24 +1,14 @@
 import {
   LegendIcon,
-  RankedTierBanner,
 } from "@/features/brawlhalla/components/Image";
 import { cn } from "@/ui/lib/utils";
 import { legends } from "@dair/brawlhalla-api/src/constants/legends";
 import { Atom, useAtom } from "@effect-atom/atom-react";
-import { t } from "@lingui/core/macro";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { type VariantProps, cva } from "class-variance-authority";
-import type { ReactNode } from "react";
-import { Pie, PieChart, Cell, LabelList } from "recharts";
 
 export const Route = createFileRoute("/ui")({
   component: RouteComponent,
 });
-
-const testPieData = [
-  { name: "W", value: 51618 },
-  { name: "L", value: 29391 },
-];
 
 const sidebarExpandedAtom = Atom.make(false);
 const selectedTabAtom = Atom.make<
