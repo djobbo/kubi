@@ -1,6 +1,6 @@
 import { Schema } from "effect"
-import { Region } from "../../../services/brawlhalla-api/schema/region"
-import { Tier } from "../../../services/brawlhalla-api/schema/tier"
+import { Region } from "../../../common/region"
+import { Tier } from "../../../common/tier"
 
 const Ranking = Schema.Struct({
 	rank: Schema.Number,

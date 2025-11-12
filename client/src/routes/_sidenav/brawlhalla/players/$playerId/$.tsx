@@ -6,6 +6,7 @@ import { createFileRoute } from "@tanstack/react-router"
 import { Cell, LabelList, Pie, PieChart } from "recharts"
 import { Button, Card, ProgressBar, StatsGrid } from "./-components"
 import { ApiClient, Route as PlayerRoute } from "./route"
+import { Trans } from '@lingui/react/macro'
 
 export const Route = createFileRoute(
 	"/_sidenav/brawlhalla/players/$playerId/$",
@@ -53,7 +54,7 @@ function RouteComponent() {
 									<RankedTierBanner
 										tier={ranked1v1.tier}
 										alt={ranked1v1.tier ?? ""}
-										containerClassName="h-24 w-16"
+										containerClassName="h-24 w-18"
 										className="object-contain object-center [grid-area:banner]"
 									/>
 									<div className="flex flex-1 flex-col gap-1">
@@ -190,7 +191,7 @@ function RouteComponent() {
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
 						<Card>
 							<h3 className="text-sm uppercase text-text-muted font-semibold">
-								Games
+								<Trans>Games</Trans>
 							</h3>
 							<div
 								className="grid place-items-center"
@@ -259,7 +260,7 @@ function RouteComponent() {
 						</Card>
 						<Card>
 							<h3 className="text-sm uppercase text-text-muted font-semibold">
-								KOs
+								<Trans>KOs</Trans>
 							</h3>
 							<div className="flex flex-col gap-2 justify-between items-center mt-4">
 								{(

@@ -15,6 +15,7 @@
 		"@dair/schema": "workspace:*",
 		"@effect/platform": "^0.93.1",
 		"@effect/platform-bun": "^0.83.0",
+		"@libsql/client": "^0.15.15",
 		"arctic": "^3.7.0",
 		"cheerio": "^1.1.2",
 		"drizzle-orm": "^0.44.7",

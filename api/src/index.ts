@@ -1,7 +1,7 @@
+import { Api } from "@dair/api-contract"
 import { FetchHttpClient, HttpApiBuilder, HttpServer } from "@effect/platform"
 import { BunHttpServer } from "@effect/platform-bun"
 import { Config, Effect, Layer } from "effect"
-import { Api } from "./api"
 import { ApiLive } from "./api-live"
 import * as Archive from "./services/archive"
 import * as Authorization from "./services/authorization"
