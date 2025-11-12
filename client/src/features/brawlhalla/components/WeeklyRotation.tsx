@@ -3,7 +3,7 @@ import { CircleHelp } from "lucide-react"
 
 import { Tooltip } from "@/components/base/Tooltip"
 import { LegendIcon } from "@/features/brawlhalla/components/Image"
-import { GetWeeklyRotationResponse } from "@dair/effect-ts/src/routes/brawlhalla/get-weekly-rotation/schema"
+import type { GetWeeklyRotationResponse } from "@dair/api-contract/src/routes/v1/brawlhalla/get-weekly-rotation"
 
 export const WeeklyRotation = ({
 	weeklyRotation,

@@ -1,106 +1,100 @@
-import { swaggerUI } from "@hono/swagger-ui"
-import { OpenAPIHono as Hono, createRoute, z } from "@hono/zod-openapi"
-import { cors } from "hono/cors"
-import { register } from "prom-client"
-import { env } from "./env"
-import HttpStatus from "./helpers/http-status"
-import { jsonContent } from "./helpers/json-content"
-import { logger } from "./helpers/logger"
-import { collectMetrics } from "./metrics"
-import { v1Route } from "./routes/v1"
+import { FetchHttpClient, HttpApiBuilder, HttpServer } from "@effect/platform";
+import { BunHttpServer } from "@effect/platform-bun";
+import { Config, Effect, Layer } from "effect";
+import { Api } from "./api";
+import { ApiLive } from "./api-live";
+import * as Archive from "./services/archive";
+import * as Authorization from "./services/authorization";
+import * as DB from "./services/db";
+import * as Docs from "./services/docs";
 
-const app = new Hono()
-app
-	.use(
-		"*",
-		cors({
-			origin: env.CLIENT_URL,
-			allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-		}),
-	)
-	.use("*", async (c, next) => {
-		const start = Date.now()
-		await next()
-		const duration = Date.now() - start
-		const status = c.res.status
-		const method = c.req.method
-		const path = c.req.path
+const getEnv = Effect.gen(function* () {
+  const allowedOrigins = (yield* Config.nonEmptyString("ALLOWED_ORIGINS").pipe(
+    Config.withDefault("*")
+  ))
+    .split(",")
+    .map((origin) => origin.trim());
+  const defaultClientUrl = yield* Config.nonEmptyString("DEFAULT_CLIENT_URL");
+  return {
+    api: {
+      allowedOrigins: [...new Set(allowedOrigins)],
+      port: yield* Config.number("API_PORT").pipe(Config.withDefault(3000)),
+      url: yield* Config.string("API_URL"),
+    },
+    client: {
+      defaultUrl: defaultClientUrl,
+    },
+    oauth: {
+      secret: yield* Config.nonEmptyString("OAUTH_SECRET"),
+      discord: {
+        clientId: yield* Config.nonEmptyString("DISCORD_CLIENT_ID"),
+        clientSecret: yield* Config.nonEmptyString("DISCORD_CLIENT_SECRET"),
+      },
+      google: {
+        clientId: yield* Config.nonEmptyString("GOOGLE_CLIENT_ID"),
+        clientSecret: yield* Config.nonEmptyString("GOOGLE_CLIENT_SECRET"),
+      },
+    },
+    brawlhalla: {
+      apiKey: yield* Config.nonEmptyString("BRAWLHALLA_API_KEY"),
+    },
+    db: {
+      url: yield* Config.nonEmptyString("DATABASE_URL"),
+      cacheVersion: yield* Config.number("DATABASE_CACHE_VERSION"),
+    },
+  };
+});
 
-		collectMetrics(method, path, status, duration)
+const api = Effect.gen(function* () {
+  const env = yield* getEnv;
 
-		logger.info(
-			{
-				method,
-				path,
-				status,
-				duration,
-			},
-			`${method} ${path} ${status} ${duration}ms`,
-		)
-	})
+  const ServerLive = HttpApiBuilder.serve().pipe(
+    Layer.provide(
+      HttpApiBuilder.middlewareCors({
+        allowedOrigins: env.api.allowedOrigins,
+        allowedMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      })
+    ),
+    HttpServer.withLogAddress,
+    Layer.provide(ApiLive),
+    Layer.provide(BunHttpServer.layer({ port: env.api.port })),
+    Layer.provide(Archive.layer()),
+    Layer.provide(DB.layer({ url: env.db.url })),
+    Layer.provide(
+      Authorization.layer({
+        apiUrl: env.api.url,
+        defaultClientUrl: env.client.defaultUrl,
+        oauth: {
+          secret: env.oauth.secret,
+          discord: {
+            clientId: env.oauth.discord.clientId,
+            clientSecret: env.oauth.discord.clientSecret,
+          },
+          google: {
+            clientId: env.oauth.google.clientId,
+            clientSecret: env.oauth.google.clientSecret,
+          },
+        },
+      })
+    ),
+    Layer.provide(FetchHttpClient.layer),
+    Layer.provide(Docs.layer(Api))
+  );
 
-const publicRoutes = app
-	.openapi(
-		createRoute({
-			method: "get",
-			path: "/",
-			responses: {
-				[HttpStatus.OK]: jsonContent(
-					z.object({ message: z.string() }),
-					"Welcome to the dair.gg api!",
-				),
-			},
-		}),
-		(c) => c.json({ message: "Welcome to the dair.gg api!" }, HttpStatus.OK),
-	)
-	.openapi(
-		createRoute({
-			method: "get",
-			path: "/health",
-			responses: {
-				[HttpStatus.OK]: jsonContent(z.object({ message: z.string() }), "OK"),
-			},
-		}),
-		(c) => c.json({ message: "OK" }, HttpStatus.OK),
-	)
-	.route("/v1", v1Route)
+  return yield* Layer.launch(ServerLive).pipe(
+    Effect.catchAll((error) => {
+      console.error(error);
+      return Effect.die(error);
+    })
+  );
+});
 
-app.doc("/doc", {
-	openapi: "3.0.0",
-	info: {
-		version: "1.0.0",
-		title: "dair.gg API",
-	},
-	servers: [{ url: env.API_URL, description: "dair.gg" }],
-	tags: [
-		{
-			name: "Auth",
-			description: "Authentication endpoints",
-		},
-		{
-			name: "Brawlhalla",
-			description: "Brawlhalla endpoints",
-		},
-		{
-			name: "Bookmarks",
-			description: "Bookmarks endpoints",
-		},
-	],
-})
-
-app.get(
-	"/ui",
-	swaggerUI({
-		url: "/doc",
-		title: "dair.gg API",
-	}),
-)
-
-app.get("/metrics", async (c) => {
-	c.header("Content-Type", register.contentType)
-	return c.text(await register.metrics())
-})
-
-export default app
-
-export type App = typeof publicRoutes
+Effect.runFork(
+  api.pipe(
+    Effect.catchTag("ConfigError", (error) => {
+      console.error("Missing environment variable:", error.message);
+      return Effect.die(error);
+    }),
+    Effect.catchAll(Effect.logError)
+  )
+);

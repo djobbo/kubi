@@ -1,5 +1,5 @@
 import { UnsafeImage } from "@/features/brawlhalla/components/Image"
-import type { GetPreviewArticlesResponse } from '@dair/effect-ts/src/routes/brawlhalla/get-preview-articles/schema'
+import type { GetPreviewArticlesResponse } from '@dair/api-contract/src/routes/v1/brawlhalla/get-preview-articles'
 
 interface ArticlePreviewProps {
 	article: typeof GetPreviewArticlesResponse.Type['data'][number]

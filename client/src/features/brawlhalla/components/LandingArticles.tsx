@@ -2,7 +2,7 @@ import { Trans } from "@lingui/react/macro"
 
 import { ArticlePreviewGrid } from "./articles/ArticlePreviewGrid"
 import { SectionTitle } from "./layout/SectionTitle"
-import type { GetPreviewArticlesResponse } from '@dair/effect-ts/src/routes/brawlhalla/get-preview-articles/schema'
+import type { GetPreviewArticlesResponse } from '@dair/api-contract/src/routes/v1/brawlhalla/get-preview-articles'
 
 export const LandingArticles = ({
 	articles,

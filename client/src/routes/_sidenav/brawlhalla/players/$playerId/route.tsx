@@ -9,7 +9,7 @@ import { Schema } from "effect";
 import { Card, StatsGrid, Tab } from "./-components";
 import { formatTime } from "@dair/common/src/helpers/date";
 import { AtomHttpApi, Result, useAtomValue } from "@effect-atom/atom-react";
-import { Api } from "@dair/effect-ts/src/api";
+import { Api } from "@dair/api-contract";
 import { FetchHttpClient } from "@effect/platform";
 import { env } from "@/env";
 import { sidebarExpandedAtom } from "@/routes/_sidenav/route";
@@ -43,7 +43,7 @@ const PlayerIdParamSchema = Schema.transform(
       if (!parsed) return null;
 
       try {
-        return parseInt(parsed, 10);
+        return Number.parseInt(parsed, 10);
       } catch (error) {
         return null;
       }

@@ -1,5 +1,5 @@
 import { ArticlePreview } from "./ArticlePreview"
-import type { GetPreviewArticlesResponse } from '@dair/effect-ts/src/routes/brawlhalla/get-preview-articles/schema'
+import type { GetPreviewArticlesResponse } from '@dair/api-contract/src/routes/v1/brawlhalla/get-preview-articles'
 
 interface ArticlePreviewGridProps {
 	articles: typeof GetPreviewArticlesResponse.Type['data']

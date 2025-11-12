@@ -1,5 +1,5 @@
 import { env } from "@/env";
-import { Api } from "@dair/effect-ts/src/api";
+import { Api } from "@dair/api-contract";
 import { FetchHttpClient, HttpApiClient } from "@effect/platform";
 import { AtomHttpApi } from "@effect-atom/atom-react";
 import { Effect } from 'effect';
