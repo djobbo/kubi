@@ -13,8 +13,8 @@ import styles from "@/styles.css?url"
 import { activateLocale } from "@/locales/activate"
 import type { RouterContext } from "@/router.tsx"
 import { seo } from "@dair/common/src/helpers/seo"
+import { Atom, useAtomValue } from "@effect-atom/atom-react"
 import { t } from "@lingui/core/macro"
-import { Atom, useAtomValue } from '@effect-atom/atom-react'
 
 const themeAtom = Atom.make<"light" | "dark">("dark")
 

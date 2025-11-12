@@ -1,12 +1,12 @@
 import { Trans } from "@lingui/react/macro"
 
+import type { GetPreviewArticlesResponse } from "@dair/api-contract/src/routes/v1/brawlhalla/get-preview-articles"
 import { ArticlePreviewGrid } from "./articles/ArticlePreviewGrid"
 import { SectionTitle } from "./layout/SectionTitle"
-import type { GetPreviewArticlesResponse } from '@dair/api-contract/src/routes/v1/brawlhalla/get-preview-articles'
 
 export const LandingArticles = ({
 	articles,
-}: { articles: typeof GetPreviewArticlesResponse.Type['data'] }) => {
+}: { articles: (typeof GetPreviewArticlesResponse.Type)["data"] }) => {
 	if (!articles || articles.length <= 0) return null
 
 	return (

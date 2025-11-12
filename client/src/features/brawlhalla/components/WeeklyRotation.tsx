@@ -7,7 +7,7 @@ import type { GetWeeklyRotationResponse } from "@dair/api-contract/src/routes/v1
 
 export const WeeklyRotation = ({
 	weeklyRotation,
-}: { weeklyRotation: typeof GetWeeklyRotationResponse.Type['data'] }) => {
+}: { weeklyRotation: (typeof GetWeeklyRotationResponse.Type)["data"] }) => {
 	return (
 		<div className="flex flex-col items-center mt-8">
 			<div className="mx-auto grid gap-4 grid-cols-3 md:grid-cols-9 p-4 rounded-2xl bg-secondary border border-border">

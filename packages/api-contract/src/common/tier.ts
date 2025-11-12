@@ -1,4 +1,4 @@
-import { Schema } from 'effect'
+import { Schema } from "effect"
 
 const tiers = [
 	"Valhallan",
@@ -32,7 +32,7 @@ const tiers = [
 ] as const
 
 export const isValidTier = (input: string): input is (typeof tiers)[number] => {
-    return tiers.includes(input as (typeof tiers)[number])
+	return tiers.includes(input as (typeof tiers)[number])
 }
 
 export const Tier = Schema.NullOr(Schema.Literal(...tiers))

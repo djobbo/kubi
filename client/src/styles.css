@@ -5,11 +5,11 @@
 :root {
 	/* Colors */
 	--bg-root: oklch(0.205 0.019 272);
-    --bg-dark: oklch(0.23 0.023 272);
-    --bg: oklch(0.25 0.027 272);
-    --bg-light: oklch(0.3 0.032 272);
-    --text: oklch(0.95 0.03 272);
-    --text-muted: oklch(0.83 0.03 272);
+	--bg-dark: oklch(0.23 0.023 272);
+	--bg: oklch(0.25 0.027 272);
+	--bg-light: oklch(0.3 0.032 272);
+	--text: oklch(0.95 0.03 272);
+	--text-muted: oklch(0.83 0.03 272);
 	--border: oklch(0.28 0.035 272);
 	--primary-dark: oklch(0.45 0.25 272);
 	--primary: oklch(0.53 0.25 272);
@@ -36,12 +36,12 @@
 
 .light {
 	--bg-root: oklch(0.97 0.018 272);
-    --bg-dark: oklch(0.94 0.023 272);
-    --bg: oklch(0.9 0.033 272);
-    --bg-light: oklch(0.85 0.038 272);
-    --text: oklch(0.2 0.03 272);
-    --text-muted: oklch(0.15 0.03 272);
-    --border: oklch(0.82 0.035 272);
+	--bg-dark: oklch(0.94 0.023 272);
+	--bg: oklch(0.9 0.033 272);
+	--bg-light: oklch(0.85 0.038 272);
+	--text: oklch(0.2 0.03 272);
+	--text-muted: oklch(0.15 0.03 272);
+	--border: oklch(0.82 0.035 272);
 	--primary-dark: oklch(0.45 0.25 272);
 	--primary: oklch(0.53 0.25 272);
 	--primary-light: oklch(0.6 0.25 272);
@@ -52,12 +52,12 @@
 
 @theme inline {
 	--color-bg-root: var(--bg-root);
-    --color-bg-dark: var(--bg-dark);
-    --color-bg: var(--bg);
-    --color-bg-light: var(--bg-light);
-    --color-text: var(--text);
-    --color-text-muted: var(--text-muted);
-    --color-border: var(--border);
+	--color-bg-dark: var(--bg-dark);
+	--color-bg: var(--bg);
+	--color-bg-light: var(--bg-light);
+	--color-text: var(--text);
+	--color-text-muted: var(--text-muted);
+	--color-border: var(--border);
 	--color-primary-dark: var(--primary-dark);
 	--color-primary: var(--primary);
 	--color-primary-light: var(--primary-light);
@@ -76,10 +76,10 @@
 		height: 100%;
 	}
 	body {
-        @apply bg-bg-root text-text h-full;
-        font-family: var(--font-sans);
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
+		@apply bg-bg-root text-text h-full;
+		font-family: var(--font-sans);
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
 	}
 
 	code {

@@ -1,10 +1,10 @@
 import { randomUUID } from "node:crypto"
+import { DB, DBError } from "@/services/db"
 import { type NewSession, sessionsTable } from "@dair/schema/src/auth"
 import { HttpApiBuilder } from "@effect/platform"
 import { and, eq, gt } from "drizzle-orm"
 import { Effect, Option, Redacted } from "effect"
 import { sessionApiKey } from "."
-import { DB, DBError } from "@/services/db"
 
 export const createSession = (userId: string) =>
 	Effect.gen(function* () {

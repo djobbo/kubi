@@ -1,7 +1,7 @@
+import { Authorization } from "@/services/authorization"
 import type { Provider } from "@dair/schema"
 import { HttpServerResponse } from "@effect/platform"
 import { Effect } from "effect"
-import { Authorization } from "@/services/authorization"
 
 export const providerCallback = (
 	provider: Provider,

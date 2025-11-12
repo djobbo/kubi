@@ -1,5 +1,5 @@
-import { Schema } from 'effect'
-import { Tier, isValidTier } from '@dair/api-contract/src/common/tier'
+import { Tier, isValidTier } from "@dair/api-contract/src/common/tier"
+import { Schema } from "effect"
 
 /**
  * The API returns `null` for Valhallan tier, so we need to handle that case.

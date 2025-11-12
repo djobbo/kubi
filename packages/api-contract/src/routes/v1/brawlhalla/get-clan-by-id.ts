@@ -1,4 +1,4 @@
-import { Schema } from 'effect';
+import { Schema } from "effect"
 
 const Bookmark = Schema.Struct({
 	// TODO: Add bookmark schema

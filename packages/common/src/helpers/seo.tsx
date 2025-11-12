@@ -7,7 +7,7 @@ type SEOProps = {
 
 export const seo = ({ title, description, keywords, image }: SEOProps) => {
 	const tags = [
-		{ tag: 'title', content: title },
+		{ tag: "title", content: title },
 		{ name: "description", content: description },
 		{ name: "keywords", content: keywords },
 		{ name: "twitter:title", content: title },
@@ -32,10 +32,10 @@ export const seo = ({ title, description, keywords, image }: SEOProps) => {
 export const SEO = (props: SEOProps) => {
 	const meta = seo(props)
 
-	return meta.map(tag => {
+	return meta.map((tag) => {
 		switch (tag.tag) {
-			case 'title':
-				return <title key='title'>{tag.content}</title>
+			case "title":
+				return <title key="title">{tag.content}</title>
 			default:
 				return <meta key={tag.name} {...tag} />
 		}

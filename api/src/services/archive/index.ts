@@ -1,7 +1,7 @@
+import * as DB from "@/services/db"
 import { aliasesTable } from "@dair/schema"
 import { and, eq } from "drizzle-orm"
 import { Context, Effect, Layer, Schema } from "effect"
-import * as DB from "@/services/db"
 
 export class ArchiveError extends Schema.TaggedError<ArchiveError>(
 	"ArchiveError",

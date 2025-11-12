@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto"
+import { DB, DBError } from "@/services/db"
 import {
 	type NewOAuthAccount,
 	type NewUser,
@@ -10,7 +11,6 @@ import { BadRequest } from "@effect/platform/HttpApiError"
 import { and, eq } from "drizzle-orm"
 import { Effect } from "effect"
 import type { AuthorizationProvider } from "."
-import { DB, DBError } from "@/services/db"
 
 export const validateOAuthCallback =
 	(providers: Record<string, AuthorizationProvider>) =>

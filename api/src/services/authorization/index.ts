@@ -1,3 +1,4 @@
+import { State } from "@dair/api-contract/src/routes/v1/auth/providers/callback"
 import {
 	DISCORD_PROVIDER_ID,
 	GOOGLE_PROVIDER_ID,
@@ -12,7 +13,6 @@ import type {
 import { Discord, Google, type OAuth2Tokens } from "arctic"
 import { Context, Effect, Layer, Redacted, Schema } from "effect"
 import type { ParseError } from "effect/ParseResult"
-import { State } from "@dair/api-contract/src/routes/v1/auth/providers/callback"
 import { createSession, deleteSession, getSession } from "./session"
 import { validateOAuthCallback } from "./validate-oauth-callback"
 

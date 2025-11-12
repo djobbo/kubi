@@ -1,6 +1,6 @@
-import { Schema } from "effect"
 import { CleanString } from "@/helpers/clean-string"
 import { NumberFromString } from "@/helpers/number-from-string"
+import { Schema } from "effect"
 
 const clanMemberRanks = ["Leader", "Officer", "Member", "Recruit"] as const
 const MemberRank = Schema.Literal(...clanMemberRanks)

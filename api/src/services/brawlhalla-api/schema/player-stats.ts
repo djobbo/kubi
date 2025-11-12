@@ -1,6 +1,6 @@
-import { Schema } from "effect"
 import { CleanString } from "@/helpers/clean-string"
 import { NumberFromString } from "@/helpers/number-from-string"
+import { Schema } from "effect"
 
 const Legend = Schema.Struct({
 	legend_id: Schema.Number,

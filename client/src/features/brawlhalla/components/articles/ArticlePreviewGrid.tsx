@@ -1,8 +1,8 @@
+import type { GetPreviewArticlesResponse } from "@dair/api-contract/src/routes/v1/brawlhalla/get-preview-articles"
 import { ArticlePreview } from "./ArticlePreview"
-import type { GetPreviewArticlesResponse } from '@dair/api-contract/src/routes/v1/brawlhalla/get-preview-articles'
 
 interface ArticlePreviewGridProps {
-	articles: typeof GetPreviewArticlesResponse.Type['data']
+	articles: (typeof GetPreviewArticlesResponse.Type)["data"]
 }
 
 export const ArticlePreviewGrid = ({ articles }: ArticlePreviewGridProps) => {

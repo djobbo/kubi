@@ -1,4 +1,3 @@
-
 const BRAWLTOOLS_API_URL = "https://api.brawltools.com"
 const MAX_RESULTS = 50
 

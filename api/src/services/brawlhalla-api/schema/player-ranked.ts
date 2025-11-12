@@ -1,8 +1,8 @@
-import { ParseResult, Schema } from "effect"
 import { CleanString } from "@/helpers/clean-string"
 import { NumberFromString } from "@/helpers/number-from-string"
-import { BrawlhallaApiTier } from './tier'
-import { BrawlhallaApiRegion } from './region'
+import { ParseResult, Schema } from "effect"
+import { BrawlhallaApiRegion } from "./region"
+import { BrawlhallaApiTier } from "./tier"
 
 const Legend = Schema.Struct({
 	legend_id: Schema.Number,

@@ -1,8 +1,8 @@
 import { UnsafeImage } from "@/features/brawlhalla/components/Image"
-import type { GetPreviewArticlesResponse } from '@dair/api-contract/src/routes/v1/brawlhalla/get-preview-articles'
+import type { GetPreviewArticlesResponse } from "@dair/api-contract/src/routes/v1/brawlhalla/get-preview-articles"
 
 interface ArticlePreviewProps {
-	article: typeof GetPreviewArticlesResponse.Type['data'][number]
+	article: (typeof GetPreviewArticlesResponse.Type)["data"][number]
 }
 
 const BASE_BRAWLHALLA_ARTICLE_URL = "https://brawlhalla.com/news/"
