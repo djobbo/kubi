@@ -31,7 +31,7 @@
 	/* Layout */
 	--sidebar-expanded-width: 16rem;
 	--sidebar-minimized-width: 4rem;
-	--header-height: 3rem;
+	--header-height: 2rem;
 }
 
 .light {

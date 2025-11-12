@@ -1,8 +1,8 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
-import { Button } from "./brawlhalla/players/$playerId/-components";
+import { Button, LinkButton } from "./brawlhalla/players/$playerId/-components";
 import { cn } from "@/ui/lib/utils";
 import { Atom, useAtom } from "@effect-atom/atom-react";
-import { LandingBackground } from '@/features/brawlhalla/components/layout/LandingBackground';
+import { LandingBackground } from "@/features/brawlhalla/components/layout/LandingBackground";
 
 const nav = [
   {
@@ -12,7 +12,7 @@ const nav = [
       <svg
         viewBox="0 0 24 24"
         xmlns="http://www.w3.org/2000/svg"
-        className="h-8"
+        className="h-full"
       >
         <path
           d="M16 12.5C17.933 12.5 19.5 14.067 19.5 16C19.5 17.933 17.933 19.5 16 19.5H8C6.067 19.5 4.5 17.933 4.5 16C4.5 14.067 6.067 12.5 8 12.5H16Z"
@@ -42,7 +42,7 @@ const nav = [
     id: "rankings-2v2",
     title: "2v2 Rankings",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" className="h-8">
+      <svg viewBox="0 0 24 24" fill="none" className="h-full">
         <path
           d="M13.5 13.5C15.433 13.5 17 15.067 17 17C17 18.933 15.433 20.5 13.5 20.5H5.5C3.567 20.5 2 18.933 2 17C2 15.067 3.567 13.5 5.5 13.5H13.5Z"
           className="fill-text stroke-bg-root"
@@ -83,7 +83,7 @@ const nav = [
     id: "power-rankings",
     title: "Power Rankings",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" className="h-8">
+      <svg viewBox="0 0 24 24" fill="none" className="h-full">
         <path
           d="M16 12.5C17.933 12.5 19.5 14.067 19.5 16C19.5 17.933 17.933 19.5 16 19.5H8C6.067 19.5 4.5 17.933 4.5 16C4.5 14.067 6.067 12.5 8 12.5H16Z"
           className="fill-text stroke-bg-root"
@@ -117,13 +117,13 @@ const nav = [
     ),
     href: "/rankings/power",
   },
-];
+] as const
 
 export const Route = createFileRoute("/_sidenav")({
   component: RouteComponent,
 });
 
-const sidebarExpandedAtom = Atom.make(false);
+export const sidebarExpandedAtom = Atom.make(false);
 
 function RouteComponent() {
   const [sidebarExpanded, setSidebarExpanded] = useAtom(sidebarExpandedAtom);
@@ -157,80 +157,82 @@ function RouteComponent() {
             />
           </div>
           <ul
-            className={cn("flex flex-col gap-2", {
+            className={cn("flex flex-col gap-2 transition-all", {
               "p-4": sidebarExpanded,
-              "p-2": !sidebarExpanded,
+              "px-2": !sidebarExpanded,
             })}
           >
             {nav.map((item) => (
               <li key={item.id}>
-                <Link
+                <LinkButton
+                empty
+                icon={!sidebarExpanded}
+                  size={sidebarExpanded ? 'md' : 'xl'}
                   to={item.href}
                   className={cn(
-                    "flex items-center w-full h-8 px-1 border border-transparent",
-                    "relative group cursor-pointer rounded-lg",
-                    "hover:bg-linear-to-b hover:from-primary-light hover:to-primary-dark hover:border-primary hover:border-t-primary-light",
-                    "active:bg-linear-to-t active:border-primary-dark active:border-b-primary-dark",
-                    "after:content-[''] after:absolute after:inset-0 after:border-primary-light/25 after:opacity-0 hover:after:opacity-100 hover:after:-inset-1.5 after:transition-all after:rounded-xl"
+                    {
+                      'justify-start': sidebarExpanded,
+                      'justify-center': !sidebarExpanded,
+                    }
                   )}
                 >
                   {item.icon}
-                  <span
+                  {sidebarExpanded && <span
                     className={cn(
                       "text-sm font-medium transition-all whitespace-nowrap",
-                      {
-                        "w-0 opacity-0 -translate-x-3 ml-0": !sidebarExpanded,
-                        "w-auto opacity-100 translate-x-0 ml-2":
-                          sidebarExpanded,
-                      }
+                      "w-auto opacity-100 translate-x-0 ml-2",
                     )}
                   >
                     {item.title}
-                  </span>
-                </Link>
+                  </span>}
+                </LinkButton>
               </li>
             ))}
           </ul>
         </aside>
-        <header className="[grid-area:header] flex items-center gap-4">
-          <Button
-            empty
-            icon
-            onClick={() => setSidebarExpanded(!sidebarExpanded)}
-          >
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+        <header className="[grid-area:header] flex items-center gap-4"></header>
+        <main className="relative [grid-area:main] pr-1 pb-1 rounded-tl-2xl">
+          <div className={cn("absolute top-4 bg-bg-dark rounded-lg transition-all", {
+            '-left-4': sidebarExpanded,
+            'left-4': !sidebarExpanded,
+          })}>
+            <Button
+              empty
+              icon
+              onClick={() => setSidebarExpanded(!sidebarExpanded)}
             >
-              <rect
-                x="5"
-                y="5"
-                height="14"
-                rx="1.5"
-                fill="currentcolor"
-                className={cn("transition-all duration-100", {
-                  "w-[7.5px] group-hover/button:w-[3px]": sidebarExpanded,
-                  "w-[3px] group-hover/button:w-[7.5px]": !sidebarExpanded,
-                })}
-              />
-              <rect
-                x="3"
-                y="3"
-                width="18"
-                height="18"
-                rx="3"
-                stroke="currentcolor"
-                strokeWidth={2}
-              />
-            </svg>
-          </Button>
-        </header>
-        <main className="[grid-area:main] pr-1 pb-1 rounded-tl-2xl">
-        <div className="rounded-xl h-full bg-bg border border-border">
-          <Outlet />
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  x="5"
+                  y="5"
+                  height="14"
+                  rx="1.5"
+                  fill="currentcolor"
+                  className={cn("transition-all", {
+                    "w-[7.5px] group-hover/button:w-[3px]": sidebarExpanded,
+                    "w-[3px] group-hover/button:w-[7.5px]": !sidebarExpanded,
+                  })}
+                />
+                <rect
+                  x="3"
+                  y="3"
+                  width="18"
+                  height="18"
+                  rx="3"
+                  stroke="currentcolor"
+                  strokeWidth={2}
+                />
+              </svg>
+            </Button>
+          </div>
+          <div className="rounded-xl h-full bg-bg border border-border">
+            <Outlet />
           </div>
         </main>
       </div>

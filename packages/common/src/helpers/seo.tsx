@@ -35,10 +35,9 @@ export const SEO = (props: SEOProps) => {
 	return meta.map(tag => {
 		switch (tag.tag) {
 			case 'title':
-				return <title>{tag.content}</title>
+				return <title key='title'>{tag.content}</title>
 			default:
-				return <meta {...tag} />
+				return <meta key={tag.name} {...tag} />
 		}
 	})
-
 }

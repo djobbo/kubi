@@ -1,6 +1,7 @@
 import { cn } from "@/ui/lib/utils";
+import { Link, type LinkProps } from "@tanstack/react-router";
 import { cva, type VariantProps } from "class-variance-authority";
-import type { ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 
 const tabVariants = cva(
   cn(
@@ -22,13 +23,15 @@ const tabVariants = cva(
   }
 );
 
-type TabProps = React.ComponentProps<"a"> & VariantProps<typeof tabVariants>;
+type TabProps = LinkProps &
+  ComponentProps<"a"> &
+  VariantProps<typeof tabVariants>;
 
 export const Tab = ({ children, className, active, ...props }: TabProps) => {
   return (
-    <a className={cn(tabVariants({ active }), className)} {...props}>
+    <Link className={cn(tabVariants({ active }), className)} {...props}>
       {children}
-    </a>
+    </Link>
   );
 };
 
@@ -37,7 +40,7 @@ const cardVariants = cva("rounded-lg p-4", {
     variant: {
       default: "bg-bg shadow-lg",
       inset: "bg-bg-dark border border-border",
-      dashed: "border border-border border-dashed"
+      dashed: "border border-border border-dashed",
     },
   },
   defaultVariants: {
@@ -45,8 +48,7 @@ const cardVariants = cva("rounded-lg p-4", {
   },
 });
 
-type CardProps = React.ComponentProps<"div"> &
-  VariantProps<typeof cardVariants>;
+type CardProps = ComponentProps<"div"> & VariantProps<typeof cardVariants>;
 
 export const Card = ({ children, className, variant, ...props }: CardProps) => {
   return (
@@ -61,7 +63,8 @@ const buttonVariants = cva(
     "relative group/button cursor-pointer flex items-center justify-center rounded-lg text-text",
     "hover:bg-linear-to-b hover:from-(--button-color-light) hover:to-(--button-color-dark)",
     "active:from-(--button-color-dark) active:to-(--button-color) active:border-(--button-color-dark) active:border-b-(--button-color-dark)",
-    "after:content-[''] after:absolute after:inset-0 after:border after:border-(--button-color-light)/25 after:opacity-0 hover:after:opacity-100 hover:after:-inset-1.5 after:transition-all after:rounded-xl"
+    "after:content-[''] after:absolute after:inset-0 after:border after:border-(--button-color-light)/25 after:opacity-0 hover:after:opacity-100 hover:after:-inset-1.5 after:transition-all after:rounded-xl",
+    "transition-all"
   ),
   {
     variants: {
@@ -72,7 +75,7 @@ const buttonVariants = cva(
           "[--button-color:var(--secondary)] [--button-color-dark:var(--secondary-dark)] [--button-color-light:var(--secondary-light)]",
       },
       empty: {
-        true: "border border-border",
+        true: "",
         false:
           "shadow-sm bg-linear-to-b from-(--button-color) to-(--button-color-dark) border border-(--button-color) border-t-(--button-color-light)",
       },
@@ -96,7 +99,7 @@ const buttonVariants = cva(
   }
 );
 
-type ButtonProps = React.ComponentProps<"button"> &
+type ButtonProps = ComponentProps<"button"> &
   VariantProps<typeof buttonVariants>;
 
 export const Button = ({
@@ -118,7 +121,30 @@ export const Button = ({
   );
 };
 
-type StatsGridProps = React.ComponentProps<"div"> & {
+type LinkButtonProps = LinkProps &
+  ComponentProps<"a"> &
+  VariantProps<typeof buttonVariants>;
+
+export const LinkButton = ({
+  children,
+  className,
+  intent,
+  empty,
+  icon,
+  size,
+  ...props
+}: LinkButtonProps) => {
+  return (
+    <Link
+      className={cn(buttonVariants({ intent, empty, icon, size }), className)}
+      {...props}
+    >
+      {children}
+    </Link>
+  );
+};
+
+type StatsGridProps = ComponentProps<"div"> & {
   stats: { title: string; value: ReactNode; description?: string }[];
 };
 
@@ -167,7 +193,7 @@ const progressBarVariants = cva(
   }
 );
 
-type ProgressBarProps = React.ComponentProps<"div"> &
+type ProgressBarProps = ComponentProps<"div"> &
   VariantProps<typeof progressBarVariants> & {
     value: number;
     max: number;

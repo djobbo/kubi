@@ -9,8 +9,6 @@ import type { GetPreviewArticlesResponse } from "./schema";
 
 export const getPreviewArticles = () =>
   Effect.gen(function* () {
-    // TODO: const session = yield* Authorization.getSession();
-
     const articles = yield* BrawlhallaGql.getArticles({
       withContent: false,
       first: 3,

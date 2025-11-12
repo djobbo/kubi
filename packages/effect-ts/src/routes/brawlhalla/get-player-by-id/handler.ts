@@ -15,7 +15,7 @@ import { calculateWinrate } from "@dair/brawlhalla-api/src/helpers/winrate";
 import { Effect } from "effect";
 import * as Archive from "../../../services/archive";
 import { BrawlhallaApi } from "../../../services/brawlhalla-api";
-
+import { sluggify } from "@dair/common/src/helpers/sluggify";
 import { cleanString } from "@dair/common/src/helpers/clean-string";
 import { Authorization } from "../../../services/authorization";
 import type {
@@ -34,6 +34,10 @@ import {
   NotFound,
   ServiceUnavailable,
 } from "@effect/platform/HttpApiError";
+
+const getEntitySlug = (id: number, name: string) => {
+  return `${id}-${sluggify(name).slice(0, 24)}`;
+};
 
 export const getPlayerById = (playerId: number) =>
   Effect.gen(function* () {
@@ -251,6 +255,7 @@ export const getPlayerById = (playerId: number) =>
     const playerData: typeof Player.Type = {
       id: brawlhallaId,
       name,
+      slug: getEntitySlug(brawlhallaId, name),
       aliases: aliasesData,
       stats: {
         xp: playerStats.data.xp,

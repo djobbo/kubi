@@ -11,6 +11,7 @@ export const Route = createFileRoute(
   "/_sidenav/brawlhalla/players/$playerId/$"
 )({
   component: RouteComponent,
+  staleTime: 5 * 60 * 1000,
 });
 
 function RouteComponent() {

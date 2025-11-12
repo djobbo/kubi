@@ -189,6 +189,7 @@ const PlayerLegend = Schema.Struct({
 export const Player = Schema.Struct({
 	id: Schema.Number,
 	name: Schema.String,
+	slug: Schema.String,
 	aliases: PlayerAliases,
 	stats: PlayerStats,
 	ranked: Schema.NullOr(PlayerRanked),

@@ -1,7 +1,6 @@
 import { useBookmark } from "@/features/bookmarks/hooks/use-bookmark";
 import { LegendIcon, WeaponIcon } from "@/features/brawlhalla/components/Image";
 import type { MiscStat } from "@/features/brawlhalla/components/stats/MiscStatGroup";
-import { sluggify } from "@/helpers/sluggify";
 import { Avatar, AvatarFallback, AvatarImage } from "@/ui/components/avatar";
 import { Badge } from "@/ui/components/badge";
 import { Button } from "@/ui/components/button";
@@ -16,6 +15,7 @@ import { t } from "@lingui/core/macro";
 import { Schema, Effect } from "effect";
 import { Outlet, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { BookmarkCheckIcon, BookmarkPlusIcon, ShareIcon } from "lucide-react";
+import { sluggify } from "@dair/common/src/helpers/sluggify";
 
 const playerIdRegex = /(^\d+).*/;
 /**

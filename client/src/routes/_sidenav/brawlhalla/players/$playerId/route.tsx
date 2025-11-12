@@ -1,8 +1,6 @@
-import { sluggify } from "@/helpers/sluggify";
 import { SEO } from "@dair/common/src/helpers/seo";
 import {
   createFileRoute,
-  Link,
   notFound,
   useLocation,
 } from "@tanstack/react-router";
@@ -14,6 +12,8 @@ import { AtomHttpApi, Result, useAtomValue } from "@effect-atom/atom-react";
 import { Api } from "@dair/effect-ts/src/api";
 import { FetchHttpClient } from "@effect/platform";
 import { env } from "@/env";
+import { sidebarExpandedAtom } from "@/routes/_sidenav/route";
+import { cn } from "@/ui/lib/utils";
 
 export class ApiClient extends AtomHttpApi.Tag<ApiClient>()("ApiClient", {
   api: Api,
@@ -39,14 +39,16 @@ const PlayerIdParamSchema = Schema.transform(
     strict: true,
     decode: (input) => {
       const match = input.match(playerIdRegex);
-      if (!match) return null;
+      const parsed = match?.[1];
+      if (!parsed) return null;
 
-      const parsed = parseInt(match[1], 10);
-      if (isNaN(parsed)) return null;
-
-      return parsed;
+      try {
+        return parseInt(parsed, 10);
+      } catch (error) {
+        return null;
+      }
     },
-    encode: (input) => input?.toString() ?? "",
+    encode: (input) => (input ?? "").toString(),
   }
 );
 
@@ -54,10 +56,12 @@ const ParamsSchema = Schema.Struct({
   playerId: PlayerIdParamSchema,
 });
 
+const decodeParams = Schema.decodePromise(ParamsSchema);
+
 export const Route = createFileRoute("/_sidenav/brawlhalla/players/$playerId")({
   component: RouteComponent,
   async loader({ params }) {
-    const { playerId } = await Schema.decodePromise(ParamsSchema)(params);
+    const { playerId } = await decodeParams(params);
 
     if (!playerId) {
       throw notFound();
@@ -70,13 +74,10 @@ export const Route = createFileRoute("/_sidenav/brawlhalla/players/$playerId")({
   staleTime: 5 * 60 * 1000,
 });
 
-const getPlayerSlug = (playerId: number, playerName: string) => {
-  return `${playerId}-${sluggify(playerName).slice(0, 24)}`;
-};
-
 function RouteComponent() {
   const { playerId } = Route.useLoaderData();
   const { pathname } = useLocation();
+  const sidebarExpanded = useAtomValue(sidebarExpandedAtom);
   const playerDataResult = useAtomValue(
     ApiClient.query("brawlhalla", "get-player-by-id", {
       path: { id: playerId },
@@ -85,11 +86,9 @@ function RouteComponent() {
   );
 
   return Result.builder(playerDataResult)
-  .onInitialOrWaiting(() => {
-    return <div className="px-8 pt-4 flex flex-col gap-2">
-      Loading...
-    </div>
-  })
+    .onInitialOrWaiting(() => {
+      return <div className="px-8 pt-4 flex flex-col gap-2">Loading...</div>;
+    })
     .onSuccess(({ data: playerData }) => {
       const selectedTabIndex = pathname
         .split("/")
@@ -105,8 +104,13 @@ function RouteComponent() {
             title={`${name} - Player Stats • Corehalla`}
             description={`${name} - Brawlhalla Player Stats • Corehalla`}
           />
-          <div className="px-8 pt-4 flex flex-col gap-2">
-            <div>
+          <div className="px-4 pt-4 flex flex-col gap-2">
+            <div
+              className={cn("transition-all mt-2", {
+                "pl-2": sidebarExpanded,
+                "pl-10": !sidebarExpanded,
+              })}
+            >
               <div className="flex items-center gap-2 uppercase text-text-muted text-xs">
                 <span>brawlhalla</span>
                 {"/"}
@@ -119,7 +123,7 @@ function RouteComponent() {
               <img
                 src="/assets/images/brand/logos/logo-256x256.png"
                 alt={name}
-                className="w-6 h-6 rounded-lg border border-border"
+                className="w-8 h-8 rounded-lg border border-border"
               />
               <h1 className="text-3xl font-semibold">{name}</h1>
             </div>
@@ -156,28 +160,31 @@ function RouteComponent() {
             <nav>
               <ul className="flex">
                 <li>
-                  <Link
+                  <Tab
+                    active={selectedTab === "overview"}
                     to="/brawlhalla/players/$playerId/overview"
-                    params={{ playerId }}
+                    params={{ playerId: playerData.slug }}
                   >
-                    <Tab active={selectedTab === "overview"}>Overview</Tab>
-                  </Link>
+                    Overview
+                  </Tab>
                 </li>
                 <li>
-                  <Link
+                  <Tab
+                    active={selectedTab === "2v2"}
                     to="/brawlhalla/players/$playerId/2v2"
-                    params={{ playerId }}
+                    params={{ playerId: playerData.slug }}
                   >
-                    <Tab active={selectedTab === "2v2"}>2v2</Tab>
-                  </Link>
+                    2v2
+                  </Tab>
                 </li>
                 <li>
-                  <Link
+                  <Tab
+                    active={selectedTab === "legends"}
                     to="/brawlhalla/players/$playerId/legends"
-                    params={{ playerId }}
+                    params={{ playerId: playerData.slug }}
                   >
-                    <Tab active={selectedTab === "legends"}>Legends</Tab>
-                  </Link>
+                    Legends
+                  </Tab>
                 </li>
               </ul>
             </nav>
