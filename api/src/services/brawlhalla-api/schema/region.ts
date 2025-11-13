@@ -2,7 +2,7 @@ import {
 	Region,
 	isValidRegion,
 	regions,
-} from "@dair/api-contract/src/common/region"
+} from "@dair/api-contract/src/shared/region"
 import { Schema } from "effect"
 
 /**

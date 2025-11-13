@@ -14,7 +14,7 @@ import {
 	ServiceUnavailable,
 	Unauthorized,
 } from "@effect/platform/HttpApiError"
-import { AnyRegion } from "./common/region"
+import { AnyRegion } from "./shared/region"
 import { DeleteSessionResponse } from "./routes/v1/auth/delete-session"
 import { GetSessionResponse } from "./routes/v1/auth/get-session"
 import { State } from "./routes/v1/auth/providers/callback"

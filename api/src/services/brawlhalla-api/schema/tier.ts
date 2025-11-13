@@ -1,4 +1,4 @@
-import { Tier, isValidTier } from "@dair/api-contract/src/common/tier"
+import { Tier, isValidTier } from "@dair/api-contract/src/shared/tier"
 import { Schema } from "effect"
 
 /**

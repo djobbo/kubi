@@ -1,7 +1,7 @@
 import { BrawlhallaApi } from "@/services/brawlhalla-api"
 import { Effect } from "effect"
 
-import type { AnyRegion } from "@dair/api-contract/src/common/region"
+import type { AnyRegion } from "@dair/api-contract/src/shared/region"
 import type {
 	GetRankings1v1Response,
 	GetRankings2v2Response,

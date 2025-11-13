@@ -1,6 +1,6 @@
 import { Schema } from "effect"
-import { Region } from "../../../common/region"
-import { Tier } from "../../../common/tier"
+import { Region } from "../../../shared/region"
+import { Tier } from "../../../shared/tier"
 
 const Ranking = Schema.Struct({
 	rank: Schema.Number,
