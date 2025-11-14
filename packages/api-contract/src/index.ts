@@ -11,14 +11,14 @@ import {
 	BadRequest,
 	InternalServerError,
 	NotFound,
-	ServiceUnavailable,
 	Unauthorized,
-} from "@effect/platform/HttpApiError"
+	TooManyRequests,
+} from "./shared/errors"
 import { AnyRegion } from "./shared/region"
 import { DeleteSessionResponse } from "./routes/v1/auth/delete-session"
 import { GetSessionResponse } from "./routes/v1/auth/get-session"
 import { State } from "./routes/v1/auth/providers/callback"
-import { GetClanByIdResponse } from "./routes/v1/brawlhalla/get-clan-by-id"
+import { GetClanByIdResponse } from "./routes/v1/brawlhalla/get-guild-by-id"
 import { GetPlayerByIdResponse } from "./routes/v1/brawlhalla/get-player-by-id"
 import { GetPreviewArticlesResponse } from "./routes/v1/brawlhalla/get-preview-articles"
 import {
@@ -46,16 +46,16 @@ class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
 	.add(
 		HttpApiEndpoint.get("get-player-by-id")`/players/${idParam}`
 			.addSuccess(GetPlayerByIdResponse)
-			.addError(NotFound, { status: 404 })
-			.addError(ServiceUnavailable, { status: 429 })
-			.addError(InternalServerError, { status: 500 }),
+			.addError(NotFound)
+			.addError(TooManyRequests)
+			.addError(InternalServerError),
 	)
 	.add(
-		HttpApiEndpoint.get("get-clan-by-id")`/clans/${idParam}`
+		HttpApiEndpoint.get("get-guild-by-id")`/guilds/${idParam}`
 			.addSuccess(GetClanByIdResponse)
-			.addError(NotFound, { status: 404 })
-			.addError(ServiceUnavailable, { status: 429 })
-			.addError(InternalServerError, { status: 500 }),
+			.addError(NotFound)
+			.addError(TooManyRequests)
+			.addError(InternalServerError),
 	)
 	.add(
 		HttpApiEndpoint.get(
@@ -67,32 +67,32 @@ class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
 					name: Schema.String.pipe(Schema.optional),
 				}),
 			)
-			.addError(NotFound, { status: 404 })
-			.addError(ServiceUnavailable, { status: 429 })
-			.addError(InternalServerError, { status: 500 }),
+			.addError(NotFound)
+			.addError(TooManyRequests)
+			.addError(InternalServerError),
 	)
 	.add(
 		HttpApiEndpoint.get(
 			"get-rankings-2v2",
 		)`/rankings/2v2/${regionParam}/${pageParam}`
 			.addSuccess(GetRankings2v2Response)
-			.addError(NotFound, { status: 404 })
-			.addError(ServiceUnavailable, { status: 429 })
-			.addError(InternalServerError, { status: 500 }),
+			.addError(NotFound)
+			.addError(TooManyRequests)
+			.addError(InternalServerError),
 	)
 	.add(
 		HttpApiEndpoint.get("get-preview-articles")`/articles/preview`
 			.addSuccess(GetPreviewArticlesResponse)
-			.addError(NotFound, { status: 404 })
-			.addError(ServiceUnavailable, { status: 429 })
-			.addError(InternalServerError, { status: 500 }),
+			.addError(NotFound)
+			.addError(TooManyRequests)
+			.addError(InternalServerError),
 	)
 	.add(
 		HttpApiEndpoint.get("get-weekly-rotation")`/weekly-rotation`
 			.addSuccess(GetWeeklyRotationResponse)
-			.addError(NotFound, { status: 404 })
-			.addError(ServiceUnavailable, { status: 429 })
-			.addError(InternalServerError, { status: 500 }),
+			.addError(NotFound)
+			.addError(TooManyRequests)
+			.addError(InternalServerError),
 	) {}
 
 class AuthGroup extends HttpApiGroup.make("auth")

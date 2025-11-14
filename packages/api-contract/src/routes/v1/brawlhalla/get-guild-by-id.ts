@@ -4,7 +4,7 @@ const Bookmark = Schema.Struct({
 	// TODO: Add bookmark schema
 })
 
-const ClanMember = Schema.Struct({
+const GuildMember = Schema.Struct({
 	id: Schema.Number,
 	name: Schema.String,
 	rank: Schema.String,
@@ -17,7 +17,7 @@ export const Clan = Schema.Struct({
 	name: Schema.String,
 	created_at: Schema.Number,
 	xp: Schema.Number,
-	members: Schema.Array(ClanMember),
+	members: Schema.Array(GuildMember),
 	bookmark: Schema.NullOr(Bookmark),
 })
 

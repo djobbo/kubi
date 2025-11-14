@@ -3,8 +3,8 @@ import type { GetWeeklyRotationResponse } from "@dair/api-contract/src/routes/v1
 import {
 	InternalServerError,
 	NotFound,
-	ServiceUnavailable,
-} from "@effect/platform/HttpApiError"
+	TooManyRequests,
+} from "@dair/api-contract/src/shared/errors"
 import { Effect } from "effect"
 
 export const getWeeklyRotation = () =>
@@ -29,7 +29,7 @@ export const getWeeklyRotation = () =>
 					case 404:
 						return yield* Effect.fail(new NotFound())
 					case 429:
-						return yield* Effect.fail(new ServiceUnavailable())
+						return yield* Effect.fail(new TooManyRequests())
 					default:
 						return yield* Effect.fail(new InternalServerError())
 				}

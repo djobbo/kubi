@@ -7,7 +7,7 @@ import { deleteSession } from "./routes/v1/auth/delete-session"
 import { getSession } from "./routes/v1/auth/get-session"
 import { authorize } from "./routes/v1/auth/providers/authorize"
 import { providerCallback } from "./routes/v1/auth/providers/callback"
-import { getClanById } from "./routes/v1/brawlhalla/get-clan-by-id"
+import { getGuildById } from "./routes/v1/brawlhalla/get-guild-by-id"
 import { getPlayerById } from "./routes/v1/brawlhalla/get-player-by-id"
 import { getPreviewArticles } from "./routes/v1/brawlhalla/get-preview-articles"
 import {
@@ -28,7 +28,7 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
 				return yield* getPlayerById(path.id)
 			}),
 		)
-		.handle("get-clan-by-id", ({ path }) => getClanById(path.id))
+		.handle("get-guild-by-id", ({ path }) => getGuildById(path.id))
 		.handle("get-rankings-1v1", ({ path, urlParams }) =>
 			getRankings1v1(path.region, path.page, urlParams.name),
 		)

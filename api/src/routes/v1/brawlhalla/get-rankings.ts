@@ -15,8 +15,8 @@ import { getTeamPlayers } from "@dair/brawlhalla-api/src/helpers/team-players"
 import {
 	InternalServerError,
 	NotFound,
-	ServiceUnavailable,
-} from "@effect/platform/HttpApiError"
+	TooManyRequests,
+} from "@dair/api-contract/src/shared/errors"
 
 export const getRankings1v1 = (
 	region: typeof AnyRegion.Type,
@@ -77,7 +77,7 @@ export const getRankings1v1 = (
 					case 404:
 						return yield* Effect.fail(new NotFound())
 					case 429:
-						return yield* Effect.fail(new ServiceUnavailable())
+						return yield* Effect.fail(new TooManyRequests())
 					default:
 						return yield* Effect.fail(new InternalServerError())
 				}
@@ -135,7 +135,7 @@ export const getRankings2v2 = (region: typeof AnyRegion.Type, page: number) =>
 					case 404:
 						return yield* Effect.fail(new NotFound())
 					case 429:
-						return yield* Effect.fail(new ServiceUnavailable())
+						return yield* Effect.fail(new TooManyRequests())
 					default:
 						return yield* Effect.fail(new InternalServerError())
 				}

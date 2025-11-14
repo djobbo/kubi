@@ -31,8 +31,8 @@ import { sluggify } from "@dair/common/src/helpers/sluggify"
 import {
 	InternalServerError,
 	NotFound,
-	ServiceUnavailable,
-} from "@effect/platform/HttpApiError"
+	TooManyRequests,
+} from "@dair/api-contract/src/shared/errors"
 import { Effect } from "effect"
 
 const getEntitySlug = (id: number, name: string) => {
@@ -295,7 +295,7 @@ export const getPlayerById = (playerId: number) =>
 					case 404:
 						return yield* Effect.fail(new NotFound())
 					case 429:
-						return yield* Effect.fail(new ServiceUnavailable())
+						return yield* Effect.fail(new TooManyRequests())
 					default:
 						return yield* Effect.fail(new InternalServerError())
 				}
