@@ -10,6 +10,9 @@
 		"typescript": "^5"
 	},
 	"dependencies": {
-		"dayjs": "^1.11.18"
+		"class-variance-authority": "^0.7.1",
+		"clsx": "^2.1.1",
+		"dayjs": "^1.11.18",
+		"tailwind-merge": "^3.4.0"
 	}
 }

@@ -1,10 +1,12 @@
 import type { LinguiConfig } from "@lingui/conf"
 
-enum Locales {
-	EN = "en",
-	FR = "fr",
-	Pseudo = "pseudo",
-}
+const Locales  = {
+	EN: "en",
+	FR: "fr",
+	Pseudo: "pseudo",
+} as const
+
+export type Locale = (typeof Locales)[keyof typeof Locales]
 
 const config = {
 	locales: [Locales.EN, Locales.FR, Locales.Pseudo],
@@ -15,7 +17,7 @@ const config = {
 	},
 	catalogs: [
 		{
-			path: "<rootDir>/src/locales/{locale}/messages",
+			path: "<rootDir>/src/features/locales/{locale}/messages",
 			include: ["src"],
 		},
 	],

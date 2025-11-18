@@ -1,4 +1,4 @@
-import { Tier, isValidTier } from "@dair/api-contract/src/shared/tier"
+import { TierNameSchema, isValidTier } from "@dair/api-contract/src/shared/tier"
 import { Schema } from "effect"
 
 /**
@@ -6,7 +6,7 @@ import { Schema } from "effect"
  */
 export const BrawlhallaApiTier = Schema.transform(
 	Schema.NullOr(Schema.NonEmptyTrimmedString),
-	Tier,
+	TierNameSchema,
 	{
 		strict: true,
 		decode: (input) => {

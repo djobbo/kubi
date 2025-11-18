@@ -9,357 +9,118 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as UiRouteImport } from './routes/ui'
-import { Route as SidenavLayoutRouteRouteImport } from './routes/sidenav-layout/route'
-import { Route as SidenavRouteRouteImport } from './routes/_sidenav/route'
-import { Route as SidenavLayoutIndexRouteImport } from './routes/sidenav-layout/index'
-import { Route as SidenavIndexRouteImport } from './routes/_sidenav/index'
-import { Route as SidenavLayoutPlayersPlayerIdRouteImport } from './routes/sidenav-layout/players/$playerId'
-import { Route as SidenavLayoutPlayersPlayerIdWeaponsRouteImport } from './routes/sidenav-layout/players/$playerId.weapons'
-import { Route as SidenavLayoutPlayersPlayerIdLegendsRouteImport } from './routes/sidenav-layout/players/$playerId.legends'
-import { Route as SidenavLayoutPlayersPlayerId2v2RouteImport } from './routes/sidenav-layout/players/$playerId.2v2'
-import { Route as SidenavLayoutPlayersPlayerIdSplatRouteImport } from './routes/sidenav-layout/players/$playerId.$'
-import { Route as SidenavBrawlhallaPlayersPlayerIdRouteRouteImport } from './routes/_sidenav/brawlhalla/players/$playerId/route'
-import { Route as SidenavBrawlhallaPlayersPlayerId2v2RouteImport } from './routes/_sidenav/brawlhalla/players/$playerId/2v2'
-import { Route as SidenavBrawlhallaPlayersPlayerIdSplatRouteImport } from './routes/_sidenav/brawlhalla/players/$playerId/$'
+import { Route as Char123LocaleChar125RouteRouteImport } from './routes/{-$locale}/route'
+import { Route as Char123LocaleChar125SidebarLayoutRouteRouteImport } from './routes/{-$locale}/_sidebar-layout/route'
+import { Route as Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRouteImport } from './routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/route'
 
-const UiRoute = UiRouteImport.update({
-  id: '/ui',
-  path: '/ui',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SidenavLayoutRouteRoute = SidenavLayoutRouteRouteImport.update({
-  id: '/sidenav-layout',
-  path: '/sidenav-layout',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SidenavRouteRoute = SidenavRouteRouteImport.update({
-  id: '/_sidenav',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SidenavLayoutIndexRoute = SidenavLayoutIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => SidenavLayoutRouteRoute,
-} as any)
-const SidenavIndexRoute = SidenavIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => SidenavRouteRoute,
-} as any)
-const SidenavLayoutPlayersPlayerIdRoute =
-  SidenavLayoutPlayersPlayerIdRouteImport.update({
-    id: '/players/$playerId',
-    path: '/players/$playerId',
-    getParentRoute: () => SidenavLayoutRouteRoute,
+const Char123LocaleChar125RouteRoute =
+  Char123LocaleChar125RouteRouteImport.update({
+    id: '/{-$locale}',
+    path: '/{-$locale}',
+    getParentRoute: () => rootRouteImport,
   } as any)
-const SidenavLayoutPlayersPlayerIdWeaponsRoute =
-  SidenavLayoutPlayersPlayerIdWeaponsRouteImport.update({
-    id: '/weapons',
-    path: '/weapons',
-    getParentRoute: () => SidenavLayoutPlayersPlayerIdRoute,
+const Char123LocaleChar125SidebarLayoutRouteRoute =
+  Char123LocaleChar125SidebarLayoutRouteRouteImport.update({
+    id: '/_sidebar-layout',
+    getParentRoute: () => Char123LocaleChar125RouteRoute,
   } as any)
-const SidenavLayoutPlayersPlayerIdLegendsRoute =
-  SidenavLayoutPlayersPlayerIdLegendsRouteImport.update({
-    id: '/legends',
-    path: '/legends',
-    getParentRoute: () => SidenavLayoutPlayersPlayerIdRoute,
-  } as any)
-const SidenavLayoutPlayersPlayerId2v2Route =
-  SidenavLayoutPlayersPlayerId2v2RouteImport.update({
-    id: '/2v2',
-    path: '/2v2',
-    getParentRoute: () => SidenavLayoutPlayersPlayerIdRoute,
-  } as any)
-const SidenavLayoutPlayersPlayerIdSplatRoute =
-  SidenavLayoutPlayersPlayerIdSplatRouteImport.update({
-    id: '/$',
-    path: '/$',
-    getParentRoute: () => SidenavLayoutPlayersPlayerIdRoute,
-  } as any)
-const SidenavBrawlhallaPlayersPlayerIdRouteRoute =
-  SidenavBrawlhallaPlayersPlayerIdRouteRouteImport.update({
-    id: '/brawlhalla/players/$playerId',
-    path: '/brawlhalla/players/$playerId',
-    getParentRoute: () => SidenavRouteRoute,
-  } as any)
-const SidenavBrawlhallaPlayersPlayerId2v2Route =
-  SidenavBrawlhallaPlayersPlayerId2v2RouteImport.update({
-    id: '/2v2',
-    path: '/2v2',
-    getParentRoute: () => SidenavBrawlhallaPlayersPlayerIdRouteRoute,
-  } as any)
-const SidenavBrawlhallaPlayersPlayerIdSplatRoute =
-  SidenavBrawlhallaPlayersPlayerIdSplatRouteImport.update({
-    id: '/$',
-    path: '/$',
-    getParentRoute: () => SidenavBrawlhallaPlayersPlayerIdRouteRoute,
-  } as any)
+const Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute =
+  Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRouteImport.update(
+    {
+      id: '/brawlhalla/players/$playerId/{-$tab}',
+      path: '/brawlhalla/players/$playerId/{-$tab}',
+      getParentRoute: () => Char123LocaleChar125SidebarLayoutRouteRoute,
+    } as any,
+  )
 
 export interface FileRoutesByFullPath {
-  '/sidenav-layout': typeof SidenavLayoutRouteRouteWithChildren
-  '/ui': typeof UiRoute
-  '/': typeof SidenavIndexRoute
-  '/sidenav-layout/': typeof SidenavLayoutIndexRoute
-  '/sidenav-layout/players/$playerId': typeof SidenavLayoutPlayersPlayerIdRouteWithChildren
-  '/brawlhalla/players/$playerId': typeof SidenavBrawlhallaPlayersPlayerIdRouteRouteWithChildren
-  '/sidenav-layout/players/$playerId/$': typeof SidenavLayoutPlayersPlayerIdSplatRoute
-  '/sidenav-layout/players/$playerId/2v2': typeof SidenavLayoutPlayersPlayerId2v2Route
-  '/sidenav-layout/players/$playerId/legends': typeof SidenavLayoutPlayersPlayerIdLegendsRoute
-  '/sidenav-layout/players/$playerId/weapons': typeof SidenavLayoutPlayersPlayerIdWeaponsRoute
-  '/brawlhalla/players/$playerId/$': typeof SidenavBrawlhallaPlayersPlayerIdSplatRoute
-  '/brawlhalla/players/$playerId/2v2': typeof SidenavBrawlhallaPlayersPlayerId2v2Route
+  '/{-$locale}': typeof Char123LocaleChar125SidebarLayoutRouteRouteWithChildren
+  '/{-$locale}/brawlhalla/players/$playerId/{-$tab}': typeof Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute
 }
 export interface FileRoutesByTo {
-  '/ui': typeof UiRoute
-  '/': typeof SidenavIndexRoute
-  '/sidenav-layout': typeof SidenavLayoutIndexRoute
-  '/sidenav-layout/players/$playerId': typeof SidenavLayoutPlayersPlayerIdRouteWithChildren
-  '/brawlhalla/players/$playerId': typeof SidenavBrawlhallaPlayersPlayerIdRouteRouteWithChildren
-  '/sidenav-layout/players/$playerId/$': typeof SidenavLayoutPlayersPlayerIdSplatRoute
-  '/sidenav-layout/players/$playerId/2v2': typeof SidenavLayoutPlayersPlayerId2v2Route
-  '/sidenav-layout/players/$playerId/legends': typeof SidenavLayoutPlayersPlayerIdLegendsRoute
-  '/sidenav-layout/players/$playerId/weapons': typeof SidenavLayoutPlayersPlayerIdWeaponsRoute
-  '/brawlhalla/players/$playerId/$': typeof SidenavBrawlhallaPlayersPlayerIdSplatRoute
-  '/brawlhalla/players/$playerId/2v2': typeof SidenavBrawlhallaPlayersPlayerId2v2Route
+  '/{-$locale}': typeof Char123LocaleChar125SidebarLayoutRouteRouteWithChildren
+  '/{-$locale}/brawlhalla/players/$playerId/{-$tab}': typeof Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/_sidenav': typeof SidenavRouteRouteWithChildren
-  '/sidenav-layout': typeof SidenavLayoutRouteRouteWithChildren
-  '/ui': typeof UiRoute
-  '/_sidenav/': typeof SidenavIndexRoute
-  '/sidenav-layout/': typeof SidenavLayoutIndexRoute
-  '/sidenav-layout/players/$playerId': typeof SidenavLayoutPlayersPlayerIdRouteWithChildren
-  '/_sidenav/brawlhalla/players/$playerId': typeof SidenavBrawlhallaPlayersPlayerIdRouteRouteWithChildren
-  '/sidenav-layout/players/$playerId/$': typeof SidenavLayoutPlayersPlayerIdSplatRoute
-  '/sidenav-layout/players/$playerId/2v2': typeof SidenavLayoutPlayersPlayerId2v2Route
-  '/sidenav-layout/players/$playerId/legends': typeof SidenavLayoutPlayersPlayerIdLegendsRoute
-  '/sidenav-layout/players/$playerId/weapons': typeof SidenavLayoutPlayersPlayerIdWeaponsRoute
-  '/_sidenav/brawlhalla/players/$playerId/$': typeof SidenavBrawlhallaPlayersPlayerIdSplatRoute
-  '/_sidenav/brawlhalla/players/$playerId/2v2': typeof SidenavBrawlhallaPlayersPlayerId2v2Route
+  '/{-$locale}': typeof Char123LocaleChar125RouteRouteWithChildren
+  '/{-$locale}/_sidebar-layout': typeof Char123LocaleChar125SidebarLayoutRouteRouteWithChildren
+  '/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}': typeof Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/sidenav-layout'
-    | '/ui'
-    | '/'
-    | '/sidenav-layout/'
-    | '/sidenav-layout/players/$playerId'
-    | '/brawlhalla/players/$playerId'
-    | '/sidenav-layout/players/$playerId/$'
-    | '/sidenav-layout/players/$playerId/2v2'
-    | '/sidenav-layout/players/$playerId/legends'
-    | '/sidenav-layout/players/$playerId/weapons'
-    | '/brawlhalla/players/$playerId/$'
-    | '/brawlhalla/players/$playerId/2v2'
+  fullPaths: '/{-$locale}' | '/{-$locale}/brawlhalla/players/$playerId/{-$tab}'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/ui'
-    | '/'
-    | '/sidenav-layout'
-    | '/sidenav-layout/players/$playerId'
-    | '/brawlhalla/players/$playerId'
-    | '/sidenav-layout/players/$playerId/$'
-    | '/sidenav-layout/players/$playerId/2v2'
-    | '/sidenav-layout/players/$playerId/legends'
-    | '/sidenav-layout/players/$playerId/weapons'
-    | '/brawlhalla/players/$playerId/$'
-    | '/brawlhalla/players/$playerId/2v2'
+  to: '/{-$locale}' | '/{-$locale}/brawlhalla/players/$playerId/{-$tab}'
   id:
     | '__root__'
-    | '/_sidenav'
-    | '/sidenav-layout'
-    | '/ui'
-    | '/_sidenav/'
-    | '/sidenav-layout/'
-    | '/sidenav-layout/players/$playerId'
-    | '/_sidenav/brawlhalla/players/$playerId'
-    | '/sidenav-layout/players/$playerId/$'
-    | '/sidenav-layout/players/$playerId/2v2'
-    | '/sidenav-layout/players/$playerId/legends'
-    | '/sidenav-layout/players/$playerId/weapons'
-    | '/_sidenav/brawlhalla/players/$playerId/$'
-    | '/_sidenav/brawlhalla/players/$playerId/2v2'
+    | '/{-$locale}'
+    | '/{-$locale}/_sidebar-layout'
+    | '/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  SidenavRouteRoute: typeof SidenavRouteRouteWithChildren
-  SidenavLayoutRouteRoute: typeof SidenavLayoutRouteRouteWithChildren
-  UiRoute: typeof UiRoute
+  Char123LocaleChar125RouteRoute: typeof Char123LocaleChar125RouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/ui': {
-      id: '/ui'
-      path: '/ui'
-      fullPath: '/ui'
-      preLoaderRoute: typeof UiRouteImport
+    '/{-$locale}': {
+      id: '/{-$locale}'
+      path: '/{-$locale}'
+      fullPath: '/{-$locale}'
+      preLoaderRoute: typeof Char123LocaleChar125RouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sidenav-layout': {
-      id: '/sidenav-layout'
-      path: '/sidenav-layout'
-      fullPath: '/sidenav-layout'
-      preLoaderRoute: typeof SidenavLayoutRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_sidenav': {
-      id: '/_sidenav'
+    '/{-$locale}/_sidebar-layout': {
+      id: '/{-$locale}/_sidebar-layout'
       path: ''
-      fullPath: ''
-      preLoaderRoute: typeof SidenavRouteRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/{-$locale}'
+      preLoaderRoute: typeof Char123LocaleChar125SidebarLayoutRouteRouteImport
+      parentRoute: typeof Char123LocaleChar125RouteRoute
     }
-    '/sidenav-layout/': {
-      id: '/sidenav-layout/'
-      path: '/'
-      fullPath: '/sidenav-layout/'
-      preLoaderRoute: typeof SidenavLayoutIndexRouteImport
-      parentRoute: typeof SidenavLayoutRouteRoute
-    }
-    '/_sidenav/': {
-      id: '/_sidenav/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof SidenavIndexRouteImport
-      parentRoute: typeof SidenavRouteRoute
-    }
-    '/sidenav-layout/players/$playerId': {
-      id: '/sidenav-layout/players/$playerId'
-      path: '/players/$playerId'
-      fullPath: '/sidenav-layout/players/$playerId'
-      preLoaderRoute: typeof SidenavLayoutPlayersPlayerIdRouteImport
-      parentRoute: typeof SidenavLayoutRouteRoute
-    }
-    '/sidenav-layout/players/$playerId/weapons': {
-      id: '/sidenav-layout/players/$playerId/weapons'
-      path: '/weapons'
-      fullPath: '/sidenav-layout/players/$playerId/weapons'
-      preLoaderRoute: typeof SidenavLayoutPlayersPlayerIdWeaponsRouteImport
-      parentRoute: typeof SidenavLayoutPlayersPlayerIdRoute
-    }
-    '/sidenav-layout/players/$playerId/legends': {
-      id: '/sidenav-layout/players/$playerId/legends'
-      path: '/legends'
-      fullPath: '/sidenav-layout/players/$playerId/legends'
-      preLoaderRoute: typeof SidenavLayoutPlayersPlayerIdLegendsRouteImport
-      parentRoute: typeof SidenavLayoutPlayersPlayerIdRoute
-    }
-    '/sidenav-layout/players/$playerId/2v2': {
-      id: '/sidenav-layout/players/$playerId/2v2'
-      path: '/2v2'
-      fullPath: '/sidenav-layout/players/$playerId/2v2'
-      preLoaderRoute: typeof SidenavLayoutPlayersPlayerId2v2RouteImport
-      parentRoute: typeof SidenavLayoutPlayersPlayerIdRoute
-    }
-    '/sidenav-layout/players/$playerId/$': {
-      id: '/sidenav-layout/players/$playerId/$'
-      path: '/$'
-      fullPath: '/sidenav-layout/players/$playerId/$'
-      preLoaderRoute: typeof SidenavLayoutPlayersPlayerIdSplatRouteImport
-      parentRoute: typeof SidenavLayoutPlayersPlayerIdRoute
-    }
-    '/_sidenav/brawlhalla/players/$playerId': {
-      id: '/_sidenav/brawlhalla/players/$playerId'
-      path: '/brawlhalla/players/$playerId'
-      fullPath: '/brawlhalla/players/$playerId'
-      preLoaderRoute: typeof SidenavBrawlhallaPlayersPlayerIdRouteRouteImport
-      parentRoute: typeof SidenavRouteRoute
-    }
-    '/_sidenav/brawlhalla/players/$playerId/2v2': {
-      id: '/_sidenav/brawlhalla/players/$playerId/2v2'
-      path: '/2v2'
-      fullPath: '/brawlhalla/players/$playerId/2v2'
-      preLoaderRoute: typeof SidenavBrawlhallaPlayersPlayerId2v2RouteImport
-      parentRoute: typeof SidenavBrawlhallaPlayersPlayerIdRouteRoute
-    }
-    '/_sidenav/brawlhalla/players/$playerId/$': {
-      id: '/_sidenav/brawlhalla/players/$playerId/$'
-      path: '/$'
-      fullPath: '/brawlhalla/players/$playerId/$'
-      preLoaderRoute: typeof SidenavBrawlhallaPlayersPlayerIdSplatRouteImport
-      parentRoute: typeof SidenavBrawlhallaPlayersPlayerIdRouteRoute
+    '/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}': {
+      id: '/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}'
+      path: '/brawlhalla/players/$playerId/{-$tab}'
+      fullPath: '/{-$locale}/brawlhalla/players/$playerId/{-$tab}'
+      preLoaderRoute: typeof Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRouteImport
+      parentRoute: typeof Char123LocaleChar125SidebarLayoutRouteRoute
     }
   }
 }
 
-interface SidenavBrawlhallaPlayersPlayerIdRouteRouteChildren {
-  SidenavBrawlhallaPlayersPlayerIdSplatRoute: typeof SidenavBrawlhallaPlayersPlayerIdSplatRoute
-  SidenavBrawlhallaPlayersPlayerId2v2Route: typeof SidenavBrawlhallaPlayersPlayerId2v2Route
+interface Char123LocaleChar125SidebarLayoutRouteRouteChildren {
+  Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute: typeof Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute
 }
 
-const SidenavBrawlhallaPlayersPlayerIdRouteRouteChildren: SidenavBrawlhallaPlayersPlayerIdRouteRouteChildren =
+const Char123LocaleChar125SidebarLayoutRouteRouteChildren: Char123LocaleChar125SidebarLayoutRouteRouteChildren =
   {
-    SidenavBrawlhallaPlayersPlayerIdSplatRoute:
-      SidenavBrawlhallaPlayersPlayerIdSplatRoute,
-    SidenavBrawlhallaPlayersPlayerId2v2Route:
-      SidenavBrawlhallaPlayersPlayerId2v2Route,
+    Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute:
+      Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute,
   }
 
-const SidenavBrawlhallaPlayersPlayerIdRouteRouteWithChildren =
-  SidenavBrawlhallaPlayersPlayerIdRouteRoute._addFileChildren(
-    SidenavBrawlhallaPlayersPlayerIdRouteRouteChildren,
+const Char123LocaleChar125SidebarLayoutRouteRouteWithChildren =
+  Char123LocaleChar125SidebarLayoutRouteRoute._addFileChildren(
+    Char123LocaleChar125SidebarLayoutRouteRouteChildren,
   )
 
-interface SidenavRouteRouteChildren {
-  SidenavIndexRoute: typeof SidenavIndexRoute
-  SidenavBrawlhallaPlayersPlayerIdRouteRoute: typeof SidenavBrawlhallaPlayersPlayerIdRouteRouteWithChildren
+interface Char123LocaleChar125RouteRouteChildren {
+  Char123LocaleChar125SidebarLayoutRouteRoute: typeof Char123LocaleChar125SidebarLayoutRouteRouteWithChildren
 }
 
-const SidenavRouteRouteChildren: SidenavRouteRouteChildren = {
-  SidenavIndexRoute: SidenavIndexRoute,
-  SidenavBrawlhallaPlayersPlayerIdRouteRoute:
-    SidenavBrawlhallaPlayersPlayerIdRouteRouteWithChildren,
-}
-
-const SidenavRouteRouteWithChildren = SidenavRouteRoute._addFileChildren(
-  SidenavRouteRouteChildren,
-)
-
-interface SidenavLayoutPlayersPlayerIdRouteChildren {
-  SidenavLayoutPlayersPlayerIdSplatRoute: typeof SidenavLayoutPlayersPlayerIdSplatRoute
-  SidenavLayoutPlayersPlayerId2v2Route: typeof SidenavLayoutPlayersPlayerId2v2Route
-  SidenavLayoutPlayersPlayerIdLegendsRoute: typeof SidenavLayoutPlayersPlayerIdLegendsRoute
-  SidenavLayoutPlayersPlayerIdWeaponsRoute: typeof SidenavLayoutPlayersPlayerIdWeaponsRoute
-}
-
-const SidenavLayoutPlayersPlayerIdRouteChildren: SidenavLayoutPlayersPlayerIdRouteChildren =
+const Char123LocaleChar125RouteRouteChildren: Char123LocaleChar125RouteRouteChildren =
   {
-    SidenavLayoutPlayersPlayerIdSplatRoute:
-      SidenavLayoutPlayersPlayerIdSplatRoute,
-    SidenavLayoutPlayersPlayerId2v2Route: SidenavLayoutPlayersPlayerId2v2Route,
-    SidenavLayoutPlayersPlayerIdLegendsRoute:
-      SidenavLayoutPlayersPlayerIdLegendsRoute,
-    SidenavLayoutPlayersPlayerIdWeaponsRoute:
-      SidenavLayoutPlayersPlayerIdWeaponsRoute,
+    Char123LocaleChar125SidebarLayoutRouteRoute:
+      Char123LocaleChar125SidebarLayoutRouteRouteWithChildren,
   }
 
-const SidenavLayoutPlayersPlayerIdRouteWithChildren =
-  SidenavLayoutPlayersPlayerIdRoute._addFileChildren(
-    SidenavLayoutPlayersPlayerIdRouteChildren,
+const Char123LocaleChar125RouteRouteWithChildren =
+  Char123LocaleChar125RouteRoute._addFileChildren(
+    Char123LocaleChar125RouteRouteChildren,
   )
-
-interface SidenavLayoutRouteRouteChildren {
-  SidenavLayoutIndexRoute: typeof SidenavLayoutIndexRoute
-  SidenavLayoutPlayersPlayerIdRoute: typeof SidenavLayoutPlayersPlayerIdRouteWithChildren
-}
-
-const SidenavLayoutRouteRouteChildren: SidenavLayoutRouteRouteChildren = {
-  SidenavLayoutIndexRoute: SidenavLayoutIndexRoute,
-  SidenavLayoutPlayersPlayerIdRoute:
-    SidenavLayoutPlayersPlayerIdRouteWithChildren,
-}
-
-const SidenavLayoutRouteRouteWithChildren =
-  SidenavLayoutRouteRoute._addFileChildren(SidenavLayoutRouteRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  SidenavRouteRoute: SidenavRouteRouteWithChildren,
-  SidenavLayoutRouteRoute: SidenavLayoutRouteRouteWithChildren,
-  UiRoute: UiRoute,
+  Char123LocaleChar125RouteRoute: Char123LocaleChar125RouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

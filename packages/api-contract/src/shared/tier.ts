@@ -35,4 +35,6 @@ export const isValidTier = (input: string): input is (typeof tiers)[number] => {
 	return tiers.includes(input as (typeof tiers)[number])
 }
 
-export const Tier = Schema.NullOr(Schema.Literal(...tiers))
+export const TierNameSchema = Schema.Literal(...tiers)
+
+export type TierName = typeof TierNameSchema.Type

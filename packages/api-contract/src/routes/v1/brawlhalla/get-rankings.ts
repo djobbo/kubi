@@ -1,11 +1,11 @@
 import { Schema } from "effect"
 import { Region } from "../../../shared/region"
-import { Tier } from "../../../shared/tier"
+import { TierNameSchema } from "../../../shared/tier"
 
 const Ranking = Schema.Struct({
 	rank: Schema.Number,
 	rating: Schema.Number,
-	tier: Tier,
+	tier: TierNameSchema,
 	games: Schema.Number,
 	wins: Schema.Number,
 	region: Region,

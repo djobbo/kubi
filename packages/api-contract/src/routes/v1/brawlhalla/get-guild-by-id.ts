@@ -10,6 +10,7 @@ const GuildMember = Schema.Struct({
 	rank: Schema.String,
 	joined_at: Schema.Number,
 	xp: Schema.Number,
+	lifetime_xp: Schema.Number,
 })
 
 export const Clan = Schema.Struct({
@@ -17,6 +18,7 @@ export const Clan = Schema.Struct({
 	name: Schema.String,
 	created_at: Schema.Number,
 	xp: Schema.Number,
+	lifetime_xp: Schema.Number,
 	members: Schema.Array(GuildMember),
 	bookmark: Schema.NullOr(Bookmark),
 })

@@ -1,59 +1,25 @@
-import {
-	HeadContent,
-	Outlet,
-	Scripts,
-	createRootRouteWithContext,
-} from "@tanstack/react-router"
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools"
+import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
+import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
+import { TanStackDevtools } from '@tanstack/react-devtools'
+import { GrainBackground } from '@/features/layout/components/grain-background'
 
-import TanStackQueryLayout from "@/integrations/tanstack-query/layout"
+import styles from '@/styles.css?url'
 
-import styles from "@/styles.css?url"
-
-import { activateLocale } from "@/locales/activate"
-import type { RouterContext } from "@/router.tsx"
-import { seo } from "@dair/common/src/helpers/seo"
-import { Atom, useAtomValue } from "@effect-atom/atom-react"
-import { t } from "@lingui/core/macro"
-
-const themeAtom = Atom.make<"light" | "dark">("dark")
-
-export const Route = createRootRouteWithContext<RouterContext>()({
-	loader: async ({ context: { apiClient } }) => {
-		// const session = await apiClient.auth
-		// 	.getSession({
-		// 		query: {},
-		// 	})
-		// 	.then((res) => res.json())
-		// 	.then((res) => res.data.session)
-		// 	.catch(() => null)
-		return {
-			lang: "en",
-			session: null,
-		}
-	},
-	staleTime: Number.POSITIVE_INFINITY,
-	head: ({ loaderData }) => {
-		const { lang } = loaderData ?? {}
-		activateLocale(lang)
-
-		return {
-			meta: [
-				{ charSet: "utf-8" },
-				{
-					name: "viewport",
-					// eslint-disable-next-line lingui/no-unlocalized-strings
-					content: "width=device-width, initial-scale=1",
-				},
-				{ name: "theme-color", content: "#ffffff" },
-				...seo({
-					title: t`Track your Brawlhalla stats, view rankings, and more! • Corehalla`,
-					description: t`Improve your Brawlhalla Game, and find your place among the Elite with our in-depth Player and Clan stats tracking and live leaderboards.`,
-					image: "/assets/images/og/main-og.jpg",
-				}),
-			],
-			links: [
-				{ rel: "stylesheet", href: styles },
+export const Route = createRootRoute({
+  head: () => {
+    return {
+      meta: [
+        {
+          charSet: 'utf-8',
+        },
+        {
+          name: 'viewport',
+          content: 'width=device-width, initial-scale=1',
+        },
+        { name: "theme-color", content: "#ffffff" },
+      ],
+      links: [
+        { rel: "stylesheet", href: styles },
 				{ rel: "preconnect", href: "https://fonts.googleapis.com" },
 				{
 					rel: "preconnect",
@@ -72,46 +38,33 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 				},
 				{ rel: "mask-icon", href: "/mask-icon.svg", color: "#ffffff" },
 			],
-		}
-	},
-	component: RootComponent,
+    }
+  },
+  shellComponent: RootDocument,
 })
 
-function RootComponent() {
-	return (
-		<RootDocument>
-			{/* TODO: GAscripts */}
-			{/* <GAScripts /> */}
-			<Outlet />
-			<TanStackQueryLayout />
-			<TanStackRouterDevtools />
-		</RootDocument>
-	)
-}
-
 function RootDocument({ children }: { children: React.ReactNode }) {
-	const { lang } = Route.useLoaderData()
-	const theme = useAtomValue(themeAtom)
-
-	return (
-		<html lang={lang}>
-			<head>
-				<HeadContent />
-			</head>
-			<body className={theme}>
-				{children}
-				<div
-					style={{
-						opacity: 0.012,
-						backgroundSize: "128px",
-						backgroundRepeat: "repeat",
-						backgroundImage: "url(/assets/images/grain.png)",
-						zIndex: 999,
-					}}
-					className="fixed inset-0 w-full h-full pointer-events-none"
-				/>
-				<Scripts />
-			</body>
-		</html>
-	)
+  return (
+    <html lang="en">
+      <head>
+        <HeadContent />
+      </head>
+      <body>
+        {children}
+        <GrainBackground />
+        <TanStackDevtools
+          config={{
+            position: 'bottom-right',
+          }}
+          plugins={[
+            {
+              name: 'Tanstack Router',
+              render: <TanStackRouterDevtoolsPanel />,
+            },
+          ]}
+        />
+        <Scripts />
+      </body>
+    </html>
+  )
 }

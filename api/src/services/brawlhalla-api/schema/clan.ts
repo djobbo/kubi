@@ -18,6 +18,7 @@ export const BrawlhallaApiClan = Schema.Struct({
 	clan_name: CleanString,
 	clan_create_date: Schema.Number,
 	clan_xp: NumberFromString,
+	clan_lifetime_xp: Schema.Number,
 	clan: Schema.Array(Member),
 })
 

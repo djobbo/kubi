@@ -3,7 +3,11 @@ node_modules
 dist
 dist-ssr
 *.local
-.output
-.tanstack
-dev-dist
+count.txt
+.env
 .nitro
+.tanstack
+.wrangler
+.output
+.vinxi
+todos.json

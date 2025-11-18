@@ -2,7 +2,7 @@ import { BrawlhallaApi } from "@/services/brawlhalla-api"
 import type {
 	Clan,
 	GetClanByIdResponse,
-} from "@dair/api-contract/src/routes/v1/brawlhalla/get-clan-by-id"
+} from "@dair/api-contract/src/routes/v1/brawlhalla/get-guild-by-id"
 import {
 	InternalServerError,
 	NotFound,
@@ -23,12 +23,15 @@ export const getGuildById = (clanId: number) =>
 			name: clanStats.data.clan_name,
 			created_at: clanStats.data.clan_create_date,
 			xp: clanStats.data.clan_xp,
+			lifetime_xp: clanStats.data.clan_lifetime_xp,
 			members: clanStats.data.clan.map((member) => ({
 				id: member.brawlhalla_id,
 				name: member.name,
 				rank: member.rank,
 				joined_at: member.join_date,
-				xp: member.xp,
+				// TODO: Add current guild xp when Brawlhalla's API is updated
+				xp: 0,
+				lifetime_xp: member.xp,
 			})),
 			bookmark: null,
 		}

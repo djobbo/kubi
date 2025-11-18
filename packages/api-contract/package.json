@@ -8,11 +8,11 @@
 		"@types/bun": "latest"
 	},
 	"peerDependencies": {
-		"typescript": "^5"
+		"typescript": "^5.9.3"
 	},
 	"dependencies": {
-		"@effect/platform": "^0.93.1",
-		"effect": "^3.19.3",
+		"@effect/platform": "^0.93.3",
+		"effect": "^3.19.4",
 		"@dair/schema": "workspace:*"
 	}
 }

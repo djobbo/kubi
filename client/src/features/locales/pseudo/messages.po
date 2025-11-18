@@ -1,0 +1,148 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2025-11-18 21:44+0100\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: pseudo\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/route.tsx:135
+msgid "Account level"
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/route.tsx:139
+msgid "Account XP"
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:410
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:412
+msgid "Average damage dealt per game"
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:415
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:417
+msgid "Average damage taken per game"
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:395
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:397
+msgid "Average falls per game"
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:420
+msgid "Average game length"
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:422
+msgid "Average game length in seconds"
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:400
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:402
+msgid "Average games between each suicide"
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:405
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:407
+msgid "Average games between each Team KO"
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:390
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:392
+msgid "Average KOs per game"
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:329
+msgid "Damage dealt"
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:359
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:363
+msgid "Damage dealt per second"
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:334
+msgid "Damage taken"
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:366
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:370
+msgid "Damage taken per second"
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:90
+msgid "Elo reset"
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:267
+msgid "Falls"
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:86
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:155
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:180
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:191
+msgid "Games"
+msgstr ""
+
+#: src/routes/{-$locale}/route.tsx:42
+msgid "Improve your Brawlhalla Game, and find your place among the Elite with our in-depth Player and Clan stats tracking and live leaderboards."
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/route.tsx:143
+msgid "In-game time"
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:249
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:255
+msgid "KOs"
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:28
+msgid "L"
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:171
+msgid "No ranked 2v2 data available"
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/route.tsx:105
+msgid "players"
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:278
+msgid "Suicides"
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:289
+msgid "Team KOs"
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:159
+msgid "Teammates"
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:385
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:387
+msgid "Time between each fall"
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:380
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:382
+msgid "Time between each KO"
+msgstr ""
+
+#: src/routes/{-$locale}/route.tsx:41
+msgid "Track your Brawlhalla stats, view rankings, and more! • Corehalla"
+msgstr ""
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:24
+msgid "W"
+msgstr ""

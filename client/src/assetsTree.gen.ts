@@ -183,6 +183,7 @@ export const safeAssets = [
   "/assets/images/weapons/icons/Sword.png",
   "/assets/images/weapons/icons/Unarmed.png",
   "/favicon.png",
+  "/manifest.json",
   "/robots.txt"
 ] as const;
 
@@ -403,5 +404,6 @@ export const assetsTree = {
     }
   },
   "favicon.png": "/favicon.png",
+  "manifest.json": "/manifest.json",
   "robots.txt": "/robots.txt"
 } as const;
