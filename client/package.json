@@ -15,9 +15,10 @@
     "locales:build": "bun locales:extract && bun locales:compile"
   },
   "dependencies": {
+    "@base-ui-components/react": "^1.0.0-beta.6",
     "@dair/api-contract": "workspace:*",
-    "@dair/common": "workspace:*",
     "@dair/brawlhalla-api": "workspace:*",
+    "@dair/common": "workspace:*",
     "@effect-atom/atom-react": "^0.4.0",
     "@effect/platform": "^0.93.3",
     "@lingui/conf": "^5.6.0",

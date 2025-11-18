@@ -76,13 +76,20 @@
 		height: 100%;
 	}
 	body {
-		@apply bg-bg-root text-text h-full;
+		background-color: var(--bg-root);
+		color: var(--text);
+		height: 100%;
 		font-family: var(--font-sans);
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
+		position: relative;
 	}
 
 	code {
 		font-family: var(--font-mono);
+	}
+
+	#root {
+		isolation: isolate;
 	}
 }
