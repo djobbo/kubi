@@ -1,7 +1,7 @@
 import { cn, type VariantProps, cva } from '@dair/common/src/helpers/ui'
 import type { ComponentProps } from 'react'
 
-const progressVariants = cva('relative w-full h-2 bg-bg-light rounded-full', {
+const progressVariants = cva('relative w-full h-2 bg-bg-light corner-smooth-full', {
   variants: {
     intent: {
       info: '[--bar-color:var(--primary-light)]',
@@ -42,7 +42,7 @@ export const Progress = ({
       {...props}
     >
       <span
-        className="absolute top-0 left-0 h-full rounded-full bg-(--bar-color)"
+        className="absolute top-0 left-0 h-full corner-smooth-4xl bg-(--bar-color)"
         style={{ width: `${(value / max) * 100}%` }}
       />
     </div>

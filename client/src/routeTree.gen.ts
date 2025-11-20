@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as Char123LocaleChar125RouteRouteImport } from './routes/{-$locale}/route'
 import { Route as Char123LocaleChar125SidebarLayoutRouteRouteImport } from './routes/{-$locale}/_sidebar-layout/route'
+import { Route as Char123LocaleChar125SidebarLayoutIndexRouteImport } from './routes/{-$locale}/_sidebar-layout/index'
 import { Route as Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRouteImport } from './routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/route'
 
 const Char123LocaleChar125RouteRoute =
@@ -24,6 +25,12 @@ const Char123LocaleChar125SidebarLayoutRouteRoute =
     id: '/_sidebar-layout',
     getParentRoute: () => Char123LocaleChar125RouteRoute,
   } as any)
+const Char123LocaleChar125SidebarLayoutIndexRoute =
+  Char123LocaleChar125SidebarLayoutIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => Char123LocaleChar125SidebarLayoutRouteRoute,
+  } as any)
 const Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute =
   Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRouteImport.update(
     {
@@ -35,27 +42,33 @@ const Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar12
 
 export interface FileRoutesByFullPath {
   '/{-$locale}': typeof Char123LocaleChar125SidebarLayoutRouteRouteWithChildren
+  '/{-$locale}/': typeof Char123LocaleChar125SidebarLayoutIndexRoute
   '/{-$locale}/brawlhalla/players/$playerId/{-$tab}': typeof Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute
 }
 export interface FileRoutesByTo {
-  '/{-$locale}': typeof Char123LocaleChar125SidebarLayoutRouteRouteWithChildren
+  '/{-$locale}': typeof Char123LocaleChar125SidebarLayoutIndexRoute
   '/{-$locale}/brawlhalla/players/$playerId/{-$tab}': typeof Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/{-$locale}': typeof Char123LocaleChar125RouteRouteWithChildren
   '/{-$locale}/_sidebar-layout': typeof Char123LocaleChar125SidebarLayoutRouteRouteWithChildren
+  '/{-$locale}/_sidebar-layout/': typeof Char123LocaleChar125SidebarLayoutIndexRoute
   '/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}': typeof Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/{-$locale}' | '/{-$locale}/brawlhalla/players/$playerId/{-$tab}'
+  fullPaths:
+    | '/{-$locale}'
+    | '/{-$locale}/'
+    | '/{-$locale}/brawlhalla/players/$playerId/{-$tab}'
   fileRoutesByTo: FileRoutesByTo
   to: '/{-$locale}' | '/{-$locale}/brawlhalla/players/$playerId/{-$tab}'
   id:
     | '__root__'
     | '/{-$locale}'
     | '/{-$locale}/_sidebar-layout'
+    | '/{-$locale}/_sidebar-layout/'
     | '/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}'
   fileRoutesById: FileRoutesById
 }
@@ -79,6 +92,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char123LocaleChar125SidebarLayoutRouteRouteImport
       parentRoute: typeof Char123LocaleChar125RouteRoute
     }
+    '/{-$locale}/_sidebar-layout/': {
+      id: '/{-$locale}/_sidebar-layout/'
+      path: '/'
+      fullPath: '/{-$locale}/'
+      preLoaderRoute: typeof Char123LocaleChar125SidebarLayoutIndexRouteImport
+      parentRoute: typeof Char123LocaleChar125SidebarLayoutRouteRoute
+    }
     '/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}': {
       id: '/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}'
       path: '/brawlhalla/players/$playerId/{-$tab}'
@@ -90,11 +110,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface Char123LocaleChar125SidebarLayoutRouteRouteChildren {
+  Char123LocaleChar125SidebarLayoutIndexRoute: typeof Char123LocaleChar125SidebarLayoutIndexRoute
   Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute: typeof Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute
 }
 
 const Char123LocaleChar125SidebarLayoutRouteRouteChildren: Char123LocaleChar125SidebarLayoutRouteRouteChildren =
   {
+    Char123LocaleChar125SidebarLayoutIndexRoute:
+      Char123LocaleChar125SidebarLayoutIndexRoute,
     Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute:
       Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute,
   }

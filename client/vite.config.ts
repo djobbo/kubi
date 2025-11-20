@@ -7,6 +7,7 @@ import viteTsConfigPaths from 'vite-tsconfig-paths'
 import tailwindcss from '@tailwindcss/vite'
 import { nitro } from 'nitro/vite'
 import safeAssetsPlugin from "./plugins/safe-assets-plugin"
+import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 
 const config = defineConfig({
   plugins: [
@@ -17,6 +18,7 @@ const config = defineConfig({
     viteTsConfigPaths({
       projects: ['./tsconfig.json'],
     }),
+    vanillaExtractPlugin(),
     tailwindcss(),
     safeAssetsPlugin({
       outputFile: "src/assetsTree.gen.ts",

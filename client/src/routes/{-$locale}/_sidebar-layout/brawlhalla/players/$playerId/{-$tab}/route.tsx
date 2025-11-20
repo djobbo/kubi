@@ -1,5 +1,5 @@
 import { formatTime } from '@dair/common/src/helpers/date'
-import { SEO } from '@dair/common/src/helpers/seo'  
+import { SEO } from '@dair/common/src/helpers/seo'
 import { createFileRoute, notFound, useLocation } from '@tanstack/react-router'
 import { Schema } from 'effect'
 import { Card } from '@/shared/components/card'
@@ -11,6 +11,7 @@ import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
 import { Result, useAtomValue } from '@effect-atom/atom-react'
 import { ApiClient } from '@/shared/api-client'
+import { Breadcrumb } from '@/shared/components/breadcrumb'
 
 const playerIdRegex = /(^\d+).*/
 /**
@@ -96,7 +97,7 @@ function RouteComponent() {
             title={`${name} - Player Stats • Corehalla`}
             description={`${name} - Brawlhalla Player Stats • Corehalla`}
           />
-          <div className="px-4 pt-4 flex flex-col gap-2">
+          <Breadcrumb>
             <div className="mt-2">
               <div className="flex items-center gap-2 uppercase text-text-muted text-xs">
                 <span>brawlhalla</span>
@@ -108,11 +109,13 @@ function RouteComponent() {
                 <span>#{playerData.id}</span>
               </div>
             </div>
+          </Breadcrumb>
+          <div className="px-4 pt-4 flex flex-col gap-2">
             <div className="flex items-center gap-2 mt-2">
               <img
                 src="/assets/images/brand/logos/logo-256x256.png"
                 alt={name}
-                className="w-8 h-8 rounded-lg border border-border"
+                className="w-8 h-8 corner-smooth-lg border border-border"
               />
               <h1 className="text-3xl font-semibold">{name}</h1>
             </div>
@@ -121,7 +124,7 @@ function RouteComponent() {
                 {aliases.map((alias) => (
                   <span
                     key={alias}
-                    className="text-xs text-text-muted bg-bg-light rounded-full px-2 py-0.5 border border-border hover:bg-bg-light/60"
+                    className="text-xs text-text-muted bg-bg-light corner-smooth-4xl px-2 py-0.5 border border-border hover:bg-bg-light/60"
                   >
                     {alias}
                   </span>
@@ -180,7 +183,7 @@ function RouteComponent() {
               </ul>
             </nav>
           </div>
-          <div className="@container p-4 bg-bg-dark">
+          <div className="@container p-4">
             {selectedTab === 'overview' && (
               <OverviewTab playerData={playerData} />
             )}

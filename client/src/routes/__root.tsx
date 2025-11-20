@@ -1,7 +1,7 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
-import { GrainBackground } from '@/features/layout/components/grain-background'
+import { Grain } from '@/features/layout/components/grain'
 
 import styles from '@/styles.css?url'
 
@@ -52,7 +52,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <body>
         <div id="root">
           {children}
-          <GrainBackground />
+          <Grain />
         </div>
         <TanStackDevtools
           config={{

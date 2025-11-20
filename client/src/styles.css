@@ -31,7 +31,10 @@
 	/* Layout */
 	--sidebar-expanded-width: 16rem;
 	--sidebar-minimized-width: 4rem;
-	--header-height: 2rem;
+	--header-height: 3rem;
+
+	/* Corners */
+	--corner-shape-smooth: superellipse(1.2);
 }
 
 .light {
@@ -68,6 +71,46 @@
 	--color-danger: var(--danger);
 	--color-warning: var(--warning);
 	--color-info: var(--info);
+	--corner-shape-smooth: var(--corner-shape-smooth);
+}
+
+@utility corner-smooth-* {
+	corner-shape: var(--corner-shape-smooth);
+	border-radius: --value(--radius- *);
+}
+
+@utility corner-t-* {
+	corner-block-start-shape: var(--corner-shape-smooth);
+	border-top-radius: --value(--radius-*);
+}
+
+@utility corner-b-* {
+	corner-block-end-shape: var(--corner-shape-smooth);
+	border-bottom-radius: --value(--radius-*);
+}
+@utility corner-l-* {
+	corner-block-start-shape: var(--corner-shape-smooth);
+	border-left-radius: --value(--radius-*);
+}
+@utility corner-r-* {
+	corner-block-end-shape: var(--corner-shape-smooth);
+	border-right-radius: --value(--radius-*);
+}
+@utility corner-tl-* {
+	corner-start-start-shape: var(--corner-shape-smooth);
+	border-top-left-radius: --value(--radius-*);
+}
+@utility corner-tr-* {
+	corner-start-end-shape: var(--corner-shape-smooth);
+	border-top-right-radius: --value(--radius-*);
+}
+@utility corner-bl-* {
+	corner-end-start-shape: var(--corner-shape-smooth);
+	border-bottom-left-radius: --value(--radius-*);
+}
+@utility corner-br-* {
+	corner-end-end-shape: var(--corner-shape-smooth);
+	border-bottom-right-radius: --value(--radius-*);
 }
 
 @layer base {

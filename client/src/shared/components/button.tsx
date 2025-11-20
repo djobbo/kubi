@@ -1,13 +1,13 @@
 import { cn, type VariantProps, cva } from "@dair/common/src/helpers/ui"
 import { Link, type LinkProps } from "@tanstack/react-router"
-import type { ComponentProps, ReactNode } from "react"
+import type { ComponentProps } from "react"
 
 const buttonVariants = cva(
 	cn(
-		"relative group/button cursor-pointer flex items-center justify-center rounded-lg text-text",
+		"relative group/button cursor-pointer flex items-center justify-center corner-smooth-lg text-text",
 		"hover:bg-linear-to-b hover:from-(--button-color-light) hover:to-(--button-color-dark)",
 		"active:from-(--button-color-dark) active:to-(--button-color) active:border-(--button-color-dark) active:border-b-(--button-color-dark)",
-		"after:content-[''] after:absolute after:inset-0 after:border after:border-(--button-color-light)/25 after:opacity-0 hover:after:opacity-100 hover:after:-inset-1.5 after:transition-all after:rounded-xl",
+		"after:content-[''] after:absolute after:inset-0 after:border after:border-(--button-color-light)/25 after:opacity-0 hover:after:opacity-100 hover:after:-inset-1.5 after:transition-all after:corner-smooth-xl",
 		"transition-all",
 	),
 	{
