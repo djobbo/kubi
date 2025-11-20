@@ -52,46 +52,46 @@ const getArticleQuery = (withContent?: boolean) => gql`
 `
 
 const getArticles = Effect.fn(function* (
-	query: {
-		first?: number
-		category?: string
-		after?: string
-		withContent?: boolean
-	} = {},
+  query: {
+    first?: number
+    category?: string
+    after?: string
+    withContent?: boolean
+  } = {},
 ) {
-	const articles = yield* fetchRevalidate(Articles, {
-		method: "POST",
-		url: BRAWLHALLA_GRAPHQL_API_URL,
-		body: {
-			query: getArticleQuery(query.withContent),
-			variables: {
-				first: query.first,
-				category: query.category,
-				after: query.after,
-			},
-		},
-	})
+  const articles = yield* fetchRevalidate(Articles, {
+    method: "POST",
+    url: BRAWLHALLA_GRAPHQL_API_URL,
+    body: {
+      query: getArticleQuery(query.withContent),
+      variables: {
+        first: query.first,
+        category: query.category,
+        after: query.after,
+      },
+    },
+  })
 
-	return articles
+  return articles
 })
 
 export const BrawlhallaGql = {
-	getArticles,
-	getWeeklyRotation: Effect.fn(function* () {
-		const articles = yield* getArticles({
-			category: "weekly-rotation",
-			withContent: true,
-			first: 1,
-		})
+  getArticles,
+  getWeeklyRotation: Effect.fn(function* () {
+    const articles = yield* getArticles({
+      category: "weekly-rotation",
+      withContent: true,
+      first: 1,
+    })
 
-		const weeklyRotation = yield* parseWeeklyRotation(
-			articles.data.data.posts.nodes[0]?.content,
-		)
+    const weeklyRotation = yield* parseWeeklyRotation(
+      articles.data.data.posts.nodes[0]?.content,
+    )
 
-		return {
-			data: weeklyRotation,
-			updatedAt: articles.updatedAt,
-			cached: articles.cached,
-		}
-	}),
+    return {
+      data: weeklyRotation,
+      updatedAt: articles.updatedAt,
+      cached: articles.cached,
+    }
+  }),
 }

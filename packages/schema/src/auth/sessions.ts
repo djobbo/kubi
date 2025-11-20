@@ -5,12 +5,12 @@ import { withExpiry, withTimestamp } from "../helpers/with-timestamp"
 import { usersTable } from "./users"
 
 export const sessionsTable = sqliteTable("sessions", {
-	id: text("id").primaryKey().notNull(),
-	userId: text("user_id")
-		.notNull()
-		.references(() => usersTable.id, { onDelete: "cascade" }),
-	...withTimestamp,
-	...withExpiry,
+  id: text("id").primaryKey().notNull(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => usersTable.id, { onDelete: "cascade" }),
+  ...withTimestamp,
+  ...withExpiry,
 })
 
 export type Session = typeof sessionsTable.$inferSelect
@@ -19,8 +19,8 @@ export type NewSession = typeof sessionsTable.$inferInsert
 export const sessionSelectSchema = createSelectSchema(sessionsTable)
 
 export const sessionsRelations = relations(sessionsTable, ({ one }) => ({
-	user: one(usersTable, {
-		fields: [sessionsTable.userId],
-		references: [usersTable.id],
-	}),
+  user: one(usersTable, {
+    fields: [sessionsTable.userId],
+    references: [usersTable.id],
+  }),
 }))

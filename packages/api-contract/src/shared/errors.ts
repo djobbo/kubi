@@ -1,9 +1,10 @@
-import { HttpApiSchema } from '@effect/platform';
+import { HttpApiSchema } from "@effect/platform"
 
 export * from "@effect/platform/HttpApiError"
 
-export class TooManyRequests extends HttpApiSchema.EmptyError<TooManyRequests>()({
+export class TooManyRequests extends HttpApiSchema.EmptyError<TooManyRequests>()(
+  {
     tag: "TooManyRequests",
-    status: 429
-  }) {}
-  
+    status: 429,
+  },
+) {}

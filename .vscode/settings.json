@@ -1,5 +1,6 @@
 {
 	"typescript.tsdk": "node_modules/typescript/lib",
+	"typescript.experimental.useTsgo": true,
 	"files.watcherExclude": {
 		"**/routeTree.gen.ts": true
 	},
@@ -8,5 +9,15 @@
 	},
 	"files.readonlyInclude": {
 		"**/routeTree.gen.ts": true
-	}
+	},
+	"editor.defaultFormatter": "oxc.oxc-vscode",
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"source.fixAll.oxlint": "always"
+	},
+	"oxc.fixKind": "safe_fix_or_suggestion",
+	"oxc.fmt.experimental": true,
+	"oxc.lint.run": "onSave",
+	"oxc.enable": true,
+	"oxc.typeAware": true
 }

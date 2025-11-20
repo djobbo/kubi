@@ -11,16 +11,16 @@ export const providers = [DISCORD_PROVIDER_ID, GOOGLE_PROVIDER_ID] as const
 export type Provider = (typeof providers)[number]
 
 export const oauthAccountsTable = sqliteTable("oauth_accounts", {
-	id: text("id").primaryKey().notNull(),
-	userId: text("user_id")
-		.notNull()
-		.references(() => usersTable.id, { onDelete: "cascade" }),
-	provider: text({ enum: providers }).notNull(),
-	providerUserId: text("provider_user_id").notNull(),
-	accessToken: text("access_token").notNull(),
-	refreshToken: text("refresh_token"),
-	...withTimestamp,
-	...withExpiry,
+  id: text("id").primaryKey().notNull(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => usersTable.id, { onDelete: "cascade" }),
+  provider: text({ enum: providers }).notNull(),
+  providerUserId: text("provider_user_id").notNull(),
+  accessToken: text("access_token").notNull(),
+  refreshToken: text("refresh_token"),
+  ...withTimestamp,
+  ...withExpiry,
 })
 
 export type OAuthAccount = typeof oauthAccountsTable.$inferSelect
@@ -29,11 +29,11 @@ export type NewOAuthAccount = typeof oauthAccountsTable.$inferInsert
 export const oauthAccountSelectSchema = createSelectSchema(oauthAccountsTable)
 
 export const oauthAccountsRelations = relations(
-	oauthAccountsTable,
-	({ one }) => ({
-		user: one(usersTable, {
-			fields: [oauthAccountsTable.userId],
-			references: [usersTable.id],
-		}),
-	}),
+  oauthAccountsTable,
+  ({ one }) => ({
+    user: one(usersTable, {
+      fields: [oauthAccountsTable.userId],
+      references: [usersTable.id],
+    }),
+  }),
 )

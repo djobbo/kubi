@@ -2,7 +2,6 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
-    "eslint.config.js",
     "prettier.config.js",
     "vite.config.js"
   ],
@@ -30,7 +29,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./src/*"

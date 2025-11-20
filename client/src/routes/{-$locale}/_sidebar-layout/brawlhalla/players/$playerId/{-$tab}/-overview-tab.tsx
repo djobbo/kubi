@@ -1,13 +1,13 @@
-import { RankedTierBanner } from '@/shared/components/image'
-import { cn } from '@dair/common/src/helpers/ui'
-import { t } from '@lingui/core/macro'
-import { Cell, LabelList, Pie, PieChart } from 'recharts'
-import { Button } from '@/shared/components/button'
-import { Card } from '@/shared/components/card'
-import { Progress } from '@/shared/components/progress'
-import { StatGrid } from '@/shared/components/stat-grid'
-import type { Player } from '@dair/api-contract/src/routes/v1/brawlhalla/get-player-by-id'
-import { Trans } from '@lingui/react/macro'
+import { RankedTierBanner } from "@/shared/components/image"
+import { cn } from "@dair/common/src/helpers/ui"
+import { t } from "@lingui/core/macro"
+import { Cell, LabelList, Pie, PieChart } from "recharts"
+import { Button } from "@/shared/components/button"
+import { Card } from "@/shared/components/card"
+import { Progress } from "@/shared/components/progress"
+import { StatGrid } from "@/shared/components/stat-grid"
+import type { Player } from "@dair/api-contract/src/routes/v1/brawlhalla/get-player-by-id"
+import { Trans } from "@lingui/react/macro"
 
 interface OverviewTabProps {
   playerData: typeof Player.Type
@@ -16,7 +16,7 @@ interface OverviewTabProps {
 export function OverviewTab({ playerData }: OverviewTabProps) {
   const { stats, ranked } = playerData
 
-  const { '1v1': ranked1v1, '2v2': ranked2v2 } = ranked ?? {}
+  const { "1v1": ranked1v1, "2v2": ranked2v2 } = ranked ?? {}
   const bestTeam = ranked2v2?.teams[0]
 
   const gamesPieData = [
@@ -41,7 +41,7 @@ export function OverviewTab({ playerData }: OverviewTabProps) {
             <div className="flex gap-2">
               <RankedTierBanner
                 tier={ranked1v1.tier}
-                alt={ranked1v1.tier ?? ''}
+                alt={ranked1v1.tier ?? ""}
                 containerClassName="h-24 w-18"
                 className="object-contain object-center [grid-area:banner]"
               />
@@ -60,14 +60,14 @@ export function OverviewTab({ playerData }: OverviewTabProps) {
                 />
                 <div className="flex justify-between">
                   <span>
-                    {ranked1v1.wins}W{' '}
+                    {ranked1v1.wins}W{" "}
                     <span className="text-text-muted font-normal text-sm">
                       {((ranked1v1.wins / ranked1v1.games) * 100).toFixed(2)}
                       %)
                     </span>
                   </span>
                   <span>
-                    {ranked1v1.games - ranked1v1.wins}L{' '}
+                    {ranked1v1.games - ranked1v1.wins}L{" "}
                     <span className="text-text-muted font-normal text-sm">
                       {(
                         ((ranked1v1.games - ranked1v1.wins) / ranked1v1.games) *
@@ -110,7 +110,7 @@ export function OverviewTab({ playerData }: OverviewTabProps) {
             <div className="flex gap-2">
               <RankedTierBanner
                 tier={bestTeam.tier}
-                alt={bestTeam.tier ?? ''}
+                alt={bestTeam.tier ?? ""}
                 containerClassName="h-24 w-18"
                 className="object-contain object-center [grid-area:banner]"
               />
@@ -129,14 +129,14 @@ export function OverviewTab({ playerData }: OverviewTabProps) {
                 />
                 <div className="flex justify-between">
                   <span>
-                    {bestTeam.wins}W{' '}
+                    {bestTeam.wins}W{" "}
                     <span className="text-text-muted font-normal text-sm">
                       {((bestTeam.wins / bestTeam.games) * 100).toFixed(2)}
                       %)
                     </span>
                   </span>
                   <span>
-                    {bestTeam.games - bestTeam.wins}L{' '}
+                    {bestTeam.games - bestTeam.wins}L{" "}
                     <span className="text-text-muted font-normal text-sm">
                       {(
                         ((bestTeam.games - bestTeam.wins) / bestTeam.games) *
@@ -232,9 +232,9 @@ export function OverviewTab({ playerData }: OverviewTabProps) {
                 />
                 {gamesPieData.map((_entry, index) => (
                   <Cell
-                    key={'cell-${index}'}
-                    className={cn('stroke-none fill-success', {
-                      'fill-danger': index === 1,
+                    key={"cell-${index}"}
+                    className={cn("stroke-none fill-success", {
+                      "fill-danger": index === 1,
                     })}
                   />
                 ))}
@@ -300,11 +300,11 @@ export function OverviewTab({ playerData }: OverviewTabProps) {
                 <div key={stat.title} className="w-full">
                   <p>
                     <span
-                      className={cn('text-sm', {
-                        'text-lg': stat.large,
+                      className={cn("text-sm", {
+                        "text-lg": stat.large,
                       })}
                     >
-                      {stat.value.toLocaleString()}{' '}
+                      {stat.value.toLocaleString()}{" "}
                       <span className="text-sm text-text-muted">
                         {stat.title}
                       </span>
@@ -339,7 +339,7 @@ export function OverviewTab({ playerData }: OverviewTabProps) {
                 <div key={stat.title} className="w-full">
                   <p>
                     <span className="text-lg">
-                      {stat.value.toLocaleString()}{' '}
+                      {stat.value.toLocaleString()}{" "}
                       <span className="text-sm text-text-muted">
                         {stat.title}
                       </span>

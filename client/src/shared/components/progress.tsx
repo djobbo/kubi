@@ -1,28 +1,31 @@
-import { cn, type VariantProps, cva } from '@dair/common/src/helpers/ui'
-import type { ComponentProps } from 'react'
+import { cn, type VariantProps, cva } from "@dair/common/src/helpers/ui"
+import type { ComponentProps } from "react"
 
-const progressVariants = cva('relative w-full h-2 bg-bg-light corner-smooth-full', {
-  variants: {
-    intent: {
-      info: '[--bar-color:var(--primary-light)]',
-      success: '[--bar-color:var(--success)]',
-      danger: '[--bar-color:var(--danger)]',
-      warning: '[--bar-color:var(--warning)]',
+const progressVariants = cva(
+  "relative w-full h-2 bg-bg-light corner-smooth-full",
+  {
+    variants: {
+      intent: {
+        info: "[--bar-color:var(--primary-light)]",
+        success: "[--bar-color:var(--success)]",
+        danger: "[--bar-color:var(--danger)]",
+        warning: "[--bar-color:var(--warning)]",
+      },
+      size: {
+        sm: "h-1",
+        md: "h-2",
+        lg: "h-3",
+        xl: "h-4",
+      },
     },
-    size: {
-      sm: 'h-1',
-      md: 'h-2',
-      lg: 'h-3',
-      xl: 'h-4',
+    defaultVariants: {
+      intent: "info",
+      size: "md",
     },
   },
-  defaultVariants: {
-    intent: 'info',
-    size: 'md',
-  },
-})
+)
 
-type ProgressProps = ComponentProps<'div'> &
+type ProgressProps = ComponentProps<"div"> &
   VariantProps<typeof progressVariants> & {
     value: number
     max: number

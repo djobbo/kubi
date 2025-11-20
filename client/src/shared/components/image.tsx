@@ -1,19 +1,19 @@
-import type { CSSProperties, ImgHTMLAttributes } from 'react'
+import type { CSSProperties, ImgHTMLAttributes } from "react"
 
-import type { SafeAsset } from '@/assetsTree.gen'
-import { cn } from '@dair/common/src/helpers/ui'
+import type { SafeAsset } from "@/assetsTree.gen"
+import { cn } from "@dair/common/src/helpers/ui"
 
-import type { LegendNameKey } from '@dair/brawlhalla-api/src/constants/legends'
-import type { RankedRegion } from '@dair/brawlhalla-api/src/constants/ranked/regions'
-import type {TierName} from '@dair/api-contract/src/shared/tier'
+import type { LegendNameKey } from "@dair/brawlhalla-api/src/constants/legends"
+import type { RankedRegion } from "@dair/brawlhalla-api/src/constants/ranked/regions"
+import type { TierName } from "@dair/api-contract/src/shared/tier"
 
 export type ImagePropsWithoutSrc = Omit<
   ImgHTMLAttributes<HTMLImageElement>,
-  'src'
+  "src"
 > & {
   containerClassName?: string
-  Container?: 'div' | 'span'
-  position?: 'absolute' | 'relative' | 'fixed' | string
+  Container?: "div" | "span"
+  position?: "absolute" | "relative" | "fixed" | string
   containerStyle?: CSSProperties
 }
 
@@ -23,8 +23,8 @@ type UnsafeImageProps = ImagePropsWithoutSrc & {
 
 export const UnsafeImage = ({
   containerClassName,
-  Container = 'div',
-  position = 'relative',
+  Container = "div",
+  position = "relative",
   containerStyle,
   ...props
 }: UnsafeImageProps) => {
@@ -51,7 +51,7 @@ type LegendIconProps = ImagePropsWithoutSrc & {
 }
 
 export const getLegendIconSrc = (
-  legendNameKey: LegendIconProps['legendNameKey'],
+  legendNameKey: LegendIconProps["legendNameKey"],
 ) => `/assets/images/legends/icons/${legendNameKey}.png` as const
 
 export const LegendIcon = ({ legendNameKey, ...props }: LegendIconProps) => {
@@ -83,7 +83,7 @@ type RankedTierImageProps = ImagePropsWithoutSrc & {
 }
 
 export const RankedTierBanner = ({ tier, ...props }: RankedTierImageProps) => {
-  const nonNullTier = tier ?? 'Valhallan'
+  const nonNullTier = tier ?? "Valhallan"
 
   return (
     <SafeImage
@@ -95,10 +95,10 @@ export const RankedTierBanner = ({ tier, ...props }: RankedTierImageProps) => {
 }
 
 export const RankedTierIcon = ({ tier, ...props }: RankedTierImageProps) => {
-	const nonNullTier: TierName = tier ?? 'Valhallan'
+  const nonNullTier: TierName = tier ?? "Valhallan"
   const src =
-    nonNullTier === 'Valhallan'
-      ? '/assets/images/ranked/icons/Valhallan.webp'
+    nonNullTier === "Valhallan"
+      ? "/assets/images/ranked/icons/Valhallan.webp"
       : (`/assets/images/ranked/icons/${nonNullTier}.png` as const)
 
   return <SafeImage src={src} alt={nonNullTier} {...props} />

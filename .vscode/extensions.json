@@ -1,10 +1,10 @@
 {
 	"recommendations": [
+		// Bun
 		"oven.bun-vscode",
+		// Tailwind CSS
 		"bradlc.vscode-tailwindcss",
-		"styled-components.vscode-styled-components",
-		"mrorz.language-gettext",
-		"ms-azuretools.vscode-docker",
-		"biomejs.biome"
+		// .po files (lingui)
+		"mrorz.language-gettext"
 	]
 }

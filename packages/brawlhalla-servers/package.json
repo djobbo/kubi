@@ -11,9 +11,7 @@
 		"@dair/brawlhalla-api": "workspace:*"
 	},
 	"devDependencies": {
-		"@types/bun": "latest"
-	},
-	"peerDependencies": {
-		"typescript": "^5"
+		"@types/bun": "latest",
+		"@typescript/native-preview": "^7.0.0-dev.20251120.1"
 	}
 }

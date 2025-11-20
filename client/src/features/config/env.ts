@@ -1,10 +1,10 @@
-import { Schema } from 'effect'
+import { Schema } from "effect"
 
 const EnvSchema = Schema.Struct({
-  NODE_ENV: Schema.optional(Schema.Literal('development', 'production')).pipe(
+  NODE_ENV: Schema.optional(Schema.Literal("development", "production")).pipe(
     Schema.withDefaults({
-      constructor: () => 'production' as const,
-      decoding: () => 'production' as const,
+      constructor: () => "production" as const,
+      decoding: () => "production" as const,
     }),
   ),
   VITE_CLIENT_URL: Schema.NonEmptyTrimmedString,

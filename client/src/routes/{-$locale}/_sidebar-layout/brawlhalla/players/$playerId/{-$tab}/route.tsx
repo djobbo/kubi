@@ -1,17 +1,17 @@
-import { formatTime } from '@dair/common/src/helpers/date'
-import { SEO } from '@dair/common/src/helpers/seo'
-import { createFileRoute, notFound, useLocation } from '@tanstack/react-router'
-import { Schema } from 'effect'
-import { Card } from '@/shared/components/card'
-import { StatGrid } from '@/shared/components/stat-grid'
-import { Tab } from '@/shared/components/tabs'
-import { OverviewTab } from './-overview-tab'
-import { TeamsTab } from './-teams-tab'
-import { t } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { Result, useAtomValue } from '@effect-atom/atom-react'
-import { ApiClient } from '@/shared/api-client'
-import { Breadcrumb } from '@/shared/components/breadcrumb'
+import { formatTime } from "@dair/common/src/helpers/date"
+import { SEO } from "@dair/common/src/helpers/seo"
+import { createFileRoute, notFound, useLocation } from "@tanstack/react-router"
+import { Schema } from "effect"
+import { Card } from "@/shared/components/card"
+import { StatGrid } from "@/shared/components/stat-grid"
+import { Tab } from "@/shared/components/tabs"
+import { OverviewTab } from "./-overview-tab"
+import { TeamsTab } from "./-teams-tab"
+import { t } from "@lingui/core/macro"
+import { Trans } from "@lingui/react/macro"
+import { Result, useAtomValue } from "@effect-atom/atom-react"
+import { ApiClient } from "@/shared/api-client"
+import { Breadcrumb } from "@/shared/components/breadcrumb"
 
 const playerIdRegex = /(^\d+).*/
 /**
@@ -35,11 +35,11 @@ const PlayerIdParamSchema = Schema.transform(
 
       try {
         return Number.parseInt(parsed, 10)
-      } catch (error) {
+      } catch {
         return null
       }
     },
-    encode: (input) => (input ?? '').toString(),
+    encode: (input) => (input ?? "").toString(),
   },
 )
 
@@ -50,7 +50,7 @@ const ParamsSchema = Schema.Struct({
 const decodeParams = Schema.decodePromise(ParamsSchema)
 
 export const Route = createFileRoute(
-  '/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}',
+  "/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}",
 )({
   component: RouteComponent,
   async loader({ params }) {
@@ -71,9 +71,9 @@ function RouteComponent() {
   const { playerId } = Route.useLoaderData()
   const { pathname } = useLocation()
   const playerDataResult = useAtomValue(
-    ApiClient.query('brawlhalla', 'get-player-by-id', {
+    ApiClient.query("brawlhalla", "get-player-by-id", {
       path: { id: playerId },
-      reactivityKeys: ['brawlhalla-player-id', playerId],
+      reactivityKeys: ["brawlhalla-player-id", playerId],
     }),
   )
 
@@ -83,13 +83,13 @@ function RouteComponent() {
     })
     .onSuccess(({ data: playerData }) => {
       const selectedTabIndex = pathname
-        .split('/')
+        .split("/")
         .findIndex((part) => part.startsWith(playerId.toString()))
       const selectedTab =
-        pathname.split('/')[selectedTabIndex + 1] || 'overview'
+        pathname.split("/")[selectedTabIndex + 1] || "overview"
 
       const { name, aliases, stats, ranked } = playerData
-      const { '2v2': ranked2v2 } = ranked ?? {}
+      const { "2v2": ranked2v2 } = ranked ?? {}
 
       return (
         <>
@@ -101,11 +101,11 @@ function RouteComponent() {
             <div className="mt-2">
               <div className="flex items-center gap-2 uppercase text-text-muted text-xs">
                 <span>brawlhalla</span>
-                {'/'}
+                {"/"}
                 <span>
                   <Trans>players</Trans>
                 </span>
-                {'/'}
+                {"/"}
                 <span>#{playerData.id}</span>
               </div>
             </div>
@@ -153,7 +153,7 @@ function RouteComponent() {
               <ul className="flex">
                 <li>
                   <Tab
-                    active={selectedTab === 'overview'}
+                    active={selectedTab === "overview"}
                     to="/brawlhalla/players/$playerId/overview"
                     params={{ playerId: playerData.slug }}
                   >
@@ -163,7 +163,7 @@ function RouteComponent() {
                 {(ranked2v2?.teams?.length ?? 0) > 0 && (
                   <li>
                     <Tab
-                      active={selectedTab === '2v2'}
+                      active={selectedTab === "2v2"}
                       to="/brawlhalla/players/$playerId/2v2"
                       params={{ playerId: playerData.slug }}
                     >
@@ -173,7 +173,7 @@ function RouteComponent() {
                 )}
                 <li>
                   <Tab
-                    active={selectedTab === 'legends'}
+                    active={selectedTab === "legends"}
                     to="/brawlhalla/players/$playerId/legends"
                     params={{ playerId: playerData.slug }}
                   >
@@ -184,10 +184,10 @@ function RouteComponent() {
             </nav>
           </div>
           <div className="@container p-4">
-            {selectedTab === 'overview' && (
+            {selectedTab === "overview" && (
               <OverviewTab playerData={playerData} />
             )}
-            {selectedTab === '2v2' && <TeamsTab ranked={ranked} />}
+            {selectedTab === "2v2" && <TeamsTab ranked={ranked} />}
           </div>
         </>
       )
@@ -195,7 +195,7 @@ function RouteComponent() {
     .onFailure((error) => {
       return (
         <div className="px-8 pt-4">
-          Error {';)'} <pre>{error.toString()}</pre>
+          Error {";)"} <pre>{error.toString()}</pre>
           <pre>{JSON.stringify(error, null, 2)}</pre>
         </div>
       )

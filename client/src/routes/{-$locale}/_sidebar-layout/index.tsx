@@ -1,6 +1,6 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router"
 
-export const Route = createFileRoute('/{-$locale}/_sidebar-layout/')({
+export const Route = createFileRoute("/{-$locale}/_sidebar-layout/")({
   component: RouteComponent,
 })
 

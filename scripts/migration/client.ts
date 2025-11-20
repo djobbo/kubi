@@ -9,6 +9,6 @@ import { MIGRATION_SUPABASE_SERVICE_KEY, MIGRATION_SUPABASE_URL } from "./env"
  * @see: https://supabase.com/docs/guides/api/rest/generating-types
  */
 export const supabase = createClient<Database>(
-	MIGRATION_SUPABASE_URL,
-	MIGRATION_SUPABASE_SERVICE_KEY,
+  MIGRATION_SUPABASE_URL,
+  MIGRATION_SUPABASE_SERVICE_KEY,
 )

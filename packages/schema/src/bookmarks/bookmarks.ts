@@ -1,8 +1,8 @@
 import {
-	integer,
-	sqliteTable,
-	text,
-	uniqueIndex,
+  integer,
+  sqliteTable,
+  text,
+  uniqueIndex,
 } from "drizzle-orm/sqlite-core"
 import { createInsertSchema, createSelectSchema } from "drizzle-zod"
 import { z } from "zod/v4"
@@ -19,56 +19,56 @@ export const pageTypeEnum = (name: string) => text(name, { enum: pageTypes })
 // TODO: add union if more than one meta schema is allowed
 // const metaSchema = z.union([playerStatsMetaSchema]).nullable()
 const metaV1Schema = z
-	.object({
-		version: z.literal("1"),
-		data: z.object({
-			icon: z
-				.union([
-					z.object({
-						type: z.literal("legend"),
-						id: z.number().optional(),
-					}),
-					z.object({
-						type: z.literal("url"),
-						url: z.string(),
-					}),
-				])
-				.nullable(),
-		}),
-	})
-	.nullable()
+  .object({
+    version: z.literal("1"),
+    data: z.object({
+      icon: z
+        .union([
+          z.object({
+            type: z.literal("legend"),
+            id: z.number().optional(),
+          }),
+          z.object({
+            type: z.literal("url"),
+            url: z.string(),
+          }),
+        ])
+        .nullable(),
+    }),
+  })
+  .nullable()
 
 export const metaSchema = metaV1Schema
 
 export type Meta = z.infer<typeof metaSchema>
 
 export const bookmarksTable = sqliteTable(
-	"bookmarks",
-	{
-		id: integer("id").primaryKey({ autoIncrement: true }),
-		pageType: pageTypeEnum("page_type").notNull(),
-		pageId: text("page_id").notNull(),
-		name: text("name").notNull(),
-		meta: text("meta", { mode: "json" }).$type<Meta>(),
-		userId: text("user_id")
-			.notNull()
-			.references(() => usersTable.id),
-		...withTimestamp,
-	},
-	(table) => [
-		uniqueIndex("unique_bookmark").on(
-			table.userId,
-			table.pageType,
-			table.pageId,
-		),
-	],
+  "bookmarks",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    pageType: pageTypeEnum("page_type").notNull(),
+    pageId: text("page_id").notNull(),
+    name: text("name").notNull(),
+    meta: text("meta", { mode: "json" }).$type<Meta>(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => usersTable.id),
+    ...withTimestamp,
+  },
+  (table) => [
+    uniqueIndex("unique_bookmark").on(
+      table.userId,
+      table.pageType,
+      table.pageId,
+    ),
+  ],
 )
 
 export const bookmarksRelations = relations(bookmarksTable, ({ one }) => ({
-	user: one(usersTable, {
-		fields: [bookmarksTable.userId],
-		references: [usersTable.id],
-	}),
+  user: one(usersTable, {
+    fields: [bookmarksTable.userId],
+    references: [usersTable.id],
+  }),
 }))
 
 export type Bookmark = typeof bookmarksTable.$inferSelect
@@ -76,7 +76,7 @@ export type NewBookmark = typeof bookmarksTable.$inferInsert
 
 export const bookmarkSelectSchema = createSelectSchema(bookmarksTable)
 export const bookmarksInsertSchema = createInsertSchema(bookmarksTable, {
-	pageType: pageTypeSchema,
-	meta: metaSchema,
-	userId: z.string().optional(),
+  pageType: pageTypeSchema,
+  meta: metaSchema,
+  userId: z.string().optional(),
 })
