@@ -19,7 +19,6 @@
 		"lint": "oxfmt && oxlint --type-aware"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^1.9.4",
 		"@types/bun": "latest",
 		"@typescript/native-preview": "^7.0.0-dev.20251120.1",
 		"oxfmt": "^0.14.0",
