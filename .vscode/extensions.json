@@ -1,10 +1,10 @@
 {
 	"recommendations": [
-		// Bun
 		"oven.bun-vscode",
-		// Tailwind CSS
 		"bradlc.vscode-tailwindcss",
 		// .po files (lingui)
-		"mrorz.language-gettext"
+		"mrorz.language-gettext",
+		"oxc.oxc-vscode",
+		"TypeScriptTeam.native-preview"
 	]
 }

@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "bun drizzle-kit generate && bun drizzle-kit push && bun --watch run ./src/index.ts",
 		"studio": "drizzle-kit studio",
-		"check:types": "tsc --noEmit"
+		"check:types": "tsgo --noEmit"
 	},
 	"dependencies": {
 		"@dair/api-contract": "workspace:*",
@@ -19,7 +19,7 @@
 		"arctic": "^3.7.0",
 		"cheerio": "^1.1.2",
 		"drizzle-orm": "^0.44.7",
-		"effect": "^3.19.4"
+		"effect": "^3.19.6"
 	},
 	"devDependencies": {
 		"@effect/language-service": "^0.47.3",

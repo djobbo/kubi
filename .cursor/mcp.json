@@ -1,0 +1,13 @@
+{
+    "mcpServers": {
+        "docs:effect": {
+            "url": "https://gitmcp.io/Effect-TS/effect"
+        },
+        "docs:effect-atom": {
+            "url": "https://gitmcp.io/tim-smart/effect-atom"
+        },
+        "docs:tanstack-router": {
+            "url": "https://gitmcp.io/TanStack/router"
+        }
+    }
+}
