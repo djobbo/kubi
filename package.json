@@ -16,7 +16,9 @@
 		"stop:client": "docker compose -f docker-compose.client.yml down",
 		"dev": "docker compose -f docker-compose.dev.yml up --build",
 		"dev:stop": "docker compose -f docker-compose.dev.yml down",
-		"lint": "oxfmt && oxlint --type-aware"
+		"lint": "oxfmt && oxlint --type-aware --fix --fix-suggestions",
+		"check:format": "oxfmt --check",
+		"check:lint": "oxlint --type-aware"
 	},
 	"devDependencies": {
 		"@types/bun": "latest",

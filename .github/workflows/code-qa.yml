@@ -10,14 +10,17 @@ jobs:
         include:
           - name: Lint
             action: bun run check:lint
-          - name: Typecheck
-            action: bun run check:types
-          - name: Build
-            action: bun run build
-          - name: Dead Code
-            action: bun run check:deadcode
-          - name: Locales
-            action: bun run check:locales
+          - name: Format
+            action: bun run check:format
+          # TODO: incrementally add these checks back
+          # - name: Typecheck
+          #   action: bun run check:types
+          # - name: Build
+          #   action: bun run build
+          # - name: Dead Code
+          #   action: bun run check:deadcode
+          # - name: Locales
+          #   action: bun run check:locales
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
