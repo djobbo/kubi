@@ -1,0 +1,13 @@
+{
+	"name": "@dair/brawlhalla-api",
+	"type": "module",
+	"private": true,
+	"devDependencies": {
+		"@types/bun": "latest",
+		"@typescript/native-preview": "^7.0.0-dev.20251120.1"
+	},
+	"dependencies": {
+		"@dair/common": "workspace:*",
+		"zod": "^3.25.63"
+	}
+}

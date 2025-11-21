@@ -1,0 +1,82 @@
+import {
+  integer,
+  sqliteTable,
+  text,
+  uniqueIndex,
+} from "drizzle-orm/sqlite-core"
+import { createInsertSchema, createSelectSchema } from "drizzle-zod"
+import { z } from "zod/v4"
+
+import { relations } from "drizzle-orm"
+import { usersTable } from "../auth/users"
+import { withTimestamp } from "../helpers/with-timestamp"
+
+const pageTypes = ["player_stats", "clan_stats"] as const
+
+export const pageTypeSchema = z.enum(pageTypes)
+export const pageTypeEnum = (name: string) => text(name, { enum: pageTypes })
+
+// TODO: add union if more than one meta schema is allowed
+// const metaSchema = z.union([playerStatsMetaSchema]).nullable()
+const metaV1Schema = z
+  .object({
+    version: z.literal("1"),
+    data: z.object({
+      icon: z
+        .union([
+          z.object({
+            type: z.literal("legend"),
+            id: z.number().optional(),
+          }),
+          z.object({
+            type: z.literal("url"),
+            url: z.string(),
+          }),
+        ])
+        .nullable(),
+    }),
+  })
+  .nullable()
+
+export const metaSchema = metaV1Schema
+
+export type Meta = z.infer<typeof metaSchema>
+
+export const bookmarksTable = sqliteTable(
+  "bookmarks",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    pageType: pageTypeEnum("page_type").notNull(),
+    pageId: text("page_id").notNull(),
+    name: text("name").notNull(),
+    meta: text("meta", { mode: "json" }).$type<Meta>(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => usersTable.id),
+    ...withTimestamp,
+  },
+  (table) => [
+    uniqueIndex("unique_bookmark").on(
+      table.userId,
+      table.pageType,
+      table.pageId,
+    ),
+  ],
+)
+
+export const bookmarksRelations = relations(bookmarksTable, ({ one }) => ({
+  user: one(usersTable, {
+    fields: [bookmarksTable.userId],
+    references: [usersTable.id],
+  }),
+}))
+
+export type Bookmark = typeof bookmarksTable.$inferSelect
+export type NewBookmark = typeof bookmarksTable.$inferInsert
+
+export const bookmarkSelectSchema = createSelectSchema(bookmarksTable)
+export const bookmarksInsertSchema = createInsertSchema(bookmarksTable, {
+  pageType: pageTypeSchema,
+  meta: metaSchema,
+  userId: z.string().optional(),
+})

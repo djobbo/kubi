@@ -3,6 +3,7 @@
 # Logs
 
 logs
+panda.log
 _.log
 npm-debug.log_
 yarn-debug.log*
@@ -181,8 +182,12 @@ dist
 # Database
 .db
 
-# lingui
+# Lingui
 **/locales/*/messages.ts
 
-# nixpacks
+# Panda
+styled-system
+styled-system-studio
+
+# Nixpacks
 .nixpacks

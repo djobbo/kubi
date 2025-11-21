@@ -1,0 +1,16 @@
+{
+	"name": "@dair/schema",
+	"module": "src/index.ts",
+	"types": "src/index.ts",
+	"type": "module",
+	"private": true,
+	"dependencies": {
+		"drizzle-orm": "^0.44.6",
+		"drizzle-zod": "^0.8.2",
+		"zod": "^4.1.12"
+	},
+	"devDependencies": {
+		"@types/bun": "latest",
+		"@typescript/native-preview": "^7.0.0-dev.20251120.1"
+	}
+}

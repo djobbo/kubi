@@ -1,0 +1,16 @@
+{
+	"name": "@dair/api-contract",
+	"module": "src/index.ts",
+	"types": "src/index.ts",
+	"type": "module",
+	"private": true,
+	"devDependencies": {
+		"@types/bun": "latest",
+		"@typescript/native-preview": "^7.0.0-dev.20251120.1"
+	},
+	"dependencies": {
+		"@effect/platform": "^0.93.3",
+		"effect": "^3.19.4",
+		"@dair/schema": "workspace:*"
+	}
+}
