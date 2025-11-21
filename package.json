@@ -17,15 +17,21 @@
 		"dev:stop": "docker compose -f docker-compose.dev.yml down",
 		"lint": "oxfmt && oxlint --type-aware --fix --fix-suggestions",
 		"check:format": "oxfmt --check",
-		"check:lint": "oxlint --type-aware"
+		"check:lint": "oxlint --type-aware",
+		"prepare": "husky"
 	},
 	"devDependencies": {
 		"@types/bun": "latest",
 		"@typescript/native-preview": "^7.0.0-dev.20251120.1",
+		"husky": "^9.1.7",
 		"knip": "^5.70.1",
+		"lint-staged": "^16.2.7",
 		"oxfmt": "^0.14.0",
 		"oxlint": "^1.29.0",
 		"oxlint-tsgolint": "^0.8.0"
+	},
+	"lint-staged": {
+		"**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx,vue,astro,svelte}": "oxlint --type-aware --fix --fix-suggestions"
 	},
 	"packageManager": "bun@1.2.17"
 }
