@@ -17,7 +17,7 @@ const config = {
   },
   catalogs: [
     {
-      path: "<rootDir>/src/features/locales/{locale}/messages",
+      path: "<rootDir>/src/features/i18n/locales/{locale}/messages",
       include: ["src"],
     },
   ],

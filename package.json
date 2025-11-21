@@ -1,6 +1,5 @@
 {
 	"name": "dair",
-	"module": "index.ts",
 	"type": "module",
 	"private": true,
 	"workspaces": [
@@ -9,7 +8,7 @@
 		"packages/*"
 	],
 	"scripts": {
-		"check:deadcode": "bun locales:compile && dotenv -e .env.example -- knip-bun",
+		"check:deadcode": "NODE_ENV=deadcode knip-bun",
 		"start:server": "docker compose -f docker-compose.server.yml up --build",
 		"stop:server": "docker compose -f docker-compose.server.yml down",
 		"start:client": "docker compose -f docker-compose.client.yml up --build",
@@ -23,6 +22,7 @@
 	"devDependencies": {
 		"@types/bun": "latest",
 		"@typescript/native-preview": "^7.0.0-dev.20251120.1",
+		"knip": "^5.70.1",
 		"oxfmt": "^0.14.0",
 		"oxlint": "^1.29.0",
 		"oxlint-tsgolint": "^0.8.0"

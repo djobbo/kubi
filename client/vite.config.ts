@@ -11,7 +11,7 @@ import { vanillaExtractPlugin } from "@vanilla-extract/vite-plugin"
 
 const config = defineConfig({
   plugins: [
-    ...lingui(),
+    ...(process.env.NODE_ENV !== "deadcode" ? [lingui()] : []),
     devtools(),
     nitro(),
     // this is the plugin that enables path aliases

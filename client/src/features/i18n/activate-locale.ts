@@ -11,7 +11,7 @@ export const activateLocale = async (
 ) => {
   if (!validateLocale(locale)) return
 
-  const { messages } = await import(`./${locale}/messages.ts`)
+  const { messages } = await import(`./${locale}.po`)
   i18n.load(locale, messages)
   i18n.activate(locale)
 }

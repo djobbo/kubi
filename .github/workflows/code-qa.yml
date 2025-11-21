@@ -17,8 +17,8 @@ jobs:
           #   action: bun run check:types
           # - name: Build
           #   action: bun run build
-          # - name: Dead Code
-          #   action: bun run check:deadcode
+          - name: Dead Code
+            action: bun run check:deadcode
           # - name: Locales
           #   action: bun run check:locales
     steps:

@@ -1,6 +1,5 @@
 {
 	"name": "@dair/common",
-	"module": "index.ts",
 	"type": "module",
 	"private": true,
 	"devDependencies": {

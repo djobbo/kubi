@@ -1,6 +1,6 @@
 import { env } from "@/features/config/env"
-import { activateLocale } from "@/features/locales/activate"
-import { LocalesProvider } from "@/features/locales/locales-provider"
+import { activateLocale } from "@/features/i18n/activate-locale"
+import { LocalesProvider } from "@/features/i18n/locales-provider"
 import { SEO } from "@dair/common/src/helpers/seo"
 import { t } from "@lingui/core/macro"
 import { createFileRoute, Outlet } from "@tanstack/react-router"
