@@ -1,5 +1,4 @@
 import * as Archive from "@/services/archive"
-import { Authorization } from "@/services/authorization"
 import { BrawlhallaApi } from "@/services/brawlhalla-api"
 import type {
   GetPlayerByIdResponse,
@@ -43,11 +42,13 @@ export const getPlayerById = (playerId: number) =>
   Effect.gen(function* () {
     // TODO: const session = yield* Authorization.getSession();
 
+    const brawlhallaApi = yield* BrawlhallaApi
+
     const [playerStats, playerRanked, allLegends] = yield* Effect.all(
       [
-        BrawlhallaApi.getPlayerStatsById(playerId),
-        BrawlhallaApi.getPlayerRankedById(playerId),
-        BrawlhallaApi.getAllLegendsData(),
+        brawlhallaApi.getPlayerStatsById(playerId),
+        brawlhallaApi.getPlayerRankedById(playerId),
+        brawlhallaApi.getAllLegendsData(),
       ],
       { concurrency: 3 },
     )
@@ -55,10 +56,20 @@ export const getPlayerById = (playerId: number) =>
     const archiveService = yield* Archive.Archive
     const [aliases, clan, [bookmark], [clanBookmark]] = yield* Effect.all([
       archiveService.getAliases(playerId),
-      clanId ? BrawlhallaApi.getClanById(clanId) : Effect.succeed(null),
+      clanId
+        ? brawlhallaApi
+            .getClanById(clanId)
+            .pipe(
+              Effect.catchTag("BrawlhallaClanNotFound", () =>
+                Effect.succeed(null),
+              ),
+            )
+        : Effect.succeed(null),
       Effect.succeed([null]), // TODO: bookmark service,
       Effect.succeed([null]), // TODO: bookmark service,
     ])
+
+    const name = playerStats.data.name
 
     const aliasesData: typeof PlayerAliases.Type = [
       ...new Set(
@@ -68,26 +79,6 @@ export const getPlayerById = (playerId: number) =>
           .filter((alias) => alias !== name),
       ),
     ]
-
-    // const bookmarksService = yield* BookmarksService.BookmarksService
-    // const [
-    //   aliases,
-    //   clan,
-    //   // [bookmark],
-    //   // maybeClanBookmark
-    // ] =
-    // yield* Effect.all([
-    // 		archiveService.getAliases(playerId),
-    //     clanId ? brawlhallaApi.clanById(clanId).fetch() : null,
-    // 		// bookmarksService.getBookmarksByPageIds(session?.user.id, [
-    // 		// 	{ pageId: playerId, pageType: "player_stats" },
-    // 		// ]),
-    // 		// clanId
-    // 		// 	? bookmarksService.getBookmarksByPageIds(session?.user.id, [
-    // 		// 			{ pageId: clanId, pageType: "clan_stats" },
-    // 		// 		])
-    // 		// 	: null,
-    // 	])
 
     const updated_at =
       playerStats.updatedAt.getTime() > playerRanked.updatedAt.getTime()
@@ -103,7 +94,6 @@ export const getPlayerById = (playerId: number) =>
     const weapons = getWeaponsData(legends)
     const { unarmed, gadgets, weapon_throws } = getWeaponlessData(legends)
 
-    const name = playerStats.data.name
     const brawlhallaId = playerStats.data.brawlhalla_id
 
     const clanMember = clan?.data.clan.find(
@@ -290,23 +280,10 @@ export const getPlayerById = (playerId: number) =>
   }).pipe(
     Effect.tapError(Effect.logError),
     Effect.catchTags({
-      ResponseError: Effect.fn(function* (error) {
-        switch (error.response.status) {
-          case 404:
-            return yield* Effect.fail(new NotFound())
-          case 429:
-            return yield* Effect.fail(new TooManyRequests())
-          default:
-            return yield* Effect.fail(new InternalServerError())
-        }
-      }),
-      ArchiveError: () => Effect.fail(new InternalServerError()),
-      DBError: () => Effect.fail(new InternalServerError()),
-      ParseError: () => Effect.fail(new InternalServerError()),
-      RequestError: () => Effect.fail(new InternalServerError()),
-      TimeoutException: () => Effect.fail(new InternalServerError()),
-      HttpBodyError: () => Effect.fail(new InternalServerError()),
-      ConfigError: Effect.die,
+      BrawlhallaPlayerNotFound: () => Effect.fail(new NotFound()),
+      BrawlhallaRateLimitError: () => Effect.fail(new TooManyRequests()),
+      BrawlhallaApiError: () => Effect.fail(new InternalServerError()),
+      ArchiveQueryError: () => Effect.fail(new InternalServerError()),
     }),
     Effect.withSpan("get-player-by-id"),
   )

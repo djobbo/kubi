@@ -14,7 +14,6 @@ import { legendsMap } from "@dair/brawlhalla-api/src/constants/legends"
 import { getTeamPlayers } from "@dair/brawlhalla-api/src/helpers/team-players"
 import {
   InternalServerError,
-  NotFound,
   TooManyRequests,
 } from "@dair/api-contract/src/shared/errors"
 
@@ -26,12 +25,8 @@ export const getRankings1v1 = (
   Effect.gen(function* () {
     // TODO: const session = yield* Authorization.getSession();
 
-    const [rankings] = yield* Effect.all(
-      [BrawlhallaApi.getRankings1v1(region, page, name)],
-      {
-        concurrency: 1,
-      },
-    )
+    const brawlhallaApi = yield* BrawlhallaApi
+    const rankings = yield* brawlhallaApi.getRankings1v1(region, page, name)
 
     const rankingsData: typeof Rankings1v1.Type = rankings.data.map<
       typeof Ranking1v1.Type
@@ -72,35 +67,18 @@ export const getRankings1v1 = (
   }).pipe(
     Effect.tapError(Effect.logError),
     Effect.catchTags({
-      ResponseError: Effect.fn(function* (error) {
-        switch (error.response.status) {
-          case 404:
-            return yield* Effect.fail(new NotFound())
-          case 429:
-            return yield* Effect.fail(new TooManyRequests())
-          default:
-            return yield* Effect.fail(new InternalServerError())
-        }
-      }),
-      DBError: () => Effect.fail(new InternalServerError()),
-      ParseError: () => Effect.fail(new InternalServerError()),
-      RequestError: () => Effect.fail(new InternalServerError()),
-      TimeoutException: () => Effect.fail(new InternalServerError()),
-      HttpBodyError: () => Effect.fail(new InternalServerError()),
-      ConfigError: Effect.die,
+      BrawlhallaRateLimitError: () => Effect.fail(new TooManyRequests()),
+      BrawlhallaApiError: () => Effect.fail(new InternalServerError()),
     }),
+    Effect.withSpan("get-rankings-1v1"),
   )
 
 export const getRankings2v2 = (region: typeof AnyRegion.Type, page: number) =>
   Effect.gen(function* () {
     // TODO: const session = yield* Authorization.getSession();
 
-    const [rankings] = yield* Effect.all(
-      [BrawlhallaApi.getRankings2v2(region, page)],
-      {
-        concurrency: 1,
-      },
-    )
+    const brawlhallaApi = yield* BrawlhallaApi
+    const rankings = yield* brawlhallaApi.getRankings2v2(region, page)
 
     const rankingsData: typeof Rankings2v2.Type = rankings.data.map<
       typeof Ranking2v2.Type
@@ -130,22 +108,8 @@ export const getRankings2v2 = (region: typeof AnyRegion.Type, page: number) =>
   }).pipe(
     Effect.tapError(Effect.logError),
     Effect.catchTags({
-      ResponseError: Effect.fn(function* (error) {
-        switch (error.response.status) {
-          case 404:
-            return yield* Effect.fail(new NotFound())
-          case 429:
-            return yield* Effect.fail(new TooManyRequests())
-          default:
-            return yield* Effect.fail(new InternalServerError())
-        }
-      }),
-      DBError: () => Effect.fail(new InternalServerError()),
-      ParseError: () => Effect.fail(new InternalServerError()),
-      RequestError: () => Effect.fail(new InternalServerError()),
-      TimeoutException: () => Effect.fail(new InternalServerError()),
-      HttpBodyError: () => Effect.fail(new InternalServerError()),
-      ConfigError: Effect.die,
+      BrawlhallaRateLimitError: () => Effect.fail(new TooManyRequests()),
+      BrawlhallaApiError: () => Effect.fail(new InternalServerError()),
     }),
     Effect.withSpan("get-rankings-2v2"),
   )

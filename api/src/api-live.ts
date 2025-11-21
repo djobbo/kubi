@@ -2,7 +2,6 @@ import { HttpApiBuilder } from "@effect/platform"
 import { Effect, Layer } from "effect"
 
 import { Api } from "@dair/api-contract"
-import { InternalServerError } from "@effect/platform/HttpApiError"
 import { deleteSession } from "./routes/v1/auth/delete-session"
 import { getSession } from "./routes/v1/auth/get-session"
 import { authorize } from "./routes/v1/auth/providers/authorize"
@@ -44,27 +43,9 @@ const AuthLive = HttpApiBuilder.group(Api, "auth", (handlers) =>
     .handle("authorize", ({ path, urlParams }) =>
       authorize(path.provider, urlParams),
     )
-    .handle("get_session", () =>
-      getSession().pipe(
-        Effect.catchTag("DBError", () =>
-          Effect.fail(new InternalServerError()),
-        ),
-      ),
-    )
-    .handle("delete_session", () =>
-      deleteSession().pipe(
-        Effect.catchTag("DBError", () =>
-          Effect.fail(new InternalServerError()),
-        ),
-      ),
-    )
-    .handle("logout", () =>
-      deleteSession().pipe(
-        Effect.catchTag("DBError", () =>
-          Effect.fail(new InternalServerError()),
-        ),
-      ),
-    )
+    .handle("get_session", () => getSession())
+    .handle("delete_session", () => deleteSession())
+    .handle("logout", () => deleteSession())
     .handle("callback", ({ path, urlParams }) =>
       providerCallback(path.provider, urlParams.code, urlParams.state),
     ),

@@ -1,5 +1,5 @@
-import { fetchRevalidate } from "@/helpers/fetcher"
 import { gql } from "@/helpers/gql"
+import { Fetcher } from "@/services/fetcher"
 import { Effect } from "effect"
 import { parseWeeklyRotation } from "./helpers/parse-weekly-rotation"
 import { Articles } from "./schema"
@@ -59,7 +59,8 @@ const getArticles = Effect.fn(function* (
     withContent?: boolean
   } = {},
 ) {
-  const articles = yield* fetchRevalidate(Articles, {
+  const fetcher = yield* Fetcher
+  const articles = yield* fetcher.fetchRevalidate(Articles, {
     method: "POST",
     url: BRAWLHALLA_GRAPHQL_API_URL,
     body: {

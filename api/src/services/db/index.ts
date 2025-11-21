@@ -1,49 +1,75 @@
+import { Config } from "@/services/config"
+import { DBConnectionError, DBQueryError } from "./errors"
+import * as schema from "@dair/schema"
 import { Database } from "bun:sqlite"
 import { drizzle } from "drizzle-orm/bun-sqlite"
-import { Context, Effect, Layer, Schema } from "effect"
+import { Context, Effect, Layer } from "effect"
 
-import * as schema from "@dair/schema"
+/**
+ * Database client type
+ */
+export type DatabaseClient = ReturnType<typeof drizzle<typeof schema, Database>>
 
-export class DBError extends Schema.TaggedError<DBError>("DBError")("DBError", {
-  cause: Schema.optional(Schema.Unknown),
-  message: Schema.optional(Schema.String),
-}) {}
-export class DB extends Context.Tag("DB")<
-  DB,
-  {
-    use: <T>(
-      fn: (
-        client: ReturnType<typeof drizzle<typeof schema, Database>>,
-      ) => Promise<T>,
-    ) => Effect.Effect<T, DBError, never>
-  }
->() {}
-
-type DBOptions = {
-  url: string
+/**
+ * DB service interface
+ */
+export interface DBService {
+  readonly use: <T>(
+    fn: (client: DatabaseClient) => Promise<T>,
+  ) => Effect.Effect<T, DBQueryError>
 }
 
-export const make = Effect.fn(function* (options: DBOptions) {
+/**
+ * DB service tag for dependency injection
+ */
+export class DB extends Context.Tag("DB")<DB, DBService>() {}
+
+/**
+ * Creates the DB service implementation
+ */
+const makeDB = Effect.gen(function* () {
+  const config = yield* Config
+
+  // Acquire the database connection with proper resource management
   const db = yield* Effect.acquireRelease(
     Effect.tryPromise({
       try: async () => {
-        const sqlite = new Database(options.url, { create: true })
+        const sqlite = new Database(config.db.url, { create: true })
         return drizzle(sqlite, { schema })
       },
-      catch: (e) => new DBError({ cause: e, message: "Error connecting" }),
+      catch: (e) =>
+        new DBConnectionError({
+          cause: e,
+          message: `Failed to connect to database at ${config.db.url}`,
+        }),
     }),
-    (db) => Effect.promise(async () => db.$client.close()),
+    (db) =>
+      Effect.sync(() => {
+        try {
+          db.$client.close()
+        } catch (error) {
+          console.error("Error closing database connection:", error)
+        }
+      }),
   )
 
-  return DB.of({
-    use: Effect.fn("DB.use")(function* (fn) {
-      const result = yield* Effect.tryPromise({
+  const service: DBService = {
+    use: (fn) =>
+      Effect.tryPromise({
         try: async () => await fn(db),
-        catch: (e) => new DBError({ cause: e, message: "Error in `DB.use`" }),
-      })
-      return result
-    }),
-  })
+        catch: (e) =>
+          new DBQueryError({
+            cause: e,
+            message: "Database query failed",
+          }),
+      }),
+  }
+
+  return service
 })
 
-export const layer = (options: DBOptions) => Layer.scoped(DB, make(options))
+/**
+ * Live layer for DB service
+ * Requires: Config
+ */
+export const DBLive = Layer.scoped(DB, makeDB)

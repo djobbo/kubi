@@ -1,27 +1,43 @@
 import * as DB from "@/services/db"
+import { ArchiveQueryError } from "./errors"
 import { aliasesTable } from "@dair/schema"
 import { and, eq } from "drizzle-orm"
-import { Context, Effect, Layer, Schema } from "effect"
+import { Context, Effect, Layer } from "effect"
 
-export class ArchiveError extends Schema.TaggedError<ArchiveError>(
-  "ArchiveError",
-)("ArchiveError", {
-  cause: Schema.optional(Schema.Unknown),
-  message: Schema.optional(Schema.String),
-}) {}
+/**
+ * Archive service interface
+ */
+export interface ArchiveService {
+  readonly getAliases: (playerId: number) => Effect.Effect<
+    Array<{
+      playerId: string
+      alias: string
+      public: boolean
+      createdAt: Date
+    }>,
+    ArchiveQueryError
+  >
+}
 
+/**
+ * Archive service tag for dependency injection
+ */
 export class Archive extends Context.Tag("Archive")<
   Archive,
-  ReturnType<typeof archive>
+  ArchiveService
 >() {}
 
-const archive = () => {
-  return {
+/**
+ * Creates the Archive service implementation
+ */
+const makeArchive = Effect.gen(function* () {
+  const db = yield* DB.DB
+
+  const service: ArchiveService = {
     getAliases: (playerId: number) =>
-      Effect.gen(function* () {
-        const db = yield* DB.DB
-        const aliases = yield* db.use(async (db) => {
-          return await db
+      db
+        .use(async (client) => {
+          return await client
             .select()
             .from(aliasesTable)
             .where(
@@ -32,25 +48,24 @@ const archive = () => {
             )
             .execute()
         })
-        return aliases
-      }).pipe(
-        Effect.catchAll((error) => {
-          return Effect.fail(
-            ArchiveError.make({
-              cause: error,
-              message: "Failed to get aliases",
-            }),
-          )
-        }),
-      ),
+        .pipe(
+          Effect.catchTags({
+            DBQueryError: (error) =>
+              Effect.fail(
+                new ArchiveQueryError({
+                  cause: error,
+                  message: `Failed to get aliases for player ${playerId}`,
+                }),
+              ),
+          }),
+        ),
   }
-}
 
-export const make = () => {
-  const api = archive()
-  return Effect.succeed(Archive.of(api))
-}
+  return service
+})
 
-export const layer = () => {
-  return Layer.scoped(Archive, make())
-}
+/**
+ * Live layer for Archive service
+ * Requires: DB
+ */
+export const ArchiveLive = Layer.effect(Archive, makeArchive)

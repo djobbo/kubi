@@ -34,13 +34,11 @@ export const getWeeklyRotation = () =>
             return yield* Effect.fail(new InternalServerError())
         }
       }),
-      DBError: () => Effect.fail(new InternalServerError()),
       ParseError: () => Effect.fail(new InternalServerError()),
       RequestError: () => Effect.fail(new InternalServerError()),
       TimeoutException: () => Effect.fail(new InternalServerError()),
       HttpBodyError: () => Effect.fail(new InternalServerError()),
       WeeklyRotationError: () => Effect.fail(new NotFound()),
-      ConfigError: Effect.die,
     }),
     Effect.withSpan("get-weekly-rotation"),
   )
