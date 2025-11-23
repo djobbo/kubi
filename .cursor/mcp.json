@@ -1,20 +1,11 @@
 {
     "mcpServers": {
-        "effect repo": {
-            "url": "https://gitmcp.io/Effect-TS/effect"
-        },
         "context7": {
             "command": "bunx",
             "args": [
                 "-y",
                 "@upstash/context7-mcp@latest"
             ]
-        },
-        "effect-atom repo": {
-            "url": "https://gitmcp.io/tim-smart/effect-atom"
-        },
-        "tanstack-router repo": {
-            "url": "https://gitmcp.io/TanStack/router"
         }
     }
 }
