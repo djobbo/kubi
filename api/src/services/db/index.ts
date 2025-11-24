@@ -1,4 +1,4 @@
-import { Config } from "@/services/config"
+import { DatabaseConfig } from "./config"
 import { DBConnectionError, DBQueryError } from "./errors"
 import * as schema from "@dair/schema"
 import { Database } from "bun:sqlite"
@@ -28,19 +28,19 @@ export class DB extends Context.Tag("DB")<DB, DBService>() {}
  * Creates the DB service implementation
  */
 const makeDB = Effect.gen(function* () {
-  const config = yield* Config
+  const config = yield* DatabaseConfig
 
   // Acquire the database connection with proper resource management
   const db = yield* Effect.acquireRelease(
     Effect.tryPromise({
       try: async () => {
-        const sqlite = new Database(config.db.url, { create: true })
+        const sqlite = new Database(config.url, { create: true })
         return drizzle(sqlite, { schema })
       },
       catch: (e) =>
         new DBConnectionError({
           cause: e,
-          message: `Failed to connect to database at ${config.db.url}`,
+          message: `Failed to connect to database at ${config.url}`,
         }),
     }),
     (db) =>
@@ -70,6 +70,8 @@ const makeDB = Effect.gen(function* () {
 
 /**
  * Live layer for DB service
- * Requires: Config
+ * Requires: DatabaseConfig
  */
-export const DBLive = Layer.scoped(DB, makeDB)
+export const DBLive = Layer.scoped(DB, makeDB).pipe(
+  Layer.provide(DatabaseConfig.layer),
+)
