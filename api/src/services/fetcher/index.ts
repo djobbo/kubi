@@ -1,4 +1,4 @@
-import { Config } from "@/services/config"
+import { DatabaseConfig } from "@/services/db/config"
 import { DB } from "@/services/db"
 import { CacheMissError, CacheWriteError } from "./errors"
 import { apiCacheTable } from "@dair/schema"
@@ -48,7 +48,7 @@ export interface FetcherService {
   ) => Effect.Effect<
     { data: T; updatedAt: Date; cached: boolean },
     CacheMissError | ParseError,
-    DB | Config
+    DB
   >
   readonly fetchRevalidate: <T, U>(
     schema: Schema.Schema<T, U>,
@@ -56,85 +56,116 @@ export interface FetcherService {
   ) => Effect.Effect<
     { data: T; updatedAt: Date; cached: boolean },
     ParseError | TimeoutException | HttpBodyError | HttpClientError,
-    HttpClient.HttpClient | DB | Config
+    HttpClient.HttpClient | DB
   >
 }
 
 /**
- * Fetcher service tag for dependency injection
+ * Fetcher service for making HTTP requests with caching
  */
-export class Fetcher extends Context.Tag("Fetcher")<
+export class Fetcher extends Context.Tag("@app/Fetcher")<
   Fetcher,
   FetcherService
->() {}
+>() {
+  /**
+   * Live layer for Fetcher service
+   */
+  static readonly layer = Layer.effect(
+    Fetcher,
+    Effect.gen(function* () {
+      const dbConfig = yield* DatabaseConfig
 
-/**
- * Fetches data from cache
- */
-const fetchCache = <T, U>(
-  schema: Schema.Schema<T, U>,
-  options: FetchJsonOptions,
-) =>
-  Effect.gen(function* () {
-    const config = yield* Config
-    const db = yield* DB
-    const cacheVersion = config.db.cacheVersion
-    const { cacheName, cacheMaxAge = DEFAULT_CACHE_MAX_AGE } = options
+      const service: FetcherService = {
+        fetchJson,
+        fetchCache: <T, U>(
+          schema: Schema.Schema<T, U>,
+          options: FetchJsonOptions,
+        ) =>
+          Effect.gen(function* () {
+            const db = yield* DB
+            const cacheVersion = dbConfig.cacheVersion
+            const { cacheName, cacheMaxAge = DEFAULT_CACHE_MAX_AGE } = options
 
-    if (!cacheName) {
-      return yield* Effect.fail(
-        new CacheMissError({
-          cacheName: "unknown",
-          message: "No cache name provided",
-        }),
-      )
-    }
+            if (!cacheName) {
+              return yield* Effect.fail(
+                new CacheMissError({
+                  cacheName: "unknown",
+                  message: "No cache name provided",
+                }),
+              )
+            }
 
-    const cached = yield* db
-      .use(async (client) =>
-        client
-          .select()
-          .from(apiCacheTable)
-          .where(
-            and(
-              eq(apiCacheTable.cacheName, cacheName),
-              eq(apiCacheTable.version, cacheVersion),
-              gte(apiCacheTable.createdAt, new Date(Date.now() - cacheMaxAge)),
+            const cached = yield* db
+              .use(async (client) =>
+                client
+                  .select()
+                  .from(apiCacheTable)
+                  .where(
+                    and(
+                      eq(apiCacheTable.cacheName, cacheName),
+                      eq(apiCacheTable.version, cacheVersion),
+                      gte(
+                        apiCacheTable.createdAt,
+                        new Date(Date.now() - cacheMaxAge),
+                      ),
+                    ),
+                  )
+                  .orderBy(desc(apiCacheTable.createdAt))
+                  .limit(1)
+                  .execute(),
+              )
+              .pipe(
+                Effect.andThen((rows) => rows[0]),
+                Effect.catchTag("DBQueryError", (_error) =>
+                  Effect.fail(
+                    new CacheMissError({
+                      cacheName,
+                      message: "Database query failed when fetching from cache",
+                    }),
+                  ),
+                ),
+              )
+
+            if (!cached) {
+              return yield* Effect.fail(
+                new CacheMissError({
+                  cacheName,
+                  message: "No cached data found",
+                }),
+              )
+            }
+
+            const parsed = yield* Schema.decodeUnknown(schema)(cached.data)
+
+            return {
+              data: parsed,
+              updatedAt: cached.createdAt,
+              cached: true,
+            }
+          }).pipe(Effect.withSpan("Fetcher.fetchCache")),
+
+        fetchRevalidate: <T, U>(
+          schema: Schema.Schema<T, U>,
+          options: FetchJsonOptions,
+        ) =>
+          service.fetchCache(schema, options).pipe(
+            Effect.orElse(() =>
+              fetchJson(schema, options).pipe(
+                Effect.tap(({ rawData }) =>
+                  cacheData(schema, options, rawData, dbConfig.cacheVersion).pipe(
+                    Effect.catchAll((error) => Effect.logError(error)),
+                  ),
+                ),
+              ),
             ),
-          )
-          .orderBy(desc(apiCacheTable.createdAt))
-          .limit(1)
-          .execute(),
-      )
-      .pipe(
-        Effect.andThen((rows) => rows[0]),
-        Effect.catchTag("DBQueryError", (_error) =>
-          Effect.fail(
-            new CacheMissError({
-              cacheName,
-              message: "Database query failed when fetching from cache",
-            }),
           ),
-        ),
-      )
+      }
 
-    if (!cached) {
-      return yield* Effect.fail(
-        new CacheMissError({
-          cacheName,
-          message: "No cached data found",
-        }),
-      )
-    }
+      return Fetcher.of(service)
+    }),
+  ).pipe(Layer.provide(DatabaseConfig.layer))
+}
 
-    const parsed = yield* Schema.decodeUnknown(schema)(cached.data)
-
-    return {
-      data: parsed,
-      updatedAt: cached.createdAt,
-      cached: true,
-    }
-  }).pipe(Effect.withSpan("Fetcher.fetchCache"))
 
 /**
  * Fetches JSON data from a URL
@@ -176,15 +207,14 @@ const fetchJson = <T, U>(
 /**
  * Caches data in the database
  */
-const cache = <T, U>(
+const cacheData = <T, U>(
   schema: Schema.Schema<T, U>,
   options: FetchJsonOptions,
   rawData: unknown,
+  cacheVersion: number,
 ) =>
   Effect.gen(function* () {
-    const config = yield* Config
     const db = yield* DB
-    const cacheVersion = config.db.cacheVersion
     const { cacheName } = options
     if (!cacheName) return
 
@@ -215,37 +245,3 @@ const cache = <T, U>(
         ),
       )
   }).pipe(Effect.withSpan("Fetcher.cache"))
-
-/**
- * Creates the Fetcher service implementation
- */
-const makeFetcher = () => {
-  const service: FetcherService = {
-    fetchJson,
-    fetchCache,
-    fetchRevalidate: <T, U>(
-      schema: Schema.Schema<T, U>,
-      options: FetchJsonOptions,
-    ) =>
-      fetchCache(schema, options).pipe(
-        Effect.orElse(() =>
-          fetchJson(schema, options).pipe(
-            Effect.tap(({ rawData }) =>
-              // TODO: Fire and forget cache operation
-              cache(schema, options, rawData).pipe(
-                Effect.catchAll((error) => Effect.logError(error)),
-              ),
-            ),
-          ),
-        ),
-      ),
-  }
-
-  return Effect.succeed(service)
-}
-
-/**
- * Live layer for Fetcher service
- * Requires: Config, DB, HttpClient
- */
-export const FetcherLive = Layer.effect(Fetcher, makeFetcher())

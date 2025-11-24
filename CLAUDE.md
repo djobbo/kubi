@@ -30,6 +30,18 @@ The Effect Solutions CLI provides curated best practices and patterns for Effect
 **Local Effect Source:** The Effect repository is cloned to `~/.local/share/effect-solutions/effect` for reference. Use this to explore APIs, find usage examples, and understand implementation details when the documentation isn't enough.
 <!-- effect-solutions:end -->
 
+## Effect Code Patterns
+
+This project follows idiomatic Effect patterns:
+
+- **Services**: Each service has a dedicated config, uses `@app/ServiceName` tags, `static readonly layer`, and `Effect.fn` for methods
+- **Config**: Dedicated config services per domain with `layer` (production) and `testLayer` (testing)
+- **Errors**: `Schema.TaggedError` with all properties in the schema (no mutable class properties)
+
+See detailed patterns in:
+- `api/IDIOMATIC_PATTERNS.md` - Complete guide with examples
+- `api/EFFECT_PATTERNS_QUICK_REF.md` - Quick reference templates
+
 ## Project Structure
 
 This is a monorepo with the following workspaces:
