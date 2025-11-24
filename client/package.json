@@ -29,6 +29,7 @@
     "vite-tsconfig-paths": "^5.1.4"
   },
   "devDependencies": {
+    "@effect/language-service": "^0.56.0",
     "@lingui/babel-plugin-lingui-macro": "^5.6.0",
     "@lingui/cli": "^5.6.0",
     "@lingui/vite-plugin": "^5.6.0",
@@ -56,6 +57,7 @@
     "locales:build": "bun locales:extract && bun locales:compile",
     "locales:compile": "lingui compile",
     "locales:extract": "lingui extract --clean",
+    "prepare": "effect-language-service patch",
     "serve": "bunx --bun vite preview",
     "test": "bunx --bun vitest run"
   },
