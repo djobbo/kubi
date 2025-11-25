@@ -1,5 +1,5 @@
 {
-	"typescript.experimental.useTsgo": true,
+	"typescript.experimental.useTsgo": false,
 	"files.watcherExclude": {
 		"**/routeTree.gen.ts": true
 	},
@@ -30,5 +30,7 @@
 	"oxc.fmt.experimental": true,
 	"oxc.lint.run": "onSave",
 	"oxc.enable": true,
-	"oxc.typeAware": true
+	"oxc.typeAware": true,
+	"typescript.tsdk": "./node_modules/typescript/lib",
+	"typescript.enablePromptUseWorkspaceTsdk": true
 }

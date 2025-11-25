@@ -29,6 +29,7 @@
     "vite-tsconfig-paths": "^5.1.4"
   },
   "devDependencies": {
+    "@effect/language-service": "^0.56.0",
     "@lingui/babel-plugin-lingui-macro": "^5.6.0",
     "@lingui/cli": "^5.6.0",
     "@lingui/vite-plugin": "^5.6.0",
@@ -37,13 +38,14 @@
     "@testing-library/react": "^16.3.0",
     "@types/bun": "^1.3.3",
     "@types/node": "^24.10.1",
-    "@types/react": "^19.2.6",
+    "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "@typescript/native-preview": "^7.0.0-dev.20251123.1",
-    "@vanilla-extract/vite-plugin": "^5.1.1",
+    "@typescript/native-preview": "^7.0.0-dev.20251124.1",
+    "@vanilla-extract/vite-plugin": "^5.1.2",
     "@vitejs/plugin-react": "^5.1.1",
     "jsdom": "^27.2.0",
     "prettier": "^3.6.2",
+    "typescript": "^5.9.3",
     "vite": "^7.2.4",
     "vitest": "^4.0.13",
     "web-vitals": "^5.1.0"
@@ -56,6 +58,7 @@
     "locales:build": "bun locales:extract && bun locales:compile",
     "locales:compile": "lingui compile",
     "locales:extract": "lingui extract --clean",
+    "prepare": "effect-language-service patch",
     "serve": "bunx --bun vite preview",
     "test": "bunx --bun vitest run"
   },

@@ -13,7 +13,9 @@ import type {
 import { Discord, Google, type OAuth2Tokens } from "arctic"
 import { Context, Effect, Layer, Redacted, Schema } from "effect"
 import type { ParseError } from "effect/ParseResult"
-import { Config } from "../config"
+import { OAuthConfig } from "./config"
+import { ClientConfig } from "@/services/config/client-config"
+import { ApiServerConfig } from "@/services/config/api-server-config"
 import { OAuthValidationError } from "./errors"
 import { createSession, deleteSession, getSession } from "./session"
 import { validateOAuthCallback } from "./validate-oauth-callback"
@@ -89,12 +91,121 @@ const DiscordUser = Schema.Struct({
 })
 
 /**
- * Authorization service tag for dependency injection
+ * Authorization service for OAuth authentication and session management
  */
-export class Authorization extends Context.Tag("Authorization")<
+export class Authorization extends Context.Tag("@app/Authorization")<
   Authorization,
   AuthorizationService
->() {}
+>() {
+  /**
+   * Live layer for Authorization service
+   */
+  static readonly layer = Layer.effect(
+    Authorization,
+    Effect.gen(function* () {
+      const oauthConfig = yield* OAuthConfig
+      const clientConfig = yield* ClientConfig
+      const serverConfig = yield* ApiServerConfig
+
+      const google = new Google(
+        oauthConfig.google.clientId,
+        Redacted.value(oauthConfig.google.clientSecret),
+        `${serverConfig.url}/v1/auth/providers/${GOOGLE_PROVIDER_ID}/callback`,
+      )
+
+      const discord = new Discord(
+        oauthConfig.discord.clientId,
+        Redacted.value(oauthConfig.discord.clientSecret),
+        `${serverConfig.url}/v1/auth/providers/${DISCORD_PROVIDER_ID}/callback`,
+      )
+
+      const service = makeAuthorization({
+        defaultClientUrl: clientConfig.defaultUrl,
+        oauthSecret: Redacted.value(oauthConfig.secret),
+        providers: {
+          google: {
+            provider: google,
+            getTokens: (code: string) =>
+              Effect.tryPromise({
+                try: () =>
+                  google.validateAuthorizationCode(
+                    code,
+                    Redacted.value(oauthConfig.secret),
+                  ),
+                catch: () => new Unauthorized(),
+              }),
+            getUserInfo: (accessToken: string) =>
+              Effect.gen(function* () {
+                const client = yield* HttpClient.HttpClient
+
+                const response = yield* client.get(
+                  "https://www.googleapis.com/oauth2/v2/userinfo",
+                  {
+                    headers: {
+                      Authorization: `Bearer ${accessToken}`,
+                    },
+                  },
+                )
+                const data = yield* response.json
+
+                const userInfo = yield* Schema.decodeUnknown(GoogleUser)(data)
+                return userInfo as typeof GoogleUser.Type
+              }),
+            createAuthorizationURL: (state: string) =>
+              google.createAuthorizationURL(
+                state,
+                Redacted.value(oauthConfig.secret),
+                [
+                  "https://www.googleapis.com/auth/userinfo.email",
+                  "https://www.googleapis.com/auth/userinfo.profile",
+                ],
+              ),
+          },
+          discord: {
+            provider: discord,
+            getTokens: (code: string) =>
+              Effect.tryPromise({
+                try: () => discord.validateAuthorizationCode(code, null),
+                catch: () => new Unauthorized(),
+              }),
+            getUserInfo: (accessToken: string) =>
+              Effect.gen(function* () {
+                const client = yield* HttpClient.HttpClient
+
+                const response = yield* client.get(
+                  "https://discord.com/api/users/@me",
+                  {
+                    headers: {
+                      Authorization: `Bearer ${accessToken}`,
+                    },
+                  },
+                )
+                const data = yield* response.json
+
+                const userInfo = yield* Schema.decodeUnknown(DiscordUser)(data)
+                if (!userInfo.verified) {
+                  throw new Error("Discord email is not verified")
+                }
+
+                return userInfo
+              }),
+            createAuthorizationURL: (state: string) =>
+              discord.createAuthorizationURL(state, null, [
+                "identify",
+                "email",
+              ]),
+          },
+        },
+      })
+
+      return Authorization.of(service)
+    }),
+  ).pipe(
+    Layer.provide(OAuthConfig.layer),
+    Layer.provide(ClientConfig.layer),
+    Layer.provide(ApiServerConfig.layer),
+  )
+}
 
 export interface AuthorizationProvider<
   Provider extends Google | Discord = Google | Discord,
@@ -114,6 +225,7 @@ export interface AuthorizationProvider<
 
 interface AuthorizationOptions {
   defaultClientUrl: string
+  oauthSecret: string
   providers: {
     google: AuthorizationProvider<Google, typeof GoogleUser.Type>
     discord: AuthorizationProvider<Discord, typeof DiscordUser.Type>
@@ -175,105 +287,3 @@ const makeAuthorization = (options: AuthorizationOptions) => {
 
   return service
 }
-
-/**
- * Creates the Authorization service with Effect
- */
-const makeAuthorizationEffect = Effect.gen(function* () {
-  const config = yield* Config
-
-  const google = new Google(
-    config.oauth.google.clientId,
-    config.oauth.google.clientSecret,
-    `${config.api.url}/v1/auth/providers/${GOOGLE_PROVIDER_ID}/callback`,
-  )
-
-  const discord = new Discord(
-    config.oauth.discord.clientId,
-    config.oauth.discord.clientSecret,
-    `${config.api.url}/v1/auth/providers/${DISCORD_PROVIDER_ID}/callback`,
-  )
-
-  const service = makeAuthorization({
-    defaultClientUrl: config.client.defaultUrl,
-    providers: {
-      google: {
-        provider: google,
-        getTokens: (code: string) =>
-          Effect.tryPromise({
-            try: () =>
-              google.validateAuthorizationCode(code, config.oauth.secret),
-            catch: () => {
-              return new Unauthorized()
-            },
-          }),
-        getUserInfo: (accessToken: string) =>
-          Effect.gen(function* () {
-            const client = yield* HttpClient.HttpClient
-
-            const response = yield* client.get(
-              "https://www.googleapis.com/oauth2/v2/userinfo",
-              {
-                headers: {
-                  Authorization: `Bearer ${accessToken}`,
-                },
-              },
-            )
-            const data = yield* response.json
-
-            const userInfo = yield* Schema.decodeUnknown(GoogleUser)(data)
-            return userInfo as typeof GoogleUser.Type
-          }),
-        createAuthorizationURL: (state: string) =>
-          google.createAuthorizationURL(state, config.oauth.secret, [
-            "https://www.googleapis.com/auth/userinfo.email",
-            "https://www.googleapis.com/auth/userinfo.profile",
-          ]),
-      },
-      discord: {
-        provider: discord,
-        getTokens: (code: string) =>
-          Effect.tryPromise({
-            try: () => discord.validateAuthorizationCode(code, null),
-            catch: () => {
-              return new Unauthorized()
-            },
-          }),
-        getUserInfo: (accessToken: string) =>
-          Effect.gen(function* () {
-            const client = yield* HttpClient.HttpClient
-
-            const response = yield* client.get(
-              "https://discord.com/api/users/@me",
-              {
-                headers: {
-                  Authorization: `Bearer ${accessToken}`,
-                },
-              },
-            )
-            const data = yield* response.json
-
-            const userInfo = yield* Schema.decodeUnknown(DiscordUser)(data)
-            if (!userInfo.verified) {
-              throw new Error("Discord email is not verified")
-            }
-
-            return userInfo
-          }),
-        createAuthorizationURL: (state: string) =>
-          discord.createAuthorizationURL(state, null, ["identify", "email"]),
-      },
-    },
-  })
-
-  return service
-})
-
-/**
- * Live layer for Authorization service
- * Requires: Config, DB
- */
-export const AuthorizationLive = Layer.effect(
-  Authorization,
-  makeAuthorizationEffect,
-)

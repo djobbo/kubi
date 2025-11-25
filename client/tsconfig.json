@@ -8,7 +8,7 @@
   "compilerOptions": {
     "target": "ES2022",
     "jsx": "react-jsx",
-    "module": "ESNext",
+    "module": "Preserve",
     "lib": [
       "ES2022",
       "DOM",
@@ -29,6 +29,9 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "exactOptionalPropertyTypes": true,
     "paths": {
       "@/*": [
         "./src/*"
@@ -36,6 +39,11 @@
       "~/*": [
         "./*"
       ]
-    }
+    },
+    "plugins": [
+      {
+        "name": "@effect/language-service"
+      }
+    ]
   }
 }
