@@ -21,7 +21,7 @@
   "scripts": {
     "check:deadcode": "NODE_ENV=deadcode knip-bun",
     "check:format": "oxfmt --check",
-    "check:lint": "oxlint --type-aware",
+    "check:lint": "oxlint --type-aware --type-check",
     "dev": "docker compose -f docker-compose.dev.yml up --build",
     "dev:stop": "docker compose -f docker-compose.dev.yml down",
     "lint": "oxfmt && syncpack format && syncpack fix && oxlint --type-aware --type-check --fix --fix-suggestions",
