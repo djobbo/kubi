@@ -6,7 +6,6 @@ import { ApiLive } from "./api-live"
 import { Archive } from "./services/archive"
 import { Authorization } from "./services/authorization"
 import { ApiServerConfig } from "./services/config/api-server-config"
-import { ConfigError } from "./services/config/errors"
 import { DB } from "./services/db"
 import * as Docs from "./services/docs"
 import { BrawlhallaApi } from "./services/brawlhalla-api"
@@ -56,7 +55,7 @@ const app = Effect.gen(function* () {
 
 Effect.runFork(
   app.pipe(
-    Effect.catchTag("ConfigError", (error: ConfigError) => {
+    Effect.catchTag("ConfigError", (error) => {
       console.error("Configuration error:", error.message)
       console.error("Please check your environment variables")
       return Effect.die(error)
