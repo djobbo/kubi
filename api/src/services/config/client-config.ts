@@ -28,4 +28,3 @@ export class ClientConfig extends Context.Tag("@app/ClientConfig")<
     }),
   )
 }
-

@@ -148,24 +148,28 @@ export class Fetcher extends Context.Tag("@app/Fetcher")<
           schema: Schema.Schema<T, U>,
           options: FetchJsonOptions,
         ) =>
-          service.fetchCache(schema, options).pipe(
-            Effect.orElse(() =>
-              fetchJson(schema, options).pipe(
-                Effect.tap(({ rawData }) =>
-                  cacheData(schema, options, rawData, dbConfig.cacheVersion).pipe(
-                    Effect.catchAll((error) => Effect.logError(error)),
+          service
+            .fetchCache(schema, options)
+            .pipe(
+              Effect.orElse(() =>
+                fetchJson(schema, options).pipe(
+                  Effect.tap(({ rawData }) =>
+                    cacheData(
+                      schema,
+                      options,
+                      rawData,
+                      dbConfig.cacheVersion,
+                    ).pipe(Effect.catchAll((error) => Effect.logError(error))),
                   ),
                 ),
               ),
             ),
-          ),
       }
 
       return Fetcher.of(service)
     }),
   ).pipe(Layer.provide(DatabaseConfig.layer))
 }
-
 
 /**
  * Fetches JSON data from a URL

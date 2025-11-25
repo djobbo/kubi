@@ -30,4 +30,3 @@ export class BrawlhallaApiConfig extends Context.Tag(
     }),
   )
 }
-

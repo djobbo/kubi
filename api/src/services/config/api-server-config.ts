@@ -23,9 +23,9 @@ export class ApiServerConfig extends Context.Tag("@app/ApiServerConfig")<
         "ALLOWED_ORIGINS",
       ).pipe(Config.orElse(() => Config.succeed("*")))
 
-      const origins = [...new Set(
-        allowedOrigins.split(",").map((origin) => origin.trim()),
-      )]
+      const origins = [
+        ...new Set(allowedOrigins.split(",").map((origin) => origin.trim())),
+      ]
 
       return ApiServerConfig.of({
         port,
@@ -47,4 +47,3 @@ export class ApiServerConfig extends Context.Tag("@app/ApiServerConfig")<
     }),
   )
 }
-

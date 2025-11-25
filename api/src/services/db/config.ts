@@ -31,4 +31,3 @@ export class DatabaseConfig extends Context.Tag("@app/DatabaseConfig")<
     }),
   )
 }
-
