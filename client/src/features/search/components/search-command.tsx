@@ -5,6 +5,7 @@ import * as searchCommandStyles from "./search-command.css"
 import { Autocomplete } from "@base-ui-components/react/autocomplete"
 import { ApiClient } from "@/shared/api-client"
 import { Effect } from "effect"
+import { Link } from "@tanstack/react-router"
 
 const DEBOUNCE_TIME = 1000
 const MIN_SEARCH_LENGTH = 1
@@ -53,7 +54,12 @@ const SearchAutocomplete = () => {
             <Autocomplete.List>
               {results.map((item) => (
                 <Autocomplete.Item key={item.id} value={item}>
-                  {item.name}
+                  <Link
+                    to={`/{-$locale}/brawlhalla/players/$playerId/{-$tab}`}
+                    params={{ playerId: item.slug }}
+                  >
+                    {item.name}
+                  </Link>
                 </Autocomplete.Item>
               ))}
             </Autocomplete.List>

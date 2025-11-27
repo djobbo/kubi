@@ -16,6 +16,7 @@ import {
   InternalServerError,
   TooManyRequests,
 } from "@dair/api-contract/src/shared/errors"
+import { getEntitySlug } from "@/helpers/entity-slug"
 
 export const getRankings1v1 = (
   region: typeof AnyRegion.Type,
@@ -44,6 +45,7 @@ export const getRankings1v1 = (
         peak_rating: ranking.peak_rating,
         name: ranking.name,
         id: ranking.brawlhalla_id,
+        slug: getEntitySlug(ranking.brawlhalla_id, ranking.name),
         best_legend: bestLegend
           ? {
               id: ranking.best_legend,
@@ -93,7 +95,11 @@ export const getRankings2v2 = (region: typeof AnyRegion.Type, page: number) =>
         wins: ranking.wins,
         region: ranking.region,
         peak_rating: ranking.peak_rating,
-        team: teamPlayers,
+        team: teamPlayers.map((player) => ({
+          id: player.id,
+          name: player.name,
+          slug: getEntitySlug(player.id, player.name),
+        })),
       }
     })
 

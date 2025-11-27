@@ -1,11 +1,11 @@
 import { cn, type VariantProps, cva } from "@dair/common/src/helpers/ui"
 import type { ComponentProps } from "react"
 
-const cardVariants = cva("corner-smooth-2xl p-4", {
+const cardVariants = cva("corner-smooth-xl p-4", {
   variants: {
     variant: {
       default: "bg-bg shadow-lg",
-      inset: "bg-bg-dark border border-border corner-smooth-lg",
+      inset: "bg-bg-dark border border-border corner-smooth-sm",
       dashed: "border border-border border-dashed",
     },
   },

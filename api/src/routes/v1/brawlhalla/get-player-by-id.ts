@@ -26,17 +26,13 @@ import { getLegendOrTeamRatingReset } from "@dair/brawlhalla-api/src/helpers/sea
 import { getTeamPlayers } from "@dair/brawlhalla-api/src/helpers/team-players"
 import { calculateWinrate } from "@dair/brawlhalla-api/src/helpers/winrate"
 import { cleanString } from "@dair/common/src/helpers/clean-string"
-import { sluggify } from "@dair/common/src/helpers/sluggify"
 import {
   InternalServerError,
   NotFound,
   TooManyRequests,
 } from "@dair/api-contract/src/shared/errors"
 import { Effect } from "effect"
-
-const getEntitySlug = (id: number, name: string) => {
-  return `${id}-${sluggify(name).slice(0, 24)}`
-}
+import { getEntitySlug } from "@/helpers/entity-slug"
 
 export const getPlayerById = (playerId: number) =>
   Effect.gen(function* () {
