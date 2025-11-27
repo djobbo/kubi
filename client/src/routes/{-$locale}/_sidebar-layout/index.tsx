@@ -1,3 +1,4 @@
+import { SearchButton } from "@/features/search/components/search-button"
 import { createFileRoute } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/{-$locale}/_sidebar-layout/")({
@@ -5,5 +6,10 @@ export const Route = createFileRoute("/{-$locale}/_sidebar-layout/")({
 })
 
 function RouteComponent() {
-  return <div>Hello "/-$locale/_sidebar-layout/"!</div>
+  return (
+    <div>
+      Hello "/-$locale/_sidebar-layout/"!
+      <SearchButton />
+    </div>
+  )
 }

@@ -29,9 +29,9 @@
 	--font-mono: Fira Code, monospace;
 
 	/* Layout */
-	--sidebar-expanded-width: 16rem;
+	--sidebar-expanded-width: 14rem;
 	--sidebar-minimized-width: 4rem;
-	--header-height: 3rem;
+	--header-height: 2.5rem;
 
 	/* Corners */
 	--corner-shape-smooth: superellipse(1.2);

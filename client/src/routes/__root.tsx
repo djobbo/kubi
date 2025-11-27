@@ -4,6 +4,7 @@ import { TanStackDevtools } from "@tanstack/react-devtools"
 import { Grain } from "@/features/layout/components/grain"
 
 import styles from "@/styles.css?url"
+import { SearchCommand } from "@/features/search/components/search-command"
 
 export const Route = createRootRoute({
   head: () => {
@@ -53,6 +54,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <div id="root">
           {children}
           <Grain />
+          <SearchCommand />
         </div>
         <TanStackDevtools
           config={{
