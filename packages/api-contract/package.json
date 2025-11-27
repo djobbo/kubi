@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "dependencies": {
     "@dair/schema": "workspace:*",
-    "@effect/platform": "^0.93.3",
+    "@effect/platform": "^0.93.4",
     "effect": "^3.19.6"
   },
   "devDependencies": {
