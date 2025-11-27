@@ -9,6 +9,7 @@ import {
   TooManyRequests,
 } from "@dair/api-contract/src/shared/errors"
 import { Effect } from "effect"
+import { getGuildLevel } from "@dair/brawlhalla-api/src/constants/guilds"
 
 export const getGuildById = (clanId: number) =>
   Effect.gen(function* () {
@@ -17,11 +18,15 @@ export const getGuildById = (clanId: number) =>
     const brawlhallaApi = yield* BrawlhallaApi
     const clanStats = yield* brawlhallaApi.getClanById(clanId)
 
+    const { level, xpPercentage } = getGuildLevel(clanStats.data.clan_xp)
+
     const clanData: typeof Clan.Type = {
       id: clanStats.data.clan_id,
       name: clanStats.data.clan_name,
       created_at: clanStats.data.clan_create_date,
       xp: clanStats.data.clan_xp,
+      xp_percentage: xpPercentage,
+      level: level,
       lifetime_xp: clanStats.data.clan_lifetime_xp,
       members: clanStats.data.clan.map((member) => ({
         id: member.brawlhalla_id,
