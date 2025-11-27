@@ -13,7 +13,7 @@ const config = defineConfig({
   plugins: [
     ...(process.env.NODE_ENV !== "deadcode" ? [lingui()] : []),
     devtools(),
-    // nitro(),
+    nitro(),
     // this is the plugin that enables path aliases
     viteTsConfigPaths({
       projects: ["./tsconfig.json"],
