@@ -16,6 +16,7 @@ export const Ranking1v1 = Schema.Struct({
   ...Ranking.fields,
   name: Schema.String,
   id: Schema.Number,
+  slug: Schema.String,
   best_legend: Schema.NullOr(
     Schema.Struct({
       id: Schema.Number,
@@ -31,6 +32,7 @@ export const Rankings1v1 = Schema.Array(Ranking1v1)
 const TeamPlayer = Schema.Struct({
   id: Schema.Number,
   name: Schema.String,
+  slug: Schema.String,
 })
 
 export const Ranking2v2 = Schema.Struct({

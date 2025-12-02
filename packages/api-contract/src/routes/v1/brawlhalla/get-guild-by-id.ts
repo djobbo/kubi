@@ -18,6 +18,8 @@ export const Clan = Schema.Struct({
   name: Schema.String,
   created_at: Schema.Number,
   xp: Schema.Number,
+  xp_percentage: Schema.Number,
+  level: Schema.Number,
   lifetime_xp: Schema.Number,
   members: Schema.Array(GuildMember),
   bookmark: Schema.NullOr(Bookmark),
