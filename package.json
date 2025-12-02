@@ -32,8 +32,7 @@
   },
   "type": "module",
   "workspaces": [
-    "api",
-    "client",
+    "apps/*",
     "packages/*"
   ]
 }

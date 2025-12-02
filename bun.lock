@@ -18,7 +18,7 @@
         "turbo": "^2.6.1",
       },
     },
-    "api": {
+    "apps/api": {
       "name": "@dair/api",
       "version": "0.0.0",
       "dependencies": {
@@ -42,7 +42,7 @@
         "typescript": "^5.9.3",
       },
     },
-    "client": {
+    "apps/client": {
       "name": "@dair/client",
       "version": "0.0.0",
       "dependencies": {
@@ -254,7 +254,7 @@
 
     "@csstools/css-tokenizer": ["@csstools/css-tokenizer@3.0.4", "", {}, "sha512-Vd/9EVDiu6PPJt9yAh6roZP6El1xHrdvIVGjyBsHR0RYwNHgL7FJPyIIW4fANJNG6FtyZfvlRPpFI4ZM/lubvw=="],
 
-    "@dair/api": ["@dair/api@workspace:api"],
+    "@dair/api": ["@dair/api@workspace:apps/api"],
 
     "@dair/api-contract": ["@dair/api-contract@workspace:packages/api-contract"],
 
@@ -264,7 +264,7 @@
 
     "@dair/brawlhalla-servers": ["@dair/brawlhalla-servers@workspace:packages/brawlhalla-servers"],
 
-    "@dair/client": ["@dair/client@workspace:client"],
+    "@dair/client": ["@dair/client@workspace:apps/client"],
 
     "@dair/common": ["@dair/common@workspace:packages/common"],
 
