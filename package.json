@@ -28,6 +28,7 @@
     "dev": "turbo run dev",
     "lint": "oxfmt && syncpack format && syncpack fix && oxlint --type-aware --type-check --fix --fix-suggestions",
     "prepare": "husky",
+    "server:start": "turbo run start --filter=@dair/api",
     "test": "turbo run test"
   },
   "type": "module",
