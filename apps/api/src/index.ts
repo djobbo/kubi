@@ -1,6 +1,5 @@
 import { Api } from "@dair/api-contract"
 import { FetchHttpClient, HttpApiBuilder, HttpServer } from "@effect/platform"
-import { BunHttpServer } from "@effect/platform-bun"
 import { Effect, Layer } from "effect"
 import { ApiLive } from "./api-live"
 import { Archive } from "./services/archive"
@@ -17,49 +16,69 @@ import { Fetcher } from "./services/fetcher"
 const ServerLive = Effect.gen(function* () {
   const serverConfig = yield* ApiServerConfig
 
-  return HttpApiBuilder.serve().pipe(
-    Layer.provide(
-      HttpApiBuilder.middlewareCors({
-        allowedOrigins: serverConfig.allowedOrigins,
-        allowedMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-      }),
+  return HttpApiBuilder.toWebHandler(
+    Layer.mergeAll(
+      ApiLive.pipe(
+        Layer.provide(
+          HttpApiBuilder.middlewareCors({
+            allowedOrigins: serverConfig.allowedOrigins,
+            allowedMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+          }),
+        ),
+        // Service layers (each self-contained with their config)
+        Layer.provide(BrawlhallaApi.layer),
+        Layer.provide(Archive.layer),
+        Layer.provide(Authorization.layer),
+        Layer.provide(Fetcher.layer),
+        Layer.provide(DB.layer),
+        // Infrastructure layers
+        Layer.provide(FetchHttpClient.layer),
+        Layer.provide(Docs.layer(Api)),
+      ),
+      HttpServer.layerContext,
     ),
-    HttpServer.withLogAddress,
-    Layer.provide(ApiLive),
-    Layer.provide(BunHttpServer.layer({ port: serverConfig.port })),
-    // Service layers (each self-contained with their config)
-    Layer.provide(BrawlhallaApi.layer),
-    Layer.provide(Archive.layer),
-    Layer.provide(Authorization.layer),
-    Layer.provide(Fetcher.layer),
-    Layer.provide(DB.layer),
-    // Infrastructure layers
-    Layer.provide(FetchHttpClient.layer),
-    Layer.provide(Docs.layer(Api)),
+  )
+}).pipe(Effect.provide(ApiServerConfig.layer))
+
+const { dispose, handler } = Effect.runSync(ServerLive)
+
+process.on("SIGINT", () => {
+  dispose().then(
+    () => {
+      process.exit(0)
+    },
+    () => {
+      process.exit(1)
+    },
   )
 })
 
-/**
- * Application entry point
- */
-const app = Effect.gen(function* () {
-  const server = yield* ServerLive
-  return yield* Layer.launch(server)
-}).pipe(
-  Effect.catchAll((error) => {
-    console.error("Fatal error:", error)
-    return Effect.die(error)
-  }),
-  Effect.provide(ApiServerConfig.layer),
-)
+// Use the handler in your server setup
+export default {
+  fetch: handler,
+}
 
-Effect.runFork(
-  app.pipe(
-    Effect.catchTag("ConfigError", (error) => {
-      console.error("Configuration error:", error.message)
-      console.error("Please check your environment variables")
-      return Effect.die(error)
-    }),
-    Effect.catchAll(Effect.logError),
-  ),
-)
+// /**
+//  * Application entry point
+//  */
+// const app = Effect.gen(function* () {
+//   const server = yield* ServerLive
+//   return yield* Layer.launch(server)
+// }).pipe(
+//   Effect.catchAll((error) => {
+//     console.error("Fatal error:", error)
+//     return Effect.die(error)
+//   }),
+//   Effect.provide(ApiServerConfig.layer),
+// )
+
+// Effect.runFork(
+//   app.pipe(
+//     Effect.catchTag("ConfigError", (error) => {
+//       console.error("Configuration error:", error.message)
+//       console.error("Please check your environment variables")
+//       return Effect.die(error)
+//     }),
+//     Effect.catchAll(Effect.logError),
+//   ),
+// )

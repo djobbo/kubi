@@ -1,4 +1,5 @@
 import { Config, Context, Effect, Layer } from "effect"
+import type { worker } from "~/alchemy.run.ts"
 
 /**
  * Database configuration
@@ -6,28 +7,19 @@ import { Config, Context, Effect, Layer } from "effect"
 export class DatabaseConfig extends Context.Tag("@app/DatabaseConfig")<
   DatabaseConfig,
   {
-    readonly url: string
+    readonly database: (typeof worker.Env)["DATABASE"]
     readonly cacheVersion: number
   }
 >() {
   static readonly layer = Layer.effect(
     DatabaseConfig,
     Effect.gen(function* () {
-      const url = yield* Config.nonEmptyString("DATABASE_URL")
       const cacheVersion = yield* Config.number("DATABASE_CACHE_VERSION")
+      const database = yield* Config.succeed<(typeof worker.Env)["DATABASE"]>(
+        process.env.DATABASE,
+      )
 
-      return DatabaseConfig.of({ url, cacheVersion })
-    }),
-  )
-
-  /**
-   * Test layer with in-memory database
-   */
-  static readonly testLayer = Layer.succeed(
-    DatabaseConfig,
-    DatabaseConfig.of({
-      url: ":memory:",
-      cacheVersion: 1,
+      return DatabaseConfig.of({ database, cacheVersion })
     }),
   )
 }

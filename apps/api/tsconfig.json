@@ -27,7 +27,10 @@
 		"exactOptionalPropertyTypes": true,
 		"paths": {
 			"@/*": [
-				"./src/*"
+				"./src/*",
+			],
+			"~/*": [
+				"./*"
 			]
 		},
 		"plugins": [
@@ -35,5 +38,11 @@
 				"name": "@effect/language-service"
 			}
 		]
-	}
+	},
+	"include": [
+		"src/**/*.ts",
+		"src/**/*.tsx",
+		"alchemy.d.ts",
+		"alchemy.run.ts"
+	]
 }

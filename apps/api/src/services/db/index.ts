@@ -1,14 +1,16 @@
 import { DatabaseConfig } from "./config"
 import { DBConnectionError, DBQueryError } from "./errors"
 import * as schema from "@dair/schema"
-import { Database } from "bun:sqlite"
-import { drizzle } from "drizzle-orm/bun-sqlite"
+import type { worker } from "~/alchemy.run.ts"
+import { drizzle } from "drizzle-orm/libsql"
 import { Context, Effect, Layer } from "effect"
 
 /**
  * Database client type
  */
-export type DatabaseClient = ReturnType<typeof drizzle<typeof schema, Database>>
+export type DatabaseClient = ReturnType<
+  typeof drizzle<typeof schema, (typeof worker.Env)["DATABASE"]>
+>
 
 /**
  * Database service for interacting with the SQLite database
@@ -33,13 +35,12 @@ export class DB extends Context.Tag("@app/DB")<
       const db = yield* Effect.acquireRelease(
         Effect.tryPromise({
           try: async () => {
-            const sqlite = new Database(config.url, { create: true })
-            return drizzle(sqlite, { schema })
+            return drizzle(config.database, { schema })
           },
           catch: (e) =>
             new DBConnectionError({
               cause: e,
-              message: `Failed to connect to database at ${config.url}`,
+              message: `Failed to connect to database`,
             }),
         }),
         (db) =>
