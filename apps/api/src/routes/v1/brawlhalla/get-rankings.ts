@@ -111,11 +111,4 @@ export const getRankings2v2 = (region: typeof AnyRegion.Type, page: number) =>
     }
 
     return response
-  }).pipe(
-    Effect.tapError(Effect.logError),
-    Effect.catchTags({
-      BrawlhallaRateLimitError: () => Effect.fail(new TooManyRequests()),
-      BrawlhallaApiError: () => Effect.fail(new InternalServerError()),
-    }),
-    Effect.withSpan("get-rankings-2v2"),
-  )
+  })

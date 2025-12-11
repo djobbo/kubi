@@ -1,5 +1,5 @@
 import { Api } from "@dair/api-contract"
-import { HttpApiBuilder, HttpServer } from "@effect/platform"
+import { HttpApiBuilder, HttpServer, FetchHttpClient } from "@effect/platform"
 import { BunHttpServer } from "@effect/platform-bun"
 import { Effect, Layer } from "effect"
 import { ApiLive } from "./api-live"
@@ -34,8 +34,10 @@ const ServerLive = Layer.unwrapEffect(
       Layer.provide(Docs.layer(Api)),
     )
   }),
+).pipe(
+  Layer.provide(ApiServerConfig.layer),
+  Layer.provide(FetchHttpClient.layer),
 )
 
 const server = Layer.launch(ServerLive)
-
 Effect.runFork(server)
