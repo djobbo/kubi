@@ -15,12 +15,12 @@
     "arctic": "^3.7.0",
     "cheerio": "^1.1.2",
     "drizzle-orm": "^0.45.0",
-    "effect": "^3.19.8"
+    "effect": "^3.19.11"
   },
   "devDependencies": {
-    "@effect/language-service": "^0.59.0",
+    "@effect/language-service": "^0.62.1",
     "@types/bun": "latest",
-    "@typescript/native-preview": "^7.0.0-dev.20251204.1",
+    "@typescript/native-preview": "^7.0.0-dev.20251211.1",
     "drizzle-kit": "^0.31.8",
     "typescript": "^5"
   },
