@@ -12,7 +12,7 @@ export class Database extends Effect.Service<Database>()(
     }),
   },
 ) {
-  static layer = this.Default.pipe(
+  static readonly layer = this.Default.pipe(
     Layer.provide(
       Layer.unwrapEffect(
         Effect.gen(function* () {

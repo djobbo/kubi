@@ -173,5 +173,5 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
     }),
   },
 ) {
-  static layer = this.Default.pipe(Layer.provide(Fetcher.layer))
+  static readonly layer = this.Default.pipe(Layer.provide(Fetcher.layer))
 }

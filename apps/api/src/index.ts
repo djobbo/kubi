@@ -36,29 +36,6 @@ const ServerLive = Layer.unwrapEffect(
   }),
 )
 
-// /**
-//  * Application entry point
-//  */
-// const app = Effect.gen(function* () {
-//   const server = yield* ServerLive
-//   return yield* Layer.launch(server)
-// }).pipe(
-//   Effect.catchAll((error) => {
-//     console.error("Fatal error:", error)
-//     return Effect.die(error)
-//   }),
-//   Effect.provide(ApiServerConfig.layer),
-// )
-
 const server = Layer.launch(ServerLive)
 
-Effect.runFork(
-  server.pipe(
-    Effect.catchTag("ConfigError", (error) => {
-      console.error("Configuration error:", error.message)
-      console.error("Please check your environment variables")
-      return Effect.die(error)
-    }),
-    Effect.catchAll(Effect.logError),
-  ),
-)
+Effect.runFork(server)
