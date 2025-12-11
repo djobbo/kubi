@@ -28,8 +28,8 @@
   "private": true,
   "scripts": {
     "check:types": "tsgo --noEmit",
-    "dev": "bun drizzle-kit generate && bun drizzle-kit push && bun --watch run ./src/index.ts",
     "db:migrate": "bun drizzle-kit generate && bun drizzle-kit migrate",
+    "dev": "bun drizzle-kit generate && bun drizzle-kit push && bun --watch run ./src/index.ts",
     "prepare": "effect-language-service patch",
     "start": "bun db:migrate && bun run src/index.ts",
     "studio": "drizzle-kit studio"
