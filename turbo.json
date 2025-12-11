@@ -12,7 +12,16 @@
             ],
             "cache": true
         },
+        "//#compose:up": {
+            "cache": false,
+            "outputs": [
+                ".data/**"
+            ]
+        },
         "dev": {
+            "dependsOn": [
+                "//#compose:up"
+            ],
             "persistent": true,
             "cache": false
         },

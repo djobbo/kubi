@@ -3,7 +3,6 @@
  *
  * Each service has its own config with:
  * - `layer` - Production config from environment variables
- * - `testLayer` - Mock config for testing
  *
  * Import the specific config you need:
  * - ApiServerConfig - API server settings (port, URL, CORS)

@@ -192,3 +192,6 @@ styled-system-studio
 
 # Nixpacks
 .nixpacks
+
+# PGData
+.data

@@ -1,12 +1,12 @@
 import { Api } from "@dair/api-contract"
-import { FetchHttpClient, HttpApiBuilder, HttpServer } from "@effect/platform"
+import { HttpApiBuilder, HttpServer } from "@effect/platform"
 import { BunHttpServer } from "@effect/platform-bun"
 import { Effect, Layer } from "effect"
 import { ApiLive } from "./api-live"
 import { Archive } from "./services/archive"
 import { Authorization } from "./services/authorization"
 import { ApiServerConfig } from "./services/config/api-server-config"
-import { DB } from "./services/db"
+import { Database } from "./services/db"
 import * as Docs from "./services/docs"
 import { BrawlhallaApi } from "./services/brawlhalla-api"
 import { Fetcher } from "./services/fetcher"
@@ -27,14 +27,12 @@ const ServerLive = Effect.gen(function* () {
     HttpServer.withLogAddress,
     Layer.provide(ApiLive),
     Layer.provide(BunHttpServer.layer({ port: serverConfig.port })),
-    // Service layers (each self-contained with their config)
     Layer.provide(BrawlhallaApi.layer),
     Layer.provide(Archive.layer),
     Layer.provide(Authorization.layer),
     Layer.provide(Fetcher.layer),
-    Layer.provide(DB.layer),
+    Layer.provide(Database.layer),
     // Infrastructure layers
-    Layer.provide(FetchHttpClient.layer),
     Layer.provide(Docs.layer(Api)),
   )
 })

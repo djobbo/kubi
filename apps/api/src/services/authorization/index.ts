@@ -3,7 +3,7 @@ import {
   DISCORD_PROVIDER_ID,
   GOOGLE_PROVIDER_ID,
   type Provider,
-} from "@dair/schema/src/auth"
+} from "@dair/db"
 import { HttpApiBuilder, HttpApiSecurity, HttpClient } from "@effect/platform"
 import { Unauthorized } from "@effect/platform/HttpApiError"
 import type {

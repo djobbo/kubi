@@ -34,16 +34,4 @@ export class ApiServerConfig extends Context.Tag("@app/ApiServerConfig")<
       })
     }),
   )
-
-  /**
-   * Test layer with local development settings
-   */
-  static readonly testLayer = Layer.succeed(
-    ApiServerConfig,
-    ApiServerConfig.of({
-      port: 3000,
-      url: "http://localhost:3000",
-      allowedOrigins: ["*"],
-    }),
-  )
 }
