@@ -41,22 +41,4 @@ export class OAuthConfig extends Context.Tag("@app/OAuthConfig")<
       })
     }),
   )
-
-  /**
-   * Test layer with mock OAuth credentials
-   */
-  static readonly testLayer = Layer.succeed(
-    OAuthConfig,
-    OAuthConfig.of({
-      secret: Redacted.make("test-oauth-secret"),
-      discord: {
-        clientId: "test-discord-client-id",
-        clientSecret: Redacted.make("test-discord-secret"),
-      },
-      google: {
-        clientId: "test-google-client-id",
-        clientSecret: Redacted.make("test-google-secret"),
-      },
-    }),
-  )
 }

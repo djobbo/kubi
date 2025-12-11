@@ -23,4 +23,4 @@ scrape_configs:
           - localhost
         labels:
           job: api
-          __path__: /var/log/api.log 
+          __path__: /var/log/api.log

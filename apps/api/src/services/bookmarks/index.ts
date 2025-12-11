@@ -1,4 +1,4 @@
-import { DB } from "@/services/db"
+import { Database } from "@/services/db"
 import type { SessionWithUser } from "@/services/authorization"
 import {
   type Bookmark,
@@ -6,7 +6,7 @@ import {
   type NewBookmark,
   bookmarksTable,
   legacyBookmarksTable,
-} from "@dair/schema"
+} from "@dair/db"
 import { and, eq } from "drizzle-orm"
 import { Context, Effect, Layer } from "effect"
 import { BookmarkError, DiscordAccountNotFoundError } from "./errors"
@@ -43,29 +43,15 @@ export class Bookmarks extends Context.Tag("@app/Bookmarks")<
   static readonly layer = Layer.effect(
     Bookmarks,
     Effect.gen(function* () {
-      const db = yield* DB
+      const db = yield* Database
 
       const getBookmarks = Effect.fn("Bookmarks.getBookmarks")(function* (
         userId: string,
       ) {
         return yield* db
-          .use(async (client) => {
-            return await client
-              .select()
-              .from(bookmarksTable)
-              .where(eq(bookmarksTable.userId, userId))
-              .execute()
-          })
-          .pipe(
-            Effect.catchTag("DBQueryError", (error) =>
-              Effect.fail(
-                new BookmarkError({
-                  message: `Failed to get bookmarks for user ${userId}`,
-                  cause: error,
-                }),
-              ),
-            ),
-          )
+          .select()
+          .from(bookmarksTable)
+          .where(eq(bookmarksTable.userId, userId))
       })
 
       const addBookmark = Effect.fn("Bookmarks.addBookmark")(function* (
@@ -78,33 +64,19 @@ export class Bookmarks extends Context.Tag("@app/Bookmarks")<
         }
 
         const result = yield* db
-          .use(async (client) => {
-            return await client
-              .insert(bookmarksTable)
-              .values(newBookmark)
-              .returning()
-              .onConflictDoUpdate({
-                set: {
-                  name: newBookmark.name,
-                },
-                target: [
-                  bookmarksTable.userId,
-                  bookmarksTable.pageId,
-                  bookmarksTable.pageType,
-                ],
-              })
-              .execute()
+          .insert(bookmarksTable)
+          .values(newBookmark)
+          .returning()
+          .onConflictDoUpdate({
+            set: {
+              name: newBookmark.name,
+            },
+            target: [
+              bookmarksTable.userId,
+              bookmarksTable.pageId,
+              bookmarksTable.pageType,
+            ],
           })
-          .pipe(
-            Effect.catchTag("DBQueryError", (error) =>
-              Effect.fail(
-                new BookmarkError({
-                  message: `Failed to add bookmark for user ${userId}`,
-                  cause: error,
-                }),
-              ),
-            ),
-          )
 
         if (!result[0]) {
           return yield* Effect.fail(
@@ -127,37 +99,23 @@ export class Bookmarks extends Context.Tag("@app/Bookmarks")<
           return yield* Effect.succeed([])
         }
 
-        const bookmarksData = yield* db
-          .use(async (client) => {
-            return await client.transaction(async (tx) => {
-              const results = await Promise.all(
-                bookmarks.map((bookmark) =>
-                  tx
-                    .select()
-                    .from(bookmarksTable)
-                    .where(
-                      and(
-                        eq(bookmarksTable.userId, userId),
-                        eq(bookmarksTable.pageId, bookmark.pageId),
-                        eq(bookmarksTable.pageType, bookmark.pageType),
-                      ),
-                    )
-                    .execute(),
+        const bookmarksData = yield* db.transaction(async (tx) => {
+          const results = await Promise.all(
+            bookmarks.map((bookmark) =>
+              tx
+                .select()
+                .from(bookmarksTable)
+                .where(
+                  and(
+                    eq(bookmarksTable.userId, userId),
+                    eq(bookmarksTable.pageId, bookmark.pageId),
+                    eq(bookmarksTable.pageType, bookmark.pageType),
+                  ),
                 ),
-              )
-              return results.flat()
-            })
-          })
-          .pipe(
-            Effect.catchTag("DBQueryError", (error) =>
-              Effect.fail(
-                new BookmarkError({
-                  message: `Failed to get bookmarks by page IDs for user ${userId}`,
-                  cause: error,
-                }),
-              ),
             ),
           )
+          return results.flat()
+        })
 
         return bookmarks
           .map((bookmark) => {
@@ -182,26 +140,12 @@ export class Bookmarks extends Context.Tag("@app/Bookmarks")<
         bookmark: Pick<Bookmark, "pageId" | "pageType">,
       ) {
         yield* db
-          .use(async (client) => {
-            await client
-              .delete(bookmarksTable)
-              .where(
-                and(
-                  eq(bookmarksTable.userId, userId),
-                  eq(bookmarksTable.pageId, bookmark.pageId),
-                  eq(bookmarksTable.pageType, bookmark.pageType),
-                ),
-              )
-              .execute()
-          })
-          .pipe(
-            Effect.catchTag("DBQueryError", (error) =>
-              Effect.fail(
-                new BookmarkError({
-                  message: `Failed to delete bookmark for user ${userId}`,
-                  cause: error,
-                }),
-              ),
+          .delete(bookmarksTable)
+          .where(
+            and(
+              eq(bookmarksTable.userId, userId),
+              eq(bookmarksTable.pageId, bookmark.pageId),
+              eq(bookmarksTable.pageType, bookmark.pageType),
             ),
           )
       })
@@ -226,43 +170,25 @@ export class Bookmarks extends Context.Tag("@app/Bookmarks")<
           )
         }
 
-        yield* db
-          .use(async (client) => {
-            await client.transaction(async (tx) => {
-              const legacyBookmarks = await tx
-                .select()
-                .from(legacyBookmarksTable)
-                .where(eq(legacyBookmarksTable.discordId, discordId))
-                .execute()
+        yield* db.transaction(async (tx) => {
+          const legacyBookmarks = await tx
+            .select()
+            .from(legacyBookmarksTable)
+            .where(eq(legacyBookmarksTable.discordId, discordId))
 
-              if (legacyBookmarks.length > 0) {
-                await tx
-                  .insert(bookmarksTable)
-                  .values(
-                    legacyBookmarks.map(({ discordId: _, ...bookmark }) => ({
-                      ...bookmark,
-                      userId: session.user.id,
-                    })),
-                  )
-                  .execute()
+          if (legacyBookmarks.length > 0) {
+            await tx.insert(bookmarksTable).values(
+              legacyBookmarks.map(({ discordId: _, ...bookmark }) => ({
+                ...bookmark,
+                userId: session.user.id,
+              })),
+            )
 
-                await tx
-                  .delete(legacyBookmarksTable)
-                  .where(eq(legacyBookmarksTable.discordId, discordId))
-                  .execute()
-              }
-            })
-          })
-          .pipe(
-            Effect.catchTag("DBQueryError", (error) =>
-              Effect.fail(
-                new BookmarkError({
-                  message: `Failed to migrate legacy bookmarks for user ${session.user.id}`,
-                  cause: error,
-                }),
-              ),
-            ),
-          )
+            await tx
+              .delete(legacyBookmarksTable)
+              .where(eq(legacyBookmarksTable.discordId, discordId))
+          }
+        })
       })
 
       return Bookmarks.of({
@@ -273,5 +199,5 @@ export class Bookmarks extends Context.Tag("@app/Bookmarks")<
         migrateLegacyBookmarks,
       })
     }),
-  ).pipe(Layer.provide(DB.layer))
+  )
 }

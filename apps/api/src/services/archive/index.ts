@@ -1,63 +1,29 @@
-import { DB } from "@/services/db"
-import { ArchiveQueryError } from "./errors"
-import { aliasesTable } from "@dair/schema"
+import { Database } from "@/services/db"
+import { playerAliasesTable } from "@dair/db"
 import { and, eq } from "drizzle-orm"
-import { Context, Effect, Layer } from "effect"
+import { Effect, Layer } from "effect"
 
-/**
- * Archive service for managing player aliases
- */
-export class Archive extends Context.Tag("@app/Archive")<
-  Archive,
+export class Archive extends Effect.Service<Archive>()(
+  "@dair/services/Archive",
   {
-    readonly getAliases: (playerId: number) => Effect.Effect<
-      Array<{
-        playerId: string
-        alias: string
-        public: boolean
-        createdAt: Date
-      }>,
-      ArchiveQueryError
-    >
-  }
->() {
-  /**
-   * Live layer for Archive service
-   */
-  static readonly layer = Layer.effect(
-    Archive,
-    Effect.gen(function* () {
-      const db = yield* DB
+    effect: Effect.gen(function* () {
+      const db = yield* Database
 
-      const service = {
-        getAliases: (playerId: number) =>
-          db
-            .use(async (client) => {
-              return await client
-                .select()
-                .from(aliasesTable)
-                .where(
-                  and(
-                    eq(aliasesTable.playerId, playerId.toString()),
-                    eq(aliasesTable.public, true),
-                  ),
-                )
-                .execute()
-            })
-            .pipe(
-              Effect.catchTags({
-                DBQueryError: (error) =>
-                  Effect.fail(
-                    new ArchiveQueryError({
-                      cause: error,
-                      message: `Failed to get aliases for player ${playerId}`,
-                    }),
-                  ),
-              }),
-            ),
+      return {
+        getAliases: Effect.fn("getAliases")(function* (playerId: number) {
+          return yield* db
+            .select()
+            .from(playerAliasesTable)
+            .where(
+              and(
+                eq(playerAliasesTable.playerId, playerId),
+                eq(playerAliasesTable.public, true),
+              ),
+            )
+        }),
       }
-
-      return Archive.of(service)
     }),
-  ).pipe(Layer.provide(DB.layer))
+  },
+) {
+  static readonly layer = this.Default.pipe(Layer.provide(Database.layer))
 }

@@ -1,6 +1,6 @@
 import { Authorization } from "@/services/authorization"
 import type { State } from "@dair/api-contract/src/routes/v1/auth/providers/callback"
-import type { Provider } from "@dair/schema"
+import type { Provider } from "@dair/db"
 import { HttpServerResponse } from "@effect/platform"
 import { Effect } from "effect"
 

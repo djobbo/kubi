@@ -60,7 +60,7 @@ const getArticles = Effect.fn(function* (
   } = {},
 ) {
   const fetcher = yield* Fetcher
-  const articles = yield* fetcher.fetchRevalidate(Articles, {
+  const articles = yield* fetcher.fetchJson(Articles, {
     method: "POST",
     url: BRAWLHALLA_GRAPHQL_API_URL,
     body: {

@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto"
-import { DB } from "@/services/db"
+import { Database } from "@/services/db"
 import { OAuthValidationError, UserNotFoundError } from "./errors"
 import {
   type NewOAuthAccount,
@@ -7,7 +7,7 @@ import {
   type Provider,
   oauthAccountsTable,
   usersTable,
-} from "@dair/schema/src/auth"
+} from "@dair/db"
 import { and, eq } from "drizzle-orm"
 import { Effect } from "effect"
 import type { AuthorizationProvider } from "."
@@ -58,64 +58,35 @@ export const validateOAuthCallback =
         ),
       )
 
-      const db = yield* DB
+      const db = yield* Database
 
       // Check if user exists with this OAuth account
-      const existingOAuthAccount = yield* db
-        .use((client) =>
-          client.query.oauthAccountsTable
-            .findFirst({
-              where: and(
-                eq(oauthAccountsTable.provider, providerName),
-                eq(oauthAccountsTable.providerUserId, userInfo.id),
-              ),
-              with: {
-                user: true,
-              },
-            })
-            .execute(),
-        )
-        .pipe(
-          Effect.catchTag("DBQueryError", (error) =>
-            Effect.fail(
-              new OAuthValidationError({
-                provider: providerName,
-                cause: error,
-                message: "Failed to query existing OAuth account",
-              }),
-            ),
+      const existingOAuthAccount = yield* db.query.oauthAccountsTable.findFirst(
+        {
+          where: and(
+            eq(oauthAccountsTable.provider, providerName),
+            eq(oauthAccountsTable.providerUserId, userInfo.id),
           ),
-        )
+          with: {
+            user: true,
+          },
+        },
+      )
 
       if (existingOAuthAccount) {
         // Update tokens
         yield* db
-          .use((client) =>
-            client
-              .update(oauthAccountsTable)
-              .set({
-                accessToken,
-                refreshToken,
-                expiresAt,
-                updatedAt,
-              })
-              .where(
-                and(
-                  eq(oauthAccountsTable.provider, providerName),
-                  eq(oauthAccountsTable.providerUserId, userInfo.id),
-                ),
-              )
-              .execute(),
-          )
-          .pipe(
-            Effect.catchTag("DBQueryError", (error) =>
-              Effect.fail(
-                new OAuthValidationError({
-                  provider: providerName,
-                  cause: error,
-                  message: "Failed to update OAuth tokens",
-                }),
-              ),
+          .update(oauthAccountsTable)
+          .set({
+            accessToken,
+            refreshToken,
+            expiresAt,
+            updatedAt,
+          })
+          .where(
+            and(
+              eq(oauthAccountsTable.provider, providerName),
+              eq(oauthAccountsTable.providerUserId, userInfo.id),
             ),
           )
 
@@ -125,25 +96,9 @@ export const validateOAuthCallback =
       // Check if user exists with this email
       // TODO: Change this
       // Use current session to link accounts?
-      const existingUser = yield* db
-        .use((client) =>
-          client.query.usersTable
-            .findFirst({
-              where: eq(usersTable.email, userInfo.email),
-            })
-            .execute(),
-        )
-        .pipe(
-          Effect.catchTag("DBQueryError", (error) =>
-            Effect.fail(
-              new OAuthValidationError({
-                provider: providerName,
-                cause: error,
-                message: "Failed to query existing user by email",
-              }),
-            ),
-          ),
-        )
+      const existingUser = yield* db.query.usersTable.findFirst({
+        where: eq(usersTable.email, userInfo.email),
+      })
 
       if (existingUser) {
         // Create new OAuth account for existing user
@@ -158,21 +113,7 @@ export const validateOAuthCallback =
           updatedAt,
         }
 
-        yield* db
-          .use((client) =>
-            client.insert(oauthAccountsTable).values(newOAuthAccount).execute(),
-          )
-          .pipe(
-            Effect.catchTag("DBQueryError", (error) =>
-              Effect.fail(
-                new OAuthValidationError({
-                  provider: providerName,
-                  cause: error,
-                  message: "Failed to create OAuth account for existing user",
-                }),
-              ),
-            ),
-          )
+        yield* db.insert(oauthAccountsTable).values(newOAuthAccount)
 
         return existingUser
       }
@@ -192,20 +133,9 @@ export const validateOAuthCallback =
       }
 
       const [createdUser] = yield* db
-        .use((client) =>
-          client.insert(usersTable).values(newUser).returning().execute(),
-        )
-        .pipe(
-          Effect.catchTag("DBQueryError", (error) =>
-            Effect.fail(
-              new OAuthValidationError({
-                provider: providerName,
-                cause: error,
-                message: "Failed to create new user",
-              }),
-            ),
-          ),
-        )
+        .insert(usersTable)
+        .values(newUser)
+        .returning()
 
       if (!createdUser) {
         return yield* Effect.fail(
@@ -226,21 +156,7 @@ export const validateOAuthCallback =
         updatedAt,
       }
 
-      yield* db
-        .use((client) =>
-          client.insert(oauthAccountsTable).values(newOAuthAccount).execute(),
-        )
-        .pipe(
-          Effect.catchTag("DBQueryError", (error) =>
-            Effect.fail(
-              new OAuthValidationError({
-                provider: providerName,
-                cause: error,
-                message: "Failed to create OAuth account for new user",
-              }),
-            ),
-          ),
-        )
+      yield* db.insert(oauthAccountsTable).values(newOAuthAccount)
 
       return yield* Effect.succeed(createdUser)
     })

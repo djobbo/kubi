@@ -1,4 +1,4 @@
-import { Config, Context, Effect, Layer } from "effect"
+import { Config, Context, Effect, Layer, Redacted } from "effect"
 
 /**
  * Database configuration
@@ -6,7 +6,7 @@ import { Config, Context, Effect, Layer } from "effect"
 export class DatabaseConfig extends Context.Tag("@app/DatabaseConfig")<
   DatabaseConfig,
   {
-    readonly url: string
+    readonly url: Redacted.Redacted
     readonly cacheVersion: number
   }
 >() {
@@ -16,18 +16,7 @@ export class DatabaseConfig extends Context.Tag("@app/DatabaseConfig")<
       const url = yield* Config.nonEmptyString("DATABASE_URL")
       const cacheVersion = yield* Config.number("DATABASE_CACHE_VERSION")
 
-      return DatabaseConfig.of({ url, cacheVersion })
-    }),
-  )
-
-  /**
-   * Test layer with in-memory database
-   */
-  static readonly testLayer = Layer.succeed(
-    DatabaseConfig,
-    DatabaseConfig.of({
-      url: ":memory:",
-      cacheVersion: 1,
+      return DatabaseConfig.of({ url: Redacted.make(url), cacheVersion })
     }),
   )
 }

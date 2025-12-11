@@ -48,12 +48,4 @@ export const getGuildById = (clanId: number) =>
     }
 
     return response
-  }).pipe(
-    Effect.tapError(Effect.logError),
-    Effect.catchTags({
-      BrawlhallaClanNotFound: () => Effect.fail(new NotFound()),
-      BrawlhallaRateLimitError: () => Effect.fail(new TooManyRequests()),
-      BrawlhallaApiError: () => Effect.fail(new InternalServerError()),
-    }),
-    Effect.withSpan("get-clan-by-id"),
-  )
+  })

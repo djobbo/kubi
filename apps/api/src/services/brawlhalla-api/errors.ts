@@ -18,6 +18,7 @@ export class BrawlhallaPlayerNotFound extends Schema.TaggedError<BrawlhallaPlaye
   "BrawlhallaPlayerNotFound",
 )("BrawlhallaPlayerNotFound", {
   playerId: Schema.Number,
+  status: Schema.Number.pipe(Schema.optionalWith({ default: () => 404 })),
 }) {}
 
 /**
@@ -27,6 +28,7 @@ export class BrawlhallaClanNotFound extends Schema.TaggedError<BrawlhallaClanNot
   "BrawlhallaClanNotFound",
 )("BrawlhallaClanNotFound", {
   clanId: Schema.Number,
+  status: Schema.Number.pipe(Schema.optionalWith({ default: () => 404 })),
 }) {}
 
 /**
@@ -36,4 +38,5 @@ export class BrawlhallaRateLimitError extends Schema.TaggedError<BrawlhallaRateL
   "BrawlhallaRateLimitError",
 )("BrawlhallaRateLimitError", {
   message: Schema.String,
+  status: Schema.Number.pipe(Schema.optionalWith({ default: () => 429 })),
 }) {}

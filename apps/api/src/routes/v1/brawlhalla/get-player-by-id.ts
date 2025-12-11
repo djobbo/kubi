@@ -273,13 +273,4 @@ export const getPlayerById = (playerId: number) =>
     }
 
     return response
-  }).pipe(
-    Effect.tapError(Effect.logError),
-    Effect.catchTags({
-      BrawlhallaPlayerNotFound: () => Effect.fail(new NotFound()),
-      BrawlhallaRateLimitError: () => Effect.fail(new TooManyRequests()),
-      BrawlhallaApiError: () => Effect.fail(new InternalServerError()),
-      ArchiveQueryError: () => Effect.fail(new InternalServerError()),
-    }),
-    Effect.withSpan("get-player-by-id"),
-  )
+  })
