@@ -1,11 +1,12 @@
 {
   "name": "@dair/db",
+  "version": "0.0.0",
   "dependencies": {
     "drizzle-orm": "^0.45.0",
     "postgres": "^3.4.7"
   },
   "devDependencies": {
-    "@types/bun": "latest",
+    "@types/bun": "1.3.4",
     "drizzle-kit": "^0.31.8"
   },
   "exports": {

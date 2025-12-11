@@ -1,89 +1,66 @@
 {
-    "$schema": "https://turbo.build/schema.json",
-    "ui": "tui",
-    "tasks": {
-        "build": {
-            "dependsOn": [
-                "^build"
-            ],
-            "outputs": [
-                "dist/**",
-                "build/**"
-            ],
-            "cache": true
-        },
-        "//#compose:up": {
-            "cache": false,
-            "outputs": [
-                ".data/**"
-            ]
-        },
-        "dev": {
-            "dependsOn": [
-                "//#compose:up"
-            ],
-            "persistent": true,
-            "cache": false
-        },
-        "start": {
-            "persistent": true,
-            "cache": false
-        },
-        "test": {
-            "dependsOn": [
-                "^build"
-            ],
-            "outputs": [
-                "coverage/**"
-            ],
-            "cache": true
-        },
-        "check:types": {
-            "dependsOn": [
-                "^build"
-            ],
-            "cache": true
-        },
-        "locales:build": {
-            "cache": true,
-            "outputs": [
-                "src/locales/**"
-            ]
-        },
-        "locales:extract": {
-            "cache": true,
-            "outputs": [
-                "src/locales/**"
-            ]
-        },
-        "locales:compile": {
-            "dependsOn": [
-                "locales:extract"
-            ],
-            "cache": true,
-            "outputs": [
-                "src/locales/**"
-            ]
-        },
-        "studio": {
-            "persistent": true,
-            "cache": false
-        },
-        "serve": {
-            "persistent": true,
-            "cache": false
-        },
-        "lint": {
-            "cache": true
-        },
-        "check:format": {
-            "cache": true
-        },
-        "check:lint": {
-            "cache": true
-        },
-        "check:deadcode": {
-            "cache": true
-        }
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", "build/**"],
+      "cache": true
+    },
+    "//#compose:up": {
+      "cache": false,
+      "outputs": [".data/**"]
+    },
+    "dev": {
+      "dependsOn": ["//#compose:up"],
+      "persistent": true,
+      "cache": false
+    },
+    "start": {
+      "persistent": true,
+      "cache": false
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"],
+      "cache": true
+    },
+    "check:types": {
+      "dependsOn": ["^build"],
+      "cache": true
+    },
+    "locales:build": {
+      "cache": true,
+      "outputs": ["src/locales/**"]
+    },
+    "locales:extract": {
+      "cache": true,
+      "outputs": ["src/locales/**"]
+    },
+    "locales:compile": {
+      "dependsOn": ["locales:extract"],
+      "cache": true,
+      "outputs": ["src/locales/**"]
+    },
+    "studio": {
+      "persistent": true,
+      "cache": false
+    },
+    "serve": {
+      "persistent": true,
+      "cache": false
+    },
+    "lint": {
+      "cache": true
+    },
+    "check:format": {
+      "cache": true
+    },
+    "check:lint": {
+      "cache": true
+    },
+    "check:deadcode": {
+      "cache": true
     }
+  }
 }
