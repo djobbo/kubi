@@ -1,11 +1,12 @@
-import { relations } from "drizzle-orm"
-import { pgTable, serial, text } from "drizzle-orm/pg-core"
+import { relations, sql } from "drizzle-orm"
+import { pgTable, uuid, text } from "drizzle-orm/pg-core"
 import { withTimestamp } from "../../helpers/with-timestamp"
 import { oauthAccountsTable } from "./oauth-accounts"
 import { sessionsTable } from "./sessions"
 
 export const usersTable = pgTable("users", {
-  id: serial("id").primaryKey(),
+  id: uuid("id").primaryKey().default(sql`uuidv7()`).primaryKey(),
+
   email: text("email").unique().notNull(),
   username: text("username").notNull(),
   avatarUrl: text("avatar_url"),

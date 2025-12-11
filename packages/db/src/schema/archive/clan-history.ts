@@ -1,12 +1,12 @@
-import { relations } from "drizzle-orm"
+import { relations, sql } from "drizzle-orm"
 import {
   bigint,
   index,
   jsonb,
   pgTable,
-  serial,
   text,
   timestamp,
+  uuid,
 } from "drizzle-orm/pg-core"
 import { withTimestamp } from "../../helpers/with-timestamp"
 
@@ -17,7 +17,7 @@ import { withTimestamp } from "../../helpers/with-timestamp"
 export const clanHistoryTable = pgTable(
   "clan_history",
   {
-    id: serial("id").primaryKey(),
+    id: uuid("id").primaryKey().default(sql`uuidv7()`).primaryKey(),
     clanId: bigint("clan_id", { mode: "number" }).notNull(),
     recordedAt: timestamp("recorded_at", { withTimezone: true }).notNull(),
 

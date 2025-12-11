@@ -1,9 +1,9 @@
-import { relations } from "drizzle-orm"
+import { relations, sql } from "drizzle-orm"
 import {
   bigint,
   index,
   pgTable,
-  serial,
+  uuid,
   text,
   timestamp,
 } from "drizzle-orm/pg-core"
@@ -17,8 +17,9 @@ import { playerHistoryTable } from "./player-history"
 export const playerLegendHistoryTable = pgTable(
   "player_legend_history",
   {
-    id: serial("id").primaryKey(),
-    playerHistoryId: bigint("player_history_id", { mode: "number" })
+    id: uuid("id").primaryKey().default(sql`uuidv7()`).primaryKey(),
+
+    playerHistoryId: uuid("player_history_id")
       .notNull()
       .references(() => playerHistoryTable.id, { onDelete: "cascade" }),
     playerId: bigint("player_id", { mode: "number" }).notNull(),

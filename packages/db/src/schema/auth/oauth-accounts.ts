@@ -1,5 +1,5 @@
-import { relations } from "drizzle-orm"
-import { pgTable, serial, text } from "drizzle-orm/pg-core"
+import { relations, sql } from "drizzle-orm"
+import { pgTable, uuid, text } from "drizzle-orm/pg-core"
 import { withExpiry, withTimestamp } from "../../helpers/with-timestamp"
 import { usersTable } from "./users"
 
@@ -10,8 +10,9 @@ export const providers = [DISCORD_PROVIDER_ID, GOOGLE_PROVIDER_ID] as const
 export type Provider = (typeof providers)[number]
 
 export const oauthAccountsTable = pgTable("oauth_accounts", {
-  id: serial("id").primaryKey(),
-  userId: text("user_id")
+  id: uuid("id").primaryKey().default(sql`uuidv7()`).primaryKey(),
+
+  userId: uuid("user_id")
     .notNull()
     .references(() => usersTable.id, { onDelete: "cascade" }),
   provider: text({ enum: providers }).notNull(),

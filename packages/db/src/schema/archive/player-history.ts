@@ -1,10 +1,10 @@
-import { relations } from "drizzle-orm"
+import { relations, sql } from "drizzle-orm"
 import {
   bigint,
   index,
   jsonb,
   pgTable,
-  serial,
+  uuid,
   text,
   timestamp,
 } from "drizzle-orm/pg-core"
@@ -19,7 +19,8 @@ import { playerWeaponHistoryTable } from "./player-weapon-history"
 export const playerHistoryTable = pgTable(
   "player_history",
   {
-    id: serial("id").primaryKey(),
+    id: uuid("id").primaryKey().default(sql`uuidv7()`).primaryKey(),
+
     playerId: bigint("player_id", { mode: "number" }).notNull(),
     recordedAt: timestamp("recorded_at", { withTimezone: true }).notNull(),
 

@@ -1,5 +1,5 @@
 CREATE TABLE "clan_history" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT uuidv7() NOT NULL,
 	"clan_id" bigint NOT NULL,
 	"recorded_at" timestamp with time zone NOT NULL,
 	"name" text,
@@ -14,8 +14,8 @@ CREATE TABLE "clan_history" (
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "player_aliases_legacy" (
-	"id" serial PRIMARY KEY NOT NULL,
+CREATE TABLE "player_aliases" (
+	"id" uuid PRIMARY KEY DEFAULT uuidv7() NOT NULL,
 	"player_id" integer NOT NULL,
 	"alias" text NOT NULL,
 	"public" boolean DEFAULT false NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE "player_aliases_legacy" (
 );
 --> statement-breakpoint
 CREATE TABLE "player_history" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT uuidv7() NOT NULL,
 	"player_id" bigint NOT NULL,
 	"recorded_at" timestamp with time zone NOT NULL,
 	"name" text,
@@ -67,8 +67,8 @@ CREATE TABLE "player_history" (
 );
 --> statement-breakpoint
 CREATE TABLE "player_legend_history" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"player_history_id" bigint NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT uuidv7() NOT NULL,
+	"player_history_id" uuid NOT NULL,
 	"player_id" bigint NOT NULL,
 	"recorded_at" timestamp with time zone NOT NULL,
 	"legend_id" bigint NOT NULL,
@@ -95,8 +95,8 @@ CREATE TABLE "player_legend_history" (
 );
 --> statement-breakpoint
 CREATE TABLE "player_weapon_history" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"player_history_id" bigint NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT uuidv7() NOT NULL,
+	"player_history_id" uuid NOT NULL,
 	"player_id" bigint NOT NULL,
 	"recorded_at" timestamp with time zone NOT NULL,
 	"weapon_name" text NOT NULL,
@@ -112,8 +112,40 @@ CREATE TABLE "player_weapon_history" (
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE "oauth_accounts" (
+	"id" uuid PRIMARY KEY DEFAULT uuidv7() NOT NULL,
+	"user_id" uuid NOT NULL,
+	"provider" text NOT NULL,
+	"provider_user_id" text NOT NULL,
+	"access_token" text NOT NULL,
+	"refresh_token" text,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"expires_at" timestamp with time zone NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "sessions" (
+	"id" uuid PRIMARY KEY DEFAULT uuidv7() NOT NULL,
+	"user_id" uuid NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"expires_at" timestamp with time zone NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "users" (
+	"id" uuid PRIMARY KEY DEFAULT uuidv7() NOT NULL,
+	"email" text NOT NULL,
+	"username" text NOT NULL,
+	"avatar_url" text,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "users_email_unique" UNIQUE("email")
+);
+--> statement-breakpoint
 ALTER TABLE "player_legend_history" ADD CONSTRAINT "player_legend_history_player_history_id_player_history_id_fk" FOREIGN KEY ("player_history_id") REFERENCES "public"."player_history"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "player_weapon_history" ADD CONSTRAINT "player_weapon_history_player_history_id_player_history_id_fk" FOREIGN KEY ("player_history_id") REFERENCES "public"."player_history"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "oauth_accounts" ADD CONSTRAINT "oauth_accounts_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "sessions" ADD CONSTRAINT "sessions_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "idx_clan_recorded" ON "clan_history" USING btree ("clan_id","recorded_at");--> statement-breakpoint
 CREATE INDEX "idx_clan_xp" ON "clan_history" USING btree ("xp");--> statement-breakpoint
 CREATE INDEX "idx_clan_level" ON "clan_history" USING btree ("level");--> statement-breakpoint
