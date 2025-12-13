@@ -2,7 +2,7 @@
   "name": "@dair/db",
   "version": "0.0.0",
   "dependencies": {
-    "drizzle-orm": "^0.45.0",
+    "drizzle-orm": "^0.45.1",
     "postgres": "^3.4.7"
   },
   "devDependencies": {
