@@ -1,22 +1,11 @@
 {
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "prettier.config.js",
-    "vite.config.js"
-  ],
+  "include": ["**/*.ts", "**/*.tsx", "prettier.config.js", "vite.config.js"],
   "compilerOptions": {
     "target": "ES2022",
     "jsx": "react-jsx",
     "module": "Preserve",
-    "lib": [
-      "ES2022",
-      "DOM",
-      "DOM.Iterable"
-    ],
-    "types": [
-      "vite/client"
-    ],
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": ["vite/client"],
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
@@ -33,17 +22,13 @@
     "noImplicitOverride": true,
     "exactOptionalPropertyTypes": true,
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "~/*": [
-        "./*"
-      ]
+      "@/*": ["./src/*"],
+      "#/*": ["./*"],
     },
     "plugins": [
       {
-        "name": "@effect/language-service"
-      }
-    ]
-  }
+        "name": "@effect/language-service",
+      },
+    ],
+  },
 }

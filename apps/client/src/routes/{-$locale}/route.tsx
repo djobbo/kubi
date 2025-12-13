@@ -4,7 +4,7 @@ import { LocalesProvider } from "@/features/i18n/locales-provider"
 import { SEO } from "@dair/common/src/helpers/seo"
 import { t } from "@lingui/core/macro"
 import { createFileRoute, Outlet } from "@tanstack/react-router"
-import linguiConfig from "~/lingui.config"
+import linguiConfig from "#/lingui.config"
 
 export const Route = createFileRoute("/{-$locale}")({
   component: RouteComponent,

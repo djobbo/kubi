@@ -26,6 +26,7 @@ import {
   GetRankings2v2Response,
 } from "./routes/v1/brawlhalla/get-rankings"
 import { GetWeeklyRotationResponse } from "./routes/v1/brawlhalla/get-weekly-rotation"
+import { SearchPlayerResponse } from "./routes/v1/brawlhalla/search-player"
 
 const idParam = HttpApiSchema.param("id", Schema.NumberFromString)
 const pageParam = HttpApiSchema.param(
@@ -48,6 +49,17 @@ class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
       .addSuccess(GetPlayerByIdResponse)
       .addError(NotFound)
       .addError(TooManyRequests)
+      .addError(InternalServerError),
+  )
+  .add(
+    HttpApiEndpoint.get("search-player")`/players/search`
+      .setUrlParams(
+        Schema.Struct({
+          name: Schema.String.pipe(Schema.minLength(3)),
+        }),
+      )
+      .addSuccess(SearchPlayerResponse)
+      .addError(BadRequest)
       .addError(InternalServerError),
   )
   .add(

@@ -1,10 +1,9 @@
 import { randomUUID } from "node:crypto"
-import { DB } from "@/services/db"
-import { UserNotFoundError } from "./errors"
-import { type NewSession, sessionsTable } from "@dair/schema/src/auth"
+import { Database } from "@/services/db"
+import { type NewSession, sessionsTable } from "@dair/db"
 import { HttpApiBuilder } from "@effect/platform"
 import { and, eq, gt } from "drizzle-orm"
-import { Effect, Option, Redacted } from "effect"
+import { Effect, Redacted } from "effect"
 import { sessionApiKey } from "."
 
 const isProduction = (env?: string) => env === "production"
@@ -14,31 +13,18 @@ const isProduction = (env?: string) => env === "production"
  */
 export const createSession = (userId: string) =>
   Effect.gen(function* () {
-    const db = yield* DB
+    const db = yield* Database
 
     const sessionId = randomUUID()
     const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
 
     // Create session in database
     const newSession: NewSession = {
-      id: sessionId,
       userId,
       expiresAt,
     }
 
-    yield* db
-      .use((client) =>
-        client.insert(sessionsTable).values(newSession).execute(),
-      )
-      .pipe(
-        Effect.catchTag("DBQueryError", (_error) =>
-          Effect.fail(
-            new UserNotFoundError({
-              userId,
-            }),
-          ),
-        ),
-      )
+    yield* db.insert(sessionsTable).values(newSession)
 
     yield* HttpApiBuilder.securitySetCookie(
       sessionApiKey,
@@ -60,22 +46,11 @@ export const createSession = (userId: string) =>
  */
 export const deleteSession = (sessionId: string) =>
   Effect.gen(function* () {
-    const maybeDb = yield* Effect.serviceOption(DB)
-    const db = Option.getOrThrow(maybeDb)
+    const db = yield* Database
 
     if (sessionId) {
       // Delete session from database
-      yield* db
-        .use((client) =>
-          client
-            .delete(sessionsTable)
-            .where(eq(sessionsTable.id, sessionId))
-            .execute(),
-        )
-        .pipe(
-          // Ignore errors when deleting sessions
-          Effect.catchAll(() => Effect.void),
-        )
+      yield* db.delete(sessionsTable).where(eq(sessionsTable.id, sessionId))
     }
 
     // Clear cookie
@@ -98,29 +73,23 @@ export const getSession = (sessionId: string) =>
     }
 
     // TODO: remove serviceOptional once HttpApi Middlewares accept custom services
-    const maybeDb = yield* Effect.serviceOption(DB)
-    const db = Option.getOrThrow(maybeDb)
+    const db = yield* Database
 
     // Get session from database
-    const session = yield* db.use(
-      async (client) =>
-        await client.query.sessionsTable
-          .findFirst({
-            where: and(
-              eq(sessionsTable.id, sessionId),
-              gt(sessionsTable.expiresAt, new Date()),
-            ),
-            with: {
-              user: {
-                with: {
-                  oauthAccounts: true,
-                  bookmarks: true,
-                },
-              },
-            },
-          })
-          .execute(),
-    )
+    const session = yield* db.query.sessionsTable.findFirst({
+      where: and(
+        eq(sessionsTable.id, sessionId),
+        gt(sessionsTable.expiresAt, new Date()),
+      ),
+      with: {
+        user: {
+          with: {
+            oauthAccounts: true,
+            bookmarks: true,
+          },
+        },
+      },
+    })
 
     if (!session) {
       // Session not found or expired, clear cookie
