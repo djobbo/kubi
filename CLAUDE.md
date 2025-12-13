@@ -32,6 +32,15 @@ The Effect Solutions CLI provides curated best practices and patterns for Effect
 
 **Local Effect Source:** The Effect repository is cloned to `~/.local/share/effect-solutions/effect` for reference. Use this to explore APIs, find usage examples, and understand implementation details when the documentation isn't enough.
 
+## Effect Best Practices
+
+**Before implementing Effect features**, run `effect-solutions list` and read the relevant guide.
+
+Topics include: services and layers, data modeling, error handling, configuration, testing, HTTP clients, CLIs, observability, and project structure.
+
+**Effect Source Reference:** `~/.local/share/effect-solutions/effect`
+Search here for real implementations when docs aren't enough.
+
 <!-- effect-solutions:end -->
 
 ## Effect Code Patterns
@@ -52,6 +61,6 @@ This is a monorepo with the following workspaces:
 
 ## Development
 
-- Package Manager: **Bun** (v1.3.3)
+- Package Manager: **Bun** (v1.3.4)
 - Effect Language Service is configured in all workspaces
 - TypeScript is set to strict mode with additional safety checks
