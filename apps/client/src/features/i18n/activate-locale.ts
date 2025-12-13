@@ -1,6 +1,5 @@
 import { i18n } from "@lingui/core"
-import linguiConfig from "~/lingui.config"
-import config, { type Locale } from "~/lingui.config"
+import config, { type Locale } from "#/lingui.config"
 
 const validateLocale = (locale?: string): locale is Locale => {
   if (!locale) return false

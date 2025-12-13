@@ -9,14 +9,12 @@ CREATE TABLE "clan_history" (
 	"lifetime_xp" bigint,
 	"members_count" bigint,
 	"created_date" bigint,
-	"raw_data" jsonb,
-	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
+	"raw_data" jsonb
 );
 --> statement-breakpoint
 CREATE TABLE "player_aliases" (
 	"id" uuid PRIMARY KEY DEFAULT uuidv7() NOT NULL,
-	"player_id" integer NOT NULL,
+	"player_id" bigint NOT NULL,
 	"alias" text NOT NULL,
 	"public" boolean DEFAULT false NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
@@ -41,14 +39,17 @@ CREATE TABLE "player_history" (
 	"damage_dealt" bigint,
 	"damage_taken" bigint,
 	"winrate" bigint,
-	"ranked_1v1_games" bigint,
-	"ranked_1v1_wins" bigint,
-	"ranked_1v1_losses" bigint,
+	"ranked_games" bigint,
+	"ranked_wins" bigint,
+	"ranked_losses" bigint,
 	"glory_from_wins" bigint,
 	"glory_from_peak_rating" bigint,
 	"total_glory" bigint,
 	"ranked_1v1_rating" bigint,
 	"ranked_1v1_peak_rating" bigint,
+	"ranked_1v1_games" bigint,
+	"ranked_1v1_wins" bigint,
+	"ranked_1v1_losses" bigint,
 	"ranked_2v2_games" bigint,
 	"ranked_2v2_wins" bigint,
 	"ranked_2v2_losses" bigint,
@@ -61,9 +62,7 @@ CREATE TABLE "player_history" (
 	"region" text,
 	"rating_reset" bigint,
 	"clan_id" bigint,
-	"raw_data" jsonb,
-	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
+	"raw_data" jsonb
 );
 --> statement-breakpoint
 CREATE TABLE "player_legend_history" (
@@ -89,9 +88,7 @@ CREATE TABLE "player_legend_history" (
 	"winrate" bigint,
 	"rating" bigint,
 	"peak_rating" bigint,
-	"tier" text,
-	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
+	"tier" text
 );
 --> statement-breakpoint
 CREATE TABLE "player_weapon_history" (
@@ -107,9 +104,13 @@ CREATE TABLE "player_weapon_history" (
 	"time_held" bigint,
 	"level" bigint,
 	"xp" bigint,
-	"winrate" bigint,
-	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
+	"winrate" bigint
+);
+--> statement-breakpoint
+CREATE TABLE "player_aliases_to_player_history" (
+	"player_alias_id" uuid,
+	"player_history_id" uuid,
+	CONSTRAINT "player_aliases_to_player_history_player_alias_id_player_history_id_pk" PRIMARY KEY("player_alias_id","player_history_id")
 );
 --> statement-breakpoint
 CREATE TABLE "oauth_accounts" (
@@ -144,6 +145,8 @@ CREATE TABLE "users" (
 --> statement-breakpoint
 ALTER TABLE "player_legend_history" ADD CONSTRAINT "player_legend_history_player_history_id_player_history_id_fk" FOREIGN KEY ("player_history_id") REFERENCES "public"."player_history"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "player_weapon_history" ADD CONSTRAINT "player_weapon_history_player_history_id_player_history_id_fk" FOREIGN KEY ("player_history_id") REFERENCES "public"."player_history"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "player_aliases_to_player_history" ADD CONSTRAINT "player_aliases_to_player_history_player_alias_id_player_aliases_id_fk" FOREIGN KEY ("player_alias_id") REFERENCES "public"."player_aliases"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "player_aliases_to_player_history" ADD CONSTRAINT "player_aliases_to_player_history_player_history_id_player_history_id_fk" FOREIGN KEY ("player_history_id") REFERENCES "public"."player_history"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "oauth_accounts" ADD CONSTRAINT "oauth_accounts_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "sessions" ADD CONSTRAINT "sessions_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "idx_clan_recorded" ON "clan_history" USING btree ("clan_id","recorded_at");--> statement-breakpoint
@@ -153,6 +156,10 @@ CREATE INDEX "idx_clan_lifetime_xp" ON "clan_history" USING btree ("lifetime_xp"
 CREATE INDEX "idx_clan_members_count" ON "clan_history" USING btree ("members_count");--> statement-breakpoint
 CREATE INDEX "idx_clan_name" ON "clan_history" USING btree ("name");--> statement-breakpoint
 CREATE INDEX "idx_clan_recorded_at" ON "clan_history" USING btree ("recorded_at");--> statement-breakpoint
+CREATE INDEX "idx_alias" ON "player_aliases" USING btree ("alias");--> statement-breakpoint
+CREATE INDEX "idx_created_at" ON "player_aliases" USING btree ("created_at");--> statement-breakpoint
+CREATE INDEX "idx_public_created_at" ON "player_aliases" USING btree ("public","created_at");--> statement-breakpoint
+CREATE INDEX "idx_player_id" ON "player_aliases" USING btree ("player_id");--> statement-breakpoint
 CREATE INDEX "idx_player_recorded" ON "player_history" USING btree ("player_id","recorded_at");--> statement-breakpoint
 CREATE INDEX "idx_rating_1v1" ON "player_history" USING btree ("ranked_1v1_rating");--> statement-breakpoint
 CREATE INDEX "idx_peak_rating_1v1" ON "player_history" USING btree ("ranked_1v1_peak_rating");--> statement-breakpoint
@@ -179,6 +186,7 @@ CREATE INDEX "idx_legend_rating" ON "player_legend_history" USING btree ("legend
 CREATE INDEX "idx_legend_kos" ON "player_legend_history" USING btree ("legend_id","kos");--> statement-breakpoint
 CREATE INDEX "idx_legend_winrate" ON "player_legend_history" USING btree ("legend_id","winrate");--> statement-breakpoint
 CREATE INDEX "idx_player_wins" ON "player_legend_history" USING btree ("player_id","wins");--> statement-breakpoint
+CREATE INDEX "idx_player_history_xp" ON "player_legend_history" USING btree ("player_history_id","xp");--> statement-breakpoint
 CREATE INDEX "idx_player_weapon_recorded" ON "player_weapon_history" USING btree ("player_id","weapon_name","recorded_at");--> statement-breakpoint
 CREATE INDEX "idx_weapon_wins" ON "player_weapon_history" USING btree ("weapon_name","wins");--> statement-breakpoint
 CREATE INDEX "idx_weapon_games" ON "player_weapon_history" USING btree ("weapon_name","games");--> statement-breakpoint

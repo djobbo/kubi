@@ -20,7 +20,7 @@
   "lint-staged": {
     "*": "oxlint --type-aware --fix --fix-suggestions"
   },
-  "packageManager": "bun@1.3.3",
+  "packageManager": "bun@1.3.4",
   "private": true,
   "scripts": {
     "build": "turbo run build",

@@ -1,10 +1,5 @@
 import { BrawlhallaGql } from "@/services/brawlhalla-gql"
 import type { GetWeeklyRotationResponse } from "@dair/api-contract/src/routes/v1/brawlhalla/get-weekly-rotation"
-import {
-  InternalServerError,
-  NotFound,
-  TooManyRequests,
-} from "@dair/api-contract/src/shared/errors"
 import { Effect } from "effect"
 
 export const getWeeklyRotation = () =>

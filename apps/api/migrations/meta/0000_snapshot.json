@@ -1,5 +1,5 @@
 {
-  "id": "8fe0d9ef-3663-46df-a848-8d0b8434669d",
+  "id": "84ca4bc6-8412-444a-8040-d75ea1661f51",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -74,20 +74,6 @@
           "type": "jsonb",
           "primaryKey": false,
           "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
         }
       },
       "indexes": {
@@ -223,7 +209,7 @@
         },
         "player_id": {
           "name": "player_id",
-          "type": "integer",
+          "type": "bigint",
           "primaryKey": false,
           "notNull": true
         },
@@ -255,7 +241,74 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "idx_alias": {
+          "name": "idx_alias",
+          "columns": [
+            {
+              "expression": "alias",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_created_at": {
+          "name": "idx_created_at",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_public_created_at": {
+          "name": "idx_public_created_at",
+          "columns": [
+            {
+              "expression": "public",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_player_id": {
+          "name": "idx_player_id",
+          "columns": [
+            {
+              "expression": "player_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
@@ -370,20 +423,20 @@
           "primaryKey": false,
           "notNull": false
         },
-        "ranked_1v1_games": {
-          "name": "ranked_1v1_games",
+        "ranked_games": {
+          "name": "ranked_games",
           "type": "bigint",
           "primaryKey": false,
           "notNull": false
         },
-        "ranked_1v1_wins": {
-          "name": "ranked_1v1_wins",
+        "ranked_wins": {
+          "name": "ranked_wins",
           "type": "bigint",
           "primaryKey": false,
           "notNull": false
         },
-        "ranked_1v1_losses": {
-          "name": "ranked_1v1_losses",
+        "ranked_losses": {
+          "name": "ranked_losses",
           "type": "bigint",
           "primaryKey": false,
           "notNull": false
@@ -414,6 +467,24 @@
         },
         "ranked_1v1_peak_rating": {
           "name": "ranked_1v1_peak_rating",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ranked_1v1_games": {
+          "name": "ranked_1v1_games",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ranked_1v1_wins": {
+          "name": "ranked_1v1_wins",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ranked_1v1_losses": {
+          "name": "ranked_1v1_losses",
           "type": "bigint",
           "primaryKey": false,
           "notNull": false
@@ -495,20 +566,6 @@
           "type": "jsonb",
           "primaryKey": false,
           "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
         }
       },
       "indexes": {
@@ -953,20 +1010,6 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
         }
       },
       "indexes": {
@@ -1122,6 +1165,27 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
+        },
+        "idx_player_history_xp": {
+          "name": "idx_player_history_xp",
+          "columns": [
+            {
+              "expression": "player_history_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "xp",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
@@ -1223,20 +1287,6 @@
           "type": "bigint",
           "primaryKey": false,
           "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
         }
       },
       "indexes": {
@@ -1385,6 +1435,55 @@
         }
       },
       "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.player_aliases_to_player_history": {
+      "name": "player_aliases_to_player_history",
+      "schema": "",
+      "columns": {
+        "player_alias_id": {
+          "name": "player_alias_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "player_history_id": {
+          "name": "player_history_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "player_aliases_to_player_history_player_alias_id_player_aliases_id_fk": {
+          "name": "player_aliases_to_player_history_player_alias_id_player_aliases_id_fk",
+          "tableFrom": "player_aliases_to_player_history",
+          "tableTo": "player_aliases",
+          "columnsFrom": ["player_alias_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "player_aliases_to_player_history_player_history_id_player_history_id_fk": {
+          "name": "player_aliases_to_player_history_player_history_id_player_history_id_fk",
+          "tableFrom": "player_aliases_to_player_history",
+          "tableTo": "player_history",
+          "columnsFrom": ["player_history_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "player_aliases_to_player_history_player_alias_id_player_history_id_pk": {
+          "name": "player_aliases_to_player_history_player_alias_id_player_history_id_pk",
+          "columns": ["player_alias_id", "player_history_id"]
+        }
+      },
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},

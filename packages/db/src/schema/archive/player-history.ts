@@ -8,7 +8,6 @@ import {
   text,
   timestamp,
 } from "drizzle-orm/pg-core"
-import { withTimestamp } from "../../helpers/with-timestamp"
 import { playerLegendHistoryTable } from "./player-legend-history"
 import { playerWeaponHistoryTable } from "./player-weapon-history"
 
@@ -44,9 +43,9 @@ export const playerHistoryTable = pgTable(
 
     // Ranked fields (from PlayerRanked.stats and PlayerRanked.1v1)
     // From PlayerRanked.stats
-    rankedGames: bigint("ranked_1v1_games", { mode: "number" }),
-    rankedWins: bigint("ranked_1v1_wins", { mode: "number" }),
-    rankedLosses: bigint("ranked_1v1_losses", { mode: "number" }),
+    rankedGames: bigint("ranked_games", { mode: "number" }),
+    rankedWins: bigint("ranked_wins", { mode: "number" }),
+    rankedLosses: bigint("ranked_losses", { mode: "number" }),
     gloryFromWins: bigint("glory_from_wins", { mode: "number" }),
     gloryFromPeakRating: bigint("glory_from_peak_rating", { mode: "number" }),
     totalGlory: bigint("total_glory", { mode: "number" }),
@@ -75,7 +74,6 @@ export const playerHistoryTable = pgTable(
 
     // JSONB: everything else from the API response
     rawData: jsonb("raw_data").$type<unknown>(),
-    ...withTimestamp,
   },
   (table) => [
     // Index for filtering a single player by id, returning all historical data sorted by date
@@ -105,11 +103,3 @@ export const playerHistoryTable = pgTable(
 
 export type PlayerHistory = typeof playerHistoryTable.$inferSelect
 export type NewPlayerHistory = typeof playerHistoryTable.$inferInsert
-
-export const playerHistoryRelations = relations(
-  playerHistoryTable,
-  ({ many }) => ({
-    legendHistory: many(playerLegendHistoryTable),
-    weaponHistory: many(playerWeaponHistoryTable),
-  }),
-)

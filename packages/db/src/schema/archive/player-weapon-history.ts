@@ -7,7 +7,6 @@ import {
   text,
   timestamp,
 } from "drizzle-orm/pg-core"
-import { withTimestamp } from "../../helpers/with-timestamp"
 import { playerHistoryTable } from "./player-history"
 
 /**
@@ -40,7 +39,6 @@ export const playerWeaponHistoryTable = pgTable(
     xp: bigint("xp", { mode: "number" }),
     // Computed winrate: (wins / games) * 100
     winrate: bigint("winrate", { mode: "number" }),
-    ...withTimestamp,
   },
   (table) => [
     // Index for querying a player's weapon history

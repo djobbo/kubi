@@ -8,7 +8,6 @@ import {
   timestamp,
   uuid,
 } from "drizzle-orm/pg-core"
-import { withTimestamp } from "../../helpers/with-timestamp"
 
 /**
  * Clan history table storing historical clan data from Brawlhalla API.
@@ -33,8 +32,6 @@ export const clanHistoryTable = pgTable(
 
     // JSONB: everything else from the API response
     rawData: jsonb("raw_data").$type<unknown>(),
-
-    ...withTimestamp,
   },
   (table) => [
     // Index for filtering a single clan by id, returning all historical data sorted by date

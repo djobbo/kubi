@@ -7,7 +7,6 @@ import {
   text,
   timestamp,
 } from "drizzle-orm/pg-core"
-import { withTimestamp } from "../../helpers/with-timestamp"
 import { playerHistoryTable } from "./player-history"
 
 /**
@@ -51,7 +50,6 @@ export const playerLegendHistoryTable = pgTable(
     rating: bigint("rating", { mode: "number" }),
     peakRating: bigint("peak_rating", { mode: "number" }),
     tier: text("tier"),
-    ...withTimestamp,
   },
   (table) => [
     // Index for querying a player's legend history
@@ -66,8 +64,8 @@ export const playerLegendHistoryTable = pgTable(
     index("idx_legend_rating").on(table.legendId, table.rating),
     index("idx_legend_kos").on(table.legendId, table.kos),
     index("idx_legend_winrate").on(table.legendId, table.winrate),
-    // Index for player's best legends
     index("idx_player_wins").on(table.playerId, table.wins),
+    index("idx_player_history_xp").on(table.playerHistoryId, table.xp),
   ],
 )
 

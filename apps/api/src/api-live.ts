@@ -19,6 +19,7 @@ import {
   NotFound,
   TooManyRequests,
 } from "@dair/api-contract/src/shared/errors"
+import { searchPlayer } from "./routes/v1/brawlhalla/search-player"
 
 const HealthLive = HttpApiBuilder.group(Api, "health", (handlers) =>
   handlers.handle("health", () => Effect.succeed("OK")),
@@ -38,6 +39,20 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
             BrawlhallaPlayerNotFound: () => Effect.fail(new NotFound()),
             BrawlhallaRateLimitError: () => Effect.fail(new TooManyRequests()),
             BrawlhallaApiError: () => Effect.fail(new InternalServerError()),
+            SqlError: () => Effect.fail(new InternalServerError()),
+          }),
+        ),
+      ),
+    )
+    .handle(
+      "search-player",
+      Effect.fn("search-player")(
+        function* ({ urlParams }) {
+          return yield* searchPlayer(urlParams.name)
+        },
+        flow(
+          Effect.tapError(Effect.logError),
+          Effect.catchTags({
             SqlError: () => Effect.fail(new InternalServerError()),
           }),
         ),

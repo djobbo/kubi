@@ -7,3 +7,9 @@
 - no personal rating in ranked 2v2 ??
 - leaderboard only goes up to 1000th page ??
 - no 2v2 search...
+
+### Stupid breaking changes
+
+- clan xp is now the new guild xp
+- old clan xp is still accessible via `clan_lifetime_xp`
+- clan members xp is still the old xp, no way to get the new xp (LOL?)
