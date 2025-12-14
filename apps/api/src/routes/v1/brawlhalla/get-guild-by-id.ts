@@ -3,11 +3,6 @@ import type {
   Clan,
   GetClanByIdResponse,
 } from "@dair/api-contract/src/routes/v1/brawlhalla/get-guild-by-id"
-import {
-  InternalServerError,
-  NotFound,
-  TooManyRequests,
-} from "@dair/api-contract/src/shared/errors"
 import { Effect } from "effect"
 import { getGuildLevel } from "@dair/brawlhalla-api/src/constants/guilds"
 

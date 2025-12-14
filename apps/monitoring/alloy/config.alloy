@@ -1,0 +1,55 @@
+// Grafana Alloy Configuration
+// OpenTelemetry Collector for logs and traces
+
+// =============================================================================
+// OTLP Receiver - Receives telemetry data from applications
+// =============================================================================
+otelcol.receiver.otlp "default" {
+  grpc {
+    endpoint = "0.0.0.0:4317"
+  }
+
+  http {
+    endpoint = "0.0.0.0:4318"
+  }
+
+  output {
+    logs   = [otelcol.processor.batch.default.input]
+    traces = [otelcol.processor.batch.default.input]
+  }
+}
+
+// =============================================================================
+// Batch Processor - Batches telemetry data for efficient export
+// =============================================================================
+otelcol.processor.batch "default" {
+  output {
+    logs   = [otelcol.exporter.loki.default.input]
+    traces = [otelcol.exporter.otlp.tempo.input]
+  }
+}
+
+// =============================================================================
+// Loki Exporter - Exports logs to Grafana Loki
+// =============================================================================
+otelcol.exporter.loki "default" {
+  forward_to = [loki.write.default.receiver]
+}
+
+loki.write "default" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+}
+
+// =============================================================================
+// OTLP Exporter - Exports traces to Grafana Tempo
+// =============================================================================
+otelcol.exporter.otlp "tempo" {
+  client {
+    endpoint = "tempo:4317"
+    tls {
+      insecure = true
+    }
+  }
+}
