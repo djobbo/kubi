@@ -8,6 +8,7 @@ import { getEntitySlug } from "@/helpers/entity-slug"
 
 export const searchPlayer = Effect.fn(function* (name: string) {
   const archive = yield* Archive
+  yield* Effect.log("Searching for player: " + name)
   const searchResult = yield* archive.searchPlayers(name)
   const parsedAliases = searchResult.data.map<typeof SearchPlayerItem.Type>(
     (alias) => {

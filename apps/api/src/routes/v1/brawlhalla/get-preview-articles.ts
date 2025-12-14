@@ -1,10 +1,5 @@
 import { BrawlhallaGql } from "@/services/brawlhalla-gql"
 import type { GetPreviewArticlesResponse } from "@dair/api-contract/src/routes/v1/brawlhalla/get-preview-articles"
-import {
-  InternalServerError,
-  NotFound,
-  TooManyRequests,
-} from "@dair/api-contract/src/shared/errors"
 import { Effect } from "effect"
 
 export const getPreviewArticles = () =>

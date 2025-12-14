@@ -19,6 +19,7 @@ export const providerCallback = (
 
     return HttpServerResponse.redirect(redirectUrl)
   }).pipe(
+    Effect.withSpan("provider-callback"),
     Effect.catchAll((e) =>
       Effect.gen(function* () {
         console.log(e)
