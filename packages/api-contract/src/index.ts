@@ -6,7 +6,7 @@ import {
 } from "@effect/platform"
 import { Schema } from "effect"
 
-import { providers } from "@dair/schema"
+import { providers } from "@dair/db"
 import {
   BadRequest,
   InternalServerError,
