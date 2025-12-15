@@ -372,7 +372,6 @@ export class Archive extends Effect.Service<Archive>()(
             offset = 0,
             limit = 10,
           ) {
-            console.log("legendId", legendId, field)
             const latestPerIdSubquery = db.$with("latest_per_id").as(
               db
                 .select({
