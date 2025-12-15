@@ -128,14 +128,12 @@ export const getPlayerById = Effect.fn("getPlayerById")(function* (
       ? {
           games: ranked2v2AccumulativeData.totalGames,
           wins: ranked2v2AccumulativeData.totalWins,
-          average_peak_rating: calculateWinrate(
-            ranked2v2AccumulativeData.totalPeakRating,
+          average_peak_rating:
+            ranked2v2AccumulativeData.totalPeakRating /
             ranked2v2AccumulativeData.totalGames,
-          ),
-          average_rating: calculateWinrate(
-            ranked2v2AccumulativeData.totalRating,
+          average_rating:
+            ranked2v2AccumulativeData.totalRating /
             ranked2v2AccumulativeData.totalGames,
-          ),
           teams: playerRanked.data["2v2"]
             .map((team) => {
               const players = getTeamPlayers(team)

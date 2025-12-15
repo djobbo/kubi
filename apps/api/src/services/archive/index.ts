@@ -123,11 +123,12 @@ export class Archive extends Effect.Service<Archive>()(
               : {}),
           }
 
-          const [playerHistoryId] = yield* db
+          const [playerHistoryRow] = yield* db
             .insert(playerHistoryTable)
             .values(playerHistory)
             .returning({ id: playerHistoryTable.id })
 
+          const playerHistoryId = playerHistoryRow?.id
           if (!playerHistoryId) {
             return yield* ArchiveQueryError.make({
               message: "Failed to add player history",
@@ -144,7 +145,7 @@ export class Archive extends Effect.Service<Archive>()(
           )
           const playerLegendsHistory =
             playerData.legends.map<NewPlayerLegendHistory>((legend) => ({
-              playerHistoryId: playerHistoryId.id,
+              playerHistoryId,
               playerId: playerData.id,
               playerName: playerData.name,
               legendId: legend.id,
@@ -165,7 +166,7 @@ export class Archive extends Effect.Service<Archive>()(
             }))
           const playerWeaponsHistory =
             playerData.weapons.map<NewPlayerWeaponHistory>((weapon) => ({
-              playerHistoryId: playerHistoryId.id,
+              playerHistoryId,
               playerId: playerData.id,
               playerName: playerData.name,
               weaponName: weapon.name,
@@ -178,26 +179,30 @@ export class Archive extends Effect.Service<Archive>()(
               losses: weapon.stats.games - weapon.stats.wins,
             }))
 
-          const [playerLegendHistoryId, playerWeaponHistoryId] =
-            yield* Effect.all(
-              [
-                db
-                  .insert(playerLegendHistoryTable)
-                  .values(playerLegendsHistory),
-                db
-                  .insert(playerWeaponHistoryTable)
-                  .values(playerWeaponsHistory),
-              ],
-              { concurrency: "unbounded" },
-            ).pipe(
-              Effect.tapError((error) => {
-                return Effect.logError(
-                  "Error creating player legend or weapon history",
-                  error,
-                )
-                return Effect.succeed(null)
-              }),
-            )
+          const [legendRows, weaponRows] = yield* Effect.all(
+            [
+              db
+                .insert(playerLegendHistoryTable)
+                .values(playerLegendsHistory)
+                .returning({ id: playerLegendHistoryTable.id }),
+              db
+                .insert(playerWeaponHistoryTable)
+                .values(playerWeaponsHistory)
+                .returning({ id: playerWeaponHistoryTable.id }),
+            ],
+            { concurrency: "unbounded" },
+          ).pipe(
+            Effect.tapError((error) => {
+              return Effect.logError(
+                "Error creating player legend or weapon history",
+                error,
+              )
+              return Effect.succeed(null)
+            }),
+          )
+
+          const playerLegendHistoryId = legendRows[0]?.id
+          const playerWeaponHistoryId = weaponRows[0]?.id
 
           if (!playerLegendHistoryId || !playerWeaponHistoryId) {
             return yield* ArchiveQueryError.make({
