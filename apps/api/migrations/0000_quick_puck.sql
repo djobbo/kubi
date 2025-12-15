@@ -97,6 +97,53 @@ CREATE TABLE "brawlhalla_player_weapon_history" (
 	"xp" bigint NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE "brawlhalla_ranked_1v1_history" (
+	"id" uuid PRIMARY KEY DEFAULT uuidv7() NOT NULL,
+	"recorded_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"player_id" bigint NOT NULL,
+	"name" text NOT NULL,
+	"rank" integer NOT NULL,
+	"rating" integer NOT NULL,
+	"peak_rating" integer NOT NULL,
+	"tier" text NOT NULL,
+	"games" integer NOT NULL,
+	"wins" integer NOT NULL,
+	"region" text NOT NULL,
+	"best_legend_id" integer,
+	"best_legend_games" integer,
+	"best_legend_wins" integer
+);
+--> statement-breakpoint
+CREATE TABLE "brawlhalla_ranked_2v2_history" (
+	"id" uuid PRIMARY KEY DEFAULT uuidv7() NOT NULL,
+	"recorded_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"player_id_one" bigint NOT NULL,
+	"player_id_two" bigint NOT NULL,
+	"player_name_one" text NOT NULL,
+	"player_name_two" text NOT NULL,
+	"rank" integer NOT NULL,
+	"rating" integer NOT NULL,
+	"peak_rating" integer NOT NULL,
+	"tier" text NOT NULL,
+	"games" integer NOT NULL,
+	"wins" integer NOT NULL,
+	"region" text NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "brawlhalla_ranked_rotating_history" (
+	"id" uuid PRIMARY KEY DEFAULT uuidv7() NOT NULL,
+	"recorded_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"player_id" bigint NOT NULL,
+	"name" text NOT NULL,
+	"rank" integer NOT NULL,
+	"rating" integer NOT NULL,
+	"peak_rating" integer NOT NULL,
+	"tier" text NOT NULL,
+	"games" integer NOT NULL,
+	"wins" integer NOT NULL,
+	"region" text NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE "oauth_accounts" (
 	"id" uuid PRIMARY KEY DEFAULT uuidv7() NOT NULL,
 	"user_id" uuid NOT NULL,
@@ -181,4 +228,17 @@ CREATE INDEX "idx_brawlhalla_player_weapon_history_wins" ON "brawlhalla_player_w
 CREATE INDEX "idx_brawlhalla_player_weapon_history_games" ON "brawlhalla_player_weapon_history" USING btree ("weapon_name","games");--> statement-breakpoint
 CREATE INDEX "idx_brawlhalla_player_weapon_history_losses" ON "brawlhalla_player_weapon_history" USING btree ("weapon_name","losses");--> statement-breakpoint
 CREATE INDEX "idx_brawlhalla_player_weapon_history_kos" ON "brawlhalla_player_weapon_history" USING btree ("weapon_name","kos");--> statement-breakpoint
-CREATE INDEX "idx_brawlhalla_player_weapon_history_player_wins" ON "brawlhalla_player_weapon_history" USING btree ("player_id","wins");
+CREATE INDEX "idx_brawlhalla_player_weapon_history_player_wins" ON "brawlhalla_player_weapon_history" USING btree ("player_id","wins");--> statement-breakpoint
+CREATE INDEX "idx_ranked_1v1_history_recorded_at" ON "brawlhalla_ranked_1v1_history" USING btree ("recorded_at");--> statement-breakpoint
+CREATE INDEX "idx_ranked_1v1_history_player_recorded" ON "brawlhalla_ranked_1v1_history" USING btree ("player_id","recorded_at");--> statement-breakpoint
+CREATE INDEX "idx_ranked_1v1_history_rating" ON "brawlhalla_ranked_1v1_history" USING btree ("rating");--> statement-breakpoint
+CREATE INDEX "idx_ranked_1v1_history_region" ON "brawlhalla_ranked_1v1_history" USING btree ("region");--> statement-breakpoint
+CREATE INDEX "idx_ranked_2v2_history_recorded_at" ON "brawlhalla_ranked_2v2_history" USING btree ("recorded_at");--> statement-breakpoint
+CREATE INDEX "idx_ranked_2v2_history_player_one_recorded" ON "brawlhalla_ranked_2v2_history" USING btree ("player_id_one","recorded_at");--> statement-breakpoint
+CREATE INDEX "idx_ranked_2v2_history_player_two_recorded" ON "brawlhalla_ranked_2v2_history" USING btree ("player_id_two","recorded_at");--> statement-breakpoint
+CREATE INDEX "idx_ranked_2v2_history_rating" ON "brawlhalla_ranked_2v2_history" USING btree ("rating");--> statement-breakpoint
+CREATE INDEX "idx_ranked_2v2_history_region" ON "brawlhalla_ranked_2v2_history" USING btree ("region");--> statement-breakpoint
+CREATE INDEX "idx_ranked_rotating_history_recorded_at" ON "brawlhalla_ranked_rotating_history" USING btree ("recorded_at");--> statement-breakpoint
+CREATE INDEX "idx_ranked_rotating_history_player_recorded" ON "brawlhalla_ranked_rotating_history" USING btree ("player_id","recorded_at");--> statement-breakpoint
+CREATE INDEX "idx_ranked_rotating_history_rating" ON "brawlhalla_ranked_rotating_history" USING btree ("rating");--> statement-breakpoint
+CREATE INDEX "idx_ranked_rotating_history_region" ON "brawlhalla_ranked_rotating_history" USING btree ("region");

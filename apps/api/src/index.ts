@@ -14,6 +14,7 @@ import { Fetcher } from "./services/fetcher"
 import { responseCache } from "./services/middleware/response-cache"
 import { ObservabilityLive } from "./services/observability"
 import { scheduleRankingsCrawler } from "./workers/rankings-crawler"
+import { scheduleLeaderboardCrawler } from "./workers/leaderboard-crawler"
 import { Duration } from "effect"
 
 // Shared dependencies for both server and workers
@@ -62,7 +63,6 @@ const WorkerDependencies = Layer.mergeAll(
   FetchHttpClient.layer,
 )
 
-// Rankings crawler worker running in background
 const rankingsCrawlerWorker = scheduleRankingsCrawler.pipe(
   Effect.provide(WorkerDependencies),
   Effect.catchAllCause((cause) =>
@@ -70,9 +70,17 @@ const rankingsCrawlerWorker = scheduleRankingsCrawler.pipe(
   ),
 )
 
+const leaderboardCrawlerWorker = scheduleLeaderboardCrawler.pipe(
+  Effect.provide(WorkerDependencies),
+  Effect.catchAllCause((cause) =>
+    Effect.logError("Ranked queues crawler worker crashed", cause),
+  ),
+)
+
 const server = Effect.gen(function* () {
-  // Fork the rankings crawler to run in the background
+  // Fork the rankings and ranked queues crawlers to run in the background
   yield* Effect.fork(rankingsCrawlerWorker)
+  yield* Effect.fork(leaderboardCrawlerWorker)
 
   // Launch the HTTP server (this blocks forever)
   return yield* Layer.launch(ServerLive)

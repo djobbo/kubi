@@ -42,6 +42,15 @@ export const Ranking2v2 = Schema.Struct({
 
 export const Rankings2v2 = Schema.Array(Ranking2v2)
 
+export const RankingRotating = Schema.Struct({
+  ...Ranking.fields,
+  name: Schema.String,
+  id: Schema.Number,
+  slug: Schema.String,
+})
+
+export const RankingsRotating = Schema.Array(RankingRotating)
+
 export const GetRankings1v1Response = Schema.Struct({
   data: Rankings1v1,
   meta: Schema.Struct({
@@ -51,6 +60,13 @@ export const GetRankings1v1Response = Schema.Struct({
 
 export const GetRankings2v2Response = Schema.Struct({
   data: Rankings2v2,
+  meta: Schema.Struct({
+    updated_at: Schema.Date,
+  }),
+})
+
+export const GetRankingsRotatingResponse = Schema.Struct({
+  data: RankingsRotating,
   meta: Schema.Struct({
     updated_at: Schema.Date,
   }),
