@@ -9,7 +9,7 @@ import { withRecordedAt } from "../../../helpers/with-timestamp"
 export const clanHistoryTable = pgTable(
   "brawlhalla_clan_history",
   {
-    id: uuid("id").primaryKey().default(sql`uuidv7()`).primaryKey(),
+    id: uuid("id").primaryKey().default(sql`uuidv7()`),
     clanId: bigint("clan_id", { mode: "number" }).notNull(),
     ...withRecordedAt,
 

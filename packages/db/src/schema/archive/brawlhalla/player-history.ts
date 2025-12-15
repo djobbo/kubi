@@ -20,7 +20,7 @@ import { playerWeaponHistoryTable } from "./player-weapon-history"
 export const playerHistoryTable = pgTable(
   "brawlhalla_player_history",
   {
-    id: uuid("id").primaryKey().default(sql`uuidv7()`).primaryKey(),
+    id: uuid("id").primaryKey().default(sql`uuidv7()`),
 
     playerId: bigint("player_id", { mode: "number" }).notNull(),
     ...withRecordedAt,

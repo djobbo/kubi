@@ -134,9 +134,11 @@ export class Archive extends Effect.Service<Archive>()(
               cause: new Error("Player history ID is undefined"),
             })
           }
-          Effect.log("Created player history for player: " + playerData.id)
+          yield* Effect.log(
+            "Created player history for player: " + playerData.id,
+          )
 
-          Effect.log(
+          yield* Effect.log(
             "Creating player legend history for player: " + playerData.id,
             playerData.legends.length,
           )
@@ -189,7 +191,7 @@ export class Archive extends Effect.Service<Archive>()(
               { concurrency: "unbounded" },
             ).pipe(
               Effect.tapError((error) => {
-                Effect.logError(
+                return Effect.logError(
                   "Error creating player legend or weapon history",
                   error,
                 )
@@ -206,7 +208,7 @@ export class Archive extends Effect.Service<Archive>()(
             })
           }
 
-          Effect.log(
+          yield* Effect.log(
             "Created player legend and weapon history for player: " +
               playerData.id,
           )

@@ -286,8 +286,7 @@ export const getPlayerById = Effect.fn("getPlayerById")(function* (
     { mode: "validate", concurrency: "unbounded" },
   ).pipe(
     Effect.catchAll((error) => {
-      Effect.logError("Error adding player history or aliases", error)
-      return Effect.succeed(null)
+      return Effect.logError("Error adding player history or aliases", error)
     }),
   )
 

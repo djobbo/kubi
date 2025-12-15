@@ -114,26 +114,30 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
     )
     .handle(
       "get-global-legend-rankings",
-      Effect.fn("get-global-legend-rankings")(function* ({ path }) {
-        return yield* getGlobalLegendRankings(path.legendId, path.sortBy)
-      }),
-      flow(
-        Effect.tapError(Effect.logError),
-        Effect.catchTags({
-          SqlError: () => Effect.fail(new InternalServerError()),
-        }),
+      Effect.fn("get-global-legend-rankings")(
+        function* ({ path }) {
+          return yield* getGlobalLegendRankings(path.legendId, path.sortBy)
+        },
+        flow(
+          Effect.tapError(Effect.logError),
+          Effect.catchTags({
+            SqlError: () => Effect.fail(new InternalServerError()),
+          }),
+        ),
       ),
     )
     .handle(
       "get-global-weapon-rankings",
-      Effect.fn("get-global-weapon-rankings")(function* ({ path }) {
-        return yield* getGlobalWeaponRankings(path.weaponName, path.sortBy)
-      }),
-      flow(
-        Effect.tapError(Effect.logError),
-        Effect.catchTags({
-          SqlError: () => Effect.fail(new InternalServerError()),
-        }),
+      Effect.fn("get-global-weapon-rankings")(
+        function* ({ path }) {
+          return yield* getGlobalWeaponRankings(path.weaponName, path.sortBy)
+        },
+        flow(
+          Effect.tapError(Effect.logError),
+          Effect.catchTags({
+            SqlError: () => Effect.fail(new InternalServerError()),
+          }),
+        ),
       ),
     )
     .handle(
