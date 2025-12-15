@@ -64,7 +64,7 @@ export class Fetcher extends Effect.Service<Fetcher>()("@app/Fetcher", {
           cacheKey,
           schema,
           fetchFromApi,
-          Option.some(Duration.millis(ttl)),
+          Option.some(Duration.seconds(ttl)),
         )
       }),
     }

@@ -1,15 +1,6 @@
 import { Config, Duration, Option, Schema } from "effect"
 import { Effect } from "effect"
 import { Redis } from "ioredis"
-import * as Arr from "effect/Array"
-
-class CacheParseError extends Schema.TaggedError<CacheParseError>(
-  "CacheParseError",
-)("CacheParseError", {
-  method: Schema.String,
-  cause: Schema.optional(Schema.Unknown),
-  message: Schema.String,
-}) {}
 
 class CacheSerializationError extends Schema.TaggedError<CacheSerializationError>(
   "CacheSerializationError",
