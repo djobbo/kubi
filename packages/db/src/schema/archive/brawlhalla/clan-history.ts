@@ -1,30 +1,22 @@
 import { relations, sql } from "drizzle-orm"
-import {
-  bigint,
-  index,
-  jsonb,
-  pgTable,
-  text,
-  timestamp,
-  uuid,
-} from "drizzle-orm/pg-core"
+import { bigint, index, jsonb, pgTable, text, uuid } from "drizzle-orm/pg-core"
+import { withRecordedAt } from "../../../helpers/with-timestamp"
 
 /**
  * Clan history table storing historical clan data from Brawlhalla API.
  * Uses hybrid approach: frequently queried fields as columns, rest in JSONB.
  */
 export const clanHistoryTable = pgTable(
-  "clan_history",
+  "brawlhalla_clan_history",
   {
-    id: uuid("id").primaryKey().default(sql`uuidv7()`).primaryKey(),
+    id: uuid("id").primaryKey().default(sql`uuidv7()`),
     clanId: bigint("clan_id", { mode: "number" }).notNull(),
-    recordedAt: timestamp("recorded_at", { withTimezone: true }).notNull(),
+    ...withRecordedAt,
 
     // Extracted columns: fields used for ranking/filtering
     // From Clan (packages/api-contract/src/routes/v1/brawlhalla/get-guild-by-id)
     name: text("name"),
     xp: bigint("xp", { mode: "number" }),
-    xpPercentage: bigint("xp_percentage", { mode: "number" }),
     level: bigint("level", { mode: "number" }),
     lifetimeXp: bigint("lifetime_xp", { mode: "number" }),
     membersCount: bigint("members_count", { mode: "number" }),

@@ -4,7 +4,7 @@ import { withExpiry, withTimestamp } from "../../helpers/with-timestamp"
 import { usersTable } from "./users"
 
 export const sessionsTable = pgTable("sessions", {
-  id: uuid("id").primaryKey().default(sql`uuidv7()`).primaryKey(),
+  id: uuid("id").primaryKey().default(sql`uuidv7()`),
 
   userId: uuid("user_id")
     .notNull()

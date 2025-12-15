@@ -198,10 +198,7 @@
   ],
   "refresh": "10s",
   "schemaVersion": 39,
-  "tags": [
-    "logs",
-    "loki"
-  ],
+  "tags": ["logs", "loki"],
   "templating": {
     "list": [
       {

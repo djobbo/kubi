@@ -6,7 +6,7 @@ import type {
 } from "@dair/api-contract/src/routes/v1/brawlhalla/search-player"
 import { getEntitySlug } from "@/helpers/entity-slug"
 
-export const searchPlayer = Effect.fn(function* (name: string) {
+export const searchPlayer = Effect.fn("searchPlayer")(function* (name: string) {
   const archive = yield* Archive
   yield* Effect.log("Searching for player: " + name)
   const searchResult = yield* archive.searchPlayers(name)
@@ -31,8 +31,7 @@ export const searchPlayer = Effect.fn(function* (name: string) {
         slug: getEntitySlug(alias.playerId, alias.name),
         name: alias.name,
         public: alias.public,
-        createdAt: alias.createdAt,
-        updatedAt: alias.updatedAt,
+        recordedAt: alias.recordedAt,
         // TODO: Add ranking and legend
         ranking: null, // ranking,
         legend: null, // legend,

@@ -20,6 +20,9 @@ import {
   TooManyRequests,
 } from "@dair/api-contract/src/shared/errors"
 import { searchPlayer } from "./routes/v1/brawlhalla/search-player"
+import { getGlobalPlayerRankings } from "./routes/v1/brawlhalla/get-global-player-rankings"
+import { getGlobalLegendRankings } from "./routes/v1/brawlhalla/get-global-legend-rankings"
+import { getGlobalWeaponRankings } from "./routes/v1/brawlhalla/get-global-weapon-rankings"
 
 const HealthLive = HttpApiBuilder.group(Api, "health", (handlers) =>
   handlers.handle("health", () => Effect.succeed("OK")),
@@ -91,6 +94,48 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
           Effect.catchTags({
             BrawlhallaRateLimitError: () => Effect.fail(new TooManyRequests()),
             BrawlhallaApiError: () => Effect.fail(new InternalServerError()),
+          }),
+        ),
+      ),
+    )
+    .handle(
+      "get-global-player-rankings",
+      Effect.fn("get-global-player-rankings")(
+        function* ({ path }) {
+          return yield* getGlobalPlayerRankings(path.sortBy)
+        },
+        flow(
+          Effect.tapError(Effect.logError),
+          Effect.catchTags({
+            SqlError: () => Effect.fail(new InternalServerError()),
+          }),
+        ),
+      ),
+    )
+    .handle(
+      "get-global-legend-rankings",
+      Effect.fn("get-global-legend-rankings")(
+        function* ({ path }) {
+          return yield* getGlobalLegendRankings(path.legendId, path.sortBy)
+        },
+        flow(
+          Effect.tapError(Effect.logError),
+          Effect.catchTags({
+            SqlError: () => Effect.fail(new InternalServerError()),
+          }),
+        ),
+      ),
+    )
+    .handle(
+      "get-global-weapon-rankings",
+      Effect.fn("get-global-weapon-rankings")(
+        function* ({ path }) {
+          return yield* getGlobalWeaponRankings(path.weaponName, path.sortBy)
+        },
+        flow(
+          Effect.tapError(Effect.logError),
+          Effect.catchTags({
+            SqlError: () => Effect.fail(new InternalServerError()),
           }),
         ),
       ),

@@ -6,8 +6,7 @@ export const SearchPlayerItem = Schema.Struct({
   slug: Schema.String,
   name: Schema.String,
   public: Schema.Boolean,
-  createdAt: Schema.Date,
-  updatedAt: Schema.Date,
+  recordedAt: Schema.Date,
   ranking: Schema.NullOr(
     Schema.Struct({
       rating: Schema.Number,
@@ -24,7 +23,7 @@ export const SearchPlayerItem = Schema.Struct({
 })
 
 export const SearchPlayerCursor = Schema.Struct({
-  createdAt: Schema.Date,
+  recordedAt: Schema.Date,
   id: Schema.String,
 })
 

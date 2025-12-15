@@ -5,7 +5,6 @@ import {
   HttpApiSchema,
 } from "@effect/platform"
 import { Schema } from "effect"
-
 import { providers } from "@dair/db"
 import {
   BadRequest,
@@ -27,6 +26,20 @@ import {
 } from "./routes/v1/brawlhalla/get-rankings"
 import { GetWeeklyRotationResponse } from "./routes/v1/brawlhalla/get-weekly-rotation"
 import { SearchPlayerResponse } from "./routes/v1/brawlhalla/search-player"
+import {
+  GetGlobalPlayerRankingsResponse,
+  GlobalPlayerRankingsSortByParam,
+} from "./routes/v1/brawlhalla/get-global-player-rankings"
+import {
+  GetGlobalLegendRankingsResponse,
+  GlobalLegendRankingsSortByParam,
+  LegendIdParam,
+} from "./routes/v1/brawlhalla/get-global-legend-rankings"
+import {
+  GetGlobalWeaponRankingsResponse,
+  GlobalWeaponRankingsSortByParam,
+  WeaponNameParam,
+} from "./routes/v1/brawlhalla/get-global-weapon-rankings"
 
 const idParam = HttpApiSchema.param("id", Schema.NumberFromString)
 const pageParam = HttpApiSchema.param(
@@ -90,6 +103,27 @@ class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
       .addSuccess(GetRankings2v2Response)
       .addError(NotFound)
       .addError(TooManyRequests)
+      .addError(InternalServerError),
+  )
+  .add(
+    HttpApiEndpoint.get(
+      "get-global-player-rankings",
+    )`/rankings/global/players/${GlobalPlayerRankingsSortByParam}`
+      .addSuccess(GetGlobalPlayerRankingsResponse)
+      .addError(InternalServerError),
+  )
+  .add(
+    HttpApiEndpoint.get(
+      "get-global-legend-rankings",
+    )`/rankings/global/legends/${LegendIdParam}/${GlobalLegendRankingsSortByParam}`
+      .addSuccess(GetGlobalLegendRankingsResponse)
+      .addError(InternalServerError),
+  )
+  .add(
+    HttpApiEndpoint.get(
+      "get-global-weapon-rankings",
+    )`/rankings/global/weapons/${WeaponNameParam}/${GlobalWeaponRankingsSortByParam}`
+      .addSuccess(GetGlobalWeaponRankingsResponse)
       .addError(InternalServerError),
   )
   .add(
