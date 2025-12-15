@@ -1,0 +1,249 @@
+---
+description: Database schema patterns with Drizzle ORM
+globs: "packages/db/**/*.ts, apps/api/src/services/db/**/*.ts, apps/api/src/services/archive/**/*.ts"
+alwaysApply: false
+---
+
+# Database Patterns
+
+This project uses PostgreSQL with Drizzle ORM for database operations.
+
+## Database Service
+
+Located at `apps/api/src/services/db/index.ts`:
+
+```typescript
+export class Database extends Effect.Service<Database>()(
+  "@dair/services/Database",
+  {
+    effect: PgDrizzle.make({ schema }),
+  },
+) {
+  static readonly layer = this.Default.pipe(
+    Layer.provide(
+      Layer.unwrapEffect(
+        Effect.gen(function* () {
+          const config = yield* DatabaseConfig
+          return PgClient.layer({ url: config.url })
+        }),
+      ),
+    ),
+    Layer.provide(DatabaseConfig.layer),
+  )
+}
+```
+
+## Schema Location
+
+All schemas are in `packages/db/src/schema/`:
+
+```
+packages/db/src/schema/
+├── archive/
+│   └── brawlhalla/
+│       ├── player-history.ts
+│       ├── player-legend-history.ts
+│       ├── player-weapon-history.ts
+│       ├── ranked-1v1-history.ts
+│       ├── ranked-2v2-history.ts
+│       ├── ranked-rotating-history.ts
+│       ├── player-aliases.ts
+│       └── clan-history.ts
+└── auth/
+    ├── users.ts
+    ├── sessions.ts
+    └── oauth-accounts.ts
+```
+
+## Table Definition Pattern
+
+Use hybrid approach: frequently queried fields as columns, rest in JSONB:
+
+```typescript
+import { sql } from "drizzle-orm"
+import { pgTable, uuid, bigint, text, integer, jsonb, index } from "drizzle-orm/pg-core"
+import { withRecordedAt } from "../../../helpers/with-timestamp"
+
+export const playerHistoryTable = pgTable(
+  "brawlhalla_player_history",
+  {
+    // Use UUIDv7 for time-sortable IDs
+    id: uuid("id").primaryKey().default(sql`uuidv7()`),
+    
+    // Foreign key (NOT a UUID - use the game's ID)
+    playerId: bigint("player_id", { mode: "number" }).notNull(),
+    
+    // Timestamp helper (adds recordedAt column)
+    ...withRecordedAt,
+    
+    // Extracted columns for queries/filtering
+    name: text("name").notNull(),
+    xp: bigint("xp", { mode: "number" }).notNull(),
+    games: bigint("games", { mode: "number" }).notNull(),
+    // ...
+    
+    // JSONB for raw API data (not frequently queried)
+    rawStatsData: jsonb("raw_stats_data").$type<unknown>(),
+    rawRankedData: jsonb("raw_ranked_data").$type<unknown>(),
+  },
+  (table) => [
+    // Composite index for player lookup by date
+    index("idx_player_history_recorded").on(table.playerId, table.recordedAt),
+    
+    // Individual indexes for ranking/filtering
+    index("idx_player_history_xp").on(table.xp),
+    index("idx_player_history_games").on(table.games),
+  ],
+)
+
+// Export types for use in services
+export type PlayerHistory = typeof playerHistoryTable.$inferSelect
+export type NewPlayerHistory = typeof playerHistoryTable.$inferInsert
+```
+
+## Timestamp Helper
+
+All historical tables use `withRecordedAt`:
+
+```typescript
+// packages/db/src/helpers/with-timestamp.ts
+export const withRecordedAt = {
+  recordedAt: timestamp("recorded_at", { withTimezone: true })
+    .notNull()
+    .default(sql`now()`),
+}
+```
+
+## Table Relations
+
+Define relations for Drizzle's relational queries:
+
+```typescript
+import { relations } from "drizzle-orm"
+
+export const playerHistoryRelations = relations(
+  playerHistoryTable,
+  ({ many }) => ({
+    legendHistory: many(playerLegendHistoryTable),
+    weaponHistory: many(playerWeaponHistoryTable),
+  }),
+)
+```
+
+## Using Database in Services
+
+```typescript
+export class Archive extends Effect.Service<Archive>()(
+  "@dair/services/Archive",
+  {
+    effect: Effect.gen(function* () {
+      const db = yield* Database
+      
+      return {
+        addPlayerHistory: Effect.fn("addPlayerHistory")(function* (
+          playerData: PlayerData,
+        ) {
+          const [row] = yield* db
+            .insert(playerHistoryTable)
+            .values({ ... })
+            .returning({ id: playerHistoryTable.id })
+          
+          return row
+        }),
+        
+        getPlayerHistory: Effect.fn("getPlayerHistory")(function* (
+          playerId: number,
+          limit = 10,
+          offset = 0,
+        ) {
+          return yield* db
+            .select()
+            .from(playerHistoryTable)
+            .where(eq(playerHistoryTable.playerId, playerId))
+            .orderBy(desc(playerHistoryTable.recordedAt))
+            .limit(limit)
+            .offset(offset)
+        }),
+      }
+    }),
+  },
+) {
+  static readonly layer = this.Default.pipe(Layer.provide(Database.layer))
+}
+```
+
+## Query Patterns
+
+### Latest Record Per Player (Common Pattern)
+
+```typescript
+const latestPerIdSubquery = db.$with("latest_per_id").as(
+  db
+    .select({
+      playerId: playerHistoryTable.playerId,
+      maxDate: max(playerHistoryTable.recordedAt).as("max_date"),
+    })
+    .from(playerHistoryTable)
+    .groupBy(playerHistoryTable.playerId),
+)
+
+const results = yield* db
+  .with(latestPerIdSubquery)
+  .select()
+  .from(playerHistoryTable)
+  .innerJoin(
+    latestPerIdSubquery,
+    and(
+      eq(playerHistoryTable.playerId, latestPerIdSubquery.playerId),
+      eq(playerHistoryTable.recordedAt, latestPerIdSubquery.maxDate),
+    ),
+  )
+  .orderBy(desc(playerHistoryTable.xp))
+  .limit(limit)
+```
+
+### Cursor-Based Pagination
+
+```typescript
+const cursorCondition = cursor
+  ? or(
+      lt(table.recordedAt, cursor.recordedAt),
+      and(
+        eq(table.recordedAt, cursor.recordedAt),
+        lt(table.id, cursor.id),
+      ),
+    )
+  : undefined
+
+const results = yield* db
+  .select()
+  .from(table)
+  .where(cursorCondition)
+  .orderBy(desc(table.recordedAt), desc(table.id))
+  .limit(pageSize)
+
+const nextCursor = results.length === pageSize && lastResult
+  ? { recordedAt: lastResult.recordedAt, id: lastResult.id }
+  : null
+```
+
+## Migrations
+
+```bash
+# Generate + apply migrations (from apps/api)
+bun db:migrate
+
+# Open Drizzle Studio
+bun studio
+```
+
+Migration files are in `apps/api/migrations/`.
+
+## Important Notes
+
+1. **Use UUIDv7** for primary keys (time-sortable)
+2. **Use bigint with mode: "number"** for game IDs (they're large numbers)
+3. **Add indexes** for any column used in WHERE or ORDER BY
+4. **Use JSONB** for complex/rarely queried data
+5. **Always use withRecordedAt** for historical tables
+6. **Use onConflictDoNothing** when inserting possibly duplicate data (like aliases)

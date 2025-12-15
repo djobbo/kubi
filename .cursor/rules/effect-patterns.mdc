@@ -1,0 +1,168 @@
+---
+description: Effect TypeScript patterns and conventions used in this project
+globs: "*.ts, *.tsx"
+alwaysApply: true
+---
+
+# Effect Patterns
+
+This project uses Effect TypeScript extensively. Follow these patterns strictly.
+
+## Before Implementing Effect Code
+
+**ALWAYS run Effect Solutions CLI first:**
+
+```bash
+bunx effect-solutions list              # List available topics
+bunx effect-solutions show <topic>      # Read specific topic
+bunx effect-solutions search <term>     # Search by keyword
+```
+
+Key topics: `basics`, `services-and-layers`, `data-modeling`, `error-handling`, `config`
+
+Local Effect source for reference: `~/.local/share/effect-solutions/effect`
+
+## Service Pattern
+
+Every service MUST follow this structure:
+
+```typescript
+import { Effect, Layer } from "effect"
+
+export class MyService extends Effect.Service<MyService>()(
+  "@dair/services/MyService",  // Tag: @dair/services/<Name>
+  {
+    effect: Effect.gen(function* () {
+      // Yield dependencies
+      const dep = yield* SomeDependency
+      
+      return {
+        // Use Effect.fn for all methods (enables tracing)
+        myMethod: Effect.fn("myMethod")(function* (param: string) {
+          return yield* dep.doSomething(param)
+        }),
+      }
+    }),
+  },
+) {
+  // Static layer with ALL dependencies
+  static readonly layer = this.Default.pipe(
+    Layer.provide(SomeDependency.layer),
+  )
+}
+```
+
+### Key Rules
+
+- Tag convention: `@dair/services/<ServiceName>`
+- All methods use `Effect.fn("methodName")(function* () { ... })`
+- Layer includes all dependencies via `Layer.provide()`
+- Export `static readonly layer` for composition
+
+## Error Pattern
+
+**ALL properties must be in the schema definition:**
+
+```typescript
+import { Schema } from "effect"
+
+// ✅ CORRECT
+export class MyError extends Schema.TaggedError<MyError>(
+  "MyError",
+)("MyError", {
+  message: Schema.String,
+  cause: Schema.optional(Schema.Unknown),
+  status: Schema.Number.pipe(Schema.optionalWith({ default: () => 500 })),
+}) {}
+
+// ❌ WRONG - Never add class properties
+export class BadError extends Schema.TaggedError<BadError>(
+  "BadError",
+)("BadError", {
+  message: Schema.String,
+}) {
+  status = 500  // DON'T DO THIS!
+}
+```
+
+### HTTP API Errors
+
+```typescript
+import { HttpApiSchema } from "@effect/platform"
+
+export class TooManyRequests extends HttpApiSchema.EmptyError<TooManyRequests>()({
+  tag: "TooManyRequests",
+  status: 429,
+}) {}
+```
+
+### Creating Errors
+
+```typescript
+// Use .make() method
+yield* MyError.make({ message: "Something went wrong" })
+```
+
+## Config Pattern
+
+```typescript
+import { Config, Effect, Layer, Redacted } from "effect"
+
+export class MyConfig extends Effect.Service<MyConfig>()(
+  "@dair/services/MyConfig",
+  {
+    effect: Effect.gen(function* () {
+      return {
+        url: yield* Config.nonEmptyString("MY_URL"),
+        secret: yield* Config.redacted("MY_SECRET"),  // For sensitive data
+        port: yield* Config.number("MY_PORT").pipe(Config.withDefault(3000)),
+      }
+    }),
+  },
+) {
+  static readonly layer = this.Default
+  
+  // For testing
+  static readonly testLayer = Layer.succeed(this, {
+    url: "http://test",
+    secret: Redacted.make("test-secret"),
+    port: 3000,
+  })
+}
+```
+
+## Error Handling Pattern
+
+Use `catchTags` for typed error handling:
+
+```typescript
+Effect.fn("myOperation")(
+  function* () {
+    return yield* riskyOperation()
+  },
+  flow(
+    Effect.tapError(Effect.logError),
+    Effect.catchTags({
+      NotFoundError: () => Effect.fail(new NotFound()),
+      RateLimitError: () => Effect.fail(new TooManyRequests()),
+      ApiError: () => Effect.fail(new InternalServerError()),
+    }),
+  ),
+)
+```
+
+## Common Imports
+
+```typescript
+import { Effect, Layer, Config, Schema, Duration, Option, Redacted, flow } from "effect"
+import { HttpApiBuilder, HttpClient, FetchHttpClient } from "@effect/platform"
+import { HttpApiEndpoint, HttpApiGroup, HttpApiSchema, HttpApi } from "@effect/platform"
+```
+
+## Anti-Patterns to Avoid
+
+1. **Don't use Effect.tryPromise without proper error handling**
+2. **Don't skip Effect.fn for service methods**
+3. **Don't add properties outside Schema in TaggedError**
+4. **Don't forget to provide layers in static layer**
+5. **Don't use raw promises - wrap in Effect**

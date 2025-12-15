@@ -1,0 +1,207 @@
+---
+description: Project structure, workspaces, and shared packages
+globs: "*"
+alwaysApply: true
+---
+
+# Project Structure
+
+This is a Turborepo monorepo with Bun as the package manager.
+
+## Workspace Layout
+
+```
+dair/
+├── apps/
+│   ├── api/           # Backend API (Effect + Bun)
+│   ├── client/        # Frontend (React + Vite + TanStack Router)
+│   └── monitoring/    # Grafana stack config
+├── packages/
+│   ├── api-contract/  # Shared API types (HttpApi contracts)
+│   ├── brawlhalla-api/# Game API types & helpers
+│   ├── brawlhalla-replays/ # Replay file parser
+│   ├── brawlhalla-servers/ # Server location data
+│   ├── common/        # Shared utilities
+│   ├── db/            # Drizzle schema
+│   └── schema/        # Effect Schema definitions
+└── scripts/           # Build & migration helpers
+```
+
+## Package References
+
+Use workspace protocol for internal packages:
+
+```json
+{
+  "dependencies": {
+    "@dair/api-contract": "workspace:*",
+    "@dair/brawlhalla-api": "workspace:*",
+    "@dair/common": "workspace:*",
+    "@dair/db": "workspace:*"
+  }
+}
+```
+
+## Import Aliases
+
+### API App (apps/api)
+
+Uses `@/` alias pointing to `src/`:
+
+```typescript
+import { Archive } from "@/services/archive"
+import { BrawlhallaApi } from "@/services/brawlhalla-api"
+import { getPlayerById } from "@/routes/v1/brawlhalla/get-player-by-id"
+```
+
+### Packages
+
+Import directly from package source:
+
+```typescript
+import { Api } from "@dair/api-contract"
+import { playerHistoryTable } from "@dair/db"
+import { cleanString } from "@dair/common/src/helpers/clean-string"
+import { rankedRegions } from "@dair/brawlhalla-api/src/constants/ranked/regions"
+```
+
+## API App Structure (apps/api/src/)
+
+```
+src/
+├── index.ts              # Entry point (server + workers)
+├── api-live.ts           # Route handlers implementation
+├── routes/
+│   └── v1/
+│       ├── brawlhalla/   # Game data endpoints
+│       │   ├── get-player-by-id.ts
+│       │   ├── get-rankings.ts
+│       │   └── ...
+│       ├── auth/         # Auth endpoints
+│       │   ├── providers/
+│       │   └── ...
+│       └── health/       # Health check endpoints
+├── services/             # Business logic
+│   ├── archive/          # Historical data storage
+│   ├── authorization/    # OAuth + sessions
+│   ├── brawlhalla-api/   # External API client
+│   ├── cache/            # Redis service
+│   ├── config/           # Config services
+│   ├── db/               # Database service
+│   ├── fetcher/          # HTTP client
+│   └── rate-limiter/     # Rate limiting
+├── workers/              # Background jobs
+│   ├── leaderboard-crawler.ts
+│   ├── rankings-crawler.ts
+│   └── shared/
+│       ├── crawl-config.ts
+│       ├── rate-limit.ts
+│       └── scheduler.ts
+└── helpers/              # Utility functions
+```
+
+## API Contract Package (packages/api-contract/)
+
+Defines typed API contracts shared between frontend and backend:
+
+```
+src/
+├── index.ts              # Main Api export
+├── routes/
+│   └── v1/
+│       ├── brawlhalla/   # Response schemas
+│       │   ├── get-player-by-id.ts
+│       │   └── ...
+│       ├── auth/
+│       └── health/
+└── shared/
+    ├── errors.ts         # HTTP error types
+    ├── region.ts         # Region schema
+    └── tier.ts           # Tier schema
+```
+
+## Database Package (packages/db/)
+
+```
+src/
+├── index.ts              # Re-exports
+├── helpers/
+│   └── with-timestamp.ts
+└── schema/
+    ├── archive/
+    │   └── brawlhalla/   # Historical tables
+    └── auth/             # User/session tables
+```
+
+## Client App Structure (apps/client/src/)
+
+```
+src/
+├── router.tsx            # TanStack Router setup
+├── routeTree.gen.ts      # Generated route tree
+├── routes/
+│   ├── __root.tsx        # Root layout
+│   └── {-$locale}/       # Locale-prefixed routes
+│       └── ...
+├── features/
+│   ├── config/           # App config
+│   ├── i18n/             # Lingui setup
+│   ├── layout/           # Layout components
+│   └── search/           # Search feature
+├── shared/
+│   ├── api-client.ts     # API client
+│   └── components/       # Shared components
+└── styles.css            # Global styles
+```
+
+## Development Commands
+
+```bash
+# Root commands
+bun dev           # Start all services
+bun build         # Build all packages
+bun lint          # Lint + format all
+bun check:types   # Type check all
+bun check:deadcode # Find unused exports
+
+# API commands (from apps/api)
+bun dev           # Dev server with watch
+bun db:migrate    # Run migrations
+bun studio        # Drizzle Studio
+
+# Client commands (from apps/client)
+bun dev           # Vite dev server
+bun build         # Production build
+bun locales:extract
+bun locales:compile
+```
+
+## Adding New Features
+
+### New API Endpoint
+
+1. Define contract in `packages/api-contract/src/routes/v1/<group>/<endpoint>.ts`
+2. Add to HttpApiGroup in `packages/api-contract/src/index.ts`
+3. Implement handler in `apps/api/src/routes/v1/<group>/<endpoint>.ts`
+4. Add handler to group in `apps/api/src/api-live.ts`
+
+### New Service
+
+1. Create in `apps/api/src/services/<name>/index.ts`
+2. Follow Effect.Service pattern with `@dair/services/<Name>` tag
+3. Export `static readonly layer` with dependencies
+4. Provide layer in `apps/api/src/index.ts` SharedDependencies
+
+### New Database Table
+
+1. Define in `packages/db/src/schema/<domain>/<table>.ts`
+2. Export from `packages/db/src/schema/<domain>/index.ts`
+3. Export from `packages/db/src/index.ts`
+4. Run `bun db:migrate` from apps/api
+
+### New Package
+
+1. Create folder in `packages/<name>/`
+2. Add `package.json` with `@dair/<name>` name
+3. Add to consuming apps' dependencies
+4. Run `bun install` from root
