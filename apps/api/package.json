@@ -22,7 +22,8 @@
     "arctic": "^3.7.0",
     "cheerio": "^1.1.2",
     "drizzle-orm": "^0.45.1",
-    "effect": "^3.19.12"
+    "effect": "^3.19.12",
+    "redis": "^4.7.0"
   },
   "devDependencies": {
     "@effect/language-service": "^0.62.3",

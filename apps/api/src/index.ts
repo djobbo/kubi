@@ -5,19 +5,23 @@ import { Effect, Layer } from "effect"
 import { ApiLive } from "./api-live"
 import { Archive } from "./services/archive"
 import { Authorization } from "./services/authorization"
+import { Cache } from "./services/cache"
 import { ApiServerConfig } from "./services/config/api-server-config"
 import { Database } from "./services/db"
 import * as Docs from "./services/docs"
 import { BrawlhallaApi } from "./services/brawlhalla-api"
 import { Fetcher } from "./services/fetcher"
+import { responseCache } from "./services/middleware/response-cache"
 import { ObservabilityLive } from "./services/observability"
 import { scheduleRankingsCrawler } from "./workers/rankings-crawler"
+import { Duration } from "effect"
 
 // Shared dependencies for both server and workers
 const SharedDependencies = Layer.mergeAll(
   BrawlhallaApi.layer,
   Archive.layer,
   Authorization.layer,
+  Cache.layer,
   Fetcher.layer,
   Database.layer,
 )
@@ -26,7 +30,13 @@ const ServerLive = Layer.unwrapEffect(
   Effect.gen(function* () {
     const serverConfig = yield* ApiServerConfig
 
-    return HttpApiBuilder.serve().pipe(
+    // Response caching middleware - excludes auth and health endpoints
+    const responseCacheMiddleware = yield* responseCache({
+      ttlSeconds: Duration.toSeconds(Duration.minutes(5)),
+      exclude: ["/auth/", "/health", "/session"],
+    })
+
+    return HttpApiBuilder.serve(responseCacheMiddleware).pipe(
       Layer.provide(
         HttpApiBuilder.middlewareCors({
           allowedOrigins: serverConfig.allowedOrigins,
@@ -44,6 +54,7 @@ const ServerLive = Layer.unwrapEffect(
 ).pipe(
   Layer.provide(ApiServerConfig.layer),
   Layer.provide(FetchHttpClient.layer),
+  Layer.provide(Cache.layer),
 )
 
 // Dependencies for rankings crawler worker

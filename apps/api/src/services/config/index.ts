@@ -10,6 +10,7 @@
  * - BrawlhallaApiConfig - Brawlhalla API key
  * - DatabaseConfig - Database connection
  * - OAuthConfig - OAuth secrets
+ * - CacheConfig - Redis cache settings
  */
 
 export { ApiServerConfig } from "./api-server-config"
@@ -19,3 +20,4 @@ export { ConfigError } from "./errors"
 // Re-export other config services for convenience
 export { DatabaseConfig } from "../db/config"
 export { OAuthConfig } from "../authorization/config"
+export { CacheConfig } from "../cache/config"

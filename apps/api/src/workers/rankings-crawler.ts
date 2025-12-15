@@ -190,8 +190,8 @@ export const runRankingsCrawler = Effect.gen(function* () {
   // Create rate limiter: 3 requests per second
   // Using scoped to ensure proper cleanup
   const rateLimiter = yield* RateLimiter.make({
-    limit: 3,
-    interval: Duration.seconds(1),
+    limit: 1,
+    interval: Duration.seconds(5),
   })
 
   const tasks = generateCrawlTasks()

@@ -24,7 +24,6 @@ import {
 } from "@dair/brawlhalla-api/src/helpers/season-reset"
 import { getLegendOrTeamRatingReset } from "@dair/brawlhalla-api/src/helpers/season-reset"
 import { getTeamPlayers } from "@dair/brawlhalla-api/src/helpers/team-players"
-import { calculateWinrate } from "@dair/brawlhalla-api/src/helpers/winrate"
 import { cleanString } from "@dair/common/src/helpers/clean-string"
 import { Effect } from "effect"
 import { getEntitySlug } from "@/helpers/entity-slug"
