@@ -9,6 +9,7 @@ import { providerCallback } from "./routes/v1/auth/providers/callback"
 import { getGuildById } from "./routes/v1/brawlhalla/get-guild-by-id"
 import { getPlayerById } from "./routes/v1/brawlhalla/get-player-by-id"
 import { getPreviewArticles } from "./routes/v1/brawlhalla/get-preview-articles"
+import { getPlayerRankings } from "./routes/v1/brawlhalla/get-player-rankings"
 import {
   getRankings1v1,
   getRankings2v2,
@@ -91,6 +92,20 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
           Effect.catchTags({
             BrawlhallaRateLimitError: () => Effect.fail(new TooManyRequests()),
             BrawlhallaApiError: () => Effect.fail(new InternalServerError()),
+          }),
+        ),
+      ),
+    )
+    .handle(
+      "get-player-rankings",
+      Effect.fn("get-player-rankings")(
+        function* ({ path }) {
+          return yield* getPlayerRankings(path.sortBy)
+        },
+        flow(
+          Effect.tapError(Effect.logError),
+          Effect.catchTags({
+            SqlError: () => Effect.fail(new InternalServerError()),
           }),
         ),
       ),

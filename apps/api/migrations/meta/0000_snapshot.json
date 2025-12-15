@@ -1,11 +1,11 @@
 {
-  "id": "84ca4bc6-8412-444a-8040-d75ea1661f51",
+  "id": "8a2422a9-cf59-4534-abc5-187fcf8f82ab",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.clan_history": {
-      "name": "clan_history",
+    "public.brawlhalla_clan_history": {
+      "name": "brawlhalla_clan_history",
       "schema": "",
       "columns": {
         "id": {
@@ -25,7 +25,8 @@
           "name": "recorded_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         },
         "name": {
           "name": "name",
@@ -35,12 +36,6 @@
         },
         "xp": {
           "name": "xp",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "xp_percentage": {
-          "name": "xp_percentage",
           "type": "bigint",
           "primaryKey": false,
           "notNull": false
@@ -196,8 +191,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.player_aliases": {
-      "name": "player_aliases",
+    "public.brawlhalla_player_aliases": {
+      "name": "brawlhalla_player_aliases",
       "schema": "",
       "columns": {
         "id": {
@@ -226,15 +221,8 @@
           "notNull": true,
           "default": false
         },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
+        "recorded_at": {
+          "name": "recorded_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true,
@@ -242,8 +230,35 @@
         }
       },
       "indexes": {
-        "idx_alias": {
-          "name": "idx_alias",
+        "idx_brawlhalla_player_alias_recorded": {
+          "name": "idx_brawlhalla_player_alias_recorded",
+          "columns": [
+            {
+              "expression": "player_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "alias",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "recorded_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_brawlhalla_player_alias": {
+          "name": "idx_brawlhalla_player_alias",
           "columns": [
             {
               "expression": "alias",
@@ -257,11 +272,11 @@
           "method": "btree",
           "with": {}
         },
-        "idx_created_at": {
-          "name": "idx_created_at",
+        "idx_brawlhalla_player_alias_recorded_at": {
+          "name": "idx_brawlhalla_player_alias_recorded_at",
           "columns": [
             {
-              "expression": "created_at",
+              "expression": "recorded_at",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -272,8 +287,8 @@
           "method": "btree",
           "with": {}
         },
-        "idx_public_created_at": {
-          "name": "idx_public_created_at",
+        "idx_brawlhalla_player_public_recorded_at": {
+          "name": "idx_brawlhalla_player_public_recorded_at",
           "columns": [
             {
               "expression": "public",
@@ -282,7 +297,7 @@
               "nulls": "last"
             },
             {
-              "expression": "created_at",
+              "expression": "recorded_at",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -293,8 +308,8 @@
           "method": "btree",
           "with": {}
         },
-        "idx_player_id": {
-          "name": "idx_player_id",
+        "idx_brawlhalla_player_aliases_player_id": {
+          "name": "idx_brawlhalla_player_aliases_player_id",
           "columns": [
             {
               "expression": "player_id",
@@ -316,8 +331,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.player_history": {
-      "name": "player_history",
+    "public.brawlhalla_player_history": {
+      "name": "brawlhalla_player_history",
       "schema": "",
       "columns": {
         "id": {
@@ -337,203 +352,180 @@
           "name": "recorded_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         },
         "name": {
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "xp": {
           "name": "xp",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
-        },
-        "level": {
-          "name": "level",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "xp_percentage": {
-          "name": "xp_percentage",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "games": {
           "name": "games",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "wins": {
           "name": "wins",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
+        },
+        "losses": {
+          "name": "losses",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
         },
         "matchtime": {
           "name": "matchtime",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "kos": {
           "name": "kos",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "falls": {
           "name": "falls",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "suicides": {
           "name": "suicides",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "team_kos": {
           "name": "team_kos",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "damage_dealt": {
           "name": "damage_dealt",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "damage_taken": {
           "name": "damage_taken",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
-        },
-        "winrate": {
-          "name": "winrate",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "ranked_games": {
           "name": "ranked_games",
-          "type": "bigint",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
         "ranked_wins": {
           "name": "ranked_wins",
-          "type": "bigint",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
         "ranked_losses": {
           "name": "ranked_losses",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "glory_from_wins": {
-          "name": "glory_from_wins",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "glory_from_peak_rating": {
-          "name": "glory_from_peak_rating",
-          "type": "bigint",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
         "total_glory": {
           "name": "total_glory",
-          "type": "bigint",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
         "ranked_1v1_rating": {
           "name": "ranked_1v1_rating",
-          "type": "bigint",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
         "ranked_1v1_peak_rating": {
           "name": "ranked_1v1_peak_rating",
-          "type": "bigint",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
         "ranked_1v1_games": {
           "name": "ranked_1v1_games",
-          "type": "bigint",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
         "ranked_1v1_wins": {
           "name": "ranked_1v1_wins",
-          "type": "bigint",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
         "ranked_1v1_losses": {
           "name": "ranked_1v1_losses",
-          "type": "bigint",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
         "ranked_2v2_games": {
           "name": "ranked_2v2_games",
-          "type": "bigint",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
         "ranked_2v2_wins": {
           "name": "ranked_2v2_wins",
-          "type": "bigint",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
         "ranked_2v2_losses": {
           "name": "ranked_2v2_losses",
-          "type": "bigint",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
         "ranked_rotating_rating": {
           "name": "ranked_rotating_rating",
-          "type": "bigint",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
         "ranked_rotating_peak_rating": {
           "name": "ranked_rotating_peak_rating",
-          "type": "bigint",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
         "ranked_rotating_games": {
           "name": "ranked_rotating_games",
-          "type": "bigint",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
         "ranked_rotating_wins": {
           "name": "ranked_rotating_wins",
-          "type": "bigint",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
         "ranked_rotating_losses": {
           "name": "ranked_rotating_losses",
-          "type": "bigint",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
@@ -549,28 +541,28 @@
           "primaryKey": false,
           "notNull": false
         },
-        "rating_reset": {
-          "name": "rating_reset",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": false
-        },
         "clan_id": {
           "name": "clan_id",
           "type": "bigint",
           "primaryKey": false,
           "notNull": false
         },
-        "raw_data": {
-          "name": "raw_data",
+        "raw_stats_data": {
+          "name": "raw_stats_data",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "raw_ranked_data": {
+          "name": "raw_ranked_data",
           "type": "jsonb",
           "primaryKey": false,
           "notNull": false
         }
       },
       "indexes": {
-        "idx_player_recorded": {
-          "name": "idx_player_recorded",
+        "idx_brawlhalla_player_history_recorded": {
+          "name": "idx_brawlhalla_player_history_recorded",
           "columns": [
             {
               "expression": "player_id",
@@ -590,248 +582,8 @@
           "method": "btree",
           "with": {}
         },
-        "idx_rating_1v1": {
-          "name": "idx_rating_1v1",
-          "columns": [
-            {
-              "expression": "ranked_1v1_rating",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "idx_peak_rating_1v1": {
-          "name": "idx_peak_rating_1v1",
-          "columns": [
-            {
-              "expression": "ranked_1v1_peak_rating",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "idx_games_1v1": {
-          "name": "idx_games_1v1",
-          "columns": [
-            {
-              "expression": "ranked_1v1_games",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "idx_wins_1v1": {
-          "name": "idx_wins_1v1",
-          "columns": [
-            {
-              "expression": "ranked_1v1_wins",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "idx_losses_1v1": {
-          "name": "idx_losses_1v1",
-          "columns": [
-            {
-              "expression": "ranked_1v1_losses",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "idx_glory_from_wins_1v1": {
-          "name": "idx_glory_from_wins_1v1",
-          "columns": [
-            {
-              "expression": "glory_from_wins",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "idx_glory_from_peak_rating_1v1": {
-          "name": "idx_glory_from_peak_rating_1v1",
-          "columns": [
-            {
-              "expression": "glory_from_peak_rating",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "idx_total_glory_1v1": {
-          "name": "idx_total_glory_1v1",
-          "columns": [
-            {
-              "expression": "total_glory",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "idx_games_2v2": {
-          "name": "idx_games_2v2",
-          "columns": [
-            {
-              "expression": "ranked_2v2_games",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "idx_rating_rotating": {
-          "name": "idx_rating_rotating",
-          "columns": [
-            {
-              "expression": "ranked_rotating_rating",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "idx_peak_rating_rotating": {
-          "name": "idx_peak_rating_rotating",
-          "columns": [
-            {
-              "expression": "ranked_rotating_peak_rating",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "idx_xp": {
-          "name": "idx_xp",
-          "columns": [
-            {
-              "expression": "xp",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "idx_level": {
-          "name": "idx_level",
-          "columns": [
-            {
-              "expression": "level",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "idx_wins": {
-          "name": "idx_wins",
-          "columns": [
-            {
-              "expression": "wins",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "idx_games": {
-          "name": "idx_games",
-          "columns": [
-            {
-              "expression": "games",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "idx_winrate": {
-          "name": "idx_winrate",
-          "columns": [
-            {
-              "expression": "winrate",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "idx_name": {
-          "name": "idx_name",
+        "idx_brawlhalla_player_history_name": {
+          "name": "idx_brawlhalla_player_history_name",
           "columns": [
             {
               "expression": "name",
@@ -845,8 +597,338 @@
           "method": "btree",
           "with": {}
         },
-        "idx_recorded_at": {
-          "name": "idx_recorded_at",
+        "idx_brawlhalla_player_history_xp": {
+          "name": "idx_brawlhalla_player_history_xp",
+          "columns": [
+            {
+              "expression": "xp",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_brawlhalla_player_history_games": {
+          "name": "idx_brawlhalla_player_history_games",
+          "columns": [
+            {
+              "expression": "games",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_brawlhalla_player_history_wins": {
+          "name": "idx_brawlhalla_player_history_wins",
+          "columns": [
+            {
+              "expression": "wins",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_brawlhalla_player_history_losses": {
+          "name": "idx_brawlhalla_player_history_losses",
+          "columns": [
+            {
+              "expression": "losses",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_brawlhalla_player_history_ranked_games": {
+          "name": "idx_brawlhalla_player_history_ranked_games",
+          "columns": [
+            {
+              "expression": "ranked_games",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_brawlhalla_player_history_ranked_wins": {
+          "name": "idx_brawlhalla_player_history_ranked_wins",
+          "columns": [
+            {
+              "expression": "ranked_wins",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_brawlhalla_player_history_ranked_losses": {
+          "name": "idx_brawlhalla_player_history_ranked_losses",
+          "columns": [
+            {
+              "expression": "ranked_losses",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_brawlhalla_player_history_total_glory": {
+          "name": "idx_brawlhalla_player_history_total_glory",
+          "columns": [
+            {
+              "expression": "total_glory",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_brawlhalla_player_history_ranked_1v1_rating": {
+          "name": "idx_brawlhalla_player_history_ranked_1v1_rating",
+          "columns": [
+            {
+              "expression": "ranked_1v1_rating",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_brawlhalla_player_history_ranked_1v1_peak_rating": {
+          "name": "idx_brawlhalla_player_history_ranked_1v1_peak_rating",
+          "columns": [
+            {
+              "expression": "ranked_1v1_peak_rating",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_brawlhalla_player_history_ranked_1v1_games": {
+          "name": "idx_brawlhalla_player_history_ranked_1v1_games",
+          "columns": [
+            {
+              "expression": "ranked_1v1_games",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_brawlhalla_player_history_ranked_1v1_wins": {
+          "name": "idx_brawlhalla_player_history_ranked_1v1_wins",
+          "columns": [
+            {
+              "expression": "ranked_1v1_wins",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_brawlhalla_player_history_ranked_1v1_losses": {
+          "name": "idx_brawlhalla_player_history_ranked_1v1_losses",
+          "columns": [
+            {
+              "expression": "ranked_1v1_losses",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_brawlhalla_player_history_ranked_2v2_games": {
+          "name": "idx_brawlhalla_player_history_ranked_2v2_games",
+          "columns": [
+            {
+              "expression": "ranked_2v2_games",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_brawlhalla_player_history_ranked_2v2_wins": {
+          "name": "idx_brawlhalla_player_history_ranked_2v2_wins",
+          "columns": [
+            {
+              "expression": "ranked_2v2_wins",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_brawlhalla_player_history_ranked_2v2_losses": {
+          "name": "idx_brawlhalla_player_history_ranked_2v2_losses",
+          "columns": [
+            {
+              "expression": "ranked_2v2_losses",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_brawlhalla_player_history_ranked_rotating_rating": {
+          "name": "idx_brawlhalla_player_history_ranked_rotating_rating",
+          "columns": [
+            {
+              "expression": "ranked_rotating_rating",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_brawlhalla_player_history_ranked_rotating_peak_rating": {
+          "name": "idx_brawlhalla_player_history_ranked_rotating_peak_rating",
+          "columns": [
+            {
+              "expression": "ranked_rotating_peak_rating",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_brawlhalla_player_history_ranked_rotating_games": {
+          "name": "idx_brawlhalla_player_history_ranked_rotating_games",
+          "columns": [
+            {
+              "expression": "ranked_rotating_games",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_brawlhalla_player_history_ranked_rotating_wins": {
+          "name": "idx_brawlhalla_player_history_ranked_rotating_wins",
+          "columns": [
+            {
+              "expression": "ranked_rotating_wins",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_brawlhalla_player_history_ranked_rotating_losses": {
+          "name": "idx_brawlhalla_player_history_ranked_rotating_losses",
+          "columns": [
+            {
+              "expression": "ranked_rotating_losses",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_brawlhalla_player_history_clan_id": {
+          "name": "idx_brawlhalla_player_history_clan_id",
+          "columns": [
+            {
+              "expression": "clan_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_brawlhalla_player_history_recorded_at": {
+          "name": "idx_brawlhalla_player_history_recorded_at",
           "columns": [
             {
               "expression": "recorded_at",
@@ -868,8 +950,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.player_legend_history": {
-      "name": "player_legend_history",
+    "public.brawlhalla_player_legend_history": {
+      "name": "brawlhalla_player_legend_history",
       "schema": "",
       "columns": {
         "id": {
@@ -895,7 +977,8 @@
           "name": "recorded_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         },
         "legend_id": {
           "name": "legend_id",
@@ -903,65 +986,47 @@
           "primaryKey": false,
           "notNull": true
         },
-        "legend_name_key": {
-          "name": "legend_name_key",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "legend_name": {
-          "name": "legend_name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
         "games": {
           "name": "games",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "wins": {
           "name": "wins",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
+        },
+        "losses": {
+          "name": "losses",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
         },
         "xp": {
           "name": "xp",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
-        },
-        "level": {
-          "name": "level",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "xp_percentage": {
-          "name": "xp_percentage",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "damage_dealt": {
           "name": "damage_dealt",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "damage_taken": {
           "name": "damage_taken",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "kos": {
           "name": "kos",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "falls": {
           "name": "falls",
@@ -973,25 +1038,19 @@
           "name": "suicides",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "team_kos": {
           "name": "team_kos",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "matchtime": {
           "name": "matchtime",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
-        },
-        "winrate": {
-          "name": "winrate",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "rating": {
           "name": "rating",
@@ -1004,17 +1063,11 @@
           "type": "bigint",
           "primaryKey": false,
           "notNull": false
-        },
-        "tier": {
-          "name": "tier",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {
-        "idx_player_legend_recorded": {
-          "name": "idx_player_legend_recorded",
+        "idx_brawlhalla_player_legend_history_recorded": {
+          "name": "idx_brawlhalla_player_legend_history_recorded",
           "columns": [
             {
               "expression": "player_id",
@@ -1040,8 +1093,8 @@
           "method": "btree",
           "with": {}
         },
-        "idx_legend_wins": {
-          "name": "idx_legend_wins",
+        "idx_brawlhalla_player_legend_history_wins": {
+          "name": "idx_brawlhalla_player_legend_history_wins",
           "columns": [
             {
               "expression": "legend_id",
@@ -1061,8 +1114,8 @@
           "method": "btree",
           "with": {}
         },
-        "idx_legend_games": {
-          "name": "idx_legend_games",
+        "idx_brawlhalla_player_legend_history_games": {
+          "name": "idx_brawlhalla_player_legend_history_games",
           "columns": [
             {
               "expression": "legend_id",
@@ -1082,8 +1135,8 @@
           "method": "btree",
           "with": {}
         },
-        "idx_legend_rating": {
-          "name": "idx_legend_rating",
+        "idx_brawlhalla_player_legend_history_rating": {
+          "name": "idx_brawlhalla_player_legend_history_rating",
           "columns": [
             {
               "expression": "legend_id",
@@ -1103,8 +1156,29 @@
           "method": "btree",
           "with": {}
         },
-        "idx_legend_kos": {
-          "name": "idx_legend_kos",
+        "idx_brawlhalla_player_legend_history_losses": {
+          "name": "idx_brawlhalla_player_legend_history_losses",
+          "columns": [
+            {
+              "expression": "legend_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "losses",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_brawlhalla_player_legend_history_kos": {
+          "name": "idx_brawlhalla_player_legend_history_kos",
           "columns": [
             {
               "expression": "legend_id",
@@ -1124,29 +1198,8 @@
           "method": "btree",
           "with": {}
         },
-        "idx_legend_winrate": {
-          "name": "idx_legend_winrate",
-          "columns": [
-            {
-              "expression": "legend_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "winrate",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "idx_player_wins": {
-          "name": "idx_player_wins",
+        "idx_brawlhalla_player_legend_history_player_wins": {
+          "name": "idx_brawlhalla_player_legend_history_player_wins",
           "columns": [
             {
               "expression": "player_id",
@@ -1166,8 +1219,8 @@
           "method": "btree",
           "with": {}
         },
-        "idx_player_history_xp": {
-          "name": "idx_player_history_xp",
+        "idx_brawlhalla_player_legend_history_xp": {
+          "name": "idx_brawlhalla_player_legend_history_xp",
           "columns": [
             {
               "expression": "player_history_id",
@@ -1189,12 +1242,16 @@
         }
       },
       "foreignKeys": {
-        "player_legend_history_player_history_id_player_history_id_fk": {
-          "name": "player_legend_history_player_history_id_player_history_id_fk",
-          "tableFrom": "player_legend_history",
-          "tableTo": "player_history",
-          "columnsFrom": ["player_history_id"],
-          "columnsTo": ["id"],
+        "brawlhalla_player_legend_history_player_history_id_brawlhalla_player_history_id_fk": {
+          "name": "brawlhalla_player_legend_history_player_history_id_brawlhalla_player_history_id_fk",
+          "tableFrom": "brawlhalla_player_legend_history",
+          "tableTo": "brawlhalla_player_history",
+          "columnsFrom": [
+            "player_history_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1205,8 +1262,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.player_weapon_history": {
-      "name": "player_weapon_history",
+    "public.brawlhalla_player_weapon_history": {
+      "name": "brawlhalla_player_weapon_history",
       "schema": "",
       "columns": {
         "id": {
@@ -1232,7 +1289,8 @@
           "name": "recorded_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         },
         "weapon_name": {
           "name": "weapon_name",
@@ -1244,54 +1302,48 @@
           "name": "games",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "wins": {
           "name": "wins",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
+        },
+        "losses": {
+          "name": "losses",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
         },
         "kos": {
           "name": "kos",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "damage_dealt": {
           "name": "damage_dealt",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "time_held": {
           "name": "time_held",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
-        },
-        "level": {
-          "name": "level",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "xp": {
           "name": "xp",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
-        },
-        "winrate": {
-          "name": "winrate",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {
-        "idx_player_weapon_recorded": {
-          "name": "idx_player_weapon_recorded",
+        "idx_brawlhalla_player_weapon_history_recorded": {
+          "name": "idx_brawlhalla_player_weapon_history_recorded",
           "columns": [
             {
               "expression": "player_id",
@@ -1317,8 +1369,8 @@
           "method": "btree",
           "with": {}
         },
-        "idx_weapon_wins": {
-          "name": "idx_weapon_wins",
+        "idx_brawlhalla_player_weapon_history_wins": {
+          "name": "idx_brawlhalla_player_weapon_history_wins",
           "columns": [
             {
               "expression": "weapon_name",
@@ -1338,8 +1390,8 @@
           "method": "btree",
           "with": {}
         },
-        "idx_weapon_games": {
-          "name": "idx_weapon_games",
+        "idx_brawlhalla_player_weapon_history_games": {
+          "name": "idx_brawlhalla_player_weapon_history_games",
           "columns": [
             {
               "expression": "weapon_name",
@@ -1359,8 +1411,29 @@
           "method": "btree",
           "with": {}
         },
-        "idx_weapon_kos": {
-          "name": "idx_weapon_kos",
+        "idx_brawlhalla_player_weapon_history_losses": {
+          "name": "idx_brawlhalla_player_weapon_history_losses",
+          "columns": [
+            {
+              "expression": "weapon_name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "losses",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_brawlhalla_player_weapon_history_kos": {
+          "name": "idx_brawlhalla_player_weapon_history_kos",
           "columns": [
             {
               "expression": "weapon_name",
@@ -1380,29 +1453,8 @@
           "method": "btree",
           "with": {}
         },
-        "idx_weapon_winrate": {
-          "name": "idx_weapon_winrate",
-          "columns": [
-            {
-              "expression": "weapon_name",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "winrate",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "idx_player_weapon_wins": {
-          "name": "idx_player_weapon_wins",
+        "idx_brawlhalla_player_weapon_history_player_wins": {
+          "name": "idx_brawlhalla_player_weapon_history_player_wins",
           "columns": [
             {
               "expression": "player_id",
@@ -1424,66 +1476,21 @@
         }
       },
       "foreignKeys": {
-        "player_weapon_history_player_history_id_player_history_id_fk": {
-          "name": "player_weapon_history_player_history_id_player_history_id_fk",
-          "tableFrom": "player_weapon_history",
-          "tableTo": "player_history",
-          "columnsFrom": ["player_history_id"],
-          "columnsTo": ["id"],
+        "brawlhalla_player_weapon_history_player_history_id_brawlhalla_player_history_id_fk": {
+          "name": "brawlhalla_player_weapon_history_player_history_id_brawlhalla_player_history_id_fk",
+          "tableFrom": "brawlhalla_player_weapon_history",
+          "tableTo": "brawlhalla_player_history",
+          "columnsFrom": [
+            "player_history_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.player_aliases_to_player_history": {
-      "name": "player_aliases_to_player_history",
-      "schema": "",
-      "columns": {
-        "player_alias_id": {
-          "name": "player_alias_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "player_history_id": {
-          "name": "player_history_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "player_aliases_to_player_history_player_alias_id_player_aliases_id_fk": {
-          "name": "player_aliases_to_player_history_player_alias_id_player_aliases_id_fk",
-          "tableFrom": "player_aliases_to_player_history",
-          "tableTo": "player_aliases",
-          "columnsFrom": ["player_alias_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "player_aliases_to_player_history_player_history_id_player_history_id_fk": {
-          "name": "player_aliases_to_player_history_player_history_id_player_history_id_fk",
-          "tableFrom": "player_aliases_to_player_history",
-          "tableTo": "player_history",
-          "columnsFrom": ["player_history_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "player_aliases_to_player_history_player_alias_id_player_history_id_pk": {
-          "name": "player_aliases_to_player_history_player_alias_id_player_history_id_pk",
-          "columns": ["player_alias_id", "player_history_id"]
-        }
-      },
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
@@ -1557,8 +1564,12 @@
           "name": "oauth_accounts_user_id_users_id_fk",
           "tableFrom": "oauth_accounts",
           "tableTo": "users",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1613,8 +1624,12 @@
           "name": "sessions_user_id_users_id_fk",
           "tableFrom": "sessions",
           "tableTo": "users",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1676,7 +1691,9 @@
         "users_email_unique": {
           "name": "users_email_unique",
           "nullsNotDistinct": false,
-          "columns": ["email"]
+          "columns": [
+            "email"
+          ]
         }
       },
       "policies": {},

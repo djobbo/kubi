@@ -12,3 +12,9 @@ export const withTimestamp = {
 export const withExpiry = {
   expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
 } as const satisfies Record<string, PgColumnBuilderBase>
+
+export const withRecordedAt = {
+  recordedAt: timestamp("recorded_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+} as const satisfies Record<string, PgColumnBuilderBase>

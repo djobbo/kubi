@@ -7,10 +7,10 @@ import {
   index,
 } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
-import { withTimestamp } from "../../helpers/with-timestamp"
+import { withRecordedAt } from "../../../helpers/with-timestamp"
 
 export const playerAliasesTable = pgTable(
-  "player_aliases",
+  "brawlhalla_player_aliases",
   {
     id: uuid("id").primaryKey().default(sql`uuidv7()`).primaryKey(),
 
@@ -18,13 +18,21 @@ export const playerAliasesTable = pgTable(
 
     alias: text("alias").notNull(),
     public: boolean("public").notNull().default(false),
-    ...withTimestamp,
+    ...withRecordedAt,
   },
   (table) => [
-    index("idx_alias").on(table.alias),
-    index("idx_created_at").on(table.createdAt),
-    index("idx_public_created_at").on(table.public, table.createdAt),
-    index("idx_player_id").on(table.playerId),
+    index("idx_brawlhalla_player_alias_recorded").on(
+      table.playerId,
+      table.alias,
+      table.recordedAt,
+    ),
+    index("idx_brawlhalla_player_alias").on(table.alias),
+    index("idx_brawlhalla_player_alias_recorded_at").on(table.recordedAt),
+    index("idx_brawlhalla_player_public_recorded_at").on(
+      table.public,
+      table.recordedAt,
+    ),
+    index("idx_brawlhalla_player_aliases_player_id").on(table.playerId),
   ],
 )
 
