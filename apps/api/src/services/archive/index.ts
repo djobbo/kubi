@@ -31,6 +31,7 @@ import type { GlobalPlayerRankingsSortByParam } from "@dair/api-contract/src/rou
 import { isNotNull } from "drizzle-orm"
 import type { GlobalLegendRankingsSortByParam } from "@dair/api-contract/src/routes/v1/brawlhalla/get-global-legend-rankings"
 import type { AnyRegion } from "@dair/api-contract/src/shared/region"
+import type { GameDelta } from "@dair/api-contract/src/routes/v1/brawlhalla/get-ranked-queues"
 
 const MIN_ALIAS_SEARCH_LENGTH = 3
 
@@ -591,7 +592,12 @@ export class Archive extends Effect.Service<Archive>()(
             latestRecords,
             (latest) =>
               db
-                .select({ playerId: table.playerId, games: table.games })
+                .select({
+                  playerId: table.playerId,
+                  games: table.games,
+                  wins: table.wins,
+                  rating: table.rating,
+                })
                 .from(table)
                 .where(
                   and(
@@ -605,21 +611,24 @@ export class Archive extends Effect.Service<Archive>()(
             { concurrency: 10 },
           )
 
-          const previousGamesMap = new Map<number, number>()
+          const previousRankMap = new Map<number, typeof GameDelta.Type>()
           for (const [index, result] of previousRecordsQuery.entries()) {
             const latestPlayer = latestRecords[index]
             if (result[0] && latestPlayer) {
-              previousGamesMap.set(latestPlayer.playerId, result[0].games)
+              previousRankMap.set(latestPlayer.playerId, result[0])
             }
           }
 
           return latestRecords
             .filter((player) => {
-              const previousGames = previousGamesMap.get(player.playerId)
-              return previousGames !== undefined && player.games > previousGames
+              const previousRank = previousRankMap.get(player.playerId)
+              return (
+                previousRank !== undefined && player.games > previousRank.games
+              )
             })
             .map((player) => {
-              const previousGames = previousGamesMap.get(player.playerId) ?? 0
+              const previousRank = previousRankMap.get(player.playerId)
+
               return {
                 playerId: player.playerId,
                 name: player.name,
@@ -629,7 +638,11 @@ export class Archive extends Effect.Service<Archive>()(
                 wins: player.wins,
                 tier: player.tier,
                 region: player.region,
-                gamesDelta: player.games - previousGames,
+                gamesDelta: {
+                  games: player.games - (previousRank?.games ?? 0),
+                  wins: player.wins - (previousRank?.wins ?? 0),
+                  rating: player.rating - (previousRank?.rating ?? 0),
+                },
                 lastSeenAt: player.recordedAt,
               }
             })
@@ -704,6 +717,8 @@ export class Archive extends Effect.Service<Archive>()(
                   playerIdOne: table.playerIdOne,
                   playerIdTwo: table.playerIdTwo,
                   games: table.games,
+                  wins: table.wins,
+                  rating: table.rating,
                 })
                 .from(table)
                 .where(
@@ -719,24 +734,26 @@ export class Archive extends Effect.Service<Archive>()(
             { concurrency: 10 },
           )
 
-          const previousGamesMap = new Map<string, number>()
+          const previousRankMap = new Map<string, typeof GameDelta.Type>()
           for (const [index, result] of previousRecordsQuery.entries()) {
             const latestTeam = latestRecords[index]
             if (result[0] && latestTeam) {
               const key = `${latestTeam.playerIdOne}-${latestTeam.playerIdTwo}`
-              previousGamesMap.set(key, result[0].games)
+              previousRankMap.set(key, result[0])
             }
           }
 
           return latestRecords
             .filter((team) => {
               const key = `${team.playerIdOne}-${team.playerIdTwo}`
-              const previousGames = previousGamesMap.get(key)
-              return previousGames !== undefined && team.games > previousGames
+              const previousRank = previousRankMap.get(key)
+              return (
+                previousRank !== undefined && team.games > previousRank.games
+              )
             })
             .map((team) => {
               const key = `${team.playerIdOne}-${team.playerIdTwo}`
-              const previousGames = previousGamesMap.get(key) ?? 0
+              const previousRank = previousRankMap.get(key)
               return {
                 playerIdOne: team.playerIdOne,
                 playerIdTwo: team.playerIdTwo,
@@ -748,7 +765,11 @@ export class Archive extends Effect.Service<Archive>()(
                 wins: team.wins,
                 tier: team.tier,
                 region: team.region,
-                gamesDelta: team.games - previousGames,
+                gamesDelta: {
+                  games: team.games - (previousRank?.games ?? 0),
+                  wins: team.wins - (previousRank?.wins ?? 0),
+                  rating: team.rating - (previousRank?.rating ?? 0),
+                },
                 lastSeenAt: team.recordedAt,
               }
             })
@@ -814,7 +835,12 @@ export class Archive extends Effect.Service<Archive>()(
             latestRecords,
             (latest) =>
               db
-                .select({ playerId: table.playerId, games: table.games })
+                .select({
+                  playerId: table.playerId,
+                  games: table.games,
+                  wins: table.wins,
+                  rating: table.rating,
+                })
                 .from(table)
                 .where(
                   and(
@@ -828,21 +854,23 @@ export class Archive extends Effect.Service<Archive>()(
             { concurrency: 10 },
           )
 
-          const previousGamesMap = new Map<number, number>()
+          const previousRankMap = new Map<number, typeof GameDelta.Type>()
           for (const [index, result] of previousRecordsQuery.entries()) {
             const latestPlayer = latestRecords[index]
             if (result[0] && latestPlayer) {
-              previousGamesMap.set(latestPlayer.playerId, result[0].games)
+              previousRankMap.set(latestPlayer.playerId, result[0])
             }
           }
 
           return latestRecords
             .filter((player) => {
-              const previousGames = previousGamesMap.get(player.playerId)
-              return previousGames !== undefined && player.games > previousGames
+              const previousRank = previousRankMap.get(player.playerId)
+              return (
+                previousRank !== undefined && player.games > previousRank.games
+              )
             })
             .map((player) => {
-              const previousGames = previousGamesMap.get(player.playerId) ?? 0
+              const previousRank = previousRankMap.get(player.playerId)
               return {
                 playerId: player.playerId,
                 name: player.name,
@@ -852,7 +880,11 @@ export class Archive extends Effect.Service<Archive>()(
                 wins: player.wins,
                 tier: player.tier,
                 region: player.region,
-                gamesDelta: player.games - previousGames,
+                gamesDelta: {
+                  games: player.games - (previousRank?.games ?? 0),
+                  wins: player.wins - (previousRank?.wins ?? 0),
+                  rating: player.rating - (previousRank?.rating ?? 0),
+                },
                 lastSeenAt: player.recordedAt,
               }
             })

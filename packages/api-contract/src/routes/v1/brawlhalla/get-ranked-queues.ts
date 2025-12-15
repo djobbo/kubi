@@ -1,5 +1,11 @@
 import { Schema } from "effect"
 
+export const GameDelta = Schema.Struct({
+  games: Schema.Number,
+  wins: Schema.Number,
+  rating: Schema.Number,
+})
+
 export const QueueItem = Schema.Struct({
   rating: Schema.Number,
   peakRating: Schema.Number,
@@ -7,7 +13,7 @@ export const QueueItem = Schema.Struct({
   wins: Schema.Number,
   tier: Schema.NullOr(Schema.String),
   region: Schema.NullOr(Schema.String),
-  gamesDelta: Schema.Number,
+  gamesDelta: GameDelta,
   lastSeenAt: Schema.Date,
 })
 

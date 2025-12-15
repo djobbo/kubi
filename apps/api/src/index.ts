@@ -16,8 +16,10 @@ import { ObservabilityLive } from "./services/observability"
 import { scheduleRankingsCrawler } from "./workers/rankings-crawler"
 import { scheduleLeaderboardCrawler } from "./workers/leaderboard-crawler"
 import { Duration } from "effect"
+import { BrawlhallaRateLimiter } from "@/services/rate-limiter"
 
 // Shared dependencies for both server and workers
+// BrawlhallaApi includes its own rate limiter layer
 const SharedDependencies = Layer.mergeAll(
   BrawlhallaApi.layer,
   Archive.layer,
@@ -34,7 +36,7 @@ const ServerLive = Layer.unwrapEffect(
     return HttpApiBuilder.serve(
       responseCache({
         ttlSeconds: Duration.toSeconds(Duration.minutes(5)),
-        exclude: ["/auth/", "/health", "/session"],
+        exclude: ["/auth", "/health", "/session", "/docs", "/openapi"],
       }),
     ).pipe(
       Layer.provide(
@@ -54,10 +56,9 @@ const ServerLive = Layer.unwrapEffect(
 ).pipe(
   Layer.provide(ApiServerConfig.layer),
   Layer.provide(FetchHttpClient.layer),
-  Layer.provide(Cache.layer),
 )
 
-// Dependencies for rankings crawler worker
+// Dependencies for workers (same as shared, no additional rate limiter needed)
 const WorkerDependencies = Layer.mergeAll(
   SharedDependencies,
   FetchHttpClient.layer,
@@ -87,6 +88,8 @@ const server = Effect.gen(function* () {
 }).pipe(
   Effect.provide(ObservabilityLive),
   Effect.catchAllCause(Effect.logError),
+  // Provide the shared rate limiter at the top level so workers and server share the same instance
+  Effect.provide(BrawlhallaRateLimiter.layer),
 )
 
 await Effect.runPromise(server)

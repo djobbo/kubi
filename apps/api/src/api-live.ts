@@ -29,9 +29,17 @@ import {
   getRanked2v2Queue,
   getRankedRotatingQueue,
 } from "./routes/v1/brawlhalla/get-ranked-queues"
+import { getTokens } from "./routes/v1/health/get-tokens"
 
 const HealthLive = HttpApiBuilder.group(Api, "health", (handlers) =>
-  handlers.handle("health", () => Effect.succeed("OK")),
+  handlers
+    .handle("health", () => Effect.succeed("OK"))
+    .handle(
+      "tokens",
+      Effect.fn("tokens")(function* () {
+        return yield* getTokens
+      }),
+    ),
 )
 
 const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>

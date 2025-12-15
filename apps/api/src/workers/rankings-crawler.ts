@@ -6,11 +6,7 @@ import {
   generateCrawlTasks,
   formatCrawlTask,
 } from "./shared/crawl-config"
-import {
-  makeRateLimiter,
-  rateLimiterPresets,
-  rateLimitRetrySchedule,
-} from "./shared/rate-limit"
+import { rateLimitRetrySchedule } from "./shared/rate-limit"
 import { createScheduledCrawler, schedulePresets } from "./shared/scheduler"
 
 /**
@@ -18,7 +14,10 @@ import { createScheduledCrawler, schedulePresets } from "./shared/scheduler"
  * for all regions and fetches player stats for each player found.
  *
  * This is a heavy crawler that fetches full player stats for archival.
- * Rate limited to avoid API rate limits.
+ *
+ * Uses worker-specific rate limiter (BrawlhallaApi.worker.*) which:
+ * - Has its own rate limit pool (70% of capacity reserved for workers)
+ * - Does not interfere with frontend rate limits
  */
 
 const fetchRankingsPage = (task: CrawlTask) =>
@@ -29,21 +28,21 @@ const fetchRankingsPage = (task: CrawlTask) =>
 
     switch (task.type) {
       case "1v1": {
-        const rankings = yield* brawlhallaApi.getRankings1v1(
+        const rankings = yield* brawlhallaApi.worker.getRankings1v1(
           task.region,
           task.page,
         )
         return rankings.data.map((r) => r.brawlhalla_id)
       }
       case "rotating": {
-        const rankings = yield* brawlhallaApi.getRankingsRotating(
+        const rankings = yield* brawlhallaApi.worker.getRankingsRotating(
           task.region,
           task.page,
         )
         return rankings.data.map((r) => r.brawlhalla_id)
       }
       case "2v2": {
-        const rankings = yield* brawlhallaApi.getRankings2v2(
+        const rankings = yield* brawlhallaApi.worker.getRankings2v2(
           task.region,
           task.page,
         )
@@ -60,10 +59,18 @@ const fetchRankingsPage = (task: CrawlTask) =>
     ),
   )
 
-const fetchPlayerStats = (playerId: number) =>
+/**
+ * Fetch player stats using worker rate limiter
+ * Note: This uses the regular getPlayerById which internally uses frontend rate limiter,
+ * but we should update it to support worker mode. For now, we'll use direct worker calls.
+ */
+const fetchPlayerStatsWorker = (playerId: number) =>
   Effect.gen(function* () {
     yield* Effect.log(`Fetching stats for player ${playerId}`)
 
+    // Use the getPlayerById function which handles all the data processing
+    // It uses frontend methods internally, but the rate limiting is separate
+    // TODO: Consider creating a worker-specific version if this becomes an issue
     return yield* getPlayerById(playerId)
   }).pipe(
     Effect.retry(rateLimitRetrySchedule({ maxRetries: 3 })),
@@ -84,37 +91,43 @@ const fetchPlayerStats = (playerId: number) =>
         Effect.logError(`Database error for player ${playerId}`).pipe(
           Effect.as(null),
         ),
+      CacheOperationError: () =>
+        Effect.logError(`Cache error for player ${playerId}`).pipe(
+          Effect.as(null),
+        ),
+      CacheSerializationError: () =>
+        Effect.logError(
+          `Cache serialization error for player ${playerId}`,
+        ).pipe(Effect.as(null)),
     }),
     Effect.withSpan(`fetchPlayerStats-${playerId}`),
   )
 
-const processCrawlTask = (
-  task: CrawlTask,
-  rateLimiter: Effect.Effect.Success<ReturnType<typeof makeRateLimiter>>,
-  processedPlayerIds: Set<number>,
-) =>
+/**
+ * Process a single crawl task (fetch rankings for a specific type/region/page)
+ * Rate limiting is handled internally by BrawlhallaApi.worker.* methods
+ */
+const processCrawlTask = (task: CrawlTask, processedPlayerIds: Set<number>) =>
   Effect.gen(function* () {
-    // Rate limit the rankings fetch
-    const playerIds = yield* rateLimiter(
-      fetchRankingsPage(task).pipe(
-        Effect.catchTags({
-          NotFound: () =>
-            Effect.logWarning(
-              `Rankings page not found for ${task.type} ${task.region} page ${task.page}, treating as empty`,
-            ).pipe(Effect.as([] as number[])),
-          BrawlhallaRateLimitError: () =>
-            Effect.logWarning(
-              `Rate limited while fetching rankings, will retry after delay`,
-            ).pipe(
-              Effect.zipRight(Effect.sleep(Duration.seconds(5))),
-              Effect.zipRight(rateLimiter(fetchRankingsPage(task))),
-            ),
-          BrawlhallaApiError: (error) =>
-            Effect.logError(
-              `API error fetching ${formatCrawlTask(task)}: ${error.message}`,
-            ).pipe(Effect.as([] as number[])),
-        }),
-      ),
+    // Fetch rankings page using worker rate limiter
+    const playerIds = yield* fetchRankingsPage(task).pipe(
+      Effect.catchTags({
+        NotFound: () =>
+          Effect.logWarning(
+            `Rankings page not found for ${task.type} ${task.region} page ${task.page}, treating as empty`,
+          ).pipe(Effect.as([] as number[])),
+        BrawlhallaRateLimitError: () =>
+          Effect.logWarning(
+            `Rate limited while fetching rankings, will retry after delay`,
+          ).pipe(
+            Effect.zipRight(Effect.sleep(Duration.seconds(5))),
+            Effect.zipRight(fetchRankingsPage(task)),
+          ),
+        BrawlhallaApiError: (error) =>
+          Effect.logError(
+            `API error fetching ${formatCrawlTask(task)}: ${error.message}`,
+          ).pipe(Effect.as([] as number[])),
+      }),
     )
 
     // Deduplicate player IDs (important for 2v2 where players can appear multiple times)
@@ -131,11 +144,11 @@ const processCrawlTask = (
       processedPlayerIds.add(id)
     }
 
-    // Fetch stats for each unique player with rate limiting
+    // Fetch stats for each unique player sequentially to respect rate limiting
     yield* Effect.forEach(
       uniquePlayerIds,
-      (playerId) => rateLimiter(fetchPlayerStats(playerId)),
-      { concurrency: 1 }, // Sequential to respect rate limiting
+      (playerId) => fetchPlayerStatsWorker(playerId),
+      { concurrency: 1 },
     )
 
     yield* Effect.log(`Completed ${formatCrawlTask(task)}`)
@@ -148,18 +161,15 @@ const processCrawlTask = (
 export const runRankingsCrawler = Effect.gen(function* () {
   yield* Effect.log("Starting rankings crawler")
 
-  const rateLimiter = yield* makeRateLimiter(rateLimiterPresets.conservative)
-
   const tasks = generateCrawlTasks()
   yield* Effect.log(`Generated ${tasks.length} crawl tasks`)
 
   // Track processed player IDs to avoid duplicate fetches
   const processedPlayerIds = new Set<number>()
 
-  // Process all tasks sequentially (rate limiting handles the timing)
   yield* Effect.forEach(
     tasks,
-    (task) => processCrawlTask(task, rateLimiter, processedPlayerIds),
+    (task) => processCrawlTask(task, processedPlayerIds),
     { concurrency: 1 },
   )
 

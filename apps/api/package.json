@@ -24,8 +24,7 @@
     "cheerio": "^1.1.2",
     "drizzle-orm": "^0.45.1",
     "effect": "^3.19.12",
-    "ioredis": "^5.8.2",
-    "redis": "^5.10.0"
+    "ioredis": "^5.8.2"
   },
   "devDependencies": {
     "@effect/language-service": "^0.62.3",

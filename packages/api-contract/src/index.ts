@@ -46,6 +46,7 @@ import {
   GetRankedQueues2v2Response,
   GetRankedQueuesRotatingResponse,
 } from "./routes/v1/brawlhalla/get-ranked-queues"
+import { GetTokensResponse } from "./routes/v1/health/get-tokens"
 
 const idParam = HttpApiSchema.param("id", Schema.NumberFromString)
 const pageParam = HttpApiSchema.param(
@@ -58,9 +59,13 @@ const providerParam = HttpApiSchema.param(
   Schema.Literal(...providers),
 )
 
-class HealthGroup extends HttpApiGroup.make("health").add(
-  HttpApiEndpoint.get("health")`/`.addSuccess(Schema.String),
-) {}
+class HealthGroup extends HttpApiGroup.make("health")
+  .add(HttpApiEndpoint.get("health")`/`.addSuccess(Schema.String))
+  .add(
+    HttpApiEndpoint.get("tokens")`/tokens`
+      .addSuccess(GetTokensResponse)
+      .addError(InternalServerError),
+  ) {}
 
 class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
   .add(

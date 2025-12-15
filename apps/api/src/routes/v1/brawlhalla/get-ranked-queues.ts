@@ -8,7 +8,7 @@ import type {
 import { getEntitySlug } from "@/helpers/entity-slug"
 import type { AnyRegion } from "@dair/api-contract/src/shared/region"
 
-const WINDOW_MINUTES = 15
+const WINDOW_MINUTES = 60
 
 export const getRanked1v1Queue = Effect.fn("getRanked1v1Queue")(function* (
   region: typeof AnyRegion.Type,

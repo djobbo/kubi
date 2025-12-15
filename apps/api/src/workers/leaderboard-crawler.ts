@@ -11,11 +11,7 @@ import {
   generateCrawlTasks,
   formatCrawlTask,
 } from "./shared/crawl-config"
-import {
-  makeRateLimiter,
-  rateLimiterPresets,
-  rateLimitRetrySchedule,
-} from "./shared/rate-limit"
+import { rateLimitRetrySchedule } from "./shared/rate-limit"
 import { createScheduledCrawler, schedulePresets } from "./shared/scheduler"
 import { getTeamPlayers } from "@dair/brawlhalla-api/src/helpers/team-players"
 
@@ -26,7 +22,9 @@ import { getTeamPlayers } from "@dair/brawlhalla-api/src/helpers/team-players"
  * This is a lightweight crawler that only fetches rankings pages,
  * NOT individual player stats.
  *
- * Rate limited to avoid API rate limits.
+ * Uses worker-specific rate limiter (BrawlhallaApi.worker.*) which:
+ * - Has its own rate limit pool (70% of capacity reserved for workers)
+ * - Does not interfere with frontend rate limits
  */
 
 /**
@@ -39,7 +37,7 @@ const fetch1v1Rankings = Effect.fn("fetch1v1Rankings")(function* (
   const brawlhallaApi = yield* BrawlhallaApi
   const archive = yield* Archive
 
-  const rankings = yield* brawlhallaApi.getRankings1v1(region, page)
+  const rankings = yield* brawlhallaApi.worker.getRankings1v1(region, page)
 
   const entries: NewRanked1v1History[] = rankings.data.map((r) => ({
     playerId: r.brawlhalla_id,
@@ -51,9 +49,6 @@ const fetch1v1Rankings = Effect.fn("fetch1v1Rankings")(function* (
     games: r.games,
     wins: r.wins,
     region: r.region?.toLowerCase() ?? region,
-    bestLegendId: r.best_legend,
-    bestLegendGames: r.best_legend_games,
-    bestLegendWins: r.best_legend_wins,
   }))
 
   yield* archive.addRanked1v1History(entries)
@@ -71,7 +66,7 @@ const fetch2v2Rankings = Effect.fn("fetch2v2Rankings")(function* (
   const brawlhallaApi = yield* BrawlhallaApi
   const archive = yield* Archive
 
-  const rankings = yield* brawlhallaApi.getRankings2v2(region, page)
+  const rankings = yield* brawlhallaApi.worker.getRankings2v2(region, page)
 
   const entries: NewRanked2v2History[] = rankings.data.map((r) => {
     const [player1, player2] = getTeamPlayers(r)
@@ -106,7 +101,7 @@ const fetchRotatingRankings = Effect.fn("fetchRotatingRankings")(function* (
   const brawlhallaApi = yield* BrawlhallaApi
   const archive = yield* Archive
 
-  const rankings = yield* brawlhallaApi.getRankingsRotating(region, page)
+  const rankings = yield* brawlhallaApi.worker.getRankingsRotating(region, page)
 
   const entries: NewRankedRotatingHistory[] = rankings.data.map((r) => ({
     playerId: r.brawlhalla_id,
@@ -118,9 +113,6 @@ const fetchRotatingRankings = Effect.fn("fetchRotatingRankings")(function* (
     games: r.games,
     wins: r.wins,
     region: r.region?.toLowerCase() ?? region,
-    bestLegendId: r.best_legend,
-    bestLegendGames: r.best_legend_games,
-    bestLegendWins: r.best_legend_wins,
   }))
 
   yield* archive.addRankedRotatingHistory(entries)
@@ -130,11 +122,9 @@ const fetchRotatingRankings = Effect.fn("fetchRotatingRankings")(function* (
 
 /**
  * Process a single crawl task (fetch rankings for a specific type/region/page)
+ * Rate limiting is handled internally by BrawlhallaApi.worker.* methods
  */
-const processCrawlTask = (
-  task: CrawlTask,
-  rateLimiter: Effect.Effect.Success<ReturnType<typeof makeRateLimiter>>,
-) =>
+const processCrawlTask = (task: CrawlTask) =>
   Effect.gen(function* () {
     yield* Effect.log(`Fetching ${formatCrawlTask(task)}`)
 
@@ -149,7 +139,7 @@ const processCrawlTask = (
       }
     })()
 
-    const count = yield* rateLimiter(fetchFn).pipe(
+    const count = yield* fetchFn.pipe(
       Effect.retry(rateLimitRetrySchedule({ maxRetries: 3 })),
       Effect.catchTags({
         BrawlhallaRateLimitError: () =>
@@ -182,19 +172,16 @@ const processCrawlTask = (
 export const runLeaderboardCrawler = Effect.gen(function* () {
   yield* Effect.log("Starting leaderboard crawler")
 
-  const rateLimiter = yield* makeRateLimiter(rateLimiterPresets.standard)
-
   const tasks = generateCrawlTasks()
   yield* Effect.log(`Generated ${tasks.length} crawl tasks`)
 
   // Track total entries stored
   let totalEntries = 0
 
-  // Process all tasks sequentially (rate limiting handles the timing)
   yield* Effect.forEach(
     tasks,
     (task) =>
-      processCrawlTask(task, rateLimiter).pipe(
+      processCrawlTask(task).pipe(
         Effect.tap((count) => {
           totalEntries += count
         }),

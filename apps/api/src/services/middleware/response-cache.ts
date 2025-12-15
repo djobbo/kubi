@@ -137,7 +137,7 @@ export const responseCache = (options: ResponseCacheOptions = {}) => {
 
       if (Option.isSome(cachedResult)) {
         const cached = cachedResult.value
-        Effect.log(`Cached response for ${cacheKey}`)
+        yield* Effect.log(`Cached response for ${cacheKey}`)
 
         // Rebuild response from cached data
         // Pass contentType in options - this sets it on the body, not just headers
@@ -157,7 +157,7 @@ export const responseCache = (options: ResponseCacheOptions = {}) => {
           cachedResult.value.updatedAt.toISOString(),
         )
 
-        Effect.log(`Returning cached response for ${cacheKey}`)
+        yield* Effect.log(`Returning cached response for ${cacheKey}`)
 
         return response
       }
@@ -194,7 +194,7 @@ export const responseCache = (options: ResponseCacheOptions = {}) => {
             updatedAt: new Date(),
           }
 
-          Effect.log(`Caching response for ${cacheKey}`)
+          yield* Effect.log(`Caching response for ${cacheKey}`)
 
           // Store in cache (fire and forget - don't block the response)
           yield* cache
