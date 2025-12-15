@@ -6,6 +6,7 @@
     "@dair/brawlhalla-api": "workspace:*",
     "@dair/common": "workspace:*",
     "@dair/db": "workspace:*",
+    "@effect/experimental": "^0.57.11",
     "@effect/opentelemetry": "^0.59.3",
     "@effect/platform": "^0.93.8",
     "@effect/platform-bun": "^0.86.0",
@@ -23,6 +24,7 @@
     "cheerio": "^1.1.2",
     "drizzle-orm": "^0.45.1",
     "effect": "^3.19.12",
+    "ioredis": "^5.8.2",
     "redis": "^5.10.0"
   },
   "devDependencies": {

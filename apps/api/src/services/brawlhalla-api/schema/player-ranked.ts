@@ -1,6 +1,6 @@
 import { CleanString } from "@/helpers/clean-string"
 import { NumberFromString } from "@/helpers/number-from-string"
-import { ParseResult, Schema } from "effect"
+import { Schema } from "effect"
 import { BrawlhallaApiRegion } from "./region"
 import { BrawlhallaApiTier } from "./tier"
 

@@ -30,13 +30,12 @@ const ServerLive = Layer.unwrapEffect(
   Effect.gen(function* () {
     const serverConfig = yield* ApiServerConfig
 
-    // Response caching middleware - excludes auth and health endpoints
-    const responseCacheMiddleware = yield* responseCache({
-      ttlSeconds: Duration.toSeconds(Duration.minutes(5)),
-      exclude: ["/auth/", "/health", "/session"],
-    })
-
-    return HttpApiBuilder.serve(responseCacheMiddleware).pipe(
+    return HttpApiBuilder.serve(
+      responseCache({
+        ttlSeconds: Duration.toSeconds(Duration.minutes(5)),
+        exclude: ["/auth/", "/health", "/session"],
+      }),
+    ).pipe(
       Layer.provide(
         HttpApiBuilder.middlewareCors({
           allowedOrigins: serverConfig.allowedOrigins,
@@ -73,7 +72,7 @@ const rankingsCrawlerWorker = scheduleRankingsCrawler.pipe(
 
 const server = Effect.gen(function* () {
   // Fork the rankings crawler to run in the background
-  yield* Effect.fork(rankingsCrawlerWorker)
+  // yield* Effect.fork(rankingsCrawlerWorker)
 
   // Launch the HTTP server (this blocks forever)
   return yield* Layer.launch(ServerLive)

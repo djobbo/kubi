@@ -5,7 +5,7 @@ import {
   HttpClientResponse,
 } from "@effect/platform"
 import type { HttpMethod } from "@effect/platform/HttpMethod"
-import { Effect, Layer, pipe, Schedule, Schema } from "effect"
+import { Duration, Effect, Layer, Option, pipe, Schedule, Schema } from "effect"
 import { Cache } from "@/services/cache"
 
 const DEFAULT_RETRIES = 3
@@ -60,7 +60,12 @@ export class Fetcher extends Effect.Service<Fetcher>()("@app/Fetcher", {
         const cacheKey = `fetcher:${options.cacheName}`
         const ttl = options.cacheMaxAge ?? DEFAULT_CACHE_MAX_AGE
 
-        return yield* cache.getOrSet(cacheKey, schema, fetchFromApi, ttl)
+        return yield* cache.getOrSet(
+          cacheKey,
+          schema,
+          fetchFromApi,
+          Option.some(Duration.millis(ttl)),
+        )
       }),
     }
   }),

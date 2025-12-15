@@ -1,344 +1,183 @@
-import { Effect, Layer, Option, Redacted, Schema } from "effect"
-import { createClient, type RedisClientType } from "redis"
-import { CacheConfig } from "./config"
-import {
-  CacheConnectionError,
-  CacheOperationError,
-  CacheSerializationError,
-} from "./errors"
+import { Config, Duration, Option, Schema } from "effect"
+import { Effect } from "effect"
+import { Redis } from "ioredis"
+import * as Arr from "effect/Array"
 
-type CacheGetResult<T> = {
-  data: T
-  cached: boolean
-  updatedAt: Date
-}
+class CacheParseError extends Schema.TaggedError<CacheParseError>(
+  "CacheParseError",
+)("CacheParseError", {
+  method: Schema.String,
+  cause: Schema.optional(Schema.Unknown),
+  message: Schema.String,
+}) {}
+
+class CacheSerializationError extends Schema.TaggedError<CacheSerializationError>(
+  "CacheSerializationError",
+)("CacheSerializationError", {
+  cause: Schema.optional(Schema.Unknown),
+  message: Schema.String,
+}) {}
+
+class CacheOperationError extends Schema.TaggedError<CacheOperationError>(
+  "CacheOperationError",
+)("CacheOperationError", {
+  method: Schema.String,
+  cause: Schema.optional(Schema.Unknown),
+  message: Schema.String,
+}) {}
 
 export class Cache extends Effect.Service<Cache>()("@dair/services/Cache", {
-  scoped: Effect.gen(function* () {
-    const config = yield* CacheConfig
-
-    // Create and connect Redis client
-    const client: RedisClientType = createClient({
-      url: Redacted.value(config.url),
-    })
-
-    // Connect to Redis
-    yield* Effect.tryPromise({
-      try: () => client.connect(),
-      catch: (error) =>
-        new CacheConnectionError({
-          cause: error,
-          message: "Failed to connect to Redis",
-        }),
-    })
-
-    // Ensure graceful shutdown
-    yield* Effect.addFinalizer(() =>
-      Effect.tryPromise({
-        try: () => client.quit(),
-        catch: () => Effect.void,
-      }).pipe(
-        Effect.catchAll(() => Effect.void),
-        Effect.tap(() => Effect.log("Redis connection closed")),
-      ),
+  effect: Effect.gen(function* () {
+    const redisUrl = yield* Config.nonEmptyString("REDIS_URL").pipe(
+      Config.withDefault("redis://localhost:6379"),
     )
-
-    yield* Effect.log("Connected to Redis")
-
-    /**
-     * Get a value from cache
-     */
-    const get = <T, U>(key: string, schema: Schema.Schema<T, U>) =>
-      Effect.gen(function* () {
-        const raw = yield* Effect.tryPromise({
-          try: () => client.get(key),
-          catch: (error) =>
-            new CacheOperationError({
-              cause: error,
-              message: `Failed to get key "${key}" from cache`,
-            }),
-        })
-
-        if (raw === null) {
-          return Option.none<CacheGetResult<T>>()
+    const prefix = yield* Config.nonEmptyString("CACHE_PREFIX").pipe(
+      Config.withDefault("api:cache"),
+    )
+    const redis = new Redis(redisUrl)
+    const prefixed = (key: string) => `${prefix}:${key}`
+    const parse =
+      <T, U>(schema: Schema.Schema<T, U>) =>
+      (str: string | null): Option.Option<T> => {
+        if (str === null) {
+          return Option.none()
         }
 
-        const parsed = yield* Effect.try({
-          try: () => JSON.parse(raw) as { data: unknown; updatedAt: string },
-          catch: (error) =>
-            new CacheSerializationError({
-              cause: error,
-              message: `Failed to parse cached value for key "${key}"`,
-            }),
-        })
+        return Schema.decodeUnknownOption(schema)(JSON.parse(str))
+      }
 
-        const decoded = yield* Schema.decode(schema)(parsed.data as U).pipe(
-          Effect.mapError(
-            (error) =>
-              new CacheSerializationError({
-                cause: error,
-                message: `Failed to decode cached value for key "${key}"`,
-              }),
-          ),
-        )
-
-        return Option.some<CacheGetResult<T>>({
-          data: decoded,
-          cached: true,
-          updatedAt: new Date(parsed.updatedAt),
-        })
-      }).pipe(Effect.withSpan("Cache.get", { attributes: { key } }))
-
-    /**
-     * Set a value in cache with optional TTL
-     */
-    const set = <T, U>(
-      key: string,
-      value: T,
-      schema: Schema.Schema<T, U>,
-      ttlSeconds?: number,
-    ) =>
-      Effect.gen(function* () {
-        const encoded = yield* Schema.encode(schema)(value).pipe(
-          Effect.mapError(
-            (error) =>
-              new CacheSerializationError({
-                cause: error,
-                message: `Failed to encode value for key "${key}"`,
-              }),
-          ),
-        )
-
-        const payload = JSON.stringify({
-          data: encoded,
-          updatedAt: new Date().toISOString(),
-        })
-
-        const ttl = ttlSeconds ?? config.defaultTtlSeconds
-
-        yield* Effect.tryPromise({
-          try: () => client.setEx(key, ttl, payload),
-          catch: (error) =>
-            new CacheOperationError({
-              cause: error,
-              message: `Failed to set key "${key}" in cache`,
-            }),
-        })
-      }).pipe(Effect.withSpan("Cache.set", { attributes: { key, ttlSeconds } }))
-
-    /**
-     * Delete a value from cache
-     */
-    const del = (key: string) =>
-      Effect.gen(function* () {
-        const result = yield* Effect.tryPromise({
-          try: () => client.del(key),
-          catch: (error) =>
-            new CacheOperationError({
-              cause: error,
-              message: `Failed to delete key "${key}" from cache`,
-            }),
-        })
-
-        return result > 0
-      }).pipe(Effect.withSpan("Cache.delete", { attributes: { key } }))
-
-    /**
-     * Delete multiple keys matching a pattern
-     */
-    const deletePattern = (pattern: string) =>
-      Effect.gen(function* () {
-        const keys = yield* Effect.tryPromise({
-          try: () => client.keys(pattern),
-          catch: (error) =>
-            new CacheOperationError({
-              cause: error,
-              message: `Failed to find keys matching pattern "${pattern}"`,
-            }),
-        })
-
-        if (keys.length === 0) {
-          return 0
-        }
-
-        const result = yield* Effect.tryPromise({
-          try: () => client.del(keys),
-          catch: (error) =>
-            new CacheOperationError({
-              cause: error,
-              message: `Failed to delete keys matching pattern "${pattern}"`,
-            }),
-        })
-
-        return result
-      }).pipe(
-        Effect.withSpan("Cache.deletePattern", { attributes: { pattern } }),
-      )
-
-    /**
-     * Get or set a value in cache
-     * If the key exists, return cached value. Otherwise, compute and cache the value.
-     */
-    const getOrSet = <T, U, E, R>(
-      key: string,
-      schema: Schema.Schema<T, U>,
-      compute: Effect.Effect<T, E, R>,
-      ttlSeconds?: number,
-    ) =>
-      Effect.gen(function* () {
-        // Try to get from cache first
-        const cached = yield* Effect.tryPromise({
-          try: () => client.get(key),
-          catch: (error) =>
-            new CacheOperationError({
-              cause: error,
-              message: `Failed to get key "${key}" from cache`,
-            }),
-        })
-
-        if (cached !== null) {
-          const parsed = yield* Effect.try({
-            try: () =>
-              JSON.parse(cached) as { data: unknown; updatedAt: string },
+    const cache = {
+      get: <T, U>(key: string, schema: Schema.Schema<T, U>) =>
+        Effect.map(
+          Effect.tryPromise({
+            try: () => redis.get(prefixed(key)),
             catch: (error) =>
-              new CacheSerializationError({
+              CacheOperationError.make({
+                method: "get",
                 cause: error,
-                message: `Failed to parse cached value for key "${key}"`,
+                message: "Failed to get cache",
               }),
-          })
-
-          const decoded = yield* Schema.decode(schema)(parsed.data as U).pipe(
-            Effect.mapError(
-              (error) =>
-                new CacheSerializationError({
-                  cause: error,
-                  message: `Failed to decode cached value for key "${key}"`,
+          }),
+          parse(schema),
+        ).pipe(
+          Effect.tap(() => Effect.log(`Got cache for ${key}`)),
+          Effect.tapError(() =>
+            Effect.logError(`Failed to get cache for ${key}`),
+          ),
+          Effect.catchAll(() => Effect.succeed(Option.none<T>())),
+        ),
+      set: (
+        key: string,
+        value: unknown,
+        ttl: Option.Option<Duration.Duration>,
+      ) =>
+        Effect.tryMapPromise(
+          Effect.try({
+            try: () => JSON.stringify(value),
+            catch: (error) =>
+              CacheSerializationError.make({
+                cause: error,
+                message: "Failed to serialize cache value",
+              }),
+          }),
+          {
+            try: (value) =>
+              ttl._tag === "None"
+                ? redis.set(prefixed(key), value)
+                : redis.set(
+                    prefixed(key),
+                    value,
+                    "PX",
+                    Duration.toMillis(ttl.value),
+                  ),
+            catch: (error) =>
+              CacheOperationError.make({
+                method: "set",
+                cause: error,
+                message: "Failed to set cache",
+              }),
+          },
+        ).pipe(
+          Effect.tap(() => Effect.log(`Set cache for ${key}`)),
+          Effect.tapError(() =>
+            Effect.logError(`Failed to set cache for ${key}`),
+          ),
+        ),
+      remove: (key: string) =>
+        Effect.tryPromise({
+          try: () => redis.del(prefixed(key)),
+          catch: (error) =>
+            CacheOperationError.make({
+              method: "remove",
+              cause: error,
+              message: "Failed to remove cache",
+            }),
+        }).pipe(
+          Effect.tap(() => Effect.log(`Removed cache for ${key}`)),
+          Effect.tapError(() =>
+            Effect.logError(`Failed to remove cache for ${key}`),
+          ),
+        ),
+      clear: Effect.tryPromise({
+        try: () => redis.keys(`${prefix}:*`).then((keys) => redis.del(keys)),
+        catch: (error) =>
+          CacheOperationError.make({
+            method: "clear",
+            cause: error,
+            message: "Failed to clear cache",
+          }),
+      }).pipe(
+        Effect.tap(() => Effect.log(`Cleared cache`)),
+        Effect.tapError(() => Effect.logError(`Failed to clear cache`)),
+      ),
+    }
+    return {
+      ...cache,
+      getOrSet: <T, U, E>(
+        key: string,
+        schema: Schema.Schema<T, U>,
+        lazyValue: Effect.Effect<T, E>,
+        ttl: Option.Option<Duration.Duration>,
+      ) =>
+        cache
+          .get(key, schema)
+          .pipe(
+            Effect.flatMap(
+              Option.match({
+                onSome: Effect.fnUntraced(function* (value) {
+                  yield* Effect.log(`Got cache for ${key}`)
+                  return {
+                    data: value,
+                    updatedAt: new Date(),
+                    cached: true,
+                  }
                 }),
+                onNone: Effect.fnUntraced(function* () {
+                  yield* Effect.log(`No cache for ${key}, fetching...`)
+                  const value = yield* lazyValue
+                  yield* cache.set(key, value, ttl)
+                  return {
+                    data: value,
+                    updatedAt: new Date(),
+                    cached: false,
+                  }
+                }),
+              }),
             ),
           )
-
-          return {
-            data: decoded,
-            cached: true,
-            updatedAt: new Date(parsed.updatedAt),
-          } as CacheGetResult<T>
-        }
-
-        // Compute the value
-        const value = yield* compute
-
-        // Encode and cache the result
-        const encoded = yield* Schema.encode(schema)(value).pipe(
-          Effect.mapError(
-            (error) =>
-              new CacheSerializationError({
-                cause: error,
-                message: `Failed to encode value for key "${key}"`,
-              }),
+          .pipe(
+            Effect.tap(() => Effect.log(`Got or set cache for ${key}`)),
+            Effect.tapError(() =>
+              Effect.logError(`Failed to get or set cache for ${key}`),
+            ),
           ),
-        )
-
-        const payload = JSON.stringify({
-          data: encoded,
-          updatedAt: new Date().toISOString(),
-        })
-
-        const ttl = ttlSeconds ?? config.defaultTtlSeconds
-
-        yield* Effect.tryPromise({
-          try: () => client.setEx(key, ttl, payload),
-          catch: (error) =>
-            new CacheOperationError({
-              cause: error,
-              message: `Failed to set key "${key}" in cache`,
-            }),
-        })
-
-        return {
-          data: value,
-          cached: false,
-          updatedAt: new Date(),
-        } as CacheGetResult<T>
-      }).pipe(
-        Effect.withSpan("Cache.getOrSet", { attributes: { key, ttlSeconds } }),
-      )
-
-    /**
-     * Check if a key exists in cache
-     */
-    const has = (key: string) =>
-      Effect.gen(function* () {
-        const exists = yield* Effect.tryPromise({
-          try: () => client.exists(key),
-          catch: (error) =>
-            new CacheOperationError({
-              cause: error,
-              message: `Failed to check if key "${key}" exists in cache`,
-            }),
-        })
-
-        return exists > 0
-      }).pipe(Effect.withSpan("Cache.has", { attributes: { key } }))
-
-    /**
-     * Get remaining TTL for a key in seconds
-     */
-    const ttl = (key: string) =>
-      Effect.gen(function* () {
-        const ttlValue = yield* Effect.tryPromise({
-          try: () => client.ttl(key),
-          catch: (error) =>
-            new CacheOperationError({
-              cause: error,
-              message: `Failed to get TTL for key "${key}"`,
-            }),
-        })
-
-        // -2 means key doesn't exist, -1 means no TTL set
-        if (ttlValue < 0) {
-          return Option.none<number>()
-        }
-
-        return Option.some(ttlValue)
-      }).pipe(Effect.withSpan("Cache.ttl", { attributes: { key } }))
-
-    /**
-     * Update the TTL for an existing key
-     */
-    const expire = (key: string, ttlSeconds: number) =>
-      Effect.gen(function* () {
-        const result = yield* Effect.tryPromise({
-          try: () => client.expire(key, ttlSeconds),
-          catch: (error) =>
-            new CacheOperationError({
-              cause: error,
-              message: `Failed to set TTL for key "${key}"`,
-            }),
-        })
-
-        return result
-      }).pipe(
-        Effect.withSpan("Cache.expire", { attributes: { key, ttlSeconds } }),
-      )
-
-    return {
-      get,
-      set,
-      delete: del,
-      deletePattern,
-      getOrSet,
-      has,
-      ttl,
-      expire,
     }
-  }),
+  }).pipe(
+    Effect.tap(() => Effect.log(`Cache service initialized`)),
+    Effect.tapError(() =>
+      Effect.logError(`Failed to initialize cache service`),
+    ),
+  ),
 }) {
-  static readonly layer = this.Default.pipe(Layer.provide(CacheConfig.layer))
+  static readonly layer = this.Default
 }
-
-export { CacheConfig } from "./config"
-export {
-  CacheConnectionError,
-  CacheOperationError,
-  CacheSerializationError,
-} from "./errors"

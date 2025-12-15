@@ -43,6 +43,9 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
             BrawlhallaRateLimitError: () => Effect.fail(new TooManyRequests()),
             BrawlhallaApiError: () => Effect.fail(new InternalServerError()),
             SqlError: () => Effect.fail(new InternalServerError()),
+            CacheOperationError: () => Effect.fail(new InternalServerError()),
+            CacheSerializationError: () =>
+              Effect.fail(new InternalServerError()),
           }),
         ),
       ),
@@ -73,15 +76,28 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
             BrawlhallaClanNotFound: () => Effect.fail(new NotFound()),
             BrawlhallaRateLimitError: () => Effect.fail(new TooManyRequests()),
             BrawlhallaApiError: () => Effect.fail(new InternalServerError()),
+            CacheOperationError: () => Effect.fail(new InternalServerError()),
+            CacheSerializationError: () =>
+              Effect.fail(new InternalServerError()),
           }),
         ),
       ),
     )
     .handle(
       "get-rankings-1v1",
-      Effect.fn("get-rankings-1v1")(function* ({ path, urlParams }) {
-        return yield* getRankings1v1(path.region, path.page, urlParams.name)
-      }),
+      Effect.fn("get-rankings-1v1")(
+        function* ({ path, urlParams }) {
+          return yield* getRankings1v1(path.region, path.page, urlParams.name)
+        },
+        flow(
+          Effect.tapError(Effect.logError),
+          Effect.catchTags({
+            CacheOperationError: () => Effect.fail(new InternalServerError()),
+            CacheSerializationError: () =>
+              Effect.fail(new InternalServerError()),
+          }),
+        ),
+      ),
     )
     .handle(
       "get-rankings-2v2",
@@ -94,6 +110,9 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
           Effect.catchTags({
             BrawlhallaRateLimitError: () => Effect.fail(new TooManyRequests()),
             BrawlhallaApiError: () => Effect.fail(new InternalServerError()),
+            CacheOperationError: () => Effect.fail(new InternalServerError()),
+            CacheSerializationError: () =>
+              Effect.fail(new InternalServerError()),
           }),
         ),
       ),
@@ -164,6 +183,9 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
             TimeoutException: () => Effect.fail(new InternalServerError()),
             HttpBodyError: () => Effect.fail(new InternalServerError()),
             WeeklyRotationError: () => Effect.fail(new NotFound()),
+            CacheOperationError: () => Effect.fail(new InternalServerError()),
+            CacheSerializationError: () =>
+              Effect.fail(new InternalServerError()),
           }),
         ),
       ),
@@ -191,6 +213,9 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
             RequestError: () => Effect.fail(new InternalServerError()),
             TimeoutException: () => Effect.fail(new InternalServerError()),
             HttpBodyError: () => Effect.fail(new InternalServerError()),
+            CacheOperationError: () => Effect.fail(new InternalServerError()),
+            CacheSerializationError: () =>
+              Effect.fail(new InternalServerError()),
           }),
         ),
       ),

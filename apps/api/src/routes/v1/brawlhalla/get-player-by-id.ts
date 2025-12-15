@@ -1,4 +1,4 @@
-import * as Archive from "@/services/archive"
+import { Archive } from "@/services/archive"
 import { BrawlhallaApi } from "@/services/brawlhalla-api"
 import type {
   GetPlayerByIdResponse,
@@ -44,17 +44,13 @@ export const getPlayerById = Effect.fn("getPlayerById")(function* (
     { concurrency: 3 },
   )
   const clanId = playerStats.data.clan?.clan_id
-  const archiveService = yield* Archive.Archive
+  const archive = yield* Archive
   const [aliases, clan, [bookmark], [clanBookmark]] = yield* Effect.all([
-    archiveService.getAliases(playerId),
+    archive.getAliases(playerId),
     clanId
       ? brawlhallaApi
           .getClanById(clanId)
-          .pipe(
-            Effect.catchTag("BrawlhallaClanNotFound", () =>
-              Effect.succeed(null),
-            ),
-          )
+          .pipe(Effect.catchAll(() => Effect.succeed(null)))
       : Effect.succeed(null),
     Effect.succeed([null]), // TODO: bookmark service,
     Effect.succeed([null]), // TODO: bookmark service,
@@ -260,12 +256,8 @@ export const getPlayerById = Effect.fn("getPlayerById")(function* (
 
   yield* Effect.all(
     [
-      archiveService.addPlayerHistory(
-        playerData,
-        playerStats.data,
-        playerRanked.data,
-      ),
-      archiveService.addAliases([
+      archive.addPlayerHistory(playerData, playerStats.data, playerRanked.data),
+      archive.addAliases([
         {
           playerId: playerData.id,
           alias: name,
