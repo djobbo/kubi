@@ -197,7 +197,6 @@ export class Archive extends Effect.Service<Archive>()(
                 "Error creating player legend or weapon history",
                 error,
               )
-              return Effect.succeed(null)
             }),
           )
 
