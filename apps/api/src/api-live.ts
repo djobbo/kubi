@@ -9,7 +9,6 @@ import { providerCallback } from "./routes/v1/auth/providers/callback"
 import { getGuildById } from "./routes/v1/brawlhalla/get-guild-by-id"
 import { getPlayerById } from "./routes/v1/brawlhalla/get-player-by-id"
 import { getPreviewArticles } from "./routes/v1/brawlhalla/get-preview-articles"
-import { getPlayerRankings } from "./routes/v1/brawlhalla/get-player-rankings"
 import {
   getRankings1v1,
   getRankings2v2,
@@ -21,6 +20,9 @@ import {
   TooManyRequests,
 } from "@dair/api-contract/src/shared/errors"
 import { searchPlayer } from "./routes/v1/brawlhalla/search-player"
+import { getGlobalPlayerRankings } from "./routes/v1/brawlhalla/get-global-player-rankings"
+import { getGlobalLegendRankings } from "./routes/v1/brawlhalla/get-global-legend-rankings"
+import { getGlobalWeaponRankings } from "./routes/v1/brawlhalla/get-global-weapon-rankings"
 
 const HealthLive = HttpApiBuilder.group(Api, "health", (handlers) =>
   handlers.handle("health", () => Effect.succeed("OK")),
@@ -97,10 +99,10 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
       ),
     )
     .handle(
-      "get-player-rankings",
-      Effect.fn("get-player-rankings")(
+      "get-global-player-rankings",
+      Effect.fn("get-global-player-rankings")(
         function* ({ path }) {
-          return yield* getPlayerRankings(path.sortBy)
+          return yield* getGlobalPlayerRankings(path.sortBy)
         },
         flow(
           Effect.tapError(Effect.logError),
@@ -108,6 +110,30 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
             SqlError: () => Effect.fail(new InternalServerError()),
           }),
         ),
+      ),
+    )
+    .handle(
+      "get-global-legend-rankings",
+      Effect.fn("get-global-legend-rankings")(function* ({ path }) {
+        return yield* getGlobalLegendRankings(path.legendId, path.sortBy)
+      }),
+      flow(
+        Effect.tapError(Effect.logError),
+        Effect.catchTags({
+          SqlError: () => Effect.fail(new InternalServerError()),
+        }),
+      ),
+    )
+    .handle(
+      "get-global-weapon-rankings",
+      Effect.fn("get-global-weapon-rankings")(function* ({ path }) {
+        return yield* getGlobalWeaponRankings(path.weaponName, path.sortBy)
+      }),
+      flow(
+        Effect.tapError(Effect.logError),
+        Effect.catchTags({
+          SqlError: () => Effect.fail(new InternalServerError()),
+        }),
       ),
     )
     .handle(

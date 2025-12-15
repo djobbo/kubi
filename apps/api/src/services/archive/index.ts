@@ -21,8 +21,9 @@ import { ArchiveQueryError } from "./errors"
 import type { BrawlhallaApiClan } from "../brawlhalla-api/schema/clan"
 import type { Clan } from "@dair/api-contract/src/routes/v1/brawlhalla/get-guild-by-id"
 import type { SearchPlayerCursor } from "@dair/api-contract/src/routes/v1/brawlhalla/search-player"
-import type { GlobalPlayerRankingsSortByParam } from "@dair/api-contract/src/routes/v1/brawlhalla/get-player-rankings"
+import type { GlobalPlayerRankingsSortByParam } from "@dair/api-contract/src/routes/v1/brawlhalla/get-global-player-rankings"
 import { isNotNull } from "drizzle-orm"
+import type { GlobalLegendRankingsSortByParam } from "@dair/api-contract/src/routes/v1/brawlhalla/get-global-legend-rankings"
 
 const MIN_ALIAS_SEARCH_LENGTH = 3
 
@@ -143,6 +144,7 @@ export class Archive extends Effect.Service<Archive>()(
             playerData.legends.map<NewPlayerLegendHistory>((legend) => ({
               playerHistoryId: playerHistoryId.id,
               playerId: playerData.id,
+              playerName: playerData.name,
               legendId: legend.id,
               games: legend.stats.games,
               wins: legend.stats.wins,
@@ -163,6 +165,7 @@ export class Archive extends Effect.Service<Archive>()(
             playerData.weapons.map<NewPlayerWeaponHistory>((weapon) => ({
               playerHistoryId: playerHistoryId.id,
               playerId: playerData.id,
+              playerName: playerData.name,
               weaponName: weapon.name,
               games: weapon.stats.games,
               wins: weapon.stats.wins,
@@ -313,83 +316,163 @@ export class Archive extends Effect.Service<Archive>()(
             nextCursor: nextCursor,
           }
         }),
-        getPlayerRankings: Effect.fn("getPlayerRankings")(function* (
-          field: typeof GlobalPlayerRankingsSortByParam.Type,
-          offset = 0,
-          limit = 10,
-        ) {
-          const latestPerIdSubquery = db.$with("latest_per_id").as(
-            db
-              .select({
-                playerId: playerHistoryTable.playerId,
-                maxDate: max(playerHistoryTable.recordedAt).as("max_date"),
-              })
+        getGlobalPlayerRankings: Effect.fn("getGlobalPlayerRankings")(
+          function* (
+            field: typeof GlobalPlayerRankingsSortByParam.Type,
+            offset = 0,
+            limit = 10,
+          ) {
+            const latestPerIdSubquery = db.$with("latest_per_id").as(
+              db
+                .select({
+                  playerId: playerHistoryTable.playerId,
+                  maxDate: max(playerHistoryTable.recordedAt).as("max_date"),
+                })
+                .from(playerHistoryTable)
+                .groupBy(playerHistoryTable.playerId)
+                .where(isNotNull(playerHistoryTable[field])),
+            )
+
+            const results = yield* db
+              .with(latestPerIdSubquery)
+              .select()
               .from(playerHistoryTable)
-              .groupBy(playerHistoryTable.playerId)
-              .where(isNotNull(playerHistoryTable[field])),
-          )
+              .innerJoin(
+                latestPerIdSubquery,
+                and(
+                  eq(playerHistoryTable.playerId, latestPerIdSubquery.playerId),
+                  eq(
+                    playerHistoryTable.recordedAt,
+                    latestPerIdSubquery.maxDate,
+                  ),
+                ),
+              )
+              .orderBy(
+                desc(playerHistoryTable[field]),
+                desc(playerHistoryTable.recordedAt),
+                desc(playerHistoryTable.id),
+              )
+              .limit(limit)
+              .offset(offset)
 
-          const results = yield* db
-            .with(latestPerIdSubquery)
-            .select()
-            .from(playerHistoryTable)
-            .innerJoin(
-              latestPerIdSubquery,
-              and(
-                eq(playerHistoryTable.playerId, latestPerIdSubquery.playerId),
-                eq(playerHistoryTable.recordedAt, latestPerIdSubquery.maxDate),
-              ),
+            return results.map((result) => result.brawlhalla_player_history)
+          },
+        ),
+        getGlobalLegendRankings: Effect.fn("getGlobalLegendRankings")(
+          function* (
+            legendId: number,
+            field: typeof GlobalLegendRankingsSortByParam.Type,
+            offset = 0,
+            limit = 10,
+          ) {
+            console.log("legendId", legendId, field)
+            const latestPerIdSubquery = db.$with("latest_per_id").as(
+              db
+                .select({
+                  playerId: playerLegendHistoryTable.playerId,
+                  maxDate: max(playerLegendHistoryTable.recordedAt).as(
+                    "max_date",
+                  ),
+                })
+                .from(playerLegendHistoryTable)
+                .groupBy(playerLegendHistoryTable.playerId)
+                .where(
+                  and(
+                    eq(playerLegendHistoryTable.legendId, legendId),
+                    isNotNull(playerLegendHistoryTable[field]),
+                  ),
+                ),
             )
-            .orderBy(
-              desc(playerHistoryTable[field]),
-              desc(playerHistoryTable.recordedAt),
-              desc(playerHistoryTable.id),
-            )
-            .limit(limit)
-            .offset(offset)
 
-          return results.map((result) => result.brawlhalla_player_history)
-        }),
-        getLegendRankings: Effect.fn("getLegendRankings")(function* (
-          legendId: number,
-          field: keyof NewPlayerLegendHistory,
-          offset = 0,
-          limit = 10,
-        ) {
-          // Use same thing as searchPlayers but for legends with field, and with offset and limit instead of cursor
-          return yield* db
-            .select()
-            .from(playerLegendHistoryTable)
-            .where(eq(playerLegendHistoryTable.legendId, legendId))
-            .groupBy(playerLegendHistoryTable.playerId)
-            .orderBy(
-              desc(playerLegendHistoryTable[field]),
-              desc(playerLegendHistoryTable.recordedAt),
-              desc(playerLegendHistoryTable.id),
+            const results = yield* db
+              .with(latestPerIdSubquery)
+              .select()
+              .from(playerLegendHistoryTable)
+              .innerJoin(
+                latestPerIdSubquery,
+                and(
+                  eq(
+                    playerLegendHistoryTable.playerId,
+                    latestPerIdSubquery.playerId,
+                  ),
+                  eq(
+                    playerLegendHistoryTable.recordedAt,
+                    latestPerIdSubquery.maxDate,
+                  ),
+                  eq(playerLegendHistoryTable.legendId, legendId),
+                  isNotNull(playerLegendHistoryTable[field]),
+                ),
+              )
+              .orderBy(
+                desc(playerLegendHistoryTable[field]),
+                desc(playerLegendHistoryTable.recordedAt),
+                desc(playerLegendHistoryTable.id),
+              )
+              .limit(limit)
+              .offset(offset)
+
+            return results.map(
+              (result) => result.brawlhalla_player_legend_history,
             )
-            .limit(limit)
-            .offset(offset)
-        }),
-        getWeaponRankings: Effect.fn("getWeaponRankings")(function* (
-          weaponName: string,
-          field: keyof NewPlayerWeaponHistory,
-          offset = 0,
-          limit = 10,
-        ) {
-          // Use same thing as searchPlayers but for legends with field, and with offset and limit instead of cursor
-          return yield* db
-            .select()
-            .from(playerWeaponHistoryTable)
-            .where(eq(playerWeaponHistoryTable.weaponName, weaponName))
-            .groupBy(playerWeaponHistoryTable.playerId)
-            .orderBy(
-              desc(playerWeaponHistoryTable[field]),
-              desc(playerLegendHistoryTable.recordedAt),
-              desc(playerLegendHistoryTable.id),
+          },
+        ),
+        getGlobalWeaponRankings: Effect.fn("getGlobalWeaponRankings")(
+          function* (
+            weaponName: string,
+            field: keyof NewPlayerWeaponHistory,
+            offset = 0,
+            limit = 10,
+          ) {
+            const latestPerIdSubquery = db.$with("latest_per_id").as(
+              db
+                .select({
+                  playerId: playerWeaponHistoryTable.playerId,
+                  maxDate: max(playerWeaponHistoryTable.recordedAt).as(
+                    "max_date",
+                  ),
+                })
+                .from(playerWeaponHistoryTable)
+                .groupBy(playerWeaponHistoryTable.playerId)
+                .where(
+                  and(
+                    eq(playerWeaponHistoryTable.weaponName, weaponName),
+                    isNotNull(playerWeaponHistoryTable[field]),
+                  ),
+                ),
             )
-            .limit(limit)
-            .offset(offset)
-        }),
+
+            const results = yield* db
+              .with(latestPerIdSubquery)
+              .select()
+              .from(playerWeaponHistoryTable)
+              .innerJoin(
+                latestPerIdSubquery,
+                and(
+                  eq(
+                    playerWeaponHistoryTable.playerId,
+                    latestPerIdSubquery.playerId,
+                  ),
+                  eq(
+                    playerWeaponHistoryTable.recordedAt,
+                    latestPerIdSubquery.maxDate,
+                  ),
+                  eq(playerWeaponHistoryTable.weaponName, weaponName),
+                  isNotNull(playerWeaponHistoryTable[field]),
+                ),
+              )
+              .orderBy(
+                desc(playerWeaponHistoryTable[field]),
+                desc(playerWeaponHistoryTable.recordedAt),
+                desc(playerWeaponHistoryTable.id),
+              )
+              .limit(limit)
+              .offset(offset)
+
+            return results.map(
+              (result) => result.brawlhalla_player_weapon_history,
+            )
+          },
+        ),
       }
     }),
   },

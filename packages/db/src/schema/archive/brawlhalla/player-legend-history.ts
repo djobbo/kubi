@@ -1,5 +1,5 @@
 import { relations, sql } from "drizzle-orm"
-import { bigint, index, pgTable, uuid } from "drizzle-orm/pg-core"
+import { bigint, index, pgTable, text, uuid } from "drizzle-orm/pg-core"
 import { playerHistoryTable } from "./player-history"
 import { withRecordedAt } from "../../../helpers/with-timestamp"
 
@@ -16,6 +16,7 @@ export const playerLegendHistoryTable = pgTable(
       .notNull()
       .references(() => playerHistoryTable.id, { onDelete: "cascade" }),
     playerId: bigint("player_id", { mode: "number" }).notNull(),
+    playerName: text("player_name").notNull(),
     ...withRecordedAt,
 
     // Legend identification
@@ -29,7 +30,7 @@ export const playerLegendHistoryTable = pgTable(
     damageDealt: bigint("damage_dealt", { mode: "number" }).notNull(),
     damageTaken: bigint("damage_taken", { mode: "number" }).notNull(),
     kos: bigint("kos", { mode: "number" }).notNull(),
-    falls: bigint("falls", { mode: "number" }),
+    falls: bigint("falls", { mode: "number" }).notNull(),
     suicides: bigint("suicides", { mode: "number" }).notNull(),
     teamKos: bigint("team_kos", { mode: "number" }).notNull(),
     matchtime: bigint("matchtime", { mode: "number" }).notNull(),

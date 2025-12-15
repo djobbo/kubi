@@ -16,6 +16,7 @@ export const playerWeaponHistoryTable = pgTable(
       .notNull()
       .references(() => playerHistoryTable.id, { onDelete: "cascade" }),
     playerId: bigint("player_id", { mode: "number" }).notNull(),
+    playerName: text("player_name").notNull(),
     ...withRecordedAt,
 
     // Weapon identification

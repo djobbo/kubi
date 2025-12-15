@@ -7,9 +7,9 @@ export const PlayerRanking = Schema.Struct({
   name: Schema.String,
   slug: Schema.String,
   xp: Schema.Number,
-  level: Schema.Number,
   games: Schema.Number,
   wins: Schema.Number,
+  losses: Schema.Number,
   matchtime: Schema.Number,
   kos: Schema.Number,
   falls: Schema.Number,
@@ -60,7 +60,7 @@ null as unknown as PlayerHistory satisfies Omit<
   "slug"
 >
 
-export const GetPlayerRankingsResponse = Schema.Struct({
+export const GetGlobalPlayerRankingsResponse = Schema.Struct({
   data: Schema.Array(PlayerRanking),
   meta: Schema.Struct({}),
 })

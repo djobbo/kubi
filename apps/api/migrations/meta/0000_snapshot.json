@@ -1,5 +1,5 @@
 {
-  "id": "8a2422a9-cf59-4534-abc5-187fcf8f82ab",
+  "id": "657c7b67-f057-4446-adce-5d295f470ece",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -973,6 +973,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "player_name": {
+          "name": "player_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "recorded_at": {
           "name": "recorded_at",
           "type": "timestamp with time zone",
@@ -1032,7 +1038,7 @@
           "name": "falls",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "suicides": {
           "name": "suicides",
@@ -1282,6 +1288,12 @@
         "player_id": {
           "name": "player_id",
           "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "player_name": {
+          "name": "player_name",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
