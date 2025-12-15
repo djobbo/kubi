@@ -26,4 +26,3 @@ export const GetTokensResponse = Schema.Struct({
 
 export type GetTokensResponse = Schema.Schema.Type<typeof GetTokensResponse>
 export type RateLimiterStatus = Schema.Schema.Type<typeof RateLimiterStatus>
-

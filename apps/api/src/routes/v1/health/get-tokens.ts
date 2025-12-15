@@ -8,4 +8,3 @@ export const getTokens = Effect.gen(function* () {
   const rateLimiter = yield* BrawlhallaRateLimiter
   return yield* rateLimiter.getStatus
 })
-
