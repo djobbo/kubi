@@ -11,6 +11,16 @@ import * as Docs from "./services/docs"
 import { BrawlhallaApi } from "./services/brawlhalla-api"
 import { Fetcher } from "./services/fetcher"
 import { ObservabilityLive } from "./services/observability"
+import { scheduleRankingsCrawler } from "./workers/rankings-crawler"
+
+// Shared dependencies for both server and workers
+const SharedDependencies = Layer.mergeAll(
+  BrawlhallaApi.layer,
+  Archive.layer,
+  Authorization.layer,
+  Fetcher.layer,
+  Database.layer,
+)
 
 const ServerLive = Layer.unwrapEffect(
   Effect.gen(function* () {
@@ -26,11 +36,7 @@ const ServerLive = Layer.unwrapEffect(
       HttpServer.withLogAddress,
       Layer.provide(ApiLive),
       Layer.provide(BunHttpServer.layer({ port: serverConfig.port })),
-      Layer.provide(BrawlhallaApi.layer),
-      Layer.provide(Archive.layer),
-      Layer.provide(Authorization.layer),
-      Layer.provide(Fetcher.layer),
-      Layer.provide(Database.layer),
+      Layer.provide(SharedDependencies),
       // Infrastructure layers
       Layer.provide(Docs.layer(Api)),
     )
@@ -40,43 +46,29 @@ const ServerLive = Layer.unwrapEffect(
   Layer.provide(FetchHttpClient.layer),
 )
 
-const server = Layer.launch(ServerLive).pipe(
+// Dependencies for rankings crawler worker
+const WorkerDependencies = Layer.mergeAll(
+  SharedDependencies,
+  FetchHttpClient.layer,
+)
+
+// Rankings crawler worker running in background
+const rankingsCrawlerWorker = scheduleRankingsCrawler.pipe(
+  Effect.provide(WorkerDependencies),
+  Effect.catchAllCause((cause) =>
+    Effect.logError("Rankings crawler worker crashed", cause),
+  ),
+)
+
+const server = Effect.gen(function* () {
+  // Fork the rankings crawler to run in the background
+  yield* Effect.fork(rankingsCrawlerWorker)
+
+  // Launch the HTTP server (this blocks forever)
+  return yield* Layer.launch(ServerLive)
+}).pipe(
   Effect.provide(ObservabilityLive),
   Effect.catchAllCause(Effect.logError),
 )
+
 await Effect.runPromise(server)
-// import { Effect } from "effect"
-// import { NodeSdk } from "@effect/opentelemetry"
-// import { BatchSpanProcessor } from "@opentelemetry/sdk-trace-base"
-// import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http"
-
-// const poll = task("/poll", 1)
-
-// // Create a program with tasks and subtasks
-// const program = task("client", 2, [
-//   task("/api", 3, [
-//     task("/authN", 4, [task("/authZ", 5)]),
-//     task("/payment Gateway", 6, [task("DB", 7), task("Ext. Merchant", 8)]),
-//     task("/dispatch", 9, [
-//       task("/dispatch/search", 10),
-//       Effect.all([poll, poll, poll], { concurrency: "inherit" }),
-//       task("/pollDriver/{id}", 11),
-//     ]),
-//   ]),
-// ])
-
-// const NodeSdkLive = NodeSdk.layer(() => ({
-//   resource: { serviceName: "api" },
-//   spanProcessor: new BatchSpanProcessor(
-//     new OTLPTraceExporter({
-//       url: "http://alloy:4318/v1/traces",
-//     }),
-//   ),
-// }))
-
-// await Effect.runPromise(
-//   program.pipe(
-//     Effect.provide(NodeSdkLive),
-//     Effect.catchAllCause(Effect.logError),
-//   ),
-// )

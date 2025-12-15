@@ -31,3 +31,16 @@ export const BrawlhallaApiRanking2v2 = Schema.Struct({
 })
 
 export const BrawlhallaApiRankings2v2 = Schema.Array(BrawlhallaApiRanking2v2)
+
+export const BrawlhallaApiRankingRotating = Schema.Struct({
+  ...Ranking.fields,
+  name: Schema.String,
+  brawlhalla_id: Schema.Number,
+  best_legend: Schema.Number,
+  best_legend_games: Schema.Number,
+  best_legend_wins: Schema.Number,
+})
+
+export const BrawlhallaApiRankingsRotating = Schema.Array(
+  BrawlhallaApiRankingRotating,
+)

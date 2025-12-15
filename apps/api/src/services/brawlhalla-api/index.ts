@@ -13,6 +13,7 @@ import { BrawlhallaApiPlayerStats } from "./schema/player-stats"
 import {
   BrawlhallaApiRankings1v1,
   BrawlhallaApiRankings2v2,
+  BrawlhallaApiRankingsRotating,
 } from "./schema/rankings"
 import { NotFound } from "@effect/platform/HttpApiError"
 
@@ -149,6 +150,16 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
             schema: BrawlhallaApiRankings2v2,
             path: `/rankings/2v2/${region.toLowerCase()}/${page}`,
             cacheName: `brawlhalla-rankings-2v2-${region}-${page}`,
+          })
+        }),
+        getRankingsRotating: Effect.fn("getRankingsRotating")(function* (
+          region: string,
+          page: number,
+        ) {
+          return yield* fetchBrawlhallaApi({
+            schema: BrawlhallaApiRankingsRotating,
+            path: `/rankings/rotating/${region.toLowerCase()}/${page}`,
+            cacheName: `brawlhalla-rankings-rotating-${region}-${page}`,
           })
         }),
         getClanById: Effect.fn("getClanById")(function* (clanId: number) {
