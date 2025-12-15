@@ -91,9 +91,7 @@
         "footer": {
           "countRows": false,
           "fields": "",
-          "reducer": [
-            "sum"
-          ],
+          "reducer": ["sum"],
           "show": false
         },
         "showHeader": true
@@ -247,9 +245,7 @@
         "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": [
-            "count"
-          ],
+          "calcs": ["count"],
           "fields": "",
           "values": false
         },
@@ -321,10 +317,7 @@
   ],
   "refresh": "10s",
   "schemaVersion": 39,
-  "tags": [
-    "observability",
-    "overview"
-  ],
+  "tags": ["observability", "overview"],
   "templating": {
     "list": [
       {

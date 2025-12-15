@@ -6,12 +6,12 @@ The project uses a Grafana-based observability stack for monitoring, logging, an
 
 ### Stack Components
 
-| Service | Port | Description |
-|---------|------|-------------|
-| **Grafana** | 3002 | Visualization and dashboards |
-| **Grafana Alloy** | 12345 (UI), 4317 (gRPC), 4318 (HTTP) | OpenTelemetry collector |
-| **Grafana Loki** | 3100 | Log aggregation |
-| **Grafana Tempo** | 3200 | Distributed tracing |
+| Service           | Port                                 | Description                  |
+| ----------------- | ------------------------------------ | ---------------------------- |
+| **Grafana**       | 3002                                 | Visualization and dashboards |
+| **Grafana Alloy** | 12345 (UI), 4317 (gRPC), 4318 (HTTP) | OpenTelemetry collector      |
+| **Grafana Loki**  | 3100                                 | Log aggregation              |
+| **Grafana Tempo** | 3200                                 | Distributed tracing          |
 
 ### Architecture
 
@@ -56,8 +56,8 @@ bun compose up
 
 The API automatically sends telemetry to Alloy via OpenTelemetry. Configure via environment variables:
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `OTLP_ENDPOINT` | `http://alloy:4318` | OTLP HTTP endpoint |
-| `SERVICE_NAME` | `api` | Service name in traces |
-| `SERVICE_VERSION` | `0.0.0` | Service version in traces |
+| Variable          | Default                 | Description               |
+| ----------------- | ----------------------- | ------------------------- |
+| `OTLP_ENDPOINT`   | `http://localhost:4318` | OTLP HTTP endpoint        |
+| `SERVICE_NAME`    | `api`                   | Service name in traces    |
+| `SERVICE_VERSION` | `0.0.0`                 | Service version in traces |
