@@ -72,7 +72,7 @@ const rankingsCrawlerWorker = scheduleRankingsCrawler.pipe(
 
 const server = Effect.gen(function* () {
   // Fork the rankings crawler to run in the background
-  // yield* Effect.fork(rankingsCrawlerWorker)
+  yield* Effect.fork(rankingsCrawlerWorker)
 
   // Launch the HTTP server (this blocks forever)
   return yield* Layer.launch(ServerLive)
