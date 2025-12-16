@@ -1,7 +1,7 @@
 import { Api } from "@dair/api-contract"
 import { HttpApiBuilder, HttpServer, FetchHttpClient } from "@effect/platform"
 import { BunHttpServer } from "@effect/platform-bun"
-import { Effect, Layer } from "effect"
+import { Effect, Layer, Duration, flow } from "effect"
 import { ApiLive } from "./api-live"
 import { Archive } from "./services/archive"
 import { Authorization } from "./services/authorization"
@@ -13,10 +13,8 @@ import { BrawlhallaApi } from "./services/brawlhalla-api"
 import { BrawltoolsApi } from "./services/brawltools-api"
 import { Fetcher } from "./services/fetcher"
 import { responseCache } from "./services/middleware/response-cache"
+import { workerAuthMiddleware } from "./services/middleware/worker-auth"
 import { ObservabilityLive } from "./services/observability"
-import { scheduleRankingsCrawler } from "./workers/rankings-crawler"
-import { scheduleLeaderboardCrawler } from "./workers/leaderboard-crawler"
-import { Duration } from "effect"
 import { BrawlhallaRateLimiter } from "@/services/rate-limiter"
 
 // Shared dependencies for both server and workers
@@ -31,16 +29,20 @@ const SharedDependencies = Layer.mergeAll(
   Database.layer,
 )
 
+// Compose middleware: worker auth -> response cache
+const composedMiddleware = flow(
+  workerAuthMiddleware,
+  responseCache({
+    ttlSeconds: Duration.toSeconds(Duration.minutes(5)),
+    exclude: ["/auth", "/health", "/session", "/docs", "/openapi"],
+  }),
+)
+
 const ServerLive = Layer.unwrapEffect(
   Effect.gen(function* () {
     const serverConfig = yield* ApiServerConfig
 
-    return HttpApiBuilder.serve(
-      responseCache({
-        ttlSeconds: Duration.toSeconds(Duration.minutes(5)),
-        exclude: ["/auth", "/health", "/session", "/docs", "/openapi"],
-      }),
-    ).pipe(
+    return HttpApiBuilder.serve(composedMiddleware).pipe(
       Layer.provide(
         HttpApiBuilder.middlewareCors({
           allowedOrigins: serverConfig.allowedOrigins,
@@ -58,40 +60,12 @@ const ServerLive = Layer.unwrapEffect(
 ).pipe(
   Layer.provide(ApiServerConfig.layer),
   Layer.provide(FetchHttpClient.layer),
+  Layer.provide(ObservabilityLive),
+  Layer.provide(BrawlhallaRateLimiter.layer),
 )
 
-// Dependencies for workers (same as shared, no additional rate limiter needed)
-const WorkerDependencies = Layer.mergeAll(
-  SharedDependencies,
-  FetchHttpClient.layer,
-)
-
-const rankingsCrawlerWorker = scheduleRankingsCrawler.pipe(
-  Effect.provide(WorkerDependencies),
-  Effect.catchAllCause((cause) =>
-    Effect.logError("Rankings crawler worker crashed", cause),
-  ),
-)
-
-const leaderboardCrawlerWorker = scheduleLeaderboardCrawler.pipe(
-  Effect.provide(WorkerDependencies),
-  Effect.catchAllCause((cause) =>
-    Effect.logError("Ranked queues crawler worker crashed", cause),
-  ),
-)
-
-const server = Effect.gen(function* () {
-  // Fork the rankings and ranked queues crawlers to run in the background
-  // yield* Effect.fork(rankingsCrawlerWorker)
-  // yield* Effect.fork(leaderboardCrawlerWorker)
-
-  // Launch the HTTP server (this blocks forever)
-  return yield* Layer.launch(ServerLive)
-}).pipe(
-  Effect.provide(ObservabilityLive),
+const server = Layer.launch(ServerLive).pipe(
   Effect.catchAllCause(Effect.logError),
-  // Provide the shared rate limiter at the top level so workers and server share the same instance
-  Effect.provide(BrawlhallaRateLimiter.layer),
 )
 
 await Effect.runPromise(server)

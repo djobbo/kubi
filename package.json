@@ -37,7 +37,9 @@
     "lint": "oxfmt && syncpack format && syncpack fix && oxlint --type-aware --type-check --fix --fix-suggestions",
     "prepare": "husky && effect-language-service patch",
     "server:start": "turbo run start --filter=@dair/api",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "workers:dev": "turbo run dev --filter=@dair/workers",
+    "workers:start": "turbo run start --filter=@dair/workers"
   },
   "type": "module",
   "workspaces": [
