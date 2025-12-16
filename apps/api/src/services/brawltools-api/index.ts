@@ -116,12 +116,14 @@ export class BrawltoolsApi extends Effect.Service<BrawltoolsApi>()(
           )
 
         return {
-          rankings: result.data,
+          rankings: result.data.prPlayers,
           page,
           gameMode,
           region,
           orderBy,
           order,
+          totalPages: result.data.totalPages,
+          lastUpdated: result.data.lastUpdated,
           updatedAt: result.updatedAt,
         }
       })

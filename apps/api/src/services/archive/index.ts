@@ -17,7 +17,7 @@ import {
   ranked2v2HistoryTable,
   rankedRotatingHistoryTable,
 } from "@dair/db"
-import { and, eq, desc, like, or, lt, max, gte, count } from "drizzle-orm"
+import { and, eq, desc, or, lt, max, gte, count, ilike } from "drizzle-orm"
 import { Effect, Layer } from "effect"
 import { BadRequest } from "@dair/api-contract/src/shared/errors"
 import type { BrawlhallaApiPlayerStats } from "../brawlhalla-api/schema/player-stats"
@@ -27,7 +27,7 @@ import { ArchiveQueryError } from "./errors"
 import type { BrawlhallaApiClan } from "../brawlhalla-api/schema/clan"
 import type { Clan } from "@dair/api-contract/src/routes/v1/brawlhalla/get-guild-by-id"
 import type { SearchPlayerCursor } from "@dair/api-contract/src/routes/v1/brawlhalla/search-player"
-import type { GlobalPlayerRankingsSortByParam } from "@dair/api-contract/src/routes/v1/brawlhalla/get-player-rankings"
+import type { GlobalPlayerRankingsOrderBy } from "@dair/api-contract/src/routes/v1/brawlhalla/get-player-rankings"
 import { isNotNull } from "drizzle-orm"
 import type { GlobalLegendRankingsOrderBy } from "@dair/api-contract/src/routes/v1/brawlhalla/get-legend-rankings"
 import type { AnyRegion } from "@dair/api-contract/src/shared/region"
@@ -269,7 +269,7 @@ export class Archive extends Effect.Service<Archive>()(
                 maxDate: max(playerAliasesTable.recordedAt).as("max_date"),
               })
               .from(playerAliasesTable)
-              .where(like(playerAliasesTable.alias, `${name.toLowerCase()}%`))
+              .where(ilike(playerAliasesTable.alias, `${name}%`))
               .groupBy(playerAliasesTable.playerId),
           )
 
@@ -303,10 +303,7 @@ export class Archive extends Effect.Service<Archive>()(
               ),
             )
             .where(
-              and(
-                like(playerAliasesTable.alias, `${name.toLowerCase()}%`),
-                cursorCondition,
-              ),
+              and(ilike(playerAliasesTable.alias, `${name}%`), cursorCondition),
             )
             .orderBy(
               desc(playerAliasesTable.recordedAt),
@@ -332,7 +329,7 @@ export class Archive extends Effect.Service<Archive>()(
         }),
         getGlobalPlayerRankings: Effect.fn("getGlobalPlayerRankings")(
           function* (
-            field: typeof GlobalPlayerRankingsSortByParam.Type,
+            field: typeof GlobalPlayerRankingsOrderBy.Type,
             offset = 0,
             limit = 10,
           ) {
@@ -914,9 +911,7 @@ export class Archive extends Effect.Service<Archive>()(
               })
               .from(clanHistoryTable)
               .where(
-                name
-                  ? like(clanHistoryTable.name, `${name.toLowerCase()}%`)
-                  : undefined,
+                name ? ilike(clanHistoryTable.name, `${name}%`) : undefined,
               )
               .groupBy(clanHistoryTable.clanId),
           )

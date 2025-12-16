@@ -17,23 +17,20 @@ export const WeaponRanking = Schema.Struct({
 })
 
 export const WeaponNameParam = HttpApiSchema.param(
-  "weaponName",
+  "name",
   Schema.NonEmptyTrimmedString,
 )
 
-export const GlobalWeaponRankingsOrderBy = HttpApiSchema.param(
-  "orderBy",
-  Schema.Literal(
-    ...([
-      "xp",
-      "games",
-      "wins",
-      "losses",
-      "timeHeld",
-      "kos",
-      "damageDealt",
-    ] satisfies (keyof PlayerWeaponHistory)[]),
-  ),
+export const GlobalWeaponRankingsOrderBy = Schema.Literal(
+  ...([
+    "xp",
+    "games",
+    "wins",
+    "losses",
+    "timeHeld",
+    "kos",
+    "damageDealt",
+  ] satisfies (keyof PlayerWeaponHistory)[]),
 )
 
 null as unknown as PlayerWeaponHistory satisfies Omit<

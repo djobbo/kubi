@@ -219,10 +219,7 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
       "get-legend-rankings",
       Effect.fn("get-legend-rankings")(
         function* ({ path, urlParams }) {
-          return yield* getGlobalLegendRankings(
-            path.legendId,
-            urlParams.orderBy,
-          )
+          return yield* getGlobalLegendRankings(path.id, urlParams.orderBy)
         },
         flow(
           Effect.tapError(Effect.logError),
@@ -236,10 +233,7 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
       "get-weapon-rankings",
       Effect.fn("get-weapon-rankings")(
         function* ({ path, urlParams }) {
-          return yield* getGlobalWeaponRankings(
-            path.weaponName,
-            urlParams.orderBy,
-          )
+          return yield* getGlobalWeaponRankings(path.name, urlParams.orderBy)
         },
         flow(
           Effect.tapError(Effect.logError),

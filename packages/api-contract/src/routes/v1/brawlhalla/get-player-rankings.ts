@@ -36,7 +36,7 @@ export const PlayerRanking = Schema.Struct({
   rankedRotatingLosses: Schema.NullOr(Schema.Number),
 })
 
-export const GlobalPlayerRankingsSortByParam = HttpApiSchema.param(
+export const GlobalPlayerRankingsOrderBy = HttpApiSchema.param(
   "orderBy",
   Schema.Literal(
     ...([

@@ -2,13 +2,13 @@ import { Effect } from "effect"
 import { Archive } from "@/services/archive"
 import type {
   GetGlobalPlayerRankingsResponse,
-  GlobalPlayerRankingsSortByParam,
+  GlobalPlayerRankingsOrderBy,
   PlayerRanking,
 } from "@dair/api-contract/src/routes/v1/brawlhalla/get-player-rankings"
 import { getEntitySlug } from "@/helpers/entity-slug"
 
 export const getGlobalPlayerRankings = Effect.fn("getGlobalPlayerRankings")(
-  function* (orderBy: typeof GlobalPlayerRankingsSortByParam.Type) {
+  function* (orderBy: typeof GlobalPlayerRankingsOrderBy.Type) {
     const archive = yield* Archive
     const rankings = yield* archive.getGlobalPlayerRankings(orderBy)
 

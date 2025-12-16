@@ -29,7 +29,7 @@ import { GetWeeklyRotationResponse } from "./routes/v1/brawlhalla/get-weekly-rot
 import { SearchPlayerResponse } from "./routes/v1/brawlhalla/search-player"
 import {
   GetGlobalPlayerRankingsResponse,
-  GlobalPlayerRankingsSortByParam,
+  GlobalPlayerRankingsOrderBy,
 } from "./routes/v1/brawlhalla/get-player-rankings"
 import {
   GetGlobalLegendRankingsResponse,
@@ -60,11 +60,6 @@ import {
 } from "./routes/v1/brawlhalla/get-servers"
 
 const idParam = HttpApiSchema.param("id", Schema.NumberFromString)
-const pageParam = HttpApiSchema.param(
-  "page",
-  Schema.NumberFromString.pipe(Schema.greaterThanOrEqualTo(1)),
-)
-const regionParam = HttpApiSchema.param("region", AnyRegion)
 const providerParam = HttpApiSchema.param(
   "provider",
   Schema.Literal(...providers),
@@ -101,7 +96,7 @@ class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
     HttpApiEndpoint.get("get-player-rankings")`/players/rankings`
       .setUrlParams(
         Schema.Struct({
-          orderBy: GlobalPlayerRankingsSortByParam.pipe(
+          orderBy: GlobalPlayerRankingsOrderBy.pipe(
             Schema.optionalWith({ default: () => "xp" }),
           ),
         }),

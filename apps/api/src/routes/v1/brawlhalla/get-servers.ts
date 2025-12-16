@@ -28,12 +28,12 @@ function getDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
   return R * c
 }
 
-export const getServers = Effect.fn("getServers")(function* () {
-  return {
+export const getServers = Effect.fn("getServers")(() =>
+  Effect.succeed({
     data: servers,
     meta: { timestamp: new Date() },
-  } satisfies typeof GetServersResponse.Type
-})
+  } satisfies typeof GetServersResponse.Type),
+)
 
 export const getNearestServer = (ip: string | null) =>
   Effect.gen(function* () {
