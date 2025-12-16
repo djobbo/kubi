@@ -2,7 +2,7 @@ export const servers = [
   {
     id: "US-E",
     url: "pingtest-atl.brawlhalla.com",
-    ip: "52.95.18.3",
+    ip: "99.78.176.220",
     location: {
       city: "Dublin",
       country: "United States",
@@ -14,7 +14,7 @@ export const servers = [
   {
     id: "US-W",
     url: "pingtest-cal.brawlhalla.com",
-    ip: "176.32.118.53",
+    ip: "176.32.118.39",
     location: {
       city: "San Jose",
       country: "United States",
@@ -26,7 +26,7 @@ export const servers = [
   {
     id: "EU",
     url: "pingtest-ams.brawlhalla.com",
-    ip: "52.94.138.242",
+    ip: "52.94.137.23",
     location: {
       city: "Frankfurt am Main",
       country: "Germany",
@@ -38,7 +38,7 @@ export const servers = [
   {
     id: "SEA",
     url: "pingtest-sgp.brawlhalla.com",
-    ip: "15.221.11.14",
+    ip: "15.221.11.26",
     location: {
       city: "Singapore",
       country: "Singapore",
@@ -50,7 +50,7 @@ export const servers = [
   {
     id: "AUS",
     url: "pingtest-aus.brawlhalla.com",
-    ip: "54.240.206.54",
+    ip: "99.83.80.141",
     location: {
       city: "Sydney",
       country: "Australia",
@@ -74,19 +74,19 @@ export const servers = [
   {
     id: "JPN",
     url: "pingtest-jpn.brawlhalla.com",
-    ip: "99.77.58.81",
+    ip: "52.195.201.15",
     location: {
       city: "Tokyo",
       country: "Japan",
       lat: 35.6895,
       lon: 139.692,
-      isp: "Amazon.com",
+      isp: "Amazon Technologies Inc.",
     },
   },
   {
     id: "ME",
     url: "pingtest-mde.brawlhalla.com",
-    ip: "99.82.132.91",
+    ip: "99.82.128.102",
     location: {
       city: "Manama",
       country: "Bahrain",

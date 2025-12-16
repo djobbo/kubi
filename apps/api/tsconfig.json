@@ -24,12 +24,12 @@
     "noPropertyAccessFromIndexSignature": false,
     "exactOptionalPropertyTypes": true,
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": ["./src/*"]
     },
     "plugins": [
       {
-        "name": "@effect/language-service",
-      },
-    ],
-  },
+        "name": "@effect/language-service"
+      }
+    ]
+  }
 }
