@@ -2,18 +2,18 @@ import { Effect } from "effect"
 import { Archive } from "@/services/archive"
 import type {
   GetGlobalLegendRankingsResponse,
-  GlobalLegendRankingsSortByParam,
+  GlobalLegendRankingsOrderBy,
   LegendRanking,
-} from "@dair/api-contract/src/routes/v1/brawlhalla/get-global-legend-rankings"
+} from "@dair/api-contract/src/routes/v1/brawlhalla/get-legend-rankings"
 import { getEntitySlug } from "@/helpers/entity-slug"
 
 export const getGlobalLegendRankings = Effect.fn("getGlobalLegendRankings")(
   function* (
     legendId: number,
-    sortBy: typeof GlobalLegendRankingsSortByParam.Type,
+    orderBy: typeof GlobalLegendRankingsOrderBy.Type,
   ) {
     const archive = yield* Archive
-    const rankings = yield* archive.getGlobalLegendRankings(legendId, sortBy)
+    const rankings = yield* archive.getGlobalLegendRankings(legendId, orderBy)
 
     const rankingsData = rankings.map<typeof LegendRanking.Type>((ranking) => ({
       ...ranking,

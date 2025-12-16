@@ -37,7 +37,7 @@ export const PlayerRanking = Schema.Struct({
 })
 
 export const GlobalPlayerRankingsSortByParam = HttpApiSchema.param(
-  "sortBy",
+  "orderBy",
   Schema.Literal(
     ...([
       "xp",

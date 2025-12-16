@@ -1,5 +1,8 @@
 import { Effect, Schema } from "effect"
-import type { GetLocationResponse } from "@dair/api-contract/src/routes/v1/brawlhalla/get-location"
+import type {
+  GetNearestServerResponse,
+  GetServersResponse,
+} from "@dair/api-contract/src/routes/v1/brawlhalla/get-servers"
 import { servers } from "@dair/brawlhalla-servers"
 
 type Server = (typeof servers)[number]
@@ -25,11 +28,18 @@ function getDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
   return R * c
 }
 
-export const getLocation = (ip: string | null) =>
+export const getServers = Effect.fn("getServers")(function* () {
+  return {
+    data: servers,
+    meta: { timestamp: new Date() },
+  } satisfies typeof GetServersResponse.Type
+})
+
+export const getNearestServer = (ip: string | null) =>
   Effect.gen(function* () {
     if (!ip) {
-      const response: typeof GetLocationResponse.Type = {
-        data: { region: null },
+      const response: typeof GetNearestServerResponse.Type = {
+        data: { server: null },
         meta: { timestamp: new Date() },
       }
       return response
@@ -49,8 +59,8 @@ export const getLocation = (ip: string | null) =>
     )
 
     if (!result) {
-      const response: typeof GetLocationResponse.Type = {
-        data: { region: null },
+      const response: typeof GetNearestServerResponse.Type = {
+        data: { server: null },
         meta: { timestamp: new Date() },
       }
       return response
@@ -71,8 +81,8 @@ export const getLocation = (ip: string | null) =>
       { server: servers[0], distance: Number.POSITIVE_INFINITY },
     )
 
-    const response: typeof GetLocationResponse.Type = {
-      data: { region: closestServer.server.id },
+    const response: typeof GetNearestServerResponse.Type = {
+      data: { server: closestServer.server },
       meta: { timestamp: new Date() },
     }
 

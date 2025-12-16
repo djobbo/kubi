@@ -27,9 +27,9 @@ import { ArchiveQueryError } from "./errors"
 import type { BrawlhallaApiClan } from "../brawlhalla-api/schema/clan"
 import type { Clan } from "@dair/api-contract/src/routes/v1/brawlhalla/get-guild-by-id"
 import type { SearchPlayerCursor } from "@dair/api-contract/src/routes/v1/brawlhalla/search-player"
-import type { GlobalPlayerRankingsSortByParam } from "@dair/api-contract/src/routes/v1/brawlhalla/get-global-player-rankings"
+import type { GlobalPlayerRankingsSortByParam } from "@dair/api-contract/src/routes/v1/brawlhalla/get-player-rankings"
 import { isNotNull } from "drizzle-orm"
-import type { GlobalLegendRankingsSortByParam } from "@dair/api-contract/src/routes/v1/brawlhalla/get-global-legend-rankings"
+import type { GlobalLegendRankingsOrderBy } from "@dair/api-contract/src/routes/v1/brawlhalla/get-legend-rankings"
 import type { AnyRegion } from "@dair/api-contract/src/shared/region"
 import type { GameDelta } from "@dair/api-contract/src/routes/v1/brawlhalla/get-ranked-queues"
 
@@ -375,7 +375,7 @@ export class Archive extends Effect.Service<Archive>()(
         getGlobalLegendRankings: Effect.fn("getGlobalLegendRankings")(
           function* (
             legendId: number,
-            field: typeof GlobalLegendRankingsSortByParam.Type,
+            field: typeof GlobalLegendRankingsOrderBy.Type,
             offset = 0,
             limit = 10,
           ) {

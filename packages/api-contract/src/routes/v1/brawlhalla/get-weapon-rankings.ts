@@ -21,8 +21,8 @@ export const WeaponNameParam = HttpApiSchema.param(
   Schema.NonEmptyTrimmedString,
 )
 
-export const GlobalWeaponRankingsSortByParam = HttpApiSchema.param(
-  "sortBy",
+export const GlobalWeaponRankingsOrderBy = HttpApiSchema.param(
+  "orderBy",
   Schema.Literal(
     ...([
       "xp",

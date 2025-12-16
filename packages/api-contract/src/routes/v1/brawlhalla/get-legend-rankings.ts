@@ -25,8 +25,8 @@ export const LegendIdParam = HttpApiSchema.param(
   Schema.NumberFromString,
 )
 
-export const GlobalLegendRankingsSortByParam = HttpApiSchema.param(
-  "sortBy",
+export const GlobalLegendRankingsOrderBy = HttpApiSchema.param(
+  "orderBy",
   Schema.Literal(
     ...([
       "xp",

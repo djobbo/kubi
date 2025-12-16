@@ -2,18 +2,18 @@ import { Effect } from "effect"
 import { Archive } from "@/services/archive"
 import type {
   GetGlobalWeaponRankingsResponse,
-  GlobalWeaponRankingsSortByParam,
+  GlobalWeaponRankingsOrderBy,
   WeaponRanking,
-} from "@dair/api-contract/src/routes/v1/brawlhalla/get-global-weapon-rankings"
+} from "@dair/api-contract/src/routes/v1/brawlhalla/get-weapon-rankings"
 import { getEntitySlug } from "@/helpers/entity-slug"
 
 export const getGlobalWeaponRankings = Effect.fn("getGlobalWeaponRankings")(
   function* (
     weaponName: string,
-    sortBy: typeof GlobalWeaponRankingsSortByParam.Type,
+    orderBy: typeof GlobalWeaponRankingsOrderBy.Type,
   ) {
     const archive = yield* Archive
-    const rankings = yield* archive.getGlobalWeaponRankings(weaponName, sortBy)
+    const rankings = yield* archive.getGlobalWeaponRankings(weaponName, orderBy)
 
     const rankingsData = rankings.map<typeof WeaponRanking.Type>((ranking) => ({
       ...ranking,

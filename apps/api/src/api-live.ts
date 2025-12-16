@@ -21,9 +21,9 @@ import {
   TooManyRequests,
 } from "@dair/api-contract/src/shared/errors"
 import { searchPlayer } from "./routes/v1/brawlhalla/search-player"
-import { getGlobalPlayerRankings } from "./routes/v1/brawlhalla/get-global-player-rankings"
-import { getGlobalLegendRankings } from "./routes/v1/brawlhalla/get-global-legend-rankings"
-import { getGlobalWeaponRankings } from "./routes/v1/brawlhalla/get-global-weapon-rankings"
+import { getGlobalPlayerRankings } from "./routes/v1/brawlhalla/get-player-rankings"
+import { getGlobalLegendRankings } from "./routes/v1/brawlhalla/get-legend-rankings"
+import { getGlobalWeaponRankings } from "./routes/v1/brawlhalla/get-weapon-rankings"
 import {
   getRanked1v1Queue,
   getRanked2v2Queue,
@@ -32,7 +32,10 @@ import {
 import { getTokens } from "./routes/v1/health/get-tokens"
 import { searchGuild } from "./routes/v1/brawlhalla/search-guild"
 import { getPowerRankings } from "./routes/v1/brawlhalla/get-power-rankings"
-import { getLocation } from "./routes/v1/brawlhalla/get-location"
+import {
+  getServers,
+  getNearestServer,
+} from "./routes/v1/brawlhalla/get-servers"
 
 const HealthLive = HttpApiBuilder.group(Api, "health", (handlers) =>
   handlers
@@ -103,8 +106,12 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
     .handle(
       "get-ranked-1v1",
       Effect.fn("get-ranked-1v1")(
-        function* ({ path, urlParams }) {
-          return yield* getRankings1v1(path.region, path.page, urlParams.name)
+        function* ({ urlParams }) {
+          return yield* getRankings1v1(
+            urlParams.region,
+            urlParams.page,
+            urlParams.name,
+          )
         },
         flow(
           Effect.tapError(Effect.logError),
@@ -119,8 +126,8 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
     .handle(
       "get-ranked-2v2",
       Effect.fn("get-ranked-2v2")(
-        function* ({ path }) {
-          return yield* getRankings2v2(path.region, path.page)
+        function* ({ urlParams }) {
+          return yield* getRankings2v2(urlParams.region, urlParams.page)
         },
         flow(
           Effect.tapError(Effect.logError),
@@ -137,8 +144,8 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
     .handle(
       "get-ranked-rotating",
       Effect.fn("get-ranked-rotating")(
-        function* ({ path }) {
-          return yield* getRankingsRotating(path.region, path.page)
+        function* ({ urlParams }) {
+          return yield* getRankingsRotating(urlParams.region, urlParams.page)
         },
         flow(
           Effect.tapError(Effect.logError),
@@ -153,10 +160,10 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
       ),
     )
     .handle(
-      "get-ranked-queues-1v1",
-      Effect.fn("get-ranked-queues-1v1")(
-        function* ({ path }) {
-          return yield* getRanked1v1Queue(path.region)
+      "get-ranked-1v1-queue",
+      Effect.fn("get-ranked-1v1-queue")(
+        function* ({ urlParams }) {
+          return yield* getRanked1v1Queue(urlParams.region)
         },
         flow(
           Effect.tapError(Effect.logError),
@@ -167,10 +174,10 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
       ),
     )
     .handle(
-      "get-ranked-queues-2v2",
-      Effect.fn("get-ranked-queues-2v2")(
-        function* ({ path }) {
-          return yield* getRanked2v2Queue(path.region)
+      "get-ranked-2v2-queue",
+      Effect.fn("get-ranked-2v2-queue")(
+        function* ({ urlParams }) {
+          return yield* getRanked2v2Queue(urlParams.region)
         },
         flow(
           Effect.tapError(Effect.logError),
@@ -181,10 +188,10 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
       ),
     )
     .handle(
-      "get-ranked-queues-rotating",
-      Effect.fn("get-ranked-queues-rotating")(
-        function* ({ path }) {
-          return yield* getRankedRotatingQueue(path.region)
+      "get-ranked-rotating-queue",
+      Effect.fn("get-ranked-rotating-queue")(
+        function* ({ urlParams }) {
+          return yield* getRankedRotatingQueue(urlParams.region)
         },
         flow(
           Effect.tapError(Effect.logError),
@@ -195,10 +202,10 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
       ),
     )
     .handle(
-      "get-global-player-rankings",
-      Effect.fn("get-global-player-rankings")(
-        function* ({ path }) {
-          return yield* getGlobalPlayerRankings(path.sortBy)
+      "get-player-rankings",
+      Effect.fn("get-player-rankings")(
+        function* ({ urlParams }) {
+          return yield* getGlobalPlayerRankings(urlParams.orderBy)
         },
         flow(
           Effect.tapError(Effect.logError),
@@ -209,10 +216,13 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
       ),
     )
     .handle(
-      "get-global-legend-rankings",
-      Effect.fn("get-global-legend-rankings")(
-        function* ({ path }) {
-          return yield* getGlobalLegendRankings(path.legendId, path.sortBy)
+      "get-legend-rankings",
+      Effect.fn("get-legend-rankings")(
+        function* ({ path, urlParams }) {
+          return yield* getGlobalLegendRankings(
+            path.legendId,
+            urlParams.orderBy,
+          )
         },
         flow(
           Effect.tapError(Effect.logError),
@@ -223,10 +233,13 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
       ),
     )
     .handle(
-      "get-global-weapon-rankings",
-      Effect.fn("get-global-weapon-rankings")(
-        function* ({ path }) {
-          return yield* getGlobalWeaponRankings(path.weaponName, path.sortBy)
+      "get-weapon-rankings",
+      Effect.fn("get-weapon-rankings")(
+        function* ({ path, urlParams }) {
+          return yield* getGlobalWeaponRankings(
+            path.weaponName,
+            urlParams.orderBy,
+          )
         },
         flow(
           Effect.tapError(Effect.logError),
@@ -318,12 +331,12 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
     .handle(
       "get-power-rankings",
       Effect.fn("get-power-rankings")(
-        function* ({ path, urlParams }) {
+        function* ({ urlParams }) {
           return yield* getPowerRankings({
-            region: path.region,
-            page: path.page,
+            region: urlParams.region,
+            page: urlParams.page,
             orderBy: urlParams.orderBy,
-            gameMode: path.gameMode,
+            gameMode: urlParams.gameMode,
           })
         },
         flow(
@@ -338,8 +351,14 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
       ),
     )
     .handle(
-      "get-location",
-      Effect.fn("get-location")(function* () {
+      "get-servers",
+      Effect.fn("get-servers")(function* () {
+        return yield* getServers()
+      }),
+    )
+    .handle(
+      "get-nearest-server",
+      Effect.fn("get-nearest-server")(function* () {
         // Get client IP from headers (x-forwarded-for for proxied requests)
         const request = yield* HttpServerRequest.HttpServerRequest
         const headers = request.headers
@@ -347,7 +366,7 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
         const ip = forwardedFor
           ? forwardedFor.split(",")[0]?.trim()
           : (headers["x-real-ip"] ?? null)
-        return yield* getLocation(ip ?? null)
+        return yield* getNearestServer(ip ?? null)
       }),
     ),
 )
