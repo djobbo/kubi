@@ -4,12 +4,9 @@ import { Schema } from "effect"
  * Rate limiter status for a single limiter
  */
 export const RateLimiterStatus = Schema.Struct({
-  config: Schema.Struct({
-    limit: Schema.Number,
-    intervalSeconds: Schema.Number,
-  }),
+  limit: Schema.Number,
+  intervalSeconds: Schema.Number,
   availableTokens: Schema.Number,
-  maxCapacity: Schema.Number,
   usagePercent: Schema.Number,
 })
 
@@ -17,10 +14,8 @@ export const RateLimiterStatus = Schema.Struct({
  * Complete rate limiter status response
  */
 export const GetTokensResponse = Schema.Struct({
-  globalPerSecond: RateLimiterStatus,
-  globalPer15Min: RateLimiterStatus,
-  workerPerSecond: RateLimiterStatus,
-  workerPer15Min: RateLimiterStatus,
+  perSecond: RateLimiterStatus,
+  per15Min: RateLimiterStatus,
   timestamp: Schema.Date,
 })
 

@@ -26,10 +26,6 @@ type FetchBrawlhallaApiOptions<T, U> = {
   path: string
   searchParams?: Record<string, string>
   cacheName: string
-  /** Whether to use worker rate limiter (default: false = frontend limiter) */
-  useWorkerRateLimiter?: boolean
-  /** Whether to use cache-first with background revalidation (default: based on RequestFetchStrategy context) */
-  cacheFirst?: boolean
 }
 
 export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
@@ -55,8 +51,9 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
       /**
        * Core fetch function that handles rate limiting correctly:
        * - Rate limiter is only applied to the actual API call, not cache lookups
-       * - Supports both frontend (cache-first) and worker (direct fetch) modes
        * - Automatically detects fetch strategy from RequestFetchStrategy context
+       *   - cache-first for frontend requests (default)
+       *   - fetch-first for worker requests (when X-Worker-API-Key header is present)
        */
       const fetchBrawlhallaApi = Effect.fn("fetchBrawlhallaApi")(
         function* <T, U>({
@@ -64,35 +61,23 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
           path,
           searchParams = {},
           cacheName,
-          useWorkerRateLimiter = false,
-          cacheFirst,
         }: FetchBrawlhallaApiOptions<T, U>) {
           const url = getRequestUrl(path, searchParams)
 
-          // Determine cache strategy: explicit option > context > default (cache-first)
+          // Determine cache strategy from context (set by worker auth middleware)
           const useFetchFirst = yield* shouldUseFetchFirst
-          const shouldUseCacheFirst = cacheFirst ?? !useFetchFirst
 
-          // Select the appropriate rate limiter
-          // When fetch-first is requested via context (worker request), use frontend limiter
-          // since the worker's own rate limiter controls the API call frequency
-          const applyRateLimit = useWorkerRateLimiter
-            ? rateLimiter.limitWorker
-            : rateLimiter.limitFrontend
-
-          // Rate limiting is applied ONLY to the actual API fetch, not the cache layer
-          // The fetcher handles caching internally and only calls the rate-limited fetch on cache miss
-          if (shouldUseCacheFirst) {
+          if (!useFetchFirst) {
             // Cache-first mode: Check cache first, rate limit only on actual API call
             return yield* fetcher.fetchJsonCacheFirst(schema, {
               method: "GET",
               url: url.toString(),
               cacheName,
-              rateLimitedFetch: applyRateLimit,
+              rateLimitedFetch: rateLimiter.limit,
             })
           } else {
             // Direct fetch mode: Rate limit and fetch directly (for workers via HTTP)
-            return yield* applyRateLimit(
+            return yield* rateLimiter.limit(
               fetcher.fetchJson(schema, {
                 method: "GET",
                 url: url.toString(),
@@ -145,42 +130,11 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
         ),
       )
 
-      // Helper to create API methods that respect request context
-      // Uses cache-first for frontend, fetch-first for workers (based on RequestFetchStrategy context)
-      const createContextAwareMethod = <T, U>(
-        options: Omit<
-          FetchBrawlhallaApiOptions<T, U>,
-          "useWorkerRateLimiter" | "cacheFirst"
-        >,
-      ) =>
-        fetchBrawlhallaApi({
-          ...options,
-          useWorkerRateLimiter: false,
-          // Don't specify cacheFirst - let it be determined by context
-        })
-
-      // Helper to create worker API methods (direct fetch with worker rate limiter)
-      const createWorkerMethod = <T, U>(
-        options: Omit<
-          FetchBrawlhallaApiOptions<T, U>,
-          "useWorkerRateLimiter" | "cacheFirst"
-        >,
-      ) =>
-        fetchBrawlhallaApi({
-          ...options,
-          useWorkerRateLimiter: true,
-          cacheFirst: false,
-        })
-
       return {
-        // ========== Context-Aware Methods ==========
-        // These methods automatically use cache-first for frontend requests
-        // and fetch-first for worker requests (based on RequestFetchStrategy context)
-
         getPlayerStatsById: Effect.fn("getPlayerStatsById")(function* (
           playerId: number,
         ) {
-          return yield* createContextAwareMethod({
+          return yield* fetchBrawlhallaApi({
             schema: BrawlhallaApiPlayerStats,
             path: `/player/${playerId}/stats`,
             cacheName: `brawlhalla-player-stats-${playerId}`,
@@ -193,7 +147,7 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
         getPlayerRankedById: Effect.fn("getPlayerRankedById")(function* (
           playerId: number,
         ) {
-          return yield* createContextAwareMethod({
+          return yield* fetchBrawlhallaApi({
             schema: BrawlhallaApiPlayerRanked,
             path: `/player/${playerId}/ranked`,
             cacheName: `brawlhalla-player-ranked-${playerId}`,
@@ -208,7 +162,7 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
           page: number,
           name?: string,
         ) {
-          return yield* createContextAwareMethod({
+          return yield* fetchBrawlhallaApi({
             schema: BrawlhallaApiRankings1v1,
             path: `/rankings/1v1/${region.toLowerCase()}/${page}${name ? `?name=${name}` : ""}`,
             cacheName: `brawlhalla-rankings-1v1-${region}-${page}-${name ?? ""}`,
@@ -218,7 +172,7 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
           region: string,
           page: number,
         ) {
-          return yield* createContextAwareMethod({
+          return yield* fetchBrawlhallaApi({
             schema: BrawlhallaApiRankings2v2,
             path: `/rankings/2v2/${region.toLowerCase()}/${page}`,
             cacheName: `brawlhalla-rankings-2v2-${region}-${page}`,
@@ -228,14 +182,14 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
           region: string,
           page: number,
         ) {
-          return yield* createContextAwareMethod({
+          return yield* fetchBrawlhallaApi({
             schema: BrawlhallaApiRankingsRotating,
             path: `/rankings/rotating/${region.toLowerCase()}/${page}`,
             cacheName: `brawlhalla-rankings-rotating-${region}-${page}`,
           })
         }),
         getClanById: Effect.fn("getClanById")(function* (clanId: number) {
-          return yield* createContextAwareMethod({
+          return yield* fetchBrawlhallaApi({
             schema: BrawlhallaApiClan,
             path: `/clan/${clanId}`,
             cacheName: `brawlhalla-clan-${clanId}`,
@@ -246,95 +200,12 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
           )
         }),
         getAllLegendsData: Effect.fn("getAllLegendsData")(function* () {
-          return yield* createContextAwareMethod({
+          return yield* fetchBrawlhallaApi({
             schema: BrawlhallaApiLegends,
             path: "/legend/all",
             cacheName: "brawlhalla-legend-all",
           })
         }),
-
-        // ========== Worker Methods (no cache-first, worker rate limiter) ==========
-
-        worker: {
-          getPlayerStatsById: Effect.fn("worker.getPlayerStatsById")(function* (
-            playerId: number,
-          ) {
-            return yield* createWorkerMethod({
-              schema: BrawlhallaApiPlayerStats,
-              path: `/player/${playerId}/stats`,
-              cacheName: `brawlhalla-player-stats-${playerId}`,
-            }).pipe(
-              Effect.catchTag("NotFound", () =>
-                Effect.fail(new BrawlhallaPlayerNotFound({ playerId })),
-              ),
-            )
-          }),
-          getPlayerRankedById: Effect.fn("worker.getPlayerRankedById")(
-            function* (playerId: number) {
-              return yield* createWorkerMethod({
-                schema: BrawlhallaApiPlayerRanked,
-                path: `/player/${playerId}/ranked`,
-                cacheName: `brawlhalla-player-ranked-${playerId}`,
-              }).pipe(
-                Effect.catchTag("NotFound", () =>
-                  Effect.fail(new BrawlhallaPlayerNotFound({ playerId })),
-                ),
-              )
-            },
-          ),
-          getRankings1v1: Effect.fn("worker.getRankings1v1")(function* (
-            region: string,
-            page: number,
-            name?: string,
-          ) {
-            return yield* createWorkerMethod({
-              schema: BrawlhallaApiRankings1v1,
-              path: `/rankings/1v1/${region.toLowerCase()}/${page}${name ? `?name=${name}` : ""}`,
-              cacheName: `brawlhalla-rankings-1v1-${region}-${page}-${name ?? ""}`,
-            })
-          }),
-          getRankings2v2: Effect.fn("worker.getRankings2v2")(function* (
-            region: string,
-            page: number,
-          ) {
-            return yield* createWorkerMethod({
-              schema: BrawlhallaApiRankings2v2,
-              path: `/rankings/2v2/${region.toLowerCase()}/${page}`,
-              cacheName: `brawlhalla-rankings-2v2-${region}-${page}`,
-            })
-          }),
-          getRankingsRotating: Effect.fn("worker.getRankingsRotating")(
-            function* (region: string, page: number) {
-              return yield* createWorkerMethod({
-                schema: BrawlhallaApiRankingsRotating,
-                path: `/rankings/rotating/${region.toLowerCase()}/${page}`,
-                cacheName: `brawlhalla-rankings-rotating-${region}-${page}`,
-              })
-            },
-          ),
-          getClanById: Effect.fn("worker.getClanById")(function* (
-            clanId: number,
-          ) {
-            return yield* createWorkerMethod({
-              schema: BrawlhallaApiClan,
-              path: `/clan/${clanId}`,
-              cacheName: `brawlhalla-clan-${clanId}`,
-            }).pipe(
-              Effect.catchTag("NotFound", () =>
-                Effect.fail(new BrawlhallaClanNotFound({ clanId })),
-              ),
-            )
-          }),
-          getAllLegendsData: Effect.fn("worker.getAllLegendsData")(
-            function* () {
-              return yield* createWorkerMethod({
-                schema: BrawlhallaApiLegends,
-                path: "/legend/all",
-                cacheName: "brawlhalla-legend-all",
-              })
-            },
-          ),
-        },
       }
     }),
   },

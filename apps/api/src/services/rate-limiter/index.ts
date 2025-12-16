@@ -4,56 +4,40 @@ import { Effect, RateLimiter, Duration } from "effect"
  * Rate limiter status information
  */
 export type RateLimiterStatus = {
-  /** Rate limiter configuration */
-  config: {
+  /** Per-second limiter status */
+  perSecond: {
     limit: number
     intervalSeconds: number
+    availableTokens: number
+    usagePercent: number
   }
-  /** Estimated available tokens (approximate, based on token bucket algorithm) */
-  availableTokens: number
-  /** Maximum capacity */
-  maxCapacity: number
-  /** Usage percentage (0-100) */
-  usagePercent: number
-}
-
-/**
- * Complete rate limiter status for all limiters
- */
-export type BrawlhallaRateLimiterStatus = {
-  /** Global per-second limiter status */
-  globalPerSecond: RateLimiterStatus
-  /** Global per-15-minute limiter status */
-  globalPer15Min: RateLimiterStatus
-  /** Worker per-second limiter status */
-  workerPerSecond: RateLimiterStatus
-  /** Worker per-15-minute limiter status */
-  workerPer15Min: RateLimiterStatus
+  /** Per-15-minute limiter status */
+  per15Min: {
+    limit: number
+    intervalSeconds: number
+    availableTokens: number
+    usagePercent: number
+  }
   /** Timestamp when status was calculated */
   timestamp: Date
 }
 
 /**
- * Shared rate limiter service for Brawlhalla API requests.
+ * Rate limiter service for Brawlhalla API requests.
  *
- * Enforces two limits:
+ * Enforces the hard limits from the Brawlhalla API:
  * - Maximum 10 requests per second (burst limit)
  * - Maximum 2000 requests per 15 minutes (sustained limit)
  *
- * Capacity allocation:
- * - Workers: ~70% (1400 requests per 15 min, ~1.56 req/sec average, max 7/sec burst)
- * - Frontend: ~30% (600 requests per 15 min, ~0.67 req/sec average, max 10/sec burst)
- *
- * Workers use a conservative rate limiter to avoid consuming all capacity.
- * Frontend requests get priority access to remaining capacity.
+ * Note: Workers have their own rate limiter in the workers app.
+ * This rate limiter only controls direct calls to the external Brawlhalla API.
  */
 export class BrawlhallaRateLimiter extends Effect.Service<BrawlhallaRateLimiter>()(
   "@dair/services/BrawlhallaRateLimiter",
   {
     effect: Effect.scoped(
       Effect.gen(function* () {
-        // Global rate limiters that apply to all requests
-        // These enforce the hard limits from the API provider
+        // Rate limiters enforcing the hard limits from the API provider
         const perSecondLimiter = yield* RateLimiter.make({
           limit: 10,
           interval: Duration.seconds(1),
@@ -62,65 +46,37 @@ export class BrawlhallaRateLimiter extends Effect.Service<BrawlhallaRateLimiter>
           limit: 2000,
           interval: Duration.minutes(15),
         })
-        // Worker-specific rate limiter (conservative to leave capacity for frontend)
-        // ~70% of capacity: 1400 requests per 15 min = ~1.56 req/sec average
-        // Using 1.5 req/sec sustained with burst capability
-        const workerPerSecondLimiter = yield* RateLimiter.make({
-          limit: 7, // Max burst for workers (leaving 3/sec for frontend)
-          interval: Duration.seconds(1),
-        })
-        const workerPer15MinLimiter = yield* RateLimiter.make({
-          limit: 1400, // ~70% of total capacity
-          interval: Duration.minutes(15),
-        })
+
         // Track request counts for status reporting
-        // Note: These are approximate since Effect's RateLimiter doesn't expose exact counts
-        // We'll estimate based on the token bucket algorithm
-        const requestCounts = {
-          globalPerSecond: 0,
-          globalPer15Min: 0,
-          workerPerSecond: 0,
-          workerPer15Min: 0,
-        }
-        const lastReset = {
-          globalPerSecond: Date.now(),
-          globalPer15Min: Date.now(),
-          workerPerSecond: Date.now(),
-          workerPer15Min: Date.now(),
-        }
+        let perSecondCount = 0
+        let per15MinCount = 0
+        let lastPerSecondReset = Date.now()
+        let lastPer15MinReset = Date.now()
+
         /**
-         * Apply both rate limiters sequentially and track usage.
-         * Both limiters must have available tokens before the effect executes.
-         * The effect executes only once after both checks pass.
+         * Apply both rate limiters and track usage.
          */
-        const applyDualLimits = <A, E, R>(
-          effect: Effect.Effect<A, E, R>,
-          perSecond: RateLimiter.RateLimiter,
-          per15Min: RateLimiter.RateLimiter,
-          counters: {
-            perSecond: keyof typeof requestCounts
-            per15Min: keyof typeof requestCounts
-          },
-        ) => {
-          // Track request before applying limiters
+        const applyRateLimit = <A, E, R>(effect: Effect.Effect<A, E, R>) => {
           const now = Date.now()
-          requestCounts[counters.perSecond]++
-          requestCounts[counters.per15Min]++
-          // Reset counters if interval has passed (approximate)
-          const perSecondInterval = Duration.toMillis(Duration.seconds(1))
-          if (now - lastReset[counters.perSecond] >= perSecondInterval) {
-            requestCounts[counters.perSecond] = 1
-            lastReset[counters.perSecond] = now
+
+          // Update per-second counter
+          if (now - lastPerSecondReset >= 1000) {
+            perSecondCount = 0
+            lastPerSecondReset = now
           }
-          const per15MinInterval = Duration.toMillis(Duration.minutes(15))
-          if (now - lastReset[counters.per15Min] >= per15MinInterval) {
-            requestCounts[counters.per15Min] = 1
-            lastReset[counters.per15Min] = now
+          perSecondCount++
+
+          // Update per-15-min counter
+          if (now - lastPer15MinReset >= 900000) {
+            per15MinCount = 0
+            lastPer15MinReset = now
           }
-          // Apply both limiters: per-second limiter wraps per-15-min limiter
-          // This ensures both tokens are acquired before execution
-          return perSecond(per15Min(effect))
+          per15MinCount++
+
+          // Apply both limiters: per-second wraps per-15-min
+          return perSecondLimiter(per15MinLimiter(effect))
         }
+
         /**
          * Calculate available tokens based on token bucket algorithm
          */
@@ -136,110 +92,51 @@ export class BrawlhallaRateLimiter extends Effect.Service<BrawlhallaRateLimiter>
           const available = Math.min(limit, tokensRefilled - used + limit)
           return Math.max(0, available)
         }
+
         /**
-         * Get status of all rate limiters
+         * Get current status of rate limiters
          */
-        const getStatus = (): BrawlhallaRateLimiterStatus => {
-          const perSecondIntervalMs = Duration.toMillis(Duration.seconds(1))
-          const per15MinIntervalMs = Duration.toMillis(Duration.minutes(15))
-          const globalPerSecondAvailable = calculateAvailableTokens(
+        const getStatus = (): RateLimiterStatus => {
+          const perSecondAvailable = calculateAvailableTokens(
             10,
-            perSecondIntervalMs,
-            requestCounts.globalPerSecond,
-            lastReset.globalPerSecond,
+            1000,
+            perSecondCount,
+            lastPerSecondReset,
           )
-          const globalPer15MinAvailable = calculateAvailableTokens(
+          const per15MinAvailable = calculateAvailableTokens(
             2000,
-            per15MinIntervalMs,
-            requestCounts.globalPer15Min,
-            lastReset.globalPer15Min,
+            900000,
+            per15MinCount,
+            lastPer15MinReset,
           )
-          const workerPerSecondAvailable = calculateAvailableTokens(
-            7,
-            perSecondIntervalMs,
-            requestCounts.workerPerSecond,
-            lastReset.workerPerSecond,
-          )
-          const workerPer15MinAvailable = calculateAvailableTokens(
-            1400,
-            per15MinIntervalMs,
-            requestCounts.workerPer15Min,
-            lastReset.workerPer15Min,
-          )
+
           return {
-            globalPerSecond: {
-              config: {
-                limit: 10,
-                intervalSeconds: 1,
-              },
-              availableTokens: globalPerSecondAvailable,
-              maxCapacity: 10,
-              usagePercent: Math.round(
-                ((10 - globalPerSecondAvailable) / 10) * 100,
-              ),
+            perSecond: {
+              limit: 10,
+              intervalSeconds: 1,
+              availableTokens: perSecondAvailable,
+              usagePercent: Math.round(((10 - perSecondAvailable) / 10) * 100),
             },
-            globalPer15Min: {
-              config: {
-                limit: 2000,
-                intervalSeconds: 900, // 15 minutes
-              },
-              availableTokens: globalPer15MinAvailable,
-              maxCapacity: 2000,
+            per15Min: {
+              limit: 2000,
+              intervalSeconds: 900,
+              availableTokens: per15MinAvailable,
               usagePercent: Math.round(
-                ((2000 - globalPer15MinAvailable) / 2000) * 100,
-              ),
-            },
-            workerPerSecond: {
-              config: {
-                limit: 7,
-                intervalSeconds: 1,
-              },
-              availableTokens: workerPerSecondAvailable,
-              maxCapacity: 7,
-              usagePercent: Math.round(
-                ((7 - workerPerSecondAvailable) / 7) * 100,
-              ),
-            },
-            workerPer15Min: {
-              config: {
-                limit: 1400,
-                intervalSeconds: 900, // 15 minutes
-              },
-              availableTokens: workerPer15MinAvailable,
-              maxCapacity: 1400,
-              usagePercent: Math.round(
-                ((1400 - workerPer15MinAvailable) / 1400) * 100,
+                ((2000 - per15MinAvailable) / 2000) * 100,
               ),
             },
             timestamp: new Date(),
           }
         }
+
         return {
           /**
-           * Rate limit a worker request.
-           * Uses conservative limits to reserve capacity for frontend.
+           * Rate limit an API request.
+           * Enforces both per-second and per-15-minute limits.
            */
-          limitWorker: <A, E, R>(effect: Effect.Effect<A, E, R>) =>
-            applyDualLimits(
-              effect,
-              workerPerSecondLimiter,
-              workerPer15MinLimiter,
-              {
-                perSecond: "workerPerSecond",
-                per15Min: "workerPer15Min",
-              },
-            ),
+          limit: applyRateLimit,
           /**
-           * Rate limit a frontend API request.
-           * Uses global limits with priority access to remaining capacity.
-           */
-          limitFrontend: <A, E, R>(effect: Effect.Effect<A, E, R>) =>
-            applyDualLimits(effect, perSecondLimiter, per15MinLimiter, {
-              perSecond: "globalPerSecond",
-              per15Min: "globalPer15Min",
-            }),
-          /**
-           * Get current status of all rate limiters
+           * Get current status of rate limiters
            */
           getStatus: Effect.sync(getStatus),
         }
@@ -249,35 +146,3 @@ export class BrawlhallaRateLimiter extends Effect.Service<BrawlhallaRateLimiter>
 ) {
   static readonly layer = this.Default
 }
-
-/**
- * Rate limiter presets for workers (backward compatibility)
- * These are now just wrappers around the shared rate limiter
- */
-export const rateLimiterPresets = {
-  /**
-   * Conservative: Uses worker rate limits (1.5 req/sec average, 7/sec max burst)
-   */
-  conservative: "worker" as const,
-  /**
-   * Standard: Uses worker rate limits (1.5 req/sec average, 7/sec max burst)
-   */
-  standard: "worker" as const,
-  /**
-   * Fast: Uses worker rate limits (1.5 req/sec average, 7/sec max burst)
-   * Note: All worker presets use the same limits now to ensure capacity reservation
-   */
-  fast: "worker" as const,
-} as const
-
-/**
- * Create a rate limiter function for workers (backward compatibility)
- * @deprecated Use BrawlhallaRateLimiter.limitWorker directly
- */
-export const makeRateLimiter = (
-  _preset: (typeof rateLimiterPresets)[keyof typeof rateLimiterPresets],
-) =>
-  Effect.gen(function* () {
-    const rateLimiter = yield* BrawlhallaRateLimiter
-    return rateLimiter.limitWorker
-  })
