@@ -47,6 +47,14 @@ import {
   GetRankedQueuesRotatingResponse,
 } from "./routes/v1/brawlhalla/get-ranked-queues"
 import { GetTokensResponse } from "./routes/v1/health/get-tokens"
+import { SearchGuildResponse } from "./routes/v1/brawlhalla/search-guild"
+import {
+  GetPowerRankingsResponse,
+  PowerRankingsGameMode,
+  PowerRankingsOrderBy,
+  PowerRankingsRegion,
+} from "./routes/v1/brawlhalla/get-power-rankings"
+import { GetLocationResponse } from "./routes/v1/brawlhalla/get-location"
 
 const idParam = HttpApiSchema.param("id", Schema.NumberFromString)
 const pageParam = HttpApiSchema.param(
@@ -91,6 +99,25 @@ class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
       .addSuccess(GetClanByIdResponse)
       .addError(NotFound)
       .addError(TooManyRequests)
+      .addError(InternalServerError),
+  )
+  .add(
+    HttpApiEndpoint.get("search-guild")`/guilds/search`
+      .setUrlParams(
+        Schema.Struct({
+          page: Schema.NumberFromString.pipe(
+            Schema.greaterThanOrEqualTo(1),
+            Schema.optionalWith({ default: () => 1 }),
+          ),
+          limit: Schema.NumberFromString.pipe(
+            Schema.greaterThanOrEqualTo(1),
+            Schema.lessThanOrEqualTo(100),
+            Schema.optionalWith({ default: () => 50 }),
+          ),
+          name: Schema.String.pipe(Schema.optional),
+        }),
+      )
+      .addSuccess(SearchGuildResponse)
       .addError(InternalServerError),
   )
   .add(
@@ -155,21 +182,21 @@ class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
   .add(
     HttpApiEndpoint.get(
       "get-global-player-rankings",
-    )`/rankings/global/players/${GlobalPlayerRankingsSortByParam}`
+    )`/rankings/players/${GlobalPlayerRankingsSortByParam}`
       .addSuccess(GetGlobalPlayerRankingsResponse)
       .addError(InternalServerError),
   )
   .add(
     HttpApiEndpoint.get(
       "get-global-legend-rankings",
-    )`/rankings/global/legends/${LegendIdParam}/${GlobalLegendRankingsSortByParam}`
+    )`/rankings/legends/${LegendIdParam}/${GlobalLegendRankingsSortByParam}`
       .addSuccess(GetGlobalLegendRankingsResponse)
       .addError(InternalServerError),
   )
   .add(
     HttpApiEndpoint.get(
       "get-global-weapon-rankings",
-    )`/rankings/global/weapons/${WeaponNameParam}/${GlobalWeaponRankingsSortByParam}`
+    )`/rankings/weapons/${WeaponNameParam}/${GlobalWeaponRankingsSortByParam}`
       .addSuccess(GetGlobalWeaponRankingsResponse)
       .addError(InternalServerError),
   )
@@ -185,6 +212,26 @@ class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
       .addSuccess(GetWeeklyRotationResponse)
       .addError(NotFound)
       .addError(TooManyRequests)
+      .addError(InternalServerError),
+  )
+  .add(
+    HttpApiEndpoint.get(
+      "get-power-rankings",
+    )`/rankings/power/${HttpApiSchema.param("gameMode", PowerRankingsGameMode)}/${HttpApiSchema.param("region", PowerRankingsRegion)}/${pageParam}`
+      .setUrlParams(
+        Schema.Struct({
+          orderBy: PowerRankingsOrderBy.pipe(
+            Schema.optionalWith({ default: () => "powerRanking" as const }),
+          ),
+        }),
+      )
+      .addSuccess(GetPowerRankingsResponse)
+      .addError(TooManyRequests)
+      .addError(InternalServerError),
+  )
+  .add(
+    HttpApiEndpoint.get("get-location")`/location`
+      .addSuccess(GetLocationResponse)
       .addError(InternalServerError),
   ) {}
 

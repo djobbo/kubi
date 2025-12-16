@@ -17,7 +17,7 @@ import {
   ranked2v2HistoryTable,
   rankedRotatingHistoryTable,
 } from "@dair/db"
-import { and, eq, desc, like, or, lt, max, gte } from "drizzle-orm"
+import { and, eq, desc, like, or, lt, max, gte, count } from "drizzle-orm"
 import { Effect, Layer } from "effect"
 import { BadRequest } from "@dair/api-contract/src/shared/errors"
 import type { BrawlhallaApiPlayerStats } from "../brawlhalla-api/schema/player-stats"
@@ -890,6 +890,74 @@ export class Archive extends Effect.Service<Archive>()(
             })
             .sort((a, b) => b.rating - a.rating)
             .slice(0, limit)
+        }),
+
+        /**
+         * Search guilds by name with pagination.
+         * Uses the clan history table for efficient lookups.
+         */
+        searchGuilds: Effect.fn("searchGuilds")(function* ({
+          page = 1,
+          limit = 50,
+          name,
+        }: {
+          page?: number
+          limit?: number
+          name?: string | undefined
+        }) {
+          // Get latest record per clan
+          const latestPerIdSubquery = db.$with("latest_per_id").as(
+            db
+              .select({
+                clanId: clanHistoryTable.clanId,
+                maxDate: max(clanHistoryTable.recordedAt).as("max_date"),
+              })
+              .from(clanHistoryTable)
+              .where(
+                name
+                  ? like(clanHistoryTable.name, `${name.toLowerCase()}%`)
+                  : undefined,
+              )
+              .groupBy(clanHistoryTable.clanId),
+          )
+
+          // Count total matching clans
+          const totalResult = yield* db
+            .with(latestPerIdSubquery)
+            .select({ count: count() })
+            .from(latestPerIdSubquery)
+
+          // Get paginated results
+          const results = yield* db
+            .with(latestPerIdSubquery)
+            .select({
+              id: clanHistoryTable.id,
+              clanId: clanHistoryTable.clanId,
+              name: clanHistoryTable.name,
+              xp: clanHistoryTable.xp,
+              membersCount: clanHistoryTable.membersCount,
+              createdDate: clanHistoryTable.createdDate,
+              recordedAt: clanHistoryTable.recordedAt,
+            })
+            .from(clanHistoryTable)
+            .innerJoin(
+              latestPerIdSubquery,
+              and(
+                eq(clanHistoryTable.clanId, latestPerIdSubquery.clanId),
+                eq(clanHistoryTable.recordedAt, latestPerIdSubquery.maxDate),
+              ),
+            )
+            .orderBy(desc(clanHistoryTable.xp))
+            .limit(limit)
+            .offset((page - 1) * limit)
+
+          return {
+            clans: results,
+            total: totalResult[0]?.count ?? null,
+            page,
+            limit,
+            name,
+          }
         }),
       }
     }),

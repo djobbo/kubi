@@ -4,6 +4,7 @@
   "dependencies": {
     "@dair/api-contract": "workspace:*",
     "@dair/brawlhalla-api": "workspace:*",
+    "@dair/brawlhalla-servers": "workspace:*",
     "@dair/common": "workspace:*",
     "@dair/db": "workspace:*",
     "@effect/experimental": "^0.57.11",

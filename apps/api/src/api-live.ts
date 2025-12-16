@@ -1,4 +1,4 @@
-import { HttpApiBuilder } from "@effect/platform"
+import { HttpApiBuilder, HttpServerRequest } from "@effect/platform"
 import { Effect, Layer, flow } from "effect"
 
 import { Api } from "@dair/api-contract"
@@ -30,6 +30,9 @@ import {
   getRankedRotatingQueue,
 } from "./routes/v1/brawlhalla/get-ranked-queues"
 import { getTokens } from "./routes/v1/health/get-tokens"
+import { searchGuild } from "./routes/v1/brawlhalla/search-guild"
+import { getPowerRankings } from "./routes/v1/brawlhalla/get-power-rankings"
+import { getLocation } from "./routes/v1/brawlhalla/get-location"
 
 const HealthLive = HttpApiBuilder.group(Api, "health", (handlers) =>
   handlers
@@ -293,6 +296,59 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
           }),
         ),
       ),
+    )
+    .handle(
+      "search-guild",
+      Effect.fn("search-guild")(
+        function* ({ urlParams }) {
+          return yield* searchGuild({
+            page: urlParams.page,
+            limit: urlParams.limit,
+            name: urlParams.name,
+          })
+        },
+        flow(
+          Effect.tapError(Effect.logError),
+          Effect.catchTags({
+            SqlError: () => Effect.fail(new InternalServerError()),
+          }),
+        ),
+      ),
+    )
+    .handle(
+      "get-power-rankings",
+      Effect.fn("get-power-rankings")(
+        function* ({ path, urlParams }) {
+          return yield* getPowerRankings({
+            region: path.region,
+            page: path.page,
+            orderBy: urlParams.orderBy,
+            gameMode: path.gameMode,
+          })
+        },
+        flow(
+          Effect.tapError(Effect.logError),
+          Effect.catchTags({
+            BrawltoolsApiError: () => Effect.fail(new InternalServerError()),
+            CacheOperationError: () => Effect.fail(new InternalServerError()),
+            CacheSerializationError: () =>
+              Effect.fail(new InternalServerError()),
+          }),
+        ),
+      ),
+    )
+    .handle(
+      "get-location",
+      Effect.fn("get-location")(function* () {
+        // Get client IP from headers (x-forwarded-for for proxied requests)
+        const request = yield* HttpServerRequest.HttpServerRequest
+        const headers = request.headers
+        const forwardedFor = headers["x-forwarded-for"]
+        const ip = forwardedFor
+          ? forwardedFor.split(",")[0]?.trim()
+          : (headers["x-real-ip"] ?? null)
+        return yield* getLocation(ip ?? null)
+      }),
     ),
 )
 

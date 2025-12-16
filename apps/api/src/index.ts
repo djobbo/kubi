@@ -10,6 +10,7 @@ import { ApiServerConfig } from "./services/config/api-server-config"
 import { Database } from "./services/db"
 import * as Docs from "./services/docs"
 import { BrawlhallaApi } from "./services/brawlhalla-api"
+import { BrawltoolsApi } from "./services/brawltools-api"
 import { Fetcher } from "./services/fetcher"
 import { responseCache } from "./services/middleware/response-cache"
 import { ObservabilityLive } from "./services/observability"
@@ -22,6 +23,7 @@ import { BrawlhallaRateLimiter } from "@/services/rate-limiter"
 // BrawlhallaApi includes its own rate limiter layer
 const SharedDependencies = Layer.mergeAll(
   BrawlhallaApi.layer,
+  BrawltoolsApi.layer,
   Archive.layer,
   Authorization.layer,
   Cache.layer,
@@ -80,8 +82,8 @@ const leaderboardCrawlerWorker = scheduleLeaderboardCrawler.pipe(
 
 const server = Effect.gen(function* () {
   // Fork the rankings and ranked queues crawlers to run in the background
-  yield* Effect.fork(rankingsCrawlerWorker)
-  yield* Effect.fork(leaderboardCrawlerWorker)
+  // yield* Effect.fork(rankingsCrawlerWorker)
+  // yield* Effect.fork(leaderboardCrawlerWorker)
 
   // Launch the HTTP server (this blocks forever)
   return yield* Layer.launch(ServerLive)
