@@ -1,0 +1,250 @@
+---
+description: API architecture patterns - caching, rate limiting, workers, and service composition
+globs: "apps/api/**/*.ts"
+alwaysApply: true
+---
+
+# API Architecture
+
+The API uses a multi-tier caching and rate limiting system to minimize external API usage.
+
+## Request Flow
+
+```
+Client Request
+      │
+      ▼
+┌─────────────┐     Cache Hit     ┌─────────────┐
+│  Public API │ ──────────────────│    Redis    │
+│   Handler   │                   │   (Cache)   │
+└──────┬──────┘                   └─────────────┘
+       │ Cache Miss                      ▲
+       ▼                                 │
+┌─────────────┐                          │
+│ Rate Limiter│                          │
+│ (Frontend)  │                          │
+└──────┬──────┘                          │
+       │                                 │
+       ▼                                 │
+┌─────────────┐   Background     ┌───────┴───────┐
+│ External API│   Revalidation   │   Store in    │
+│ (Brawlhalla)│ ────────────────▶│     Cache     │
+└──────┬──────┘                  └───────────────┘
+       │
+       ▼
+┌─────────────┐
+│ PostgreSQL  │  (Historical data)
+│  (Archive)  │
+└─────────────┘
+```
+
+## Rate Limiting
+
+The external API has hard limits: **10 req/sec, 2000 req/15min**
+
+Capacity is split between frontend (user requests) and workers (background jobs):
+
+| Consumer | Per Second | Per 15 Min | Use Case |
+| -------- | ---------- | ---------- | -------- |
+| Frontend | 10 (max)   | 600 (30%)  | User requests (priority) |
+| Workers  | 7 (max)    | 1400 (70%) | Background crawlers |
+
+### Using the Rate Limiter
+
+```typescript
+const rateLimiter = yield* BrawlhallaRateLimiter
+
+// For API route handlers (user requests)
+yield* rateLimiter.limitFrontend(apiCall)
+
+// For background workers
+yield* rateLimiter.limitWorker(apiCall)
+
+// Check status (for /health/tokens endpoint)
+const status = yield* rateLimiter.getStatus
+```
+
+## Caching Strategy: Stale-While-Revalidate
+
+**Users never wait on rate limiting if cache exists.**
+
+1. **Fresh cache exists**: Return immediately
+2. **Stale cache exists**: Return immediately + trigger background revalidation
+3. **No cache**: Fetch with rate limiting, cache result
+
+### Fetcher Service Usage
+
+```typescript
+const fetcher = yield* Fetcher
+
+// For workers (direct fetch, no cache-first)
+yield* fetcher.fetchJson(schema, {
+  method: "GET",
+  url,
+  cacheName: "my-cache-key",
+  cacheMaxAge: 300,  // 5 min
+})
+
+// For frontend (cache-first with background revalidation)
+yield* fetcher.fetchJsonCacheFirst(schema, {
+  method: "GET",
+  url,
+  cacheName: "my-cache-key",
+  rateLimitedFetch: rateLimiter.limitFrontend,
+  staleMaxAge: 3600,  // 1 hour max stale
+})
+```
+
+## BrawlhallaApi Service
+
+Two method sets with different rate limiting:
+
+```typescript
+const brawlhallaApi = yield* BrawlhallaApi
+
+// Frontend methods (cache-first, 30% rate limit capacity)
+brawlhallaApi.getPlayerStatsById(playerId)
+brawlhallaApi.getPlayerRankedById(playerId)
+brawlhallaApi.getRankings1v1(region, page, name?)
+brawlhallaApi.getRankings2v2(region, page)
+brawlhallaApi.getRankingsRotating(region, page)
+brawlhallaApi.getClanById(clanId)
+brawlhallaApi.getAllLegendsData()
+
+// Worker methods (direct fetch, 70% rate limit capacity)
+brawlhallaApi.worker.getPlayerStatsById(playerId)
+brawlhallaApi.worker.getRankings1v1(region, page)
+// ... same methods under .worker namespace
+```
+
+## Background Workers
+
+Workers run as forked fibers alongside the HTTP server:
+
+```typescript
+// apps/api/src/index.ts
+const server = Effect.gen(function* () {
+  // Fork workers to run in background
+  yield* Effect.fork(rankingsCrawlerWorker)
+  yield* Effect.fork(leaderboardCrawlerWorker)
+  
+  // Launch HTTP server (blocks)
+  return yield* Layer.launch(ServerLive)
+})
+```
+
+### Leaderboard Crawler (every 10 minutes)
+
+- Lightweight: only fetches ranking pages
+- Stores in `ranked_*_history` tables
+- Powers "who's playing now" features
+
+```typescript
+// apps/api/src/workers/leaderboard-crawler.ts
+export const scheduleLeaderboardCrawler = createScheduledCrawler(
+  "leaderboard crawler",
+  runLeaderboardCrawler,
+  schedulePresets.frequent,  // 10 min
+)
+```
+
+### Rankings Crawler (every 6 hours)
+
+- Heavy: fetches full player stats for each player
+- Stores in `player_history`, `player_legend_history`, `player_weapon_history`
+- Powers historical tracking & global rankings
+
+```typescript
+// apps/api/src/workers/rankings-crawler.ts
+export const scheduleRankingsCrawler = createScheduledCrawler(
+  "rankings crawler",
+  runRankingsCrawler,
+  schedulePresets.sixHours,
+)
+```
+
+## Archive Service
+
+Stores historical data in PostgreSQL:
+
+```typescript
+const archive = yield* Archive
+
+// Player history (when fetching player data)
+yield* archive.addPlayerHistory(playerData, rawStats, rawRanked)
+yield* archive.addAliases([{ playerId, alias, public: true }])
+
+// Ranked history (from leaderboard crawler)
+yield* archive.addRanked1v1History(entries)
+yield* archive.addRanked2v2History(entries)
+
+// Queries
+yield* archive.searchPlayers(name, cursor, pageSize)
+yield* archive.getGlobalPlayerRankings(sortField, offset, limit)
+yield* archive.getRecentlyActiveRanked1v1Players({ region, windowMinutes: 15 })
+```
+
+## API Contract Pattern
+
+Contracts are defined in `packages/api-contract/`:
+
+```typescript
+// packages/api-contract/src/index.ts
+class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
+  .add(
+    HttpApiEndpoint.get("get-player-by-id")`/players/${idParam}`
+      .addSuccess(GetPlayerByIdResponse)
+      .addError(NotFound)
+      .addError(TooManyRequests)
+      .addError(InternalServerError),
+  ) {}
+
+export const Api = HttpApi.make("Api")
+  .add(BrawlhallaGroup.prefix("/brawlhalla"))
+  .prefix("/v1")
+```
+
+Then implemented in `apps/api/src/api-live.ts`:
+
+```typescript
+const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
+  handlers.handle(
+    "get-player-by-id",
+    Effect.fn("get-player-by-id")(
+      function* ({ path }) {
+        return yield* getPlayerById(path.id)
+      },
+      flow(
+        Effect.tapError(Effect.logError),
+        Effect.catchTags({
+          BrawlhallaPlayerNotFound: () => Effect.fail(new NotFound()),
+          BrawlhallaRateLimitError: () => Effect.fail(new TooManyRequests()),
+          // ...
+        }),
+      ),
+    ),
+  ),
+)
+```
+
+## Service Dependencies
+
+```
+ApiLive
+├── BrawlhallaLive
+│   └── requires: BrawlhallaApi, Archive
+├── AuthLive
+│   └── requires: Authorization, Database
+└── HealthLive
+    └── requires: BrawlhallaRateLimiter
+
+BrawlhallaApi.layer
+├── Fetcher.layer
+│   ├── FetchHttpClient.layer
+│   └── Cache.layer (Redis)
+└── BrawlhallaRateLimiter.layer
+
+Archive.layer
+└── Database.layer
+    └── DatabaseConfig.layer
+```

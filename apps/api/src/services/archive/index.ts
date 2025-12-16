@@ -5,13 +5,19 @@ import {
   type NewPlayerHistory,
   type NewPlayerWeaponHistory,
   type NewPlayerLegendHistory,
+  type NewRanked1v1History,
+  type NewRanked2v2History,
+  type NewRankedRotatingHistory,
   clanHistoryTable,
   playerAliasesTable,
   playerHistoryTable,
   playerLegendHistoryTable,
   playerWeaponHistoryTable,
+  ranked1v1HistoryTable,
+  ranked2v2HistoryTable,
+  rankedRotatingHistoryTable,
 } from "@dair/db"
-import { and, eq, desc, like, or, lt, max } from "drizzle-orm"
+import { and, eq, desc, like, or, lt, max, gte } from "drizzle-orm"
 import { Effect, Layer } from "effect"
 import { BadRequest } from "@dair/api-contract/src/shared/errors"
 import type { BrawlhallaApiPlayerStats } from "../brawlhalla-api/schema/player-stats"
@@ -24,6 +30,8 @@ import type { SearchPlayerCursor } from "@dair/api-contract/src/routes/v1/brawlh
 import type { GlobalPlayerRankingsSortByParam } from "@dair/api-contract/src/routes/v1/brawlhalla/get-global-player-rankings"
 import { isNotNull } from "drizzle-orm"
 import type { GlobalLegendRankingsSortByParam } from "@dair/api-contract/src/routes/v1/brawlhalla/get-global-legend-rankings"
+import type { AnyRegion } from "@dair/api-contract/src/shared/region"
+import type { GameDelta } from "@dair/api-contract/src/routes/v1/brawlhalla/get-ranked-queues"
 
 const MIN_ALIAS_SEARCH_LENGTH = 3
 
@@ -478,6 +486,411 @@ export class Archive extends Effect.Service<Archive>()(
             )
           },
         ),
+        // ===== Ranked History Methods =====
+
+        /**
+         * Add 1v1 ranked history entries from leaderboard data
+         */
+        addRanked1v1History: Effect.fn("addRanked1v1History")(function* (
+          entries: NewRanked1v1History[],
+        ) {
+          if (entries.length === 0) return []
+          return yield* db
+            .insert(ranked1v1HistoryTable)
+            .values(entries)
+            .returning({ id: ranked1v1HistoryTable.id })
+        }),
+
+        /**
+         * Add 2v2 ranked history entries from leaderboard data
+         */
+        addRanked2v2History: Effect.fn("addRanked2v2History")(function* (
+          entries: NewRanked2v2History[],
+        ) {
+          if (entries.length === 0) return []
+          return yield* db
+            .insert(ranked2v2HistoryTable)
+            .values(entries)
+            .returning({ id: ranked2v2HistoryTable.id })
+        }),
+
+        /**
+         * Add rotating ranked history entries from leaderboard data
+         */
+        addRankedRotatingHistory: Effect.fn("addRankedRotatingHistory")(
+          function* (entries: NewRankedRotatingHistory[]) {
+            if (entries.length === 0) return []
+            return yield* db
+              .insert(rankedRotatingHistoryTable)
+              .values(entries)
+              .returning({ id: rankedRotatingHistoryTable.id })
+          },
+        ),
+
+        /**
+         * Get players whose game count changed in the last N minutes.
+         * Uses the dedicated ranked history tables for efficient lookups.
+         * Returns players sorted by rating.
+         */
+        getRecentlyActiveRanked1v1Players: Effect.fn(
+          "getRecentlyActiveRanked1v1Players",
+        )(function* ({
+          windowMinutes = 15,
+          limit = 50,
+          region,
+        }: {
+          windowMinutes?: number
+          limit?: number
+          region: typeof AnyRegion.Type
+        }) {
+          const now = new Date()
+          const windowStart = new Date(now.getTime() - windowMinutes * 60000)
+
+          const table = ranked1v1HistoryTable
+          const latestInWindow = db.$with("latest_in_window").as(
+            db
+              .select({
+                playerId: table.playerId,
+                maxDate: max(table.recordedAt).as("max_date"),
+              })
+              .from(table)
+              .where(
+                and(
+                  gte(table.recordedAt, windowStart),
+                  eq(table.region, region),
+                ),
+              )
+              .groupBy(table.playerId),
+          )
+
+          const latestRecords = yield* db
+            .with(latestInWindow)
+            .select({
+              playerId: table.playerId,
+              name: table.name,
+              recordedAt: table.recordedAt,
+              games: table.games,
+              rating: table.rating,
+              peakRating: table.peakRating,
+              wins: table.wins,
+              tier: table.tier,
+              region: table.region,
+            })
+            .from(table)
+            .innerJoin(
+              latestInWindow,
+              and(
+                eq(table.playerId, latestInWindow.playerId),
+                eq(table.recordedAt, latestInWindow.maxDate),
+                eq(table.region, region),
+              ),
+            )
+
+          if (latestRecords.length === 0) return []
+
+          const previousRecordsQuery = yield* Effect.forEach(
+            latestRecords,
+            (latest) =>
+              db
+                .select({
+                  playerId: table.playerId,
+                  games: table.games,
+                  wins: table.wins,
+                  rating: table.rating,
+                })
+                .from(table)
+                .where(
+                  and(
+                    eq(table.playerId, latest.playerId),
+                    lt(table.recordedAt, latest.recordedAt),
+                    eq(table.region, region),
+                  ),
+                )
+                .orderBy(desc(table.recordedAt))
+                .limit(1),
+            { concurrency: 10 },
+          )
+
+          const previousRankMap = new Map<number, typeof GameDelta.Type>()
+          for (const [index, result] of previousRecordsQuery.entries()) {
+            const latestPlayer = latestRecords[index]
+            if (result[0] && latestPlayer) {
+              previousRankMap.set(latestPlayer.playerId, result[0])
+            }
+          }
+
+          return latestRecords
+            .filter((player) => {
+              const previousRank = previousRankMap.get(player.playerId)
+              return (
+                previousRank !== undefined && player.games > previousRank.games
+              )
+            })
+            .map((player) => {
+              const previousRank = previousRankMap.get(player.playerId)
+
+              return {
+                playerId: player.playerId,
+                name: player.name,
+                rating: player.rating,
+                peakRating: player.peakRating,
+                games: player.games,
+                wins: player.wins,
+                tier: player.tier,
+                region: player.region,
+                gamesDelta: {
+                  games: player.games - (previousRank?.games ?? 0),
+                  wins: player.wins - (previousRank?.wins ?? 0),
+                  rating: player.rating - (previousRank?.rating ?? 0),
+                },
+                lastSeenAt: player.recordedAt,
+              }
+            })
+            .sort((a, b) => b.rating - a.rating)
+            .slice(0, limit)
+        }),
+        getRecentlyActiveRanked2v2Players: Effect.fn(
+          "getRecentlyActiveRanked2v2Players",
+        )(function* ({
+          windowMinutes = 15,
+          limit = 50,
+          region,
+        }: {
+          windowMinutes?: number
+          limit?: number
+          region: typeof AnyRegion.Type
+        }) {
+          const now = new Date()
+          const windowStart = new Date(now.getTime() - windowMinutes * 60000)
+
+          const table = ranked2v2HistoryTable
+          const latestInWindow = db.$with("latest_in_window").as(
+            db
+              .select({
+                playerIdOne: table.playerIdOne,
+                playerIdTwo: table.playerIdTwo,
+                maxDate: max(table.recordedAt).as("max_date"),
+              })
+              .from(table)
+              .where(
+                and(
+                  gte(table.recordedAt, windowStart),
+                  eq(table.region, region),
+                ),
+              )
+              .groupBy(table.playerIdOne, table.playerIdTwo),
+          )
+
+          const latestRecords = yield* db
+            .with(latestInWindow)
+            .select({
+              playerIdOne: table.playerIdOne,
+              playerIdTwo: table.playerIdTwo,
+              playerNameOne: table.playerNameOne,
+              playerNameTwo: table.playerNameTwo,
+              recordedAt: table.recordedAt,
+              games: table.games,
+              rating: table.rating,
+              peakRating: table.peakRating,
+              wins: table.wins,
+              tier: table.tier,
+              region: table.region,
+            })
+            .from(table)
+            .innerJoin(
+              latestInWindow,
+              and(
+                eq(table.playerIdOne, latestInWindow.playerIdOne),
+                eq(table.playerIdTwo, latestInWindow.playerIdTwo),
+                eq(table.recordedAt, latestInWindow.maxDate),
+                eq(table.region, region),
+              ),
+            )
+
+          if (latestRecords.length === 0) return []
+
+          const previousRecordsQuery = yield* Effect.forEach(
+            latestRecords,
+            (latest) =>
+              db
+                .select({
+                  playerIdOne: table.playerIdOne,
+                  playerIdTwo: table.playerIdTwo,
+                  games: table.games,
+                  wins: table.wins,
+                  rating: table.rating,
+                })
+                .from(table)
+                .where(
+                  and(
+                    eq(table.playerIdOne, latest.playerIdOne),
+                    eq(table.playerIdTwo, latest.playerIdTwo),
+                    lt(table.recordedAt, latest.recordedAt),
+                    eq(table.region, region),
+                  ),
+                )
+                .orderBy(desc(table.recordedAt))
+                .limit(1),
+            { concurrency: 10 },
+          )
+
+          const previousRankMap = new Map<string, typeof GameDelta.Type>()
+          for (const [index, result] of previousRecordsQuery.entries()) {
+            const latestTeam = latestRecords[index]
+            if (result[0] && latestTeam) {
+              const key = `${latestTeam.playerIdOne}-${latestTeam.playerIdTwo}`
+              previousRankMap.set(key, result[0])
+            }
+          }
+
+          return latestRecords
+            .filter((team) => {
+              const key = `${team.playerIdOne}-${team.playerIdTwo}`
+              const previousRank = previousRankMap.get(key)
+              return (
+                previousRank !== undefined && team.games > previousRank.games
+              )
+            })
+            .map((team) => {
+              const key = `${team.playerIdOne}-${team.playerIdTwo}`
+              const previousRank = previousRankMap.get(key)
+              return {
+                playerIdOne: team.playerIdOne,
+                playerIdTwo: team.playerIdTwo,
+                playerNameOne: team.playerNameOne,
+                playerNameTwo: team.playerNameTwo,
+                rating: team.rating,
+                peakRating: team.peakRating,
+                games: team.games,
+                wins: team.wins,
+                tier: team.tier,
+                region: team.region,
+                gamesDelta: {
+                  games: team.games - (previousRank?.games ?? 0),
+                  wins: team.wins - (previousRank?.wins ?? 0),
+                  rating: team.rating - (previousRank?.rating ?? 0),
+                },
+                lastSeenAt: team.recordedAt,
+              }
+            })
+            .sort((a, b) => b.rating - a.rating)
+            .slice(0, limit)
+        }),
+        getRecentlyActiveRankedRotatingPlayers: Effect.fn(
+          "getRecentlyActiveRankedRotatingPlayers",
+        )(function* ({
+          windowMinutes = 15,
+          limit = 50,
+          region,
+        }: {
+          windowMinutes?: number
+          limit?: number
+          region: typeof AnyRegion.Type
+        }) {
+          const now = new Date()
+          const windowStart = new Date(now.getTime() - windowMinutes * 60000)
+          const table = rankedRotatingHistoryTable
+          const latestInWindow = db.$with("latest_in_window").as(
+            db
+              .select({
+                playerId: table.playerId,
+                maxDate: max(table.recordedAt).as("max_date"),
+              })
+              .from(table)
+              .where(
+                and(
+                  gte(table.recordedAt, windowStart),
+                  eq(table.region, region),
+                ),
+              )
+              .groupBy(table.playerId),
+          )
+
+          const latestRecords = yield* db
+            .with(latestInWindow)
+            .select({
+              playerId: table.playerId,
+              name: table.name,
+              recordedAt: table.recordedAt,
+              games: table.games,
+              rating: table.rating,
+              peakRating: table.peakRating,
+              wins: table.wins,
+              tier: table.tier,
+              region: table.region,
+            })
+            .from(table)
+            .innerJoin(
+              latestInWindow,
+              and(
+                eq(table.playerId, latestInWindow.playerId),
+                eq(table.recordedAt, latestInWindow.maxDate),
+                eq(table.region, region),
+              ),
+            )
+
+          if (latestRecords.length === 0) return []
+
+          const previousRecordsQuery = yield* Effect.forEach(
+            latestRecords,
+            (latest) =>
+              db
+                .select({
+                  playerId: table.playerId,
+                  games: table.games,
+                  wins: table.wins,
+                  rating: table.rating,
+                })
+                .from(table)
+                .where(
+                  and(
+                    eq(table.playerId, latest.playerId),
+                    lt(table.recordedAt, latest.recordedAt),
+                    eq(table.region, region),
+                  ),
+                )
+                .orderBy(desc(table.recordedAt))
+                .limit(1),
+            { concurrency: 10 },
+          )
+
+          const previousRankMap = new Map<number, typeof GameDelta.Type>()
+          for (const [index, result] of previousRecordsQuery.entries()) {
+            const latestPlayer = latestRecords[index]
+            if (result[0] && latestPlayer) {
+              previousRankMap.set(latestPlayer.playerId, result[0])
+            }
+          }
+
+          return latestRecords
+            .filter((player) => {
+              const previousRank = previousRankMap.get(player.playerId)
+              return (
+                previousRank !== undefined && player.games > previousRank.games
+              )
+            })
+            .map((player) => {
+              const previousRank = previousRankMap.get(player.playerId)
+              return {
+                playerId: player.playerId,
+                name: player.name,
+                rating: player.rating,
+                peakRating: player.peakRating,
+                games: player.games,
+                wins: player.wins,
+                tier: player.tier,
+                region: player.region,
+                gamesDelta: {
+                  games: player.games - (previousRank?.games ?? 0),
+                  wins: player.wins - (previousRank?.wins ?? 0),
+                  rating: player.rating - (previousRank?.rating ?? 0),
+                },
+                lastSeenAt: player.recordedAt,
+              }
+            })
+            .sort((a, b) => b.rating - a.rating)
+            .slice(0, limit)
+        }),
       }
     }),
   },

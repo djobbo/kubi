@@ -1,6 +1,6 @@
 import { CleanString } from "@/helpers/clean-string"
 import { NumberFromString } from "@/helpers/number-from-string"
-import { ParseResult, Schema } from "effect"
+import { Schema } from "effect"
 import { BrawlhallaApiRegion } from "./region"
 import { BrawlhallaApiTier } from "./tier"
 
@@ -38,18 +38,21 @@ const RotatingRanked = Schema.Struct({
   region: BrawlhallaApiRegion,
 })
 
-const ApiRotatingRanked = Schema.transformOrFail(
-  Schema.Union(Schema.Array(Schema.Unknown), RotatingRanked),
+const ApiRotatingRanked = Schema.transform(
+  Schema.Union(Schema.Array(Schema.Unknown), Schema.NullOr(RotatingRanked)),
   Schema.NullOr(RotatingRanked),
   {
     strict: true,
     decode: (input) => {
+      if (!input) return null
+
       if (Array.isArray(input)) {
-        return ParseResult.succeed(null)
+        return null
       }
-      return ParseResult.succeed(input)
+
+      return input
     },
-    encode: (input) => ParseResult.succeed(input),
+    encode: (input) => input,
   },
 )
 

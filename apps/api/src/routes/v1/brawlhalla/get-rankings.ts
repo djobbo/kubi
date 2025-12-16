@@ -9,6 +9,9 @@ import type {
   Ranking2v2,
   Rankings1v1,
   Rankings2v2,
+  RankingsRotating,
+  RankingRotating,
+  GetRankingsRotatingResponse,
 } from "@dair/api-contract/src/routes/v1/brawlhalla/get-rankings"
 import { legendsMap } from "@dair/brawlhalla-api/src/constants/legends"
 import { getTeamPlayers } from "@dair/brawlhalla-api/src/helpers/team-players"
@@ -104,6 +107,43 @@ export const getRankings2v2 = (region: typeof AnyRegion.Type, page: number) =>
     })
 
     const response: typeof GetRankings2v2Response.Type = {
+      data: rankingsData,
+      meta: {
+        updated_at: rankings.updatedAt,
+      },
+    }
+
+    return response
+  })
+
+export const getRankingsRotating = (
+  region: typeof AnyRegion.Type,
+  page: number,
+) =>
+  Effect.gen(function* () {
+    // TODO: const session = yield* Authorization.getSession();
+
+    const brawlhallaApi = yield* BrawlhallaApi
+    const rankings = yield* brawlhallaApi.getRankingsRotating(region, page)
+
+    const rankingsData: typeof RankingsRotating.Type = rankings.data.map<
+      typeof RankingRotating.Type
+    >((ranking) => {
+      return {
+        rank: ranking.rank,
+        rating: ranking.rating,
+        tier: ranking.tier,
+        games: ranking.games,
+        wins: ranking.wins,
+        region: ranking.region,
+        peak_rating: ranking.peak_rating,
+        name: ranking.name,
+        id: ranking.brawlhalla_id,
+        slug: getEntitySlug(ranking.brawlhalla_id, ranking.name),
+      }
+    })
+
+    const response: typeof GetRankingsRotatingResponse.Type = {
       data: rankingsData,
       meta: {
         updated_at: rankings.updatedAt,

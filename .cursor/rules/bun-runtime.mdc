@@ -1,0 +1,122 @@
+---
+description: Use Bun instead of Node.js, npm, pnpm, or vite
+globs: "*.ts, *.tsx, *.html, *.css, *.js, *.jsx, package.json"
+alwaysApply: true
+---
+
+# Bun Runtime
+
+This project uses Bun as the JavaScript runtime and package manager.
+
+## Commands
+
+```bash
+# Instead of node/ts-node
+bun <file>
+
+# Instead of npm/yarn/pnpm install
+bun install
+
+# Instead of npm run
+bun run <script>
+# Or just:
+bun <script>
+
+# Testing (instead of jest/vitest in most cases)
+bun test
+```
+
+## Key Differences
+
+- **Env loading**: Bun automatically loads `.env` files (no dotenv needed)
+- **TypeScript**: Bun runs TypeScript directly (no compilation step)
+- **Hot reload**: Use `bun --watch` or `bun --hot`
+
+## APIs (When NOT Using Effect)
+
+For cases where you're not using Effect's HTTP/database services:
+
+```typescript
+// HTTP Server (when not using @effect/platform)
+Bun.serve({
+  port: 3000,
+  routes: { ... },
+  websocket: { ... },
+})
+
+// SQLite (when not using Drizzle)
+import { Database } from "bun:sqlite"
+
+// Redis
+Bun.redis
+
+// Postgres (when not using @effect/sql-pg)
+Bun.sql
+
+// File operations
+Bun.file("path").text()
+Bun.write("path", content)
+
+// Shell commands
+Bun.$`ls -la`
+```
+
+## This Project's Setup
+
+This project uses **Effect** for most infrastructure:
+
+- **HTTP Server**: `@effect/platform` with `BunHttpServer`
+- **Database**: `@effect/sql-pg` with Drizzle ORM
+- **Redis**: `ioredis` (for Effect compatibility)
+- **HTTP Client**: `@effect/platform` HttpClient
+
+So you'll rarely use raw Bun APIs directly. Instead:
+
+```typescript
+// HTTP server
+import { BunHttpServer } from "@effect/platform-bun"
+Layer.provide(BunHttpServer.layer({ port: 3000 }))
+
+// Running files
+bun run ./src/index.ts
+bun --watch ./src/index.ts
+```
+
+## Testing
+
+```typescript
+import { test, expect, describe } from "bun:test"
+
+describe("MyService", () => {
+  test("does something", () => {
+    expect(1 + 1).toBe(2)
+  })
+})
+```
+
+Run with:
+```bash
+bun test                    # Run all tests
+bun test --watch            # Watch mode
+bun test path/to/file.test.ts  # Specific file
+```
+
+## Scripts Reference
+
+```bash
+# From project root
+bun dev              # Start all services
+bun build            # Build all packages
+bun lint             # Format + lint
+bun compose up       # Start Docker services
+bun compose down     # Stop Docker services
+
+# From apps/api
+bun dev              # API with hot reload
+bun db:migrate       # Database migrations
+bun studio           # Drizzle Studio
+
+# From apps/client
+bun dev              # Vite dev server
+bun build            # Production build
+```

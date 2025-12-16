@@ -23,6 +23,7 @@ import { GetPreviewArticlesResponse } from "./routes/v1/brawlhalla/get-preview-a
 import {
   GetRankings1v1Response,
   GetRankings2v2Response,
+  GetRankingsRotatingResponse,
 } from "./routes/v1/brawlhalla/get-rankings"
 import { GetWeeklyRotationResponse } from "./routes/v1/brawlhalla/get-weekly-rotation"
 import { SearchPlayerResponse } from "./routes/v1/brawlhalla/search-player"
@@ -40,6 +41,12 @@ import {
   GlobalWeaponRankingsSortByParam,
   WeaponNameParam,
 } from "./routes/v1/brawlhalla/get-global-weapon-rankings"
+import {
+  GetRankedQueues1v1Response,
+  GetRankedQueues2v2Response,
+  GetRankedQueuesRotatingResponse,
+} from "./routes/v1/brawlhalla/get-ranked-queues"
+import { GetTokensResponse } from "./routes/v1/health/get-tokens"
 
 const idParam = HttpApiSchema.param("id", Schema.NumberFromString)
 const pageParam = HttpApiSchema.param(
@@ -52,9 +59,13 @@ const providerParam = HttpApiSchema.param(
   Schema.Literal(...providers),
 )
 
-class HealthGroup extends HttpApiGroup.make("health").add(
-  HttpApiEndpoint.get("health")`/`.addSuccess(Schema.String),
-) {}
+class HealthGroup extends HttpApiGroup.make("health")
+  .add(HttpApiEndpoint.get("health")`/`.addSuccess(Schema.String))
+  .add(
+    HttpApiEndpoint.get("tokens")`/tokens`
+      .addSuccess(GetTokensResponse)
+      .addError(InternalServerError),
+  ) {}
 
 class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
   .add(
@@ -84,8 +95,8 @@ class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
   )
   .add(
     HttpApiEndpoint.get(
-      "get-rankings-1v1",
-    )`/rankings/1v1/${regionParam}/${pageParam}`
+      "get-ranked-1v1",
+    )`/ranked/1v1/${regionParam}/${pageParam}`
       .addSuccess(GetRankings1v1Response)
       .setUrlParams(
         Schema.Struct({
@@ -98,9 +109,45 @@ class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
   )
   .add(
     HttpApiEndpoint.get(
-      "get-rankings-2v2",
-    )`/rankings/2v2/${regionParam}/${pageParam}`
+      "get-ranked-2v2",
+    )`/ranked/2v2/${regionParam}/${pageParam}`
       .addSuccess(GetRankings2v2Response)
+      .addError(NotFound)
+      .addError(TooManyRequests)
+      .addError(InternalServerError),
+  )
+  .add(
+    HttpApiEndpoint.get(
+      "get-ranked-rotating",
+    )`/ranked/rotating/${regionParam}/${pageParam}`
+      .addSuccess(GetRankingsRotatingResponse)
+      .addError(NotFound)
+      .addError(TooManyRequests)
+      .addError(InternalServerError),
+  )
+  .add(
+    HttpApiEndpoint.get(
+      "get-ranked-queues-1v1",
+    )`/ranked/queues/1v1/${regionParam}`
+      .addSuccess(GetRankedQueues1v1Response)
+      .addError(NotFound)
+      .addError(TooManyRequests)
+      .addError(InternalServerError),
+  )
+  .add(
+    HttpApiEndpoint.get(
+      "get-ranked-queues-2v2",
+    )`/ranked/queues/2v2/${regionParam}`
+      .addSuccess(GetRankedQueues2v2Response)
+      .addError(NotFound)
+      .addError(TooManyRequests)
+      .addError(InternalServerError),
+  )
+  .add(
+    HttpApiEndpoint.get(
+      "get-ranked-queues-rotating",
+    )`/ranked/queues/rotating/${regionParam}`
+      .addSuccess(GetRankedQueuesRotatingResponse)
       .addError(NotFound)
       .addError(TooManyRequests)
       .addError(InternalServerError),
