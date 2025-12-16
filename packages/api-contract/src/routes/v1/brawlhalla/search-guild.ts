@@ -20,4 +20,3 @@ export const SearchGuildResponse = Schema.Struct({
     timestamp: Schema.Date,
   }),
 })
-
