@@ -12,6 +12,7 @@ import {
   NotFound,
   Unauthorized,
   TooManyRequests,
+  ServiceUnavailable,
 } from "./shared/errors"
 import { AnyRegion } from "./shared/region"
 import { DeleteSessionResponse } from "./routes/v1/auth/delete-session"
@@ -58,7 +59,6 @@ import {
   GetServersResponse,
   GetNearestServerResponse,
 } from "./routes/v1/brawlhalla/get-servers"
-import { WorkerSuccessResponse } from "./shared/workers"
 
 const idParam = HttpApiSchema.param("id", Schema.NumberFromString)
 const providerParam = HttpApiSchema.param(
@@ -79,9 +79,9 @@ class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
   .add(
     HttpApiEndpoint.get("get-player-by-id")`/players/${idParam}`
       .addSuccess(GetPlayerByIdResponse)
-      .addError(WorkerSuccessResponse)
       .addError(NotFound)
       .addError(TooManyRequests)
+      .addError(ServiceUnavailable)
       .addError(InternalServerError),
   )
   .add(
@@ -110,9 +110,9 @@ class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
   .add(
     HttpApiEndpoint.get("get-guild-by-id")`/guilds/${idParam}`
       .addSuccess(GetClanByIdResponse)
-      .addError(WorkerSuccessResponse)
       .addError(NotFound)
       .addError(TooManyRequests)
+      .addError(ServiceUnavailable)
       .addError(InternalServerError),
   )
   .add(
@@ -148,9 +148,9 @@ class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
         }),
       )
       .addSuccess(GetRankings1v1Response)
-      .addError(WorkerSuccessResponse)
       .addError(NotFound)
       .addError(TooManyRequests)
+      .addError(ServiceUnavailable)
       .addError(InternalServerError),
   )
   .add(
@@ -177,9 +177,9 @@ class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
         }),
       )
       .addSuccess(GetRankings2v2Response)
-      .addError(WorkerSuccessResponse)
       .addError(NotFound)
       .addError(TooManyRequests)
+      .addError(ServiceUnavailable)
       .addError(InternalServerError),
   )
 
@@ -207,9 +207,9 @@ class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
         }),
       )
       .addSuccess(GetRankingsRotatingResponse)
-      .addError(WorkerSuccessResponse)
       .addError(NotFound)
       .addError(TooManyRequests)
+      .addError(ServiceUnavailable)
       .addError(InternalServerError),
   )
   .add(

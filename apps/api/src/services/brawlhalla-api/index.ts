@@ -6,6 +6,7 @@ import {
   BrawlhallaClanNotFound,
   BrawlhallaPlayerNotFound,
   BrawlhallaRateLimitError,
+  BrawlhallaServiceUnavailable,
 } from "./errors"
 import { Config, Effect, flow, Layer, Redacted, type Schema } from "effect"
 import { BrawlhallaApiClan } from "./schema/clan"
@@ -98,6 +99,11 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
                     return yield* BrawlhallaRateLimitError.make({
                       message:
                         "Rate limit exceeded for Brawlhalla API. Please try again later.",
+                    })
+                  case 503:
+                    return yield* BrawlhallaServiceUnavailable.make({
+                      message:
+                        "Brawlhalla API is currently unavailable. Please try again later.",
                     })
                   default:
                     return yield* BrawlhallaApiError.make({

@@ -11,8 +11,8 @@ import { BrawlhallaRateLimiter } from "../rate-limiter"
 
 const DEFAULT_RETRIES = 3
 const DEFAULT_TIMEOUT = 10000
-const DEFAULT_CACHE_MAX_AGE = 300 // 5 minutes
-const DEFAULT_STALE_MAX_AGE = 3600 // 1 hour (stale data can be served for up to 1 hour while revalidating)
+const DEFAULT_CACHE_MAX_AGE = Duration.toMillis(Duration.minutes(15)) // 15 minutes
+const DEFAULT_STALE_MAX_AGE = Duration.toMillis(Duration.hours(6)) // 6 hours (stale data can be served for up to 6 hours while revalidating)
 
 type FetchJsonOptions = {
   method: HttpMethod

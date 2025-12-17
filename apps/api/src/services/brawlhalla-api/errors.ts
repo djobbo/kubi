@@ -40,3 +40,10 @@ export class BrawlhallaRateLimitError extends Schema.TaggedError<BrawlhallaRateL
   message: Schema.String,
   status: Schema.Number.pipe(Schema.optionalWith({ default: () => 429 })),
 }) {}
+
+export class BrawlhallaServiceUnavailable extends Schema.TaggedError<BrawlhallaServiceUnavailable>(
+  "BrawlhallaServiceUnavailable",
+)("BrawlhallaServiceUnavailable", {
+  message: Schema.String,
+  status: Schema.Number.pipe(Schema.optionalWith({ default: () => 503 })),
+}) {}

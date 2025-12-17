@@ -1,43 +1,5 @@
-import { HttpClient, FetchHttpClient } from "@effect/platform"
-import { WorkerConfig } from "@/services/config"
-import { Duration, Effect, Fiber, Layer, pipe, Schedule, Stream } from "effect"
+import { Duration, Effect, Fiber, Schedule, Stream } from "effect"
 import { WorkerApiClient } from "@/services/api-client"
-
-const waitForApiHealth = Effect.gen(function* () {
-  const config = yield* WorkerConfig
-  const httpClient = yield* HttpClient.HttpClient
-
-  const healthUrl = `${config.apiUrl}/v1/health`
-
-  yield* Effect.log(`Waiting for API to be healthy at ${healthUrl}...`)
-
-  let attempt = 0
-
-  yield* Effect.retry(
-    Effect.gen(function* () {
-      attempt++
-      yield* Effect.log(`Health check attempt ${attempt}...`)
-
-      const response = yield* httpClient.get(healthUrl).pipe(
-        Effect.timeout(Duration.seconds(5)),
-        Effect.catchAll((error) =>
-          Effect.fail(new Error(`Health check failed: ${String(error)}`)),
-        ),
-      )
-
-      if (response.status !== 200) {
-        return yield* Effect.fail(
-          new Error(`Health check returned status ${response.status}`),
-        )
-      }
-
-      yield* Effect.log("API is healthy!")
-    }),
-    Schedule.linear(Duration.seconds(1)).pipe(
-      Schedule.union(Schedule.spaced(Duration.seconds(5))),
-    ),
-  )
-}).pipe(Effect.provide(FetchHttpClient.layer))
 
 export const generateCrawlTasks = <
   Bracket extends string,
@@ -146,13 +108,7 @@ const defineRankedWorker = Effect.fn("worker")(function* (
   yield* Effect.log(`${workerName} worker completed`)
 })
 
-const SharedDependencies = Layer.mergeAll(
-  WorkerConfig.layer,
-  WorkerApiClient.layer,
-)
-
 const program = Effect.gen(function* () {
-  yield* waitForApiHealth
   yield* Effect.log("Starting workers")
   const worker = yield* Effect.fork(defineRankedWorker("Ranked Worker"))
   yield* Effect.sleep(Duration.seconds(1))
@@ -162,6 +118,6 @@ const program = Effect.gen(function* () {
   yield* Fiber.await(worker)
   yield* Fiber.await(playerWorker)
   yield* Effect.log("Workers completed")
-}).pipe(Effect.provide(SharedDependencies))
+})
 
-await Effect.runPromise(program)
+await Effect.runPromise(program.pipe(Effect.provide(WorkerApiClient.layer)))
