@@ -49,7 +49,12 @@ export class WorkerApiClient extends Effect.Service<WorkerApiClient>()(
           ) {
             return yield* client.brawlhalla["get-player-by-id"]({
               path: { id: playerId },
-            })
+            }).pipe(
+              Effect.catchTags({
+                WorkerSuccessResponse: () => Effect.succeed(null),
+              }),
+              Effect.tapError(Effect.logError),
+            )
           }),
 
           /**
@@ -61,7 +66,12 @@ export class WorkerApiClient extends Effect.Service<WorkerApiClient>()(
           ) {
             return yield* client.brawlhalla["get-ranked-1v1"]({
               urlParams: { region: region as "all", page },
-            })
+            }).pipe(
+              Effect.catchTags({
+                WorkerSuccessResponse: () => Effect.succeed(null),
+              }),
+              Effect.tapError(Effect.log),
+            )
           }),
 
           /**
@@ -73,7 +83,12 @@ export class WorkerApiClient extends Effect.Service<WorkerApiClient>()(
           ) {
             return yield* client.brawlhalla["get-ranked-2v2"]({
               urlParams: { region: region as "all", page },
-            })
+            }).pipe(
+              Effect.catchTags({
+                WorkerSuccessResponse: () => Effect.succeed(null),
+              }),
+              Effect.tapError(Effect.logError),
+            )
           }),
 
           /**
@@ -85,7 +100,12 @@ export class WorkerApiClient extends Effect.Service<WorkerApiClient>()(
           ) {
             return yield* client.brawlhalla["get-ranked-rotating"]({
               urlParams: { region: region as "all", page },
-            })
+            }).pipe(
+              Effect.catchTags({
+                WorkerSuccessResponse: () => Effect.succeed(null),
+              }),
+              Effect.tapError(Effect.logError),
+            )
           }),
         },
       }

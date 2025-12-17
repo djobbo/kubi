@@ -2,7 +2,7 @@ export const servers = [
   {
     id: "US-E",
     url: "pingtest-atl.brawlhalla.com",
-    ip: "99.78.176.220",
+    ip: "99.78.180.158",
     location: {
       city: "Dublin",
       country: "United States",
@@ -26,7 +26,7 @@ export const servers = [
   {
     id: "EU",
     url: "pingtest-ams.brawlhalla.com",
-    ip: "52.94.137.23",
+    ip: "52.94.137.29",
     location: {
       city: "Frankfurt am Main",
       country: "Germany",
@@ -38,7 +38,7 @@ export const servers = [
   {
     id: "SEA",
     url: "pingtest-sgp.brawlhalla.com",
-    ip: "15.221.11.26",
+    ip: "15.221.8.222",
     location: {
       city: "Singapore",
       country: "Singapore",
@@ -50,13 +50,13 @@ export const servers = [
   {
     id: "AUS",
     url: "pingtest-aus.brawlhalla.com",
-    ip: "99.83.80.141",
+    ip: "3.27.178.188",
     location: {
       city: "Sydney",
       country: "Australia",
       lat: -33.8591,
       lon: 151.2002,
-      isp: "Amazon.com, Inc.",
+      isp: "Amazon Technologies Inc.",
     },
   },
   {
@@ -74,19 +74,19 @@ export const servers = [
   {
     id: "JPN",
     url: "pingtest-jpn.brawlhalla.com",
-    ip: "52.195.201.15",
+    ip: "99.77.58.84",
     location: {
       city: "Tokyo",
       country: "Japan",
       lat: 35.6895,
       lon: 139.692,
-      isp: "Amazon Technologies Inc.",
+      isp: "Amazon.com",
     },
   },
   {
     id: "ME",
     url: "pingtest-mde.brawlhalla.com",
-    ip: "99.82.128.102",
+    ip: "99.82.136.87",
     location: {
       city: "Manama",
       country: "Bahrain",

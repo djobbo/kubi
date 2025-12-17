@@ -7,6 +7,7 @@ import {
 import type { HttpMethod } from "@effect/platform/HttpMethod"
 import { Duration, Effect, Layer, Option, pipe, Schedule, Schema } from "effect"
 import { Cache } from "@/services/cache"
+import { BrawlhallaRateLimiter } from "../rate-limiter"
 
 const DEFAULT_RETRIES = 3
 const DEFAULT_TIMEOUT = 10000
@@ -24,13 +25,6 @@ type FetchJsonOptions = {
 }
 
 type FetchJsonCacheFirstOptions = FetchJsonOptions & {
-  /**
-   * Rate limiter to apply to the actual API fetch
-   * This is only called when making a real API request, not when serving from cache
-   */
-  rateLimitedFetch?: <T, E2, R2>(
-    effect: Effect.Effect<T, E2, R2>,
-  ) => Effect.Effect<T, E2, R2>
   /**
    * Maximum age for stale data (seconds)
    * Stale data can be served while revalidating in the background
@@ -111,7 +105,6 @@ export class Fetcher extends Effect.Service<Fetcher>()("@app/Fetcher", {
       // Use staleMaxAge for cache TTL - data can be served while revalidating in the background
       const staleTtl = options.staleMaxAge ?? DEFAULT_STALE_MAX_AGE
 
-      // Create the API fetch effect (without rate limiting)
       const fetchFromApi = pipe(
         options.url,
         HttpClientRequest.make(options.method),
@@ -125,14 +118,9 @@ export class Fetcher extends Effect.Service<Fetcher>()("@app/Fetcher", {
         }),
       )
 
-      // Apply rate limiting to the fetch if provided
-      const rateLimitedFetchFromApi = options.rateLimitedFetch
-        ? options.rateLimitedFetch(fetchFromApi)
-        : fetchFromApi
-
       // If no cache name, fetch directly with rate limiting
       if (!cacheKey) {
-        return yield* rateLimitedFetchFromApi.pipe(
+        return yield* fetchFromApi.pipe(
           Effect.map((data) => ({
             data,
             updatedAt: new Date(),
@@ -151,7 +139,7 @@ export class Fetcher extends Effect.Service<Fetcher>()("@app/Fetcher", {
         // Queue background revalidation (fire and forget)
         // This will update the cache with fresh data for the next request
         yield* Effect.fork(
-          rateLimitedFetchFromApi.pipe(
+          fetchFromApi.pipe(
             Effect.tap((data) =>
               cache.set(
                 cacheKey,
@@ -180,7 +168,7 @@ export class Fetcher extends Effect.Service<Fetcher>()("@app/Fetcher", {
 
       // No cache, must fetch (this is the only path that blocks on rate limiting)
       yield* Effect.log(`Cache miss for ${options.cacheName}, fetching...`)
-      const data = yield* rateLimitedFetchFromApi
+      const data = yield* fetchFromApi
 
       // Store in cache
       yield* cache.set(cacheKey, data, Option.some(Duration.seconds(staleTtl)))

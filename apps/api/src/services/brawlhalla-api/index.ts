@@ -34,7 +34,6 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
     effect: Effect.gen(function* () {
       const apiKey = yield* Config.redacted("BRAWLHALLA_API_KEY")
       const fetcher = yield* Fetcher
-      const rateLimiter = yield* BrawlhallaRateLimiter
 
       const getRequestUrl = (
         path: string,
@@ -66,15 +65,17 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
 
           // Determine cache strategy from context (set by worker auth middleware)
           const useFetchFirst = yield* shouldUseFetchFirst
+          const rateLimiter = yield* BrawlhallaRateLimiter
 
           if (!useFetchFirst) {
             // Cache-first mode: Check cache first, rate limit only on actual API call
-            return yield* fetcher.fetchJsonCacheFirst(schema, {
-              method: "GET",
-              url: url.toString(),
-              cacheName,
-              rateLimitedFetch: rateLimiter.limit,
-            })
+            return yield* fetcher
+              .fetchJsonCacheFirst(schema, {
+                method: "GET",
+                url: url.toString(),
+                cacheName,
+              })
+              .pipe(rateLimiter.limit)
           } else {
             // Direct fetch mode: Rate limit and fetch directly (for workers via HTTP)
             return yield* rateLimiter.limit(
@@ -210,5 +211,8 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
     }),
   },
 ) {
-  static readonly layer = this.Default.pipe(Layer.provide(Fetcher.layer))
+  static readonly layer = this.Default.pipe(
+    Layer.provide(Fetcher.layer),
+    Layer.provide(BrawlhallaRateLimiter.layer),
+  )
 }

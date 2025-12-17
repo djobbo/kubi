@@ -15,12 +15,13 @@ import { Fetcher } from "./services/fetcher"
 import { responseCache } from "./services/middleware/response-cache"
 import { workerAuthMiddleware } from "./services/middleware/worker-auth"
 import { ObservabilityLive } from "./services/observability"
-import { BrawlhallaRateLimiter } from "@/services/rate-limiter"
+import { BrawlhallaRateLimiter } from "./services/rate-limiter"
 
 // Shared dependencies for both server and workers
 // BrawlhallaApi includes its own rate limiter layer
 const SharedDependencies = Layer.mergeAll(
   BrawlhallaApi.layer,
+  BrawlhallaRateLimiter.layer,
   BrawltoolsApi.layer,
   Archive.layer,
   Authorization.layer,
@@ -51,7 +52,11 @@ const ServerLive = Layer.unwrapEffect(
       ),
       HttpServer.withLogAddress,
       Layer.provide(ApiLive),
-      Layer.provide(BunHttpServer.layer({ port: serverConfig.port })),
+      Layer.provide(
+        BunHttpServer.layer({
+          port: serverConfig.port,
+        }),
+      ),
       Layer.provide(SharedDependencies),
       // Infrastructure layers
       Layer.provide(Docs.layer(Api)),
@@ -61,7 +66,6 @@ const ServerLive = Layer.unwrapEffect(
   Layer.provide(ApiServerConfig.layer),
   Layer.provide(FetchHttpClient.layer),
   Layer.provide(ObservabilityLive),
-  Layer.provide(BrawlhallaRateLimiter.layer),
 )
 
 const server = Layer.launch(ServerLive).pipe(

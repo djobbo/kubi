@@ -9,8 +9,8 @@ import { Effect, RateLimiter, Duration } from "effect"
  * often the workers make requests to our own API.
  *
  * Configuration:
- * - 5 requests per second (burst limit)
- * - 600 requests per 15 minutes (sustained limit)
+ * - 3 requests per second (burst limit)
+ * - 100 requests per 15 minutes (sustained limit)
  */
 export class WorkerRateLimiter extends Effect.Service<WorkerRateLimiter>()(
   "@dair/workers/WorkerRateLimiter",
@@ -19,14 +19,16 @@ export class WorkerRateLimiter extends Effect.Service<WorkerRateLimiter>()(
       Effect.gen(function* () {
         // Per-second burst limiter
         const perSecondLimiter = yield* RateLimiter.make({
-          limit: 5,
+          limit: 1,
           interval: Duration.seconds(1),
+          algorithm: "fixed-window",
         })
 
         // Per-15-minute sustained limiter
         const per15MinLimiter = yield* RateLimiter.make({
-          limit: 600,
+          limit: 100,
           interval: Duration.minutes(15),
+          algorithm: "token-bucket",
         })
 
         return {

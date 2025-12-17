@@ -1,4 +1,4 @@
-import { Config, Effect, Layer, Redacted } from "effect"
+import { Config, Effect } from "effect"
 
 /**
  * Worker configuration service.

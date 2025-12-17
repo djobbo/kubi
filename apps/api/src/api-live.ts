@@ -29,7 +29,7 @@ import {
   getRanked2v2Queue,
   getRankedRotatingQueue,
 } from "./routes/v1/brawlhalla/get-ranked-queues"
-import { getTokens } from "./routes/v1/health/get-tokens"
+import { getRateLimiterStatus } from "./routes/v1/brawlhalla/get-rate-limiter-status"
 import { searchGuild } from "./routes/v1/brawlhalla/search-guild"
 import { getPowerRankings } from "./routes/v1/brawlhalla/get-power-rankings"
 import {
@@ -38,18 +38,20 @@ import {
 } from "./routes/v1/brawlhalla/get-servers"
 
 const HealthLive = HttpApiBuilder.group(Api, "health", (handlers) =>
-  handlers
-    .handle("health", () => Effect.succeed("OK"))
-    .handle(
-      "tokens",
-      Effect.fn("tokens")(function* () {
-        return yield* getTokens
-      }),
-    ),
+  handlers.handle("health", () => Effect.succeed("OK")),
 )
 
 const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
   handlers
+    .handle(
+      "get-status-tokens",
+      Effect.fn("get-status-tokens")(
+        function* () {
+          return yield* getRateLimiterStatus
+        },
+        flow(Effect.tapError(Effect.logError)),
+      ),
+    )
     .handle(
       "get-player-by-id",
       Effect.fn("get-player-by-id")(
@@ -61,6 +63,7 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
           Effect.catchTags({
             BrawlhallaPlayerNotFound: () => Effect.fail(new NotFound()),
             BrawlhallaRateLimitError: () => Effect.fail(new TooManyRequests()),
+            RateLimiterError: () => Effect.fail(new TooManyRequests()),
             BrawlhallaApiError: () => Effect.fail(new InternalServerError()),
             SqlError: () => Effect.fail(new InternalServerError()),
             CacheOperationError: () => Effect.fail(new InternalServerError()),
@@ -95,6 +98,7 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
           Effect.catchTags({
             BrawlhallaClanNotFound: () => Effect.fail(new NotFound()),
             BrawlhallaRateLimitError: () => Effect.fail(new TooManyRequests()),
+            RateLimiterError: () => Effect.fail(new TooManyRequests()),
             BrawlhallaApiError: () => Effect.fail(new InternalServerError()),
             CacheOperationError: () => Effect.fail(new InternalServerError()),
             CacheSerializationError: () =>
@@ -117,6 +121,7 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
           Effect.tapError(Effect.logError),
           Effect.catchTags({
             CacheOperationError: () => Effect.fail(new InternalServerError()),
+            RateLimiterError: () => Effect.fail(new TooManyRequests()),
             CacheSerializationError: () =>
               Effect.fail(new InternalServerError()),
           }),
@@ -133,6 +138,7 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
           Effect.tapError(Effect.logError),
           Effect.catchTags({
             BrawlhallaRateLimitError: () => Effect.fail(new TooManyRequests()),
+            RateLimiterError: () => Effect.fail(new TooManyRequests()),
             BrawlhallaApiError: () => Effect.fail(new InternalServerError()),
             CacheOperationError: () => Effect.fail(new InternalServerError()),
             CacheSerializationError: () =>
@@ -151,6 +157,7 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
           Effect.tapError(Effect.logError),
           Effect.catchTags({
             BrawlhallaApiError: () => Effect.fail(new InternalServerError()),
+            RateLimiterError: () => Effect.fail(new TooManyRequests()),
             BrawlhallaRateLimitError: () => Effect.fail(new TooManyRequests()),
             CacheOperationError: () => Effect.fail(new InternalServerError()),
             CacheSerializationError: () =>

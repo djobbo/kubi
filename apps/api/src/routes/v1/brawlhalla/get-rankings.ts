@@ -1,6 +1,5 @@
 import { BrawlhallaApi } from "@/services/brawlhalla-api"
 import { Archive } from "@/services/archive"
-import { shouldUseFetchFirst } from "@/services/fetch-strategy"
 import { Effect } from "effect"
 import type {
   NewRanked1v1History,

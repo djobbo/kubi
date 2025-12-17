@@ -46,7 +46,7 @@ import {
   GetRankedQueues2v2Response,
   GetRankedQueuesRotatingResponse,
 } from "./routes/v1/brawlhalla/get-ranked-queues"
-import { GetTokensResponse } from "./routes/v1/health/get-tokens"
+import { GetRateLimiterStatusResponse } from "./routes/v1/brawlhalla/get-rate-limiter-status"
 import { SearchGuildResponse } from "./routes/v1/brawlhalla/search-guild"
 import {
   GetPowerRankingsResponse,
@@ -58,6 +58,7 @@ import {
   GetServersResponse,
   GetNearestServerResponse,
 } from "./routes/v1/brawlhalla/get-servers"
+import { WorkerSuccessResponse } from "./shared/workers"
 
 const idParam = HttpApiSchema.param("id", Schema.NumberFromString)
 const providerParam = HttpApiSchema.param(
@@ -65,18 +66,20 @@ const providerParam = HttpApiSchema.param(
   Schema.Literal(...providers),
 )
 
-class HealthGroup extends HttpApiGroup.make("health")
-  .add(HttpApiEndpoint.get("health")`/`.addSuccess(Schema.String))
-  .add(
-    HttpApiEndpoint.get("tokens")`/tokens`
-      .addSuccess(GetTokensResponse)
-      .addError(InternalServerError),
-  ) {}
+class HealthGroup extends HttpApiGroup.make("health").add(
+  HttpApiEndpoint.get("health")`/`.addSuccess(Schema.String),
+) {}
 
 class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
   .add(
+    HttpApiEndpoint.get("get-status-tokens")`/status/tokens`
+      .addSuccess(GetRateLimiterStatusResponse)
+      .addError(InternalServerError),
+  )
+  .add(
     HttpApiEndpoint.get("get-player-by-id")`/players/${idParam}`
       .addSuccess(GetPlayerByIdResponse)
+      .addError(WorkerSuccessResponse)
       .addError(NotFound)
       .addError(TooManyRequests)
       .addError(InternalServerError),
@@ -107,6 +110,7 @@ class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
   .add(
     HttpApiEndpoint.get("get-guild-by-id")`/guilds/${idParam}`
       .addSuccess(GetClanByIdResponse)
+      .addError(WorkerSuccessResponse)
       .addError(NotFound)
       .addError(TooManyRequests)
       .addError(InternalServerError),
@@ -144,6 +148,7 @@ class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
         }),
       )
       .addSuccess(GetRankings1v1Response)
+      .addError(WorkerSuccessResponse)
       .addError(NotFound)
       .addError(TooManyRequests)
       .addError(InternalServerError),
@@ -172,6 +177,7 @@ class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
         }),
       )
       .addSuccess(GetRankings2v2Response)
+      .addError(WorkerSuccessResponse)
       .addError(NotFound)
       .addError(TooManyRequests)
       .addError(InternalServerError),
@@ -201,6 +207,7 @@ class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
         }),
       )
       .addSuccess(GetRankingsRotatingResponse)
+      .addError(WorkerSuccessResponse)
       .addError(NotFound)
       .addError(TooManyRequests)
       .addError(InternalServerError),

@@ -1,26 +1,6 @@
-import { Effect, RateLimiter, Duration } from "effect"
-
-/**
- * Rate limiter status information
- */
-export type RateLimiterStatus = {
-  /** Per-second limiter status */
-  perSecond: {
-    limit: number
-    intervalSeconds: number
-    availableTokens: number
-    usagePercent: number
-  }
-  /** Per-15-minute limiter status */
-  per15Min: {
-    limit: number
-    intervalSeconds: number
-    availableTokens: number
-    usagePercent: number
-  }
-  /** Timestamp when status was calculated */
-  timestamp: Date
-}
+import { Effect, Duration, Layer } from "effect"
+import { RateLimiter } from "@effect/experimental"
+import { RateLimiterStatus } from "@dair/api-contract/src/routes/v1/brawlhalla/get-rate-limiter-status"
 
 /**
  * Rate limiter service for Brawlhalla API requests.
@@ -35,114 +15,61 @@ export type RateLimiterStatus = {
 export class BrawlhallaRateLimiter extends Effect.Service<BrawlhallaRateLimiter>()(
   "@dair/services/BrawlhallaRateLimiter",
   {
-    effect: Effect.scoped(
-      Effect.gen(function* () {
-        // Rate limiters enforcing the hard limits from the API provider
-        const perSecondLimiter = yield* RateLimiter.make({
-          limit: 10,
-          interval: Duration.seconds(1),
-        })
-        const per15MinLimiter = yield* RateLimiter.make({
-          limit: 2000,
-          interval: Duration.minutes(15),
-        })
+    effect: Effect.gen(function* () {
+      const limiter = yield* RateLimiter.RateLimiter
+      const withLimiter = yield* RateLimiter.makeWithRateLimiter
 
-        // Track request counts for status reporting
-        let perSecondCount = 0
-        let per15MinCount = 0
-        let lastPerSecondReset = Date.now()
-        let lastPer15MinReset = Date.now()
+      const per15MinLimiterConfig: Parameters<typeof limiter.consume>[0] = {
+        key: "brawlhalla-api-request-per-15-minutes",
+        limit: 2000, // TODO: Configure this
+        tokens: 1,
+        window: Duration.minutes(15),
+        algorithm: "token-bucket",
+        onExceeded: "delay",
+      }
 
-        /**
-         * Apply both rate limiters and track usage.
-         */
-        const applyRateLimit = <A, E, R>(effect: Effect.Effect<A, E, R>) => {
-          const now = Date.now()
+      const limitPerSecond = withLimiter({
+        key: "brawlhalla-api-request-per-second",
+        limit: 10, // TODO: Configure this
+        tokens: 1,
+        window: Duration.seconds(1),
+        algorithm: "token-bucket",
+        onExceeded: "delay",
+      })
+      const limitPer15Min = withLimiter(per15MinLimiterConfig)
+      const checkLimiter = limiter.consume({
+        ...per15MinLimiterConfig,
+        tokens: 0,
+      })
 
-          // Update per-second counter
-          if (now - lastPerSecondReset >= 1000) {
-            perSecondCount = 0
-            lastPerSecondReset = now
-          }
-          perSecondCount++
-
-          // Update per-15-min counter
-          if (now - lastPer15MinReset >= 900000) {
-            per15MinCount = 0
-            lastPer15MinReset = now
-          }
-          per15MinCount++
-
-          // Apply both limiters: per-second wraps per-15-min
-          return perSecondLimiter(per15MinLimiter(effect))
-        }
-
-        /**
-         * Calculate available tokens based on token bucket algorithm
-         */
-        const calculateAvailableTokens = (
-          limit: number,
-          intervalMs: number,
-          used: number,
-          lastResetTime: number,
-        ): number => {
-          const now = Date.now()
-          const elapsed = now - lastResetTime
-          const tokensRefilled = Math.floor((elapsed / intervalMs) * limit)
-          const available = Math.min(limit, tokensRefilled - used + limit)
-          return Math.max(0, available)
-        }
-
-        /**
-         * Get current status of rate limiters
-         */
-        const getStatus = (): RateLimiterStatus => {
-          const perSecondAvailable = calculateAvailableTokens(
-            10,
-            1000,
-            perSecondCount,
-            lastPerSecondReset,
-          )
-          const per15MinAvailable = calculateAvailableTokens(
-            2000,
-            900000,
-            per15MinCount,
-            lastPer15MinReset,
+      return {
+        limit: <A, E, R>(effect: Effect.Effect<A, E, R>) =>
+          limitPerSecond(limitPer15Min(effect)),
+        getStatus: Effect.gen(function* () {
+          const per15MinStatus = yield* checkLimiter.pipe(
+            Effect.catchTag("RateLimiterError", () =>
+              Effect.succeed({
+                remaining: 0,
+                limit: 0,
+                delay: Duration.zero,
+                resetAfter: Duration.zero,
+              }),
+            ),
           )
 
-          return {
-            perSecond: {
-              limit: 10,
-              intervalSeconds: 1,
-              availableTokens: perSecondAvailable,
-              usagePercent: Math.round(((10 - perSecondAvailable) / 10) * 100),
-            },
-            per15Min: {
-              limit: 2000,
-              intervalSeconds: 900,
-              availableTokens: per15MinAvailable,
-              usagePercent: Math.round(
-                ((2000 - per15MinAvailable) / 2000) * 100,
-              ),
-            },
-            timestamp: new Date(),
-          }
-        }
-
-        return {
-          /**
-           * Rate limit an API request.
-           * Enforces both per-second and per-15-minute limits.
-           */
-          limit: applyRateLimit,
-          /**
-           * Get current status of rate limiters
-           */
-          getStatus: Effect.sync(getStatus),
-        }
-      }),
-    ),
+          return RateLimiterStatus.make({
+            remaining: per15MinStatus.remaining,
+            limit: per15MinStatus.limit,
+            delay: Duration.toMillis(per15MinStatus.delay),
+            resetAfter: Duration.toMillis(per15MinStatus.resetAfter),
+          })
+        }),
+      }
+    }),
   },
 ) {
-  static readonly layer = this.Default
+  static readonly layer = this.Default.pipe(
+    Layer.provide(RateLimiter.layer),
+    Layer.provide(RateLimiter.layerStoreMemory),
+  )
 }
