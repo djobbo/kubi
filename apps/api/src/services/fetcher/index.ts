@@ -7,12 +7,11 @@ import {
 import type { HttpMethod } from "@effect/platform/HttpMethod"
 import { Duration, Effect, Layer, Option, pipe, Schedule, Schema } from "effect"
 import { Cache } from "@/services/cache"
-import { BrawlhallaRateLimiter } from "../rate-limiter"
 
 const DEFAULT_RETRIES = 3
 const DEFAULT_TIMEOUT = 10000
-const DEFAULT_CACHE_MAX_AGE = Duration.toMillis(Duration.minutes(15)) // 15 minutes
-const DEFAULT_STALE_MAX_AGE = Duration.toMillis(Duration.hours(6)) // 6 hours (stale data can be served for up to 6 hours while revalidating)
+const DEFAULT_CACHE_MAX_AGE = Duration.toMillis(Duration.hours(1)) // 1 hour
+const DEFAULT_STALE_MAX_AGE = Duration.toMillis(Duration.days(2)) // 2 days (stale data can be served for up to 2 days while revalidating)
 
 type FetchJsonOptions = {
   method: HttpMethod
