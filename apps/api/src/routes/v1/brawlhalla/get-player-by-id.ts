@@ -34,6 +34,7 @@ export const getPlayerById = Effect.fn("getPlayerById")(function* (
   // TODO: const session = yield* Authorization.getSession();
 
   const brawlhallaApi = yield* BrawlhallaApi
+  const archive = yield* Archive
 
   const [playerStats, playerRanked, allLegends] = yield* Effect.all(
     [
@@ -44,7 +45,6 @@ export const getPlayerById = Effect.fn("getPlayerById")(function* (
     { concurrency: 3 },
   )
   const clanId = playerStats.data.clan?.clan_id
-  const archive = yield* Archive
   const [aliases, clan, [bookmark], [clanBookmark]] = yield* Effect.all([
     archive.getAliases(playerId),
     clanId

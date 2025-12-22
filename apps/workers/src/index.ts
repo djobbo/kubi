@@ -1,6 +1,14 @@
 import { HttpClient, FetchHttpClient } from "@effect/platform"
 import { WorkerConfig } from "@/services/config"
-import { Duration, Effect, Fiber, Layer, pipe, Schedule, Stream } from "effect"
+import {
+  Duration,
+  Effect,
+  Fiber,
+  Layer,
+  Option,
+  Schedule,
+  Stream,
+} from "effect"
 import { WorkerApiClient } from "@/services/api-client"
 
 const waitForApiHealth = Effect.gen(function* () {
@@ -55,7 +63,7 @@ export const generateCrawlTasks = <
     regions.flatMap((region) =>
       Array.from({ length: pageCounts[region] }).map((_, page) => ({
         region,
-        page,
+        page: page + 1,
         bracket,
       })),
     ),
@@ -83,10 +91,14 @@ const defineRankedWorker = Effect.fn("worker")(function* (
     },
   })
 
+  const interval = processPlayers
+    ? Duration.seconds(1)
+    : Duration.divide(tasks.length)(Duration.minutes(15)).pipe(
+        Option.getOrElse(() => Duration.seconds(1)),
+      )
+
   const taskStream = Stream.repeat(
-    Stream.fromIterable(tasks).pipe(
-      Stream.schedule(Schedule.spaced("1 second")),
-    ),
+    Stream.fromIterable(tasks).pipe(Stream.schedule(Schedule.spaced(interval))),
     Schedule.forever,
   )
 

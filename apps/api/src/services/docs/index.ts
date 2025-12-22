@@ -49,6 +49,6 @@ export const layer = (
   Router.use((router) =>
     Effect.gen(function* () {
       yield* router.get("/openapi", make({ api }))
-      yield* router.get("/docs", makeDocs())
+      yield* router.get("/", makeDocs())
     }),
   )

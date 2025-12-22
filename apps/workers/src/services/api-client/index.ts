@@ -8,10 +8,6 @@ import {
 import { Effect, Layer, Redacted } from "effect"
 import { WorkerConfig } from "@/services/config"
 
-/**
- * API client service for workers.
- * Uses Effect HttpClient to call the main API with worker authentication.
- */
 export class WorkerApiClient extends Effect.Service<WorkerApiClient>()(
   "@dair/workers/WorkerApiClient",
   {
@@ -31,30 +27,19 @@ export class WorkerApiClient extends Effect.Service<WorkerApiClient>()(
         ),
       )
 
-      // Create the typed API client
       const client = yield* HttpApiClient.make(Api, {
         baseUrl: config.apiUrl,
       }).pipe(Effect.provide(Layer.succeed(HttpClient.HttpClient, httpClient)))
 
       return {
-        /**
-         * Brawlhalla API methods (calls our API with worker auth)
-         */
         brawlhalla: {
-          /**
-           * Get player by ID
-           */
           getPlayerById: Effect.fn("getPlayerById")(function* (
             playerId: number,
           ) {
             return yield* client.brawlhalla["get-player-by-id"]({
               path: { id: playerId },
-            })
+            }).pipe(Effect.tapError(Effect.logError))
           }),
-
-          /**
-           * Get 1v1 rankings
-           */
           getRankings1v1: Effect.fn("getRankings1v1")(function* (
             region: string,
             page: number,
@@ -63,10 +48,6 @@ export class WorkerApiClient extends Effect.Service<WorkerApiClient>()(
               urlParams: { region: region as "all", page },
             })
           }),
-
-          /**
-           * Get 2v2 rankings
-           */
           getRankings2v2: Effect.fn("getRankings2v2")(function* (
             region: string,
             page: number,
@@ -75,10 +56,6 @@ export class WorkerApiClient extends Effect.Service<WorkerApiClient>()(
               urlParams: { region: region as "all", page },
             })
           }),
-
-          /**
-           * Get rotating rankings
-           */
           getRankingsRotating: Effect.fn("getRankingsRotating")(function* (
             region: string,
             page: number,

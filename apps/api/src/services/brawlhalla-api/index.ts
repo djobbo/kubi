@@ -8,7 +8,7 @@ import {
   BrawlhallaRateLimitError,
   BrawlhallaServiceUnavailable,
 } from "./errors"
-import { Config, Effect, flow, Layer, Redacted, type Schema } from "effect"
+import { Config, Effect, flow, Layer, Redacted, Schema, pipe } from "effect"
 import { BrawlhallaApiClan } from "./schema/clan"
 import { BrawlhallaApiLegends } from "./schema/legends"
 import { BrawlhallaApiPlayerRanked } from "./schema/player-ranked"
@@ -19,6 +19,7 @@ import {
   BrawlhallaApiRankingsRotating,
 } from "./schema/rankings"
 import { NotFound } from "@effect/platform/HttpApiError"
+import { Archive } from "@/services/archive"
 
 const BASE_URL = "https://api.brawlhalla.com"
 
@@ -35,6 +36,7 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
     effect: Effect.gen(function* () {
       const apiKey = yield* Config.redacted("BRAWLHALLA_API_KEY")
       const fetcher = yield* Fetcher
+      const archive = yield* Archive
 
       const getRequestUrl = (
         path: string,
@@ -146,8 +148,46 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
             path: `/player/${playerId}/stats`,
             cacheName: `brawlhalla-player-stats-${playerId}`,
           }).pipe(
-            Effect.catchTag("NotFound", () =>
-              Effect.fail(new BrawlhallaPlayerNotFound({ playerId })),
+            Effect.tapError((error) =>
+              Effect.logError(
+                "Error getting player stats from Brawlhalla API",
+                error,
+              ),
+            ),
+            Effect.catchAll(() =>
+              pipe(
+                archive.getPlayerHistory(playerId, 1),
+                Effect.tapError((error) =>
+                  Effect.logError(
+                    "Error getting player stats from archive",
+                    error,
+                  ),
+                ),
+                Effect.flatMap(
+                  Effect.fnUntraced(function* (playerHistory) {
+                    const data = playerHistory[0]
+                    if (!data) {
+                      return yield* Effect.fail(
+                        new BrawlhallaPlayerNotFound({ playerId }),
+                      )
+                    }
+                    const rawStatsData = yield* Schema.decodeUnknown(
+                      BrawlhallaApiPlayerStats,
+                    )(data.rawStatsData)
+                    return yield* Effect.succeed({
+                      data: rawStatsData,
+                      updatedAt: data?.recordedAt,
+                      cached: true,
+                    })
+                  }),
+                ),
+                Effect.tap((archiveData) =>
+                  Effect.log(
+                    "Got player stats from archive",
+                    archiveData.data.name,
+                  ),
+                ),
+              ),
             ),
           )
         }),
@@ -159,8 +199,46 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
             path: `/player/${playerId}/ranked`,
             cacheName: `brawlhalla-player-ranked-${playerId}`,
           }).pipe(
-            Effect.catchTag("NotFound", () =>
-              Effect.fail(new BrawlhallaPlayerNotFound({ playerId })),
+            Effect.tapError((error) =>
+              Effect.logError(
+                "Error getting player ranked from Brawlhalla API",
+                error,
+              ),
+            ),
+            Effect.catchAll(() =>
+              pipe(
+                archive.getPlayerHistory(playerId, 1),
+                Effect.tapError((error) =>
+                  Effect.logError(
+                    "Error getting player ranked from archive",
+                    error,
+                  ),
+                ),
+                Effect.flatMap(
+                  Effect.fnUntraced(function* (playerHistory) {
+                    const data = playerHistory[0]
+                    if (!data) {
+                      return yield* Effect.fail(
+                        new BrawlhallaPlayerNotFound({ playerId }),
+                      )
+                    }
+                    const rawRankedData = yield* Schema.decodeUnknown(
+                      BrawlhallaApiPlayerRanked,
+                    )(data.rawRankedData)
+                    return yield* Effect.succeed({
+                      data: rawRankedData,
+                      updatedAt: data?.recordedAt,
+                      cached: true,
+                    })
+                  }),
+                ),
+                Effect.tap((archiveData) =>
+                  Effect.log(
+                    "Got player ranked from archive",
+                    archiveData.data.name,
+                  ),
+                ),
+              ),
             ),
           )
         }),
@@ -220,5 +298,6 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
   static readonly layer = this.Default.pipe(
     Layer.provide(Fetcher.layer),
     Layer.provide(BrawlhallaRateLimiter.layer),
+    Layer.provide(Archive.layer),
   )
 }

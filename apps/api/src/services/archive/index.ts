@@ -68,13 +68,16 @@ export class Archive extends Effect.Service<Archive>()(
           limit = 10,
           offset = 0,
         ) {
-          return yield* db
-            .select()
-            .from(playerHistoryTable)
-            .where(eq(playerHistoryTable.playerId, playerId))
-            .orderBy(desc(playerHistoryTable.recordedAt))
-            .limit(limit)
-            .offset(offset)
+          return yield* db.query.playerHistoryTable.findMany({
+            where: eq(playerHistoryTable.playerId, playerId),
+            orderBy: desc(playerHistoryTable.recordedAt),
+            limit,
+            offset,
+            with: {
+              legendHistory: true,
+              weaponHistory: true,
+            },
+          })
         }),
         addPlayerHistory: Effect.fn("addPlayerHistory")(function* (
           playerData: typeof Player.Type,
