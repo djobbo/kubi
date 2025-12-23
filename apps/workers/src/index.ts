@@ -5,6 +5,7 @@ import {
   Effect,
   Fiber,
   Layer,
+  Match,
   Option,
   Schedule,
   Stream,
@@ -47,20 +48,25 @@ const waitForApiHealth = Effect.gen(function* () {
   )
 }).pipe(Effect.provide(FetchHttpClient.layer))
 
+type RankedCrawlTaskOptions<
+  Bracket extends "1v1" | "2v2" | "rotating",
+  Region extends string,
+> = {
+  brackets: Bracket[]
+  regions: Region[]
+  pageCounts: NoInfer<Record<Region, number>>
+}
+
 export const generateCrawlTasks = <
-  Bracket extends string,
+  Bracket extends "1v1" | "2v2" | "rotating",
   Region extends string,
 >({
   brackets,
   regions,
   pageCounts,
-}: {
-  brackets: Bracket[]
-  regions: Region[]
-  pageCounts: NoInfer<Record<Region, number>>
-}) => {
-  return brackets.flatMap((bracket) =>
-    regions.flatMap((region) =>
+}: RankedCrawlTaskOptions<Bracket, Region>) => {
+  return regions.flatMap((region) =>
+    brackets.flatMap((bracket) =>
       Array.from({ length: pageCounts[region] }).map((_, page) => ({
         region,
         page: page + 1,
@@ -69,27 +75,17 @@ export const generateCrawlTasks = <
     ),
   )
 }
-const defineRankedWorker = Effect.fn("worker")(function* (
+const defineRankedWorker = Effect.fn("worker")(function* <
+  Bracket extends "1v1" | "2v2" | "rotating",
+  Region extends string,
+>(
   workerName: string,
+  options: RankedCrawlTaskOptions<Bracket, Region>,
   processPlayers: boolean = false,
 ) {
   yield* Effect.log(`Starting ${workerName} worker`)
   const apiClient = yield* WorkerApiClient
-  const tasks = generateCrawlTasks({
-    brackets: ["1v1", "2v2", "rotating"],
-    regions: ["eu", "us-e", "sa", "sea", "brz", "aus", "us-w", "jpn", "me"],
-    pageCounts: {
-      eu: 5,
-      "us-e": 5,
-      sa: 3,
-      sea: 3,
-      brz: 5,
-      aus: 3,
-      "us-w": 3,
-      jpn: 3,
-      me: 3,
-    },
-  })
+  const tasks = generateCrawlTasks(options)
 
   const interval = processPlayers
     ? Duration.seconds(1)
@@ -110,10 +106,17 @@ const defineRankedWorker = Effect.fn("worker")(function* (
       yield* Effect.log(
         `${workerName}: Processing task ${formatCrawlTask(task)}`,
       )
-      const { data: rankings } = yield* apiClient.brawlhalla.getRankings1v1(
-        task.region,
-        task.page,
+
+      const rankingsFetcher = Match.value(task.bracket).pipe(
+        Match.when(Match.is("1v1"), () => apiClient.brawlhalla.getRankings1v1),
+        Match.when(Match.is("2v2"), () => apiClient.brawlhalla.getRankings2v2),
+        Match.when(
+          Match.is("rotating"),
+          () => apiClient.brawlhalla.getRankingsRotating,
+        ),
+        Match.exhaustive,
       )
+      const { data: rankings } = yield* rankingsFetcher(task.region, task.page)
       yield* Effect.log(
         `${workerName}: Completed task ${formatCrawlTask(task)}`,
       )
@@ -166,10 +169,36 @@ const SharedDependencies = Layer.mergeAll(
 const program = Effect.gen(function* () {
   yield* waitForApiHealth
   yield* Effect.log("Starting workers")
-  const worker = yield* Effect.fork(defineRankedWorker("Ranked Worker"))
+  const worker = yield* Effect.fork(
+    defineRankedWorker("Ranked Worker", {
+      brackets: ["1v1", "2v2", "rotating"],
+      regions: ["eu", "us-e", "sa", "sea", "brz", "aus", "us-w", "jpn", "me"],
+      pageCounts: {
+        eu: 5,
+        "us-e": 5,
+        sa: 3,
+        sea: 3,
+        brz: 5,
+        aus: 3,
+        "us-w": 3,
+        jpn: 3,
+        me: 3,
+      },
+    }),
+  )
   yield* Effect.sleep(Duration.seconds(1))
   const playerWorker = yield* Effect.fork(
-    defineRankedWorker("Player Worker", true),
+    defineRankedWorker(
+      "Player Worker",
+      {
+        brackets: ["1v1"],
+        regions: ["all"],
+        pageCounts: {
+          all: 1000,
+        },
+      },
+      true,
+    ),
   )
   yield* Fiber.await(worker)
   yield* Fiber.await(playerWorker)
