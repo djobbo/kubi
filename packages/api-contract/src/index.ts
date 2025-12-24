@@ -12,6 +12,7 @@ import {
   NotFound,
   Unauthorized,
   TooManyRequests,
+  ServiceUnavailable,
 } from "./shared/errors"
 import { AnyRegion } from "./shared/region"
 import { DeleteSessionResponse } from "./routes/v1/auth/delete-session"
@@ -29,50 +30,58 @@ import { GetWeeklyRotationResponse } from "./routes/v1/brawlhalla/get-weekly-rot
 import { SearchPlayerResponse } from "./routes/v1/brawlhalla/search-player"
 import {
   GetGlobalPlayerRankingsResponse,
-  GlobalPlayerRankingsSortByParam,
-} from "./routes/v1/brawlhalla/get-global-player-rankings"
+  GlobalPlayerRankingsOrderBy,
+} from "./routes/v1/brawlhalla/get-player-rankings"
 import {
   GetGlobalLegendRankingsResponse,
-  GlobalLegendRankingsSortByParam,
+  GlobalLegendRankingsOrderBy,
   LegendIdParam,
-} from "./routes/v1/brawlhalla/get-global-legend-rankings"
+} from "./routes/v1/brawlhalla/get-legend-rankings"
 import {
   GetGlobalWeaponRankingsResponse,
-  GlobalWeaponRankingsSortByParam,
+  GlobalWeaponRankingsOrderBy,
   WeaponNameParam,
-} from "./routes/v1/brawlhalla/get-global-weapon-rankings"
+} from "./routes/v1/brawlhalla/get-weapon-rankings"
 import {
   GetRankedQueues1v1Response,
   GetRankedQueues2v2Response,
   GetRankedQueuesRotatingResponse,
 } from "./routes/v1/brawlhalla/get-ranked-queues"
-import { GetTokensResponse } from "./routes/v1/health/get-tokens"
+import { GetRateLimiterStatusResponse } from "./routes/v1/brawlhalla/get-rate-limiter-status"
+import { SearchGuildResponse } from "./routes/v1/brawlhalla/search-guild"
+import {
+  GetPowerRankingsResponse,
+  PowerRankingsGameMode,
+  PowerRankingsOrderBy,
+  PowerRankingsRegion,
+} from "./routes/v1/brawlhalla/get-power-rankings"
+import {
+  GetServersResponse,
+  GetNearestServerResponse,
+} from "./routes/v1/brawlhalla/get-servers"
 
 const idParam = HttpApiSchema.param("id", Schema.NumberFromString)
-const pageParam = HttpApiSchema.param(
-  "page",
-  Schema.NumberFromString.pipe(Schema.greaterThanOrEqualTo(1)),
-)
-const regionParam = HttpApiSchema.param("region", AnyRegion)
 const providerParam = HttpApiSchema.param(
   "provider",
   Schema.Literal(...providers),
 )
 
-class HealthGroup extends HttpApiGroup.make("health")
-  .add(HttpApiEndpoint.get("health")`/`.addSuccess(Schema.String))
-  .add(
-    HttpApiEndpoint.get("tokens")`/tokens`
-      .addSuccess(GetTokensResponse)
-      .addError(InternalServerError),
-  ) {}
+class HealthGroup extends HttpApiGroup.make("health").add(
+  HttpApiEndpoint.get("health")`/`.addSuccess(Schema.String),
+) {}
 
 class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
+  .add(
+    HttpApiEndpoint.get("get-status-tokens")`/status/tokens`
+      .addSuccess(GetRateLimiterStatusResponse)
+      .addError(InternalServerError),
+  )
   .add(
     HttpApiEndpoint.get("get-player-by-id")`/players/${idParam}`
       .addSuccess(GetPlayerByIdResponse)
       .addError(NotFound)
       .addError(TooManyRequests)
+      .addError(ServiceUnavailable)
       .addError(InternalServerError),
   )
   .add(
@@ -87,89 +96,189 @@ class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
       .addError(InternalServerError),
   )
   .add(
+    HttpApiEndpoint.get("get-player-rankings")`/players/rankings`
+      .setUrlParams(
+        Schema.Struct({
+          orderBy: GlobalPlayerRankingsOrderBy.pipe(
+            Schema.optionalWith({ default: () => "xp" }),
+          ),
+        }),
+      )
+      .addSuccess(GetGlobalPlayerRankingsResponse)
+      .addError(InternalServerError),
+  )
+  .add(
     HttpApiEndpoint.get("get-guild-by-id")`/guilds/${idParam}`
       .addSuccess(GetClanByIdResponse)
       .addError(NotFound)
       .addError(TooManyRequests)
+      .addError(ServiceUnavailable)
       .addError(InternalServerError),
   )
   .add(
-    HttpApiEndpoint.get(
-      "get-ranked-1v1",
-    )`/ranked/1v1/${regionParam}/${pageParam}`
-      .addSuccess(GetRankings1v1Response)
+    HttpApiEndpoint.get("search-guild")`/guilds/search`
       .setUrlParams(
         Schema.Struct({
+          page: Schema.NumberFromString.pipe(
+            Schema.greaterThanOrEqualTo(1),
+            Schema.optionalWith({ default: () => 1 }),
+          ),
+          limit: Schema.NumberFromString.pipe(
+            Schema.greaterThanOrEqualTo(1),
+            Schema.lessThanOrEqualTo(100),
+            Schema.optionalWith({ default: () => 50 }),
+          ),
           name: Schema.String.pipe(Schema.optional),
         }),
       )
+      .addSuccess(SearchGuildResponse)
+      .addError(InternalServerError),
+  )
+  // TODO: add /guilds/rankings
+  .add(
+    HttpApiEndpoint.get("get-ranked-1v1")`/ranked/1v1`
+      .setUrlParams(
+        Schema.Struct({
+          name: Schema.String.pipe(Schema.optional),
+          region: AnyRegion.pipe(Schema.optionalWith({ default: () => "all" })),
+          page: Schema.NumberFromString.pipe(
+            Schema.greaterThanOrEqualTo(1),
+            Schema.optionalWith({ default: () => 1 }),
+          ),
+        }),
+      )
+      .addSuccess(GetRankings1v1Response)
       .addError(NotFound)
       .addError(TooManyRequests)
+      .addError(ServiceUnavailable)
       .addError(InternalServerError),
   )
   .add(
-    HttpApiEndpoint.get(
-      "get-ranked-2v2",
-    )`/ranked/2v2/${regionParam}/${pageParam}`
-      .addSuccess(GetRankings2v2Response)
-      .addError(NotFound)
-      .addError(TooManyRequests)
-      .addError(InternalServerError),
-  )
-  .add(
-    HttpApiEndpoint.get(
-      "get-ranked-rotating",
-    )`/ranked/rotating/${regionParam}/${pageParam}`
-      .addSuccess(GetRankingsRotatingResponse)
-      .addError(NotFound)
-      .addError(TooManyRequests)
-      .addError(InternalServerError),
-  )
-  .add(
-    HttpApiEndpoint.get(
-      "get-ranked-queues-1v1",
-    )`/ranked/queues/1v1/${regionParam}`
+    HttpApiEndpoint.get("get-ranked-1v1-queue")`/ranked/1v1/queue`
+      .setUrlParams(
+        Schema.Struct({
+          region: AnyRegion.pipe(Schema.optionalWith({ default: () => "all" })),
+        }),
+      )
       .addSuccess(GetRankedQueues1v1Response)
       .addError(NotFound)
       .addError(TooManyRequests)
       .addError(InternalServerError),
   )
   .add(
-    HttpApiEndpoint.get(
-      "get-ranked-queues-2v2",
-    )`/ranked/queues/2v2/${regionParam}`
+    HttpApiEndpoint.get("get-ranked-2v2")`/ranked/2v2`
+      .setUrlParams(
+        Schema.Struct({
+          region: AnyRegion.pipe(Schema.optionalWith({ default: () => "all" })),
+          page: Schema.NumberFromString.pipe(
+            Schema.greaterThanOrEqualTo(1),
+            Schema.optionalWith({ default: () => 1 }),
+          ),
+        }),
+      )
+      .addSuccess(GetRankings2v2Response)
+      .addError(NotFound)
+      .addError(TooManyRequests)
+      .addError(ServiceUnavailable)
+      .addError(InternalServerError),
+  )
+
+  .add(
+    HttpApiEndpoint.get("get-ranked-2v2-queue")`/ranked/2v2/queue`
+      .setUrlParams(
+        Schema.Struct({
+          region: AnyRegion.pipe(Schema.optionalWith({ default: () => "all" })),
+        }),
+      )
       .addSuccess(GetRankedQueues2v2Response)
       .addError(NotFound)
       .addError(TooManyRequests)
       .addError(InternalServerError),
   )
   .add(
-    HttpApiEndpoint.get(
-      "get-ranked-queues-rotating",
-    )`/ranked/queues/rotating/${regionParam}`
+    HttpApiEndpoint.get("get-ranked-rotating")`/ranked/rotating`
+      .setUrlParams(
+        Schema.Struct({
+          region: AnyRegion.pipe(Schema.optionalWith({ default: () => "all" })),
+          page: Schema.NumberFromString.pipe(
+            Schema.greaterThanOrEqualTo(1),
+            Schema.optionalWith({ default: () => 1 }),
+          ),
+        }),
+      )
+      .addSuccess(GetRankingsRotatingResponse)
+      .addError(NotFound)
+      .addError(TooManyRequests)
+      .addError(ServiceUnavailable)
+      .addError(InternalServerError),
+  )
+  .add(
+    HttpApiEndpoint.get("get-ranked-rotating-queue")`/ranked/rotating/queue`
+      .setUrlParams(
+        Schema.Struct({
+          region: AnyRegion.pipe(Schema.optionalWith({ default: () => "all" })),
+        }),
+      )
       .addSuccess(GetRankedQueuesRotatingResponse)
       .addError(NotFound)
       .addError(TooManyRequests)
       .addError(InternalServerError),
   )
   .add(
-    HttpApiEndpoint.get(
-      "get-global-player-rankings",
-    )`/rankings/global/players/${GlobalPlayerRankingsSortByParam}`
-      .addSuccess(GetGlobalPlayerRankingsResponse)
+    HttpApiEndpoint.get("get-power-rankings")`/power-rankings`
+      .setUrlParams(
+        Schema.Struct({
+          gameMode: PowerRankingsGameMode.pipe(
+            Schema.optionalWith({ default: () => "1v1" }),
+          ),
+          region: PowerRankingsRegion.pipe(
+            Schema.optionalWith({ default: () => "LAN" }),
+          ),
+          page: Schema.NumberFromString.pipe(
+            Schema.greaterThanOrEqualTo(1),
+            Schema.optionalWith({ default: () => 1 }),
+          ),
+          orderBy: PowerRankingsOrderBy.pipe(
+            Schema.optionalWith({ default: () => "powerRanking" }),
+          ),
+        }),
+      )
+      .addSuccess(GetPowerRankingsResponse)
+      .addError(TooManyRequests)
       .addError(InternalServerError),
   )
   .add(
     HttpApiEndpoint.get(
-      "get-global-legend-rankings",
-    )`/rankings/global/legends/${LegendIdParam}/${GlobalLegendRankingsSortByParam}`
+      "get-legend-rankings",
+    )`/legends/${LegendIdParam}/rankings`
+      .setUrlParams(
+        Schema.Struct({
+          orderBy: GlobalLegendRankingsOrderBy.pipe(
+            Schema.optionalWith({ default: () => "xp" }),
+          ),
+        }),
+      )
       .addSuccess(GetGlobalLegendRankingsResponse)
       .addError(InternalServerError),
   )
   .add(
+    HttpApiEndpoint.get("get-weekly-rotation")`/legends/rotation`
+      .addSuccess(GetWeeklyRotationResponse)
+      .addError(NotFound)
+      .addError(TooManyRequests)
+      .addError(InternalServerError),
+  )
+  .add(
     HttpApiEndpoint.get(
-      "get-global-weapon-rankings",
-    )`/rankings/global/weapons/${WeaponNameParam}/${GlobalWeaponRankingsSortByParam}`
+      "get-weapon-rankings",
+    )`/weapons/${WeaponNameParam}/rankings`
+      .setUrlParams(
+        Schema.Struct({
+          orderBy: GlobalWeaponRankingsOrderBy.pipe(
+            Schema.optionalWith({ default: () => "xp" }),
+          ),
+        }),
+      )
       .addSuccess(GetGlobalWeaponRankingsResponse)
       .addError(InternalServerError),
   )
@@ -181,10 +290,13 @@ class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
       .addError(InternalServerError),
   )
   .add(
-    HttpApiEndpoint.get("get-weekly-rotation")`/weekly-rotation`
-      .addSuccess(GetWeeklyRotationResponse)
-      .addError(NotFound)
-      .addError(TooManyRequests)
+    HttpApiEndpoint.get("get-servers")`/servers`
+      .addSuccess(GetServersResponse)
+      .addError(InternalServerError),
+  )
+  .add(
+    HttpApiEndpoint.get("get-nearest-server")`/servers/nearest`
+      .addSuccess(GetNearestServerResponse)
       .addError(InternalServerError),
   ) {}
 

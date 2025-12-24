@@ -6,7 +6,7 @@ import { Schema } from "effect"
  */
 export const BrawlhallaApiTier = Schema.transform(
   Schema.NullOr(Schema.NonEmptyTrimmedString),
-  TierNameSchema,
+  Schema.NullOr(TierNameSchema),
   {
     strict: true,
     decode: (input) => {

@@ -17,7 +17,7 @@ import {
   ranked2v2HistoryTable,
   rankedRotatingHistoryTable,
 } from "@dair/db"
-import { and, eq, desc, like, or, lt, max, gte } from "drizzle-orm"
+import { and, eq, desc, or, lt, max, gte, count, ilike } from "drizzle-orm"
 import { Effect, Layer } from "effect"
 import { BadRequest } from "@dair/api-contract/src/shared/errors"
 import type { BrawlhallaApiPlayerStats } from "../brawlhalla-api/schema/player-stats"
@@ -27,9 +27,9 @@ import { ArchiveQueryError } from "./errors"
 import type { BrawlhallaApiClan } from "../brawlhalla-api/schema/clan"
 import type { Clan } from "@dair/api-contract/src/routes/v1/brawlhalla/get-guild-by-id"
 import type { SearchPlayerCursor } from "@dair/api-contract/src/routes/v1/brawlhalla/search-player"
-import type { GlobalPlayerRankingsSortByParam } from "@dair/api-contract/src/routes/v1/brawlhalla/get-global-player-rankings"
+import type { GlobalPlayerRankingsOrderBy } from "@dair/api-contract/src/routes/v1/brawlhalla/get-player-rankings"
 import { isNotNull } from "drizzle-orm"
-import type { GlobalLegendRankingsSortByParam } from "@dair/api-contract/src/routes/v1/brawlhalla/get-global-legend-rankings"
+import type { GlobalLegendRankingsOrderBy } from "@dair/api-contract/src/routes/v1/brawlhalla/get-legend-rankings"
 import type { AnyRegion } from "@dair/api-contract/src/shared/region"
 import type { GameDelta } from "@dair/api-contract/src/routes/v1/brawlhalla/get-ranked-queues"
 
@@ -68,13 +68,16 @@ export class Archive extends Effect.Service<Archive>()(
           limit = 10,
           offset = 0,
         ) {
-          return yield* db
-            .select()
-            .from(playerHistoryTable)
-            .where(eq(playerHistoryTable.playerId, playerId))
-            .orderBy(desc(playerHistoryTable.recordedAt))
-            .limit(limit)
-            .offset(offset)
+          return yield* db.query.playerHistoryTable.findMany({
+            where: eq(playerHistoryTable.playerId, playerId),
+            orderBy: desc(playerHistoryTable.recordedAt),
+            limit,
+            offset,
+            with: {
+              legendHistory: true,
+              weaponHistory: true,
+            },
+          })
         }),
         addPlayerHistory: Effect.fn("addPlayerHistory")(function* (
           playerData: typeof Player.Type,
@@ -269,7 +272,7 @@ export class Archive extends Effect.Service<Archive>()(
                 maxDate: max(playerAliasesTable.recordedAt).as("max_date"),
               })
               .from(playerAliasesTable)
-              .where(like(playerAliasesTable.alias, `${name.toLowerCase()}%`))
+              .where(ilike(playerAliasesTable.alias, `${name}%`))
               .groupBy(playerAliasesTable.playerId),
           )
 
@@ -303,10 +306,7 @@ export class Archive extends Effect.Service<Archive>()(
               ),
             )
             .where(
-              and(
-                like(playerAliasesTable.alias, `${name.toLowerCase()}%`),
-                cursorCondition,
-              ),
+              and(ilike(playerAliasesTable.alias, `${name}%`), cursorCondition),
             )
             .orderBy(
               desc(playerAliasesTable.recordedAt),
@@ -332,7 +332,7 @@ export class Archive extends Effect.Service<Archive>()(
         }),
         getGlobalPlayerRankings: Effect.fn("getGlobalPlayerRankings")(
           function* (
-            field: typeof GlobalPlayerRankingsSortByParam.Type,
+            field: typeof GlobalPlayerRankingsOrderBy.Type,
             offset = 0,
             limit = 10,
           ) {
@@ -375,7 +375,7 @@ export class Archive extends Effect.Service<Archive>()(
         getGlobalLegendRankings: Effect.fn("getGlobalLegendRankings")(
           function* (
             legendId: number,
-            field: typeof GlobalLegendRankingsSortByParam.Type,
+            field: typeof GlobalLegendRankingsOrderBy.Type,
             offset = 0,
             limit = 10,
           ) {
@@ -890,6 +890,72 @@ export class Archive extends Effect.Service<Archive>()(
             })
             .sort((a, b) => b.rating - a.rating)
             .slice(0, limit)
+        }),
+
+        /**
+         * Search guilds by name with pagination.
+         * Uses the clan history table for efficient lookups.
+         */
+        searchGuilds: Effect.fn("searchGuilds")(function* ({
+          page = 1,
+          limit = 50,
+          name,
+        }: {
+          page?: number
+          limit?: number
+          name?: string | undefined
+        }) {
+          // Get latest record per clan
+          const latestPerIdSubquery = db.$with("latest_per_id").as(
+            db
+              .select({
+                clanId: clanHistoryTable.clanId,
+                maxDate: max(clanHistoryTable.recordedAt).as("max_date"),
+              })
+              .from(clanHistoryTable)
+              .where(
+                name ? ilike(clanHistoryTable.name, `${name}%`) : undefined,
+              )
+              .groupBy(clanHistoryTable.clanId),
+          )
+
+          // Count total matching clans
+          const totalResult = yield* db
+            .with(latestPerIdSubquery)
+            .select({ count: count() })
+            .from(latestPerIdSubquery)
+
+          // Get paginated results
+          const results = yield* db
+            .with(latestPerIdSubquery)
+            .select({
+              id: clanHistoryTable.id,
+              clanId: clanHistoryTable.clanId,
+              name: clanHistoryTable.name,
+              xp: clanHistoryTable.xp,
+              membersCount: clanHistoryTable.membersCount,
+              createdDate: clanHistoryTable.createdDate,
+              recordedAt: clanHistoryTable.recordedAt,
+            })
+            .from(clanHistoryTable)
+            .innerJoin(
+              latestPerIdSubquery,
+              and(
+                eq(clanHistoryTable.clanId, latestPerIdSubquery.clanId),
+                eq(clanHistoryTable.recordedAt, latestPerIdSubquery.maxDate),
+              ),
+            )
+            .orderBy(desc(clanHistoryTable.xp))
+            .limit(limit)
+            .offset((page - 1) * limit)
+
+          return {
+            clans: results,
+            total: totalResult[0]?.count ?? null,
+            page,
+            limit,
+            name,
+          }
         }),
       }
     }),

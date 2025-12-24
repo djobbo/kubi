@@ -1,4 +1,4 @@
-import { Config, Context, Effect, Layer } from "effect"
+import { Config, Context, Effect, Layer, Option, Redacted } from "effect"
 
 /**
  * API Server configuration
@@ -9,6 +9,8 @@ export class ApiServerConfig extends Context.Tag("@app/ApiServerConfig")<
     readonly port: number
     readonly url: string
     readonly allowedOrigins: ReadonlyArray<string>
+    /** Optional API key for worker authentication. When provided, requests with matching X-Worker-API-Key header use fetch-first strategy. */
+    readonly workerApiKey: Option.Option<Redacted.Redacted<string>>
   }
 >() {
   static readonly layer = Layer.effect(
@@ -27,10 +29,15 @@ export class ApiServerConfig extends Context.Tag("@app/ApiServerConfig")<
         ...new Set(allowedOrigins.split(",").map((origin) => origin.trim())),
       ]
 
+      const workerApiKey = yield* Config.redacted("WORKER_API_KEY").pipe(
+        Config.option,
+      )
+
       return ApiServerConfig.of({
         port,
         url,
         allowedOrigins: origins,
+        workerApiKey,
       })
     }),
   )
