@@ -6,19 +6,23 @@ WORKDIR /app
 # Install dependencies stage
 FROM base AS deps
 COPY package.json bun.lock ./
+# Apps
+COPY apps/api/package.json ./apps/api/
+COPY apps/client/package.json ./apps/client/
 COPY apps/workers/package.json ./apps/workers/
+# Packages
 COPY packages/api-contract/package.json ./packages/api-contract/
 COPY packages/brawlhalla-api/package.json ./packages/brawlhalla-api/
+COPY packages/brawlhalla-replays/package.json ./packages/brawlhalla-replays/
+COPY packages/brawlhalla-servers/package.json ./packages/brawlhalla-servers/
 COPY packages/common/package.json ./packages/common/
+COPY packages/db/package.json ./packages/db/
+COPY packages/schema/package.json ./packages/schema/
 RUN bun install --frozen-lockfile
 
 # Build stage
 FROM base AS build
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/apps/workers/node_modules ./apps/workers/node_modules
-COPY --from=deps /app/packages/api-contract/node_modules ./packages/api-contract/node_modules
-COPY --from=deps /app/packages/brawlhalla-api/node_modules ./packages/brawlhalla-api/node_modules
-COPY --from=deps /app/packages/common/node_modules ./packages/common/node_modules
 COPY . .
 
 # SECURITY: Verify no secrets leaked into build stage
