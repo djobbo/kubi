@@ -37,8 +37,8 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 # Create non-root user for security
-RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 appuser
+RUN groupadd --system --gid 1001 nodejs && \
+    useradd --system --uid 1001 --gid nodejs appuser
 
 # Copy only necessary files (no source maps, no tests)
 COPY --from=build --chown=appuser:nodejs /app/node_modules ./node_modules

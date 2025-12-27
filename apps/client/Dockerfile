@@ -35,8 +35,8 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 # Create non-root user for security
-RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 appuser
+RUN groupadd --system --gid 1001 nodejs && \
+    useradd --system --uid 1001 --gid nodejs appuser
 
 # Copy ONLY the built output - no source code, no secrets possible
 COPY --from=build --chown=appuser:nodejs /app/apps/client/.output ./apps/client/.output
