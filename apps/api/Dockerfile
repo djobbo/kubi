@@ -20,16 +20,15 @@ COPY packages/db/package.json ./packages/db/
 COPY packages/schema/package.json ./packages/schema/
 RUN bun install --frozen-lockfile
 
-# Build stage
+# Build stage - copy source code
 FROM base AS build
-COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # SECURITY: Verify no secrets leaked into build stage
 RUN find /app -name ".env*" -type f ! -name ".env.example" -exec rm -f {} \; 2>/dev/null || true
 RUN find /app -name "*.db" -o -name "*.sqlite" -type f -exec rm -f {} \; 2>/dev/null || true
 
-# Production stage - minimal footprint
+# Production stage
 FROM base AS production
 WORKDIR /app
 ENV NODE_ENV=production
@@ -38,8 +37,10 @@ ENV NODE_ENV=production
 RUN groupadd --system --gid 1001 nodejs && \
     useradd --system --uid 1001 --gid nodejs appuser
 
-# Copy only necessary files (no source maps, no tests)
-COPY --from=build --chown=appuser:nodejs /app/node_modules ./node_modules
+# Copy node_modules directly from deps stage (not through build)
+COPY --from=deps --chown=appuser:nodejs /app/node_modules ./node_modules
+
+# Copy source code from build stage
 COPY --from=build --chown=appuser:nodejs /app/apps/api ./apps/api
 COPY --from=build --chown=appuser:nodejs /app/packages ./packages
 COPY --from=build --chown=appuser:nodejs /app/package.json ./package.json

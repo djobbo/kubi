@@ -19,7 +19,7 @@ services:
       - ./.data:/var/lib/postgresql/18/docker
 
   redis:
-    image: redis:7-alpine
+    image: redis:8-alpine
     ports:
       - 6379:6379
     command: redis-server --maxmemory 100mb --maxmemory-policy allkeys-lru

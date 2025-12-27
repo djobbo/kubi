@@ -75,4 +75,3 @@ volumes:
   loki-data:
   tempo-data:
   grafana-data:
-

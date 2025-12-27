@@ -20,9 +20,8 @@ COPY packages/db/package.json ./packages/db/
 COPY packages/schema/package.json ./packages/schema/
 RUN bun install --frozen-lockfile
 
-# Build stage
-FROM base AS build
-COPY --from=deps /app/node_modules ./node_modules
+# Build stage - needs node_modules for build
+FROM deps AS build
 COPY . .
 
 # SECURITY: Remove any accidentally copied secrets before build
