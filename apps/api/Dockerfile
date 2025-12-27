@@ -37,14 +37,26 @@ ENV NODE_ENV=production
 RUN groupadd --system --gid 1001 nodejs && \
     useradd --system --uid 1001 --gid nodejs appuser
 
-# Copy node_modules directly from deps stage (not through build)
+# Copy node_modules directly from deps stage
 COPY --from=deps --chown=appuser:nodejs /app/node_modules ./node_modules
 
-# Copy source code from build stage
+# Copy ALL workspace package.json files (required for Bun workspace resolution)
+COPY --from=deps --chown=appuser:nodejs /app/package.json ./package.json
+COPY --from=deps --chown=appuser:nodejs /app/bun.lock ./bun.lock
+COPY --from=deps --chown=appuser:nodejs /app/apps/api/package.json ./apps/api/package.json
+COPY --from=deps --chown=appuser:nodejs /app/apps/client/package.json ./apps/client/package.json
+COPY --from=deps --chown=appuser:nodejs /app/apps/workers/package.json ./apps/workers/package.json
+COPY --from=deps --chown=appuser:nodejs /app/packages/api-contract/package.json ./packages/api-contract/package.json
+COPY --from=deps --chown=appuser:nodejs /app/packages/brawlhalla-api/package.json ./packages/brawlhalla-api/package.json
+COPY --from=deps --chown=appuser:nodejs /app/packages/brawlhalla-replays/package.json ./packages/brawlhalla-replays/package.json
+COPY --from=deps --chown=appuser:nodejs /app/packages/brawlhalla-servers/package.json ./packages/brawlhalla-servers/package.json
+COPY --from=deps --chown=appuser:nodejs /app/packages/common/package.json ./packages/common/package.json
+COPY --from=deps --chown=appuser:nodejs /app/packages/db/package.json ./packages/db/package.json
+COPY --from=deps --chown=appuser:nodejs /app/packages/schema/package.json ./packages/schema/package.json
+
+# Copy source code
 COPY --from=build --chown=appuser:nodejs /app/apps/api ./apps/api
 COPY --from=build --chown=appuser:nodejs /app/packages ./packages
-COPY --from=build --chown=appuser:nodejs /app/package.json ./package.json
-COPY --from=build --chown=appuser:nodejs /app/bun.lock ./bun.lock
 COPY --from=build --chown=appuser:nodejs /app/tsconfig.json ./tsconfig.json
 
 # SECURITY: Final cleanup - ensure no secrets in production image
