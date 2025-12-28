@@ -1,0 +1,72 @@
+{
+  "kind": "collectionType",
+  "collectionName": "legends",
+  "info": {
+    "singularName": "legend",
+    "pluralName": "legends",
+    "displayName": "Legend",
+    "description": "Brawlhalla legends"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "legend_id": {
+      "type": "integer",
+      "required": true,
+      "unique": true
+    },
+    "legend_name_key": {
+      "type": "string",
+      "required": true
+    },
+    "bio_name": {
+      "type": "string",
+      "required": true
+    },
+    "bio_aka": {
+      "type": "string"
+    },
+    "weapon_one": {
+      "type": "string",
+      "required": true
+    },
+    "weapon_two": {
+      "type": "string",
+      "required": true
+    },
+    "strength": {
+      "type": "integer",
+      "required": true,
+      "min": 1,
+      "max": 10
+    },
+    "dexterity": {
+      "type": "integer",
+      "required": true,
+      "min": 1,
+      "max": 10
+    },
+    "defense": {
+      "type": "integer",
+      "required": true,
+      "min": 1,
+      "max": 10
+    },
+    "speed": {
+      "type": "integer",
+      "required": true,
+      "min": 1,
+      "max": 10
+    },
+    "thumbnail": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    }
+  }
+}
