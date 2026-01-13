@@ -1,5 +1,4 @@
 import { Fetcher } from "@/services/fetcher"
-import { BrawlhallaRateLimiter } from "@/services/rate-limiter"
 import { shouldUseFetchFirst } from "@/services/fetch-strategy"
 import {
   BrawlhallaApiError,
@@ -50,13 +49,6 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
         return url.toString()
       }
 
-      /**
-       * Core fetch function that handles rate limiting correctly:
-       * - Rate limiter is only applied to the actual API call, not cache lookups
-       * - Automatically detects fetch strategy from RequestFetchStrategy context
-       *   - cache-first for frontend requests (default)
-       *   - fetch-first for worker requests (when X-Worker-API-Key header is present)
-       */
       const fetchBrawlhallaApi = Effect.fn("fetchBrawlhallaApi")(
         function* <T, U>({
           schema,
@@ -65,29 +57,20 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
           cacheName,
         }: FetchBrawlhallaApiOptions<T, U>) {
           const url = getRequestUrl(path, searchParams)
-
-          // Determine cache strategy from context (set by worker auth middleware)
           const useFetchFirst = yield* shouldUseFetchFirst
-          const rateLimiter = yield* BrawlhallaRateLimiter
 
           if (!useFetchFirst) {
-            // Cache-first mode: Check cache first, rate limit only on actual API call
-            return yield* fetcher
-              .fetchJsonCacheFirst(schema, {
-                method: "GET",
-                url: url.toString(),
-                cacheName,
-              })
-              .pipe(rateLimiter.limit)
+            return yield* fetcher.fetchJsonCacheFirst(schema, {
+              method: "GET",
+              url: url.toString(),
+              cacheName,
+            })
           } else {
-            // Direct fetch mode: Rate limit and fetch directly (for workers via HTTP)
-            return yield* rateLimiter.limit(
-              fetcher.fetchJson(schema, {
-                method: "GET",
-                url: url.toString(),
-                cacheName,
-              }),
-            )
+            return yield* fetcher.fetchJson(schema, {
+              method: "GET",
+              url: url.toString(),
+              cacheName,
+            })
           }
         },
         flow(
@@ -297,7 +280,6 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
 ) {
   static readonly layer = this.Default.pipe(
     Layer.provide(Fetcher.layer),
-    Layer.provide(BrawlhallaRateLimiter.layer),
     Layer.provide(Archive.layer),
   )
 }

@@ -2,16 +2,6 @@ import { Effect, Duration, Layer } from "effect"
 import { RateLimiter } from "@effect/experimental"
 import { RateLimiterStatus } from "@dair/api-contract/src/routes/v1/brawlhalla/get-rate-limiter-status"
 
-/**
- * Rate limiter service for Brawlhalla API requests.
- *
- * Enforces the hard limits from the Brawlhalla API:
- * - Maximum 10 requests per second (burst limit)
- * - Maximum 2000 requests per 15 minutes (sustained limit)
- *
- * Note: Workers have their own rate limiter in the workers app.
- * This rate limiter only controls direct calls to the external Brawlhalla API.
- */
 export class BrawlhallaRateLimiter extends Effect.Service<BrawlhallaRateLimiter>()(
   "@dair/services/BrawlhallaRateLimiter",
   {
@@ -21,7 +11,7 @@ export class BrawlhallaRateLimiter extends Effect.Service<BrawlhallaRateLimiter>
 
       const per15MinLimiterConfig: Parameters<typeof limiter.consume>[0] = {
         key: "brawlhalla-api-request-per-15-minutes",
-        limit: 2000, // TODO: Configure this
+        limit: 2000,
         tokens: 1,
         window: Duration.minutes(15),
         algorithm: "token-bucket",
@@ -30,7 +20,7 @@ export class BrawlhallaRateLimiter extends Effect.Service<BrawlhallaRateLimiter>
 
       const limitPerSecond = withLimiter({
         key: "brawlhalla-api-request-per-second",
-        limit: 10, // TODO: Configure this
+        limit: 10,
         tokens: 1,
         window: Duration.seconds(1),
         algorithm: "token-bucket",

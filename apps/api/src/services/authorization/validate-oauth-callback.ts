@@ -93,9 +93,6 @@ export const validateOAuthCallback =
         return yield* Effect.succeed(existingOAuthAccount.user)
       }
 
-      // Check if user exists with this email
-      // TODO: Change this
-      // Use current session to link accounts?
       const existingUser = yield* db.query.usersTable.findFirst({
         where: eq(usersTable.email, userInfo.email),
       })

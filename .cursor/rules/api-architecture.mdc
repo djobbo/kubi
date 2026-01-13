@@ -1,12 +1,12 @@
 ---
-description: API architecture patterns - caching, rate limiting, workers, and service composition
+description: API architecture patterns - caching, workers, and service composition
 globs: "apps/api/**/*.ts"
 alwaysApply: true
 ---
 
 # API Architecture
 
-The API uses a multi-tier caching and rate limiting system to minimize external API usage.
+The API uses a multi-tier caching system with database fallback.
 
 ## Request Flow
 
@@ -20,48 +20,16 @@ Client Request
 └──────┬──────┘                   └─────────────┘
        │ Cache Miss                      ▲
        ▼                                 │
-┌─────────────┐                          │
-│ Rate Limiter│                          │
-│ (Frontend)  │                          │
-└──────┬──────┘                          │
-       │                                 │
-       ▼                                 │
 ┌─────────────┐   Background     ┌───────┴───────┐
 │ External API│   Revalidation   │   Store in    │
 │ (Brawlhalla)│ ────────────────▶│     Cache     │
 └──────┬──────┘                  └───────────────┘
-       │
+       │ API Failure
        ▼
 ┌─────────────┐
-│ PostgreSQL  │  (Historical data)
+│ PostgreSQL  │  (Fallback from archive)
 │  (Archive)  │
 └─────────────┘
-```
-
-## Rate Limiting
-
-The external API has hard limits: **10 req/sec, 2000 req/15min**
-
-Capacity is split between frontend (user requests) and workers (background jobs):
-
-| Consumer | Per Second | Per 15 Min | Use Case |
-| -------- | ---------- | ---------- | -------- |
-| Frontend | 10 (max)   | 600 (30%)  | User requests (priority) |
-| Workers  | 7 (max)    | 1400 (70%) | Background crawlers |
-
-### Using the Rate Limiter
-
-```typescript
-const rateLimiter = yield* BrawlhallaRateLimiter
-
-// For API route handlers (user requests)
-yield* rateLimiter.limitFrontend(apiCall)
-
-// For background workers
-yield* rateLimiter.limitWorker(apiCall)
-
-// Check status (for /health/tokens endpoint)
-const status = yield* rateLimiter.getStatus
 ```
 
 ## Caching Strategy: Stale-While-Revalidate
@@ -90,31 +58,24 @@ yield* fetcher.fetchJsonCacheFirst(schema, {
   method: "GET",
   url,
   cacheName: "my-cache-key",
-  rateLimitedFetch: rateLimiter.limitFrontend,
   staleMaxAge: 3600,  // 1 hour max stale
 })
 ```
 
 ## BrawlhallaApi Service
 
-Two method sets with different rate limiting:
-
 ```typescript
 const brawlhallaApi = yield* BrawlhallaApi
 
-// Frontend methods (cache-first, 30% rate limit capacity)
-brawlhallaApi.getPlayerStatsById(playerId)
-brawlhallaApi.getPlayerRankedById(playerId)
+// Methods use cache-first strategy by default
+// Workers can set fetch-first mode via X-Worker-API-Key header
+brawlhallaApi.getPlayerStatsById(playerId)  // Falls back to archive on failure
+brawlhallaApi.getPlayerRankedById(playerId) // Falls back to archive on failure
 brawlhallaApi.getRankings1v1(region, page, name?)
 brawlhallaApi.getRankings2v2(region, page)
 brawlhallaApi.getRankingsRotating(region, page)
 brawlhallaApi.getClanById(clanId)
 brawlhallaApi.getAllLegendsData()
-
-// Worker methods (direct fetch, 70% rate limit capacity)
-brawlhallaApi.worker.getPlayerStatsById(playerId)
-brawlhallaApi.worker.getRankings1v1(region, page)
-// ... same methods under .worker namespace
 ```
 
 ## Background Workers

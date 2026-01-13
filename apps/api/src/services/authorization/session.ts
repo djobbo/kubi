@@ -72,7 +72,6 @@ export const getSession = (sessionId: string) =>
       return yield* Effect.succeed(null)
     }
 
-    // TODO: remove serviceOptional once HttpApi Middlewares accept custom services
     const db = yield* Database
 
     // Get session from database

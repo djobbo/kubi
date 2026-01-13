@@ -17,8 +17,6 @@ import { workerAuthMiddleware } from "./services/middleware/worker-auth"
 import { ObservabilityLive } from "./services/observability"
 import { BrawlhallaRateLimiter } from "./services/rate-limiter"
 
-// Shared dependencies for both server and workers
-// BrawlhallaApi includes its own rate limiter layer
 const SharedDependencies = Layer.mergeAll(
   BrawlhallaApi.layer,
   BrawlhallaRateLimiter.layer,

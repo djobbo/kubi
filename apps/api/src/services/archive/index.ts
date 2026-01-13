@@ -261,7 +261,6 @@ export class Archive extends Effect.Service<Archive>()(
           pageSize = 10,
         ) {
           if (!name || name.length < MIN_ALIAS_SEARCH_LENGTH) {
-            console.error("Name must be at least 3 characters long")
             return yield* Effect.fail(new BadRequest())
           }
 
@@ -486,11 +485,6 @@ export class Archive extends Effect.Service<Archive>()(
             )
           },
         ),
-        // ===== Ranked History Methods =====
-
-        /**
-         * Add 1v1 ranked history entries from leaderboard data
-         */
         addRanked1v1History: Effect.fn("addRanked1v1History")(function* (
           entries: NewRanked1v1History[],
         ) {
@@ -500,10 +494,6 @@ export class Archive extends Effect.Service<Archive>()(
             .values(entries)
             .returning({ id: ranked1v1HistoryTable.id })
         }),
-
-        /**
-         * Add 2v2 ranked history entries from leaderboard data
-         */
         addRanked2v2History: Effect.fn("addRanked2v2History")(function* (
           entries: NewRanked2v2History[],
         ) {
@@ -513,10 +503,6 @@ export class Archive extends Effect.Service<Archive>()(
             .values(entries)
             .returning({ id: ranked2v2HistoryTable.id })
         }),
-
-        /**
-         * Add rotating ranked history entries from leaderboard data
-         */
         addRankedRotatingHistory: Effect.fn("addRankedRotatingHistory")(
           function* (entries: NewRankedRotatingHistory[]) {
             if (entries.length === 0) return []
@@ -526,12 +512,6 @@ export class Archive extends Effect.Service<Archive>()(
               .returning({ id: rankedRotatingHistoryTable.id })
           },
         ),
-
-        /**
-         * Get players whose game count changed in the last N minutes.
-         * Uses the dedicated ranked history tables for efficient lookups.
-         * Returns players sorted by rating.
-         */
         getRecentlyActiveRanked1v1Players: Effect.fn(
           "getRecentlyActiveRanked1v1Players",
         )(function* ({
@@ -891,11 +871,6 @@ export class Archive extends Effect.Service<Archive>()(
             .sort((a, b) => b.rating - a.rating)
             .slice(0, limit)
         }),
-
-        /**
-         * Search guilds by name with pagination.
-         * Uses the clan history table for efficient lookups.
-         */
         searchGuilds: Effect.fn("searchGuilds")(function* ({
           page = 1,
           limit = 50,
@@ -905,7 +880,6 @@ export class Archive extends Effect.Service<Archive>()(
           limit?: number
           name?: string | undefined
         }) {
-          // Get latest record per clan
           const latestPerIdSubquery = db.$with("latest_per_id").as(
             db
               .select({
@@ -919,13 +893,11 @@ export class Archive extends Effect.Service<Archive>()(
               .groupBy(clanHistoryTable.clanId),
           )
 
-          // Count total matching clans
           const totalResult = yield* db
             .with(latestPerIdSubquery)
             .select({ count: count() })
             .from(latestPerIdSubquery)
 
-          // Get paginated results
           const results = yield* db
             .with(latestPerIdSubquery)
             .select({

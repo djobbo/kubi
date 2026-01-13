@@ -2,7 +2,6 @@ import { legends } from "@dair/brawlhalla-api/src/constants/legends"
 import { load as loadHtml } from "cheerio"
 import { Effect, Schema } from "effect"
 
-// new error type
 class WeeklyRotationError extends Schema.TaggedError<WeeklyRotationError>(
   "WeeklyRotationError",
 )("WeeklyRotationError", {
