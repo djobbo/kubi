@@ -89,7 +89,7 @@ import { BrawlhallaApi } from "@/services/brawlhalla-api"
 
 ```typescript
 export class MyService extends Effect.Service<MyService>()(
-  "@dair/services/MyService",  // Tag convention
+  "@dair/services/MyService", // Tag convention
   {
     effect: Effect.gen(function* () {
       const dep = yield* SomeDependency
@@ -103,9 +103,7 @@ export class MyService extends Effect.Service<MyService>()(
     }),
   },
 ) {
-  static readonly layer = this.Default.pipe(
-    Layer.provide(SomeDependency.layer),
-  )
+  static readonly layer = this.Default.pipe(Layer.provide(SomeDependency.layer))
 }
 ```
 
@@ -113,9 +111,7 @@ export class MyService extends Effect.Service<MyService>()(
 
 ```typescript
 // ALL properties MUST be in schema - never add class properties
-export class MyError extends Schema.TaggedError<MyError>(
-  "MyError",
-)("MyError", {
+export class MyError extends Schema.TaggedError<MyError>("MyError")("MyError", {
   message: Schema.String,
   cause: Schema.optional(Schema.Unknown),
   status: Schema.Number.pipe(Schema.optionalWith({ default: () => 500 })),
@@ -151,11 +147,13 @@ Effect.fn("myOperation")(
 export const playerHistoryTable = pgTable(
   "brawlhalla_player_history",
   {
-    id: uuid("id").primaryKey().default(sql`uuidv7()`),  // UUIDv7 for time-sorting
+    id: uuid("id")
+      .primaryKey()
+      .default(sql`uuidv7()`), // UUIDv7 for time-sorting
     playerId: bigint("player_id", { mode: "number" }).notNull(),
-    ...withRecordedAt,  // Adds recordedAt timestamp
+    ...withRecordedAt, // Adds recordedAt timestamp
     name: text("name").notNull(),
-    rawStatsData: jsonb("raw_stats_data").$type<unknown>(),  // JSONB for complex data
+    rawStatsData: jsonb("raw_stats_data").$type<unknown>(), // JSONB for complex data
   },
   (table) => [
     index("idx_player_history_recorded").on(table.playerId, table.recordedAt),

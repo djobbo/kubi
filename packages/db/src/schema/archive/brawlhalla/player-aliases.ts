@@ -12,7 +12,9 @@ import { withRecordedAt } from "../../../helpers/with-timestamp"
 export const playerAliasesTable = pgTable(
   "brawlhalla_player_aliases",
   {
-    id: uuid("id").primaryKey().default(sql`uuidv7()`),
+    id: uuid("id")
+      .primaryKey()
+      .default(sql`uuidv7()`),
 
     playerId: bigint("player_id", { mode: "number" }).notNull(),
 

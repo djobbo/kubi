@@ -10,7 +10,9 @@ import { withRecordedAt } from "../../../helpers/with-timestamp"
 export const playerWeaponHistoryTable = pgTable(
   "brawlhalla_player_weapon_history",
   {
-    id: uuid("id").primaryKey().default(sql`uuidv7()`),
+    id: uuid("id")
+      .primaryKey()
+      .default(sql`uuidv7()`),
 
     playerHistoryId: uuid("player_history_id")
       .notNull()

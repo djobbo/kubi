@@ -1,6 +1,17 @@
 {
   "name": "@dair/api",
   "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "module": "src/index.ts",
+  "scripts": {
+    "check:types": "tsgo --noEmit",
+    "db:migrate": "bun drizzle-kit generate && bun drizzle-kit migrate",
+    "dev": "bun drizzle-kit generate && bun drizzle-kit push && bun --watch run ./src/index.ts",
+    "prepare": "effect-language-service patch",
+    "start": "bun db:migrate && bun run src/index.ts",
+    "studio": "drizzle-kit studio"
+  },
   "dependencies": {
     "@dair/api-contract": "workspace:*",
     "@dair/brawlhalla-api": "workspace:*",
@@ -33,16 +44,5 @@
     "@typescript/native-preview": "^7.0.0-dev.20260120.1",
     "drizzle-kit": "^0.31.8",
     "typescript": "^5"
-  },
-  "module": "src/index.ts",
-  "private": true,
-  "scripts": {
-    "check:types": "tsgo --noEmit",
-    "db:migrate": "bun drizzle-kit generate && bun drizzle-kit migrate",
-    "dev": "bun drizzle-kit generate && bun drizzle-kit push && bun --watch run ./src/index.ts",
-    "prepare": "effect-language-service patch",
-    "start": "bun db:migrate && bun run src/index.ts",
-    "studio": "drizzle-kit studio"
-  },
-  "type": "module"
+  }
 }

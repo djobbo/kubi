@@ -16,7 +16,9 @@ import { withRecordedAt } from "../../../helpers/with-timestamp"
 export const ranked2v2HistoryTable = pgTable(
   "brawlhalla_ranked_2v2_history",
   {
-    id: uuid("id").primaryKey().default(sql`uuidv7()`),
+    id: uuid("id")
+      .primaryKey()
+      .default(sql`uuidv7()`),
     ...withRecordedAt,
 
     // Team identification (both players)

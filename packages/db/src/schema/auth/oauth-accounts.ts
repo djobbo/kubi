@@ -10,7 +10,9 @@ export const providers = [DISCORD_PROVIDER_ID, GOOGLE_PROVIDER_ID] as const
 export type Provider = (typeof providers)[number]
 
 export const oauthAccountsTable = pgTable("oauth_accounts", {
-  id: uuid("id").primaryKey().default(sql`uuidv7()`),
+  id: uuid("id")
+    .primaryKey()
+    .default(sql`uuidv7()`),
 
   userId: uuid("user_id")
     .notNull()

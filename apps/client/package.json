@@ -1,6 +1,19 @@
 {
   "name": "@dair/client",
   "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "module": "src/router.tsx",
+  "scripts": {
+    "build": "bunx --bun vite build",
+    "dev": "bun locales:build && bunx --bun vite dev --host --port 3001",
+    "locales:build": "bun locales:extract && bun locales:compile",
+    "locales:compile": "lingui compile",
+    "locales:extract": "lingui extract --clean",
+    "prepare": "effect-language-service patch",
+    "serve": "bunx --bun vite preview",
+    "test": "bunx --bun vitest run"
+  },
   "dependencies": {
     "@base-ui-components/react": "^1.0.0-beta.7",
     "@dair/api-contract": "workspace:*",
@@ -49,18 +62,5 @@
     "vite": "^8.0.0-beta.8",
     "vitest": "^4.0.17",
     "web-vitals": "^5.1.0"
-  },
-  "module": "src/router.tsx",
-  "private": true,
-  "scripts": {
-    "build": "bunx --bun vite build",
-    "dev": "bun locales:build && bunx --bun vite dev --host --port 3001",
-    "locales:build": "bun locales:extract && bun locales:compile",
-    "locales:compile": "lingui compile",
-    "locales:extract": "lingui extract --clean",
-    "prepare": "effect-language-service patch",
-    "serve": "bunx --bun vite preview",
-    "test": "bunx --bun vitest run"
-  },
-  "type": "module"
+  }
 }

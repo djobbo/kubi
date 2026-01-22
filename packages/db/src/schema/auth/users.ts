@@ -5,7 +5,9 @@ import { oauthAccountsTable } from "./oauth-accounts"
 import { sessionsTable } from "./sessions"
 
 export const usersTable = pgTable("users", {
-  id: uuid("id").primaryKey().default(sql`uuidv7()`),
+  id: uuid("id")
+    .primaryKey()
+    .default(sql`uuidv7()`),
 
   email: text("email").unique().notNull(),
   username: text("username").notNull(),

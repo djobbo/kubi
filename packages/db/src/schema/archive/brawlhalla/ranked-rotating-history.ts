@@ -16,7 +16,9 @@ import { withRecordedAt } from "../../../helpers/with-timestamp"
 export const rankedRotatingHistoryTable = pgTable(
   "brawlhalla_ranked_rotating_history",
   {
-    id: uuid("id").primaryKey().default(sql`uuidv7()`),
+    id: uuid("id")
+      .primaryKey()
+      .default(sql`uuidv7()`),
     ...withRecordedAt,
 
     // Player identification
