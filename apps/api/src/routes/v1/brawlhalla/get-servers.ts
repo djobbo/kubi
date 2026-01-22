@@ -3,9 +3,7 @@ import type {
   GetNearestServerResponse,
   GetServersResponse,
 } from "@dair/api-contract/src/routes/v1/brawlhalla/get-servers"
-import { servers } from "@dair/brawlhalla-servers"
-
-type Server = (typeof servers)[number]
+import { ServerDiscovery, type ServerInfo } from "@/services/server-discovery"
 
 const IpApiResponse = Schema.Struct({
   status: Schema.Literal("success"),
@@ -28,16 +26,54 @@ function getDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
   return R * c
 }
 
-export const getServers = Effect.fn("getServers")(() =>
-  Effect.succeed({
+function findClosestServer(
+  servers: readonly ServerInfo[],
+  lat: number,
+  lon: number,
+): ServerInfo | null {
+  if (servers.length === 0) return null
+
+  let closest = servers[0]!
+  let minDistance = getDistance(
+    lat,
+    lon,
+    closest.location.lat,
+    closest.location.lon,
+  )
+
+  for (let i = 1; i < servers.length; i++) {
+    const server = servers[i]!
+    const distance = getDistance(
+      lat,
+      lon,
+      server.location.lat,
+      server.location.lon,
+    )
+    if (distance < minDistance) {
+      closest = server
+      minDistance = distance
+    }
+  }
+
+  return closest
+}
+
+export const getServers = Effect.fn("getServers")(function* () {
+  const serverDiscovery = yield* ServerDiscovery
+  const servers = yield* serverDiscovery.getServers()
+
+  return {
     data: servers,
     meta: { timestamp: new Date() },
-  } satisfies typeof GetServersResponse.Type),
-)
+  } satisfies typeof GetServersResponse.Type
+})
 
 export const getNearestServer = (ip: string | null) =>
   Effect.gen(function* () {
-    if (!ip) {
+    const serverDiscovery = yield* ServerDiscovery
+    const servers = yield* serverDiscovery.getServers()
+
+    if (!ip || servers.length === 0) {
       const response: typeof GetNearestServerResponse.Type = {
         data: { server: null },
         meta: { timestamp: new Date() },
@@ -67,22 +103,10 @@ export const getNearestServer = (ip: string | null) =>
     }
 
     const { lat, lon } = result
-
-    const closestServer = servers.reduce(
-      (closest: { server: Server; distance: number }, server: Server) => {
-        const distance = getDistance(
-          lat,
-          lon,
-          server.location.lat,
-          server.location.lon,
-        )
-        return distance < closest.distance ? { server, distance } : closest
-      },
-      { server: servers[0], distance: Number.POSITIVE_INFINITY },
-    )
+    const closestServer = findClosestServer(servers, lat, lon)
 
     const response: typeof GetNearestServerResponse.Type = {
-      data: { server: closestServer.server },
+      data: { server: closestServer },
       meta: { timestamp: new Date() },
     }
 

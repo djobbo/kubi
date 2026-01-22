@@ -9,6 +9,7 @@ const Server = Schema.Struct({
     country: Schema.String,
     lat: Schema.Number,
     lon: Schema.Number,
+    isp: Schema.String,
   }),
 })
 

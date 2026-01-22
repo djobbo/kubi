@@ -20,9 +20,9 @@ const config = defineConfig({
     }),
     vanillaExtractPlugin(),
     tailwindcss(),
-    safeAssetsPlugin({
-      outputFile: "src/assetsTree.gen.ts",
-    }),
+    // safeAssetsPlugin({
+    //   outputFile: "src/assetsTree.gen.ts",
+    // }),
     tanstackStart(),
     viteReact({
       babel: {

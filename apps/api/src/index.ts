@@ -14,8 +14,10 @@ import { BrawltoolsApi } from "./services/brawltools-api"
 import { Fetcher } from "./services/fetcher"
 import { responseCache } from "./services/middleware/response-cache"
 import { workerAuthMiddleware } from "./services/middleware/worker-auth"
+import { brawlhallaApiProxy } from "./services/proxy"
 import { ObservabilityLive } from "./services/observability"
 import { BrawlhallaRateLimiter } from "./services/rate-limiter"
+import { ServerDiscovery } from "./services/server-discovery"
 
 const SharedDependencies = Layer.mergeAll(
   BrawlhallaApi.layer,
@@ -26,14 +28,16 @@ const SharedDependencies = Layer.mergeAll(
   Cache.layer,
   Fetcher.layer,
   Database.layer,
+  ServerDiscovery.layer,
 )
 
-// Compose middleware: worker auth -> response cache
+// Compose middleware: proxy -> worker auth -> response cache
 const composedMiddleware = flow(
+  brawlhallaApiProxy,
   workerAuthMiddleware,
   responseCache({
     ttlSeconds: Duration.toSeconds(Duration.minutes(5)),
-    exclude: ["/auth", "/health", "/session", "/docs", "/openapi"],
+    exclude: ["/auth", "/health", "/session", "/docs", "/openapi", "/proxy"],
   }),
 )
 
