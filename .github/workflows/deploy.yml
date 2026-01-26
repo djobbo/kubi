@@ -26,8 +26,6 @@ jobs:
             app: workers
           - name: Client
             app: client
-          - name: CMS
-            app: cms
 
     steps:
       - name: Checkout repository

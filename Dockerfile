@@ -39,15 +39,6 @@ WORKDIR /app/apps/client
 ENV NODE_ENV=production
 RUN bun run build
 
-FROM deps AS build-cms
-COPY . .
-# SECURITY: Remove secrets before build
-RUN find /app -name ".env*" -type f ! -name ".env.example" -exec rm -f {} \; 2>/dev/null || true
-RUN find /app -name "*.db" -o -name "*.sqlite" -type f -exec rm -f {} \; 2>/dev/null || true
-WORKDIR /app/apps/cms
-ENV NODE_ENV=production
-RUN bun run build
-
 # ============================================
 # SHARED: Production base setup
 # ============================================
@@ -114,27 +105,4 @@ RUN find /app -name ".env*" -type f ! -name ".env.example" -delete 2>/dev/null |
     find /app -name "*.pem" -o -name "*.key" -type f -delete 2>/dev/null || true
 WORKDIR /app/apps/workers
 USER appuser
-CMD ["bun", "run", "start"]
-
-# ============================================
-# PRODUCTION: CMS (Strapi)
-# Build: docker build --target cms -t kubi-cms .
-# ============================================
-FROM production-base AS cms
-COPY --from=deps --chown=appuser:nodejs /app/node_modules ./node_modules
-COPY --from=deps --chown=appuser:nodejs /app/package.json ./package.json
-COPY --from=deps --chown=appuser:nodejs /app/bun.lock ./bun.lock
-COPY --from=deps --chown=appuser:nodejs /app/apps ./apps
-COPY --from=deps --chown=appuser:nodejs /app/packages ./packages
-COPY --from=build-cms --chown=appuser:nodejs /app/apps/cms ./apps/cms
-# SECURITY: Final cleanup
-RUN find /app -name ".env*" -type f ! -name ".env.example" -delete 2>/dev/null || true && \
-    find /app -name "*.db" -o -name "*.sqlite" -type f -delete 2>/dev/null || true && \
-    find /app -name "*.pem" -o -name "*.key" -type f -delete 2>/dev/null || true
-WORKDIR /app/apps/cms
-RUN mkdir -p public/uploads && chown -R appuser:nodejs public/uploads
-USER appuser
-EXPOSE 1337
-HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-  CMD bun -e "fetch('http://localhost:1337/_health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
 CMD ["bun", "run", "start"]
