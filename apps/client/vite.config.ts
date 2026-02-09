@@ -20,9 +20,9 @@ const config = defineConfig({
     }),
     vanillaExtractPlugin(),
     tailwindcss(),
-    // safeAssetsPlugin({
-    //   outputFile: "src/assetsTree.gen.ts",
-    // }),
+    safeAssetsPlugin({
+      outputFile: "src/assetsTree.gen.ts",
+    }),
     tanstackStart(),
     viteReact({
       babel: {
@@ -30,5 +30,8 @@ const config = defineConfig({
       },
     }),
   ],
+  server: {
+    allowedHosts: [process.env.VITE_DEV_HOST ?? "localhost"],
+  },
 })
 export default config

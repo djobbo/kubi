@@ -1,11 +1,11 @@
 {
   "name": "@dair/brawlhalla-replays",
   "version": "0.0.0",
-  "private": true,
-  "type": "module",
-  "module": "src/index.ts",
   "devDependencies": {
-    "@types/bun": "1.3.6",
-    "@typescript/native-preview": "^7.0.0-dev.20260120.1"
-  }
+    "@types/bun": "1.3.7",
+    "@typescript/native-preview": "^7.0.0-dev.20260128.1"
+  },
+  "module": "src/index.ts",
+  "private": true,
+  "type": "module"
 }

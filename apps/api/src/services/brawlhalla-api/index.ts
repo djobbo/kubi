@@ -65,13 +65,13 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
               url: url.toString(),
               cacheName,
             })
-          } else {
-            return yield* fetcher.fetchJson(schema, {
-              method: "GET",
-              url: url.toString(),
-              cacheName,
-            })
           }
+
+          return yield* fetcher.fetchJson(schema, {
+            method: "GET",
+            url: url.toString(),
+            cacheName,
+          })
         },
         flow(
           Effect.catchTags({

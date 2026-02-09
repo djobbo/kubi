@@ -57,6 +57,20 @@ export const getRankings1v1 = (
         ),
       )
 
+    yield* archive
+      .addAliases(
+        rankings.data.map((r) => ({
+          playerId: r.brawlhalla_id,
+          alias: r.name,
+          public: true,
+        })),
+      )
+      .pipe(
+        Effect.catchAll((error) =>
+          Effect.logWarning("Failed to archive 1v1 aliases", error),
+        ),
+      )
+
     const rankingsData: typeof Rankings1v1.Type = rankings.data.map<
       typeof Ranking1v1.Type
     >((ranking) => {
@@ -134,6 +148,30 @@ export const getRankings2v2 = (region: typeof AnyRegion.Type, page: number) =>
         ),
       )
 
+    yield* archive
+      .addAliases(
+        rankings.data.flatMap((r) => {
+          const teamPlayers = getTeamPlayers(r)
+          return [
+            {
+              playerId: teamPlayers[0].id,
+              alias: teamPlayers[0].name,
+              public: true,
+            },
+            {
+              playerId: teamPlayers[1].id,
+              alias: teamPlayers[1].name,
+              public: true,
+            },
+          ]
+        }),
+      )
+      .pipe(
+        Effect.catchAll((error) =>
+          Effect.logWarning("Failed to archive 2v2 aliases", error),
+        ),
+      )
+
     const rankingsData: typeof Rankings2v2.Type = rankings.data.map<
       typeof Ranking2v2.Type
     >((ranking) => {
@@ -199,6 +237,20 @@ export const getRankingsRotating = (
       .pipe(
         Effect.catchAll((error) =>
           Effect.logWarning("Failed to archive rotating rankings", error),
+        ),
+      )
+
+    yield* archive
+      .addAliases(
+        rankings.data.map((r) => ({
+          playerId: r.brawlhalla_id,
+          alias: r.name,
+          public: true,
+        })),
+      )
+      .pipe(
+        Effect.catchAll((error) =>
+          Effect.logWarning("Failed to archive rotating aliases", error),
         ),
       )
 

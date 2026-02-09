@@ -5,7 +5,7 @@ export const backdrop = style({
   minHeight: "100dvh",
   inset: 0,
   backgroundColor: "black",
-  opacity: 0.2,
+  opacity: 0.4,
   transition: "opacity 150ms cubic-bezier(0.45, 1.005, 0, 1.005)",
 
   "@supports": {
