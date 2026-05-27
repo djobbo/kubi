@@ -51,11 +51,6 @@ const VENDORED_REPOS: ReadonlyArray<VendoredRepo> = [
     branch: "main",
   },
   {
-    name: "kubi",
-    url: "https://github.com/djobbo/kubi.git",
-    branch: "main",
-  },
-  {
     name: "corehalla",
     url: "https://github.com/djobbo/corehalla.git",
     branch: "next",

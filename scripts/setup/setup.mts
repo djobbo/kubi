@@ -19,6 +19,7 @@ const ENV_EXAMPLE_PATH = ".env.example"
 const MAX_MIGRATE_RETRIES = 10
 
 const withSupabase = process.argv.includes("--with-supabase")
+const withVendoredRepos = process.argv.includes("--with-vendored-repos")
 
 const SYNC_KEYS = {
   DATABASE_URL: (s: SupabaseStatus) => s.DB_URL,
@@ -132,12 +133,13 @@ const mergeEnvFile = (
 const runCommand = Effect.fn("runCommand")(function* (
   command: string,
   args: ReadonlyArray<string>,
-  options: { readonly cwd?: string } = {},
+  options: { readonly cwd?: string; readonly stdio?: "pipe" | "inherit" } = {},
 ) {
   const { stdout, stderr, exitCode } = yield* runChildProcess({
     command,
     args,
     cwd: options.cwd,
+    stdio: options.stdio,
   }).pipe(
     Effect.mapError(
       (cause) =>
@@ -213,13 +215,16 @@ const syncLocalDevUrls = Effect.fnUntraced(function* () {
   const apiPort = getEnvVar(existing, "API_PORT", "3000")
   const appPort = getEnvVar(existing, "APP_PORT", "3001")
   const postgresPort = getEnvVar(existing, "POSTGRES_PORT", "5432")
+  const postgresUser = getEnvVar(existing, "POSTGRES_USER", "dair")
+  const postgresPassword = getEnvVar(existing, "POSTGRES_PASSWORD", "dair")
+  const postgresDb = getEnvVar(existing, "POSTGRES_DB", "dair")
   const apiUrl = `http://localhost:${apiPort}`
   const merged = mergeEnvFile(existing, {
     API_URL: apiUrl,
     VITE_API_URL: apiUrl,
     DEFAULT_CLIENT_URL: `http://localhost:${appPort}`,
     ALLOWED_ORIGINS: `http://localhost:${appPort}`,
-    DATABASE_URL: `postgresql://dair:dair@localhost:${postgresPort}/dair`,
+    DATABASE_URL: `postgresql://${encodeURIComponent(postgresUser)}:${encodeURIComponent(postgresPassword)}@localhost:${postgresPort}/${postgresDb}`,
   })
   yield* fs.writeFileString(
     ENV_PATH,
@@ -239,6 +244,7 @@ const migrateDatabase = Effect.fnUntraced(function* () {
     }
     yield* runCommand("vp", ["exec", "drizzle-kit", "migrate"], {
       cwd: "apps/api",
+      stdio: "inherit",
     })
   }).pipe(
     Effect.retry({
@@ -281,13 +287,11 @@ const program = Effect.gen(function* () {
   yield* Effect.log()
 
   yield* Effect.logInfo("Starting Docker services (Postgres + Redis)")
-  yield* runCommand("vp", [
-    "exec",
-    "tsx",
-    "scripts/compose.ts",
-    "up",
-    "--wait",
-  ]).pipe(
+  yield* runCommand(
+    "vp",
+    ["exec", "tsx", "scripts/compose.ts", "up", "--wait"],
+    { stdio: "inherit" },
+  ).pipe(
     Effect.catchTag("CommandError", () =>
       Effect.gen(function* () {
         yield* Effect.logError(
@@ -335,22 +339,24 @@ const program = Effect.gen(function* () {
   yield* Effect.logInfo("✔️ Installed dependencies")
   yield* Effect.log()
 
-  yield* Effect.logInfo("Syncing vendored repositories")
-  yield* syncVendoredRepos({}).pipe(
-    Effect.catchTag("VendoredReposError", (error) =>
-      Effect.gen(function* () {
-        yield* Effect.logError(
-          `Failed to sync vendored repositories: ${error.message}`,
-        )
-        return yield* Effect.fail(
-          new SetupError({
-            message: "Failed to sync vendored repositories",
-          }),
-        )
-      }),
-    ),
-  )
-  yield* Effect.log()
+  if (withVendoredRepos) {
+    yield* Effect.logInfo("Syncing vendored repositories")
+    yield* syncVendoredRepos({}).pipe(
+      Effect.catchTag("VendoredReposError", (error) =>
+        Effect.gen(function* () {
+          yield* Effect.logError(
+            `Failed to sync vendored repositories: ${error.message}`,
+          )
+          return yield* Effect.fail(
+            new SetupError({
+              message: "Failed to sync vendored repositories",
+            }),
+          )
+        }),
+      ),
+    )
+    yield* Effect.log()
+  }
 
   yield* Effect.logInfo("Applying database migrations...")
   yield* migrateDatabase()

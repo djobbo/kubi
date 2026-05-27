@@ -2,6 +2,23 @@ packages:
   - "apps/*"
   - "packages/*"
 
+catalogMode: prefer
+minimumReleaseAge: 1440
+minimumReleaseAgeExclude:
+  - "@effect/*"
+  - "@tanstack/*"
+  - "@typescript/native-preview*"
+  - "@voidzero-dev/*"
+  - "@oxfmt/*"
+  - "@oxlint/*"
+  - "@oxlint-tsgolint/*"
+  - drizzle-kit
+  - effect
+  - oxfmt
+  - oxlint
+  - oxlint-tsgolint
+  - vite-plus
+
 catalog:
   "@base-ui-components/react": ^1.0.0-beta.7
   "@effect/atom-react": 4.0.0-beta.71
@@ -9,7 +26,7 @@ catalog:
   "@effect/opentelemetry": 4.0.0-beta.71
   "@effect/platform-node": 4.0.0-beta.71
   "@effect/sql-pg": 4.0.0-beta.71
-  "@libsql/client": ^0.17.0
+  "@libsql/client": ^0.17.3
   "@lingui/babel-plugin-lingui-macro": ^5.9.0
   "@lingui/cli": ^5.9.0
   "@lingui/conf": ^5.9.0
@@ -18,10 +35,10 @@ catalog:
   "@lingui/vite-plugin": ^5.9.0
   "@opentelemetry/exporter-metrics-otlp-http": ^0.211.0
   "@opentelemetry/exporter-trace-otlp-http": ^0.211.0
-  "@opentelemetry/sdk-metrics": ^2.5.0
-  "@opentelemetry/sdk-trace-base": ^2.5.0
-  "@opentelemetry/sdk-trace-node": ^2.5.0
-  "@opentelemetry/sdk-trace-web": ^2.5.0
+  "@opentelemetry/sdk-metrics": ^2.7.1
+  "@opentelemetry/sdk-trace-base": ^2.7.1
+  "@opentelemetry/sdk-trace-node": ^2.7.1
+  "@opentelemetry/sdk-trace-web": ^2.7.1
   "@tailwindcss/vite": ^4.1.18
   "@tanstack/devtools-vite": ^0.4.1
   "@tanstack/react-devtools": ^0.9.3
@@ -32,10 +49,10 @@ catalog:
   "@tanstack/router-plugin": ^1.157.16
   "@testing-library/dom": ^10.4.1
   "@testing-library/react": ^16.3.2
-  "@types/node": ^22.15.0
+  "@types/node": ^22.19.19
   "@types/react": ^19.2.10
   "@types/react-dom": ^19.2.3
-  "@typescript/native-preview": ^7.0.0-dev.20260128.1
+  "@typescript/native-preview": 7.0.0-dev.20260527.1
   "@vanilla-extract/css": ^1.18.0
   "@vanilla-extract/vite-plugin": ^5.1.4
   "@vitejs/plugin-react": ^5.1.2
@@ -50,7 +67,7 @@ catalog:
   effect: 4.0.0-beta.71
   effect-solutions: ^0.4.13
   husky: ^9.1.7
-  ioredis: ^5.9.2
+  ioredis: ^5.11.0
   jsdom: ^27.4.0
   knip: ^5.82.1
   lint-staged: ^16.2.7
@@ -68,11 +85,16 @@ catalog:
   syncpack: ^14.0.0-alpha.39
   tailwind-merge: ^3.4.0
   tailwindcss: ^4.1.18
-  tsx: ^4.19.4
-  turbo: ^2.8.0
-  typescript: ^5
+  tsx: ^4.22.3
+  typescript: ^5.9.3
   vite: ^8.0.0-beta.10
   vite-plus: 0.1.22
   vite-tsconfig-paths: ^6.0.5
   vitest: ^4.0.18
   web-vitals: ^5.1.0
+
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true
+  msgpackr-extract: true
+  protobufjs: true

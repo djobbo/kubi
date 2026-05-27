@@ -35,7 +35,7 @@ Monorepo driver: **[vite-plus](https://viteplus.dev)** (`vp`). Package manager: 
 ```bash
 vp install           # Install deps (pnpm via vp)
 vp run setup         # Bootstrap .env, compose, vendored repos, migrations
-vp run dev           # Turbo: API + client + studio
+vp run dev           # Compose + API + client + Drizzle studio
 vp run lint          # Format + lint
 vp run check:types   # Typecheck all workspaces
 vp exec <cmd>        # Run with node_modules/.bin on PATH

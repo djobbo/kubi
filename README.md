@@ -176,7 +176,7 @@ vp run setup -- --with-supabase
 
 ### 2. Environment
 
-Root [`.env.example`](.env.example) lists compose defaults (`DATABASE_URL`, `REDIS_URL`, API/client URLs). The API also reads these from the root `.env` when started via turbo.
+Root [`.env.example`](.env.example) lists compose defaults (`DATABASE_URL`, `REDIS_URL`, API/client URLs). The API also reads these from the root `.env` when started via `vp run dev`.
 
 ### 3. Start Services & Dev Servers
 

@@ -21,17 +21,25 @@ export const runChildProcess = Effect.fn("runChildProcess")(
     readonly command: string
     readonly args: ReadonlyArray<string>
     readonly cwd?: string
+    readonly stdio?: "pipe" | "inherit"
   }) {
+    const stdio = options.stdio ?? "pipe"
     const spawner = yield* ChildProcessSpawner.ChildProcessSpawner
     const cmd = ChildProcess.make(options.command, options.args, {
       cwd: options.cwd,
-      stdout: "pipe",
-      stderr: "pipe",
+      stdout: stdio,
+      stderr: stdio,
     })
 
     return yield* Effect.scoped(
       Effect.gen(function* () {
         const handle = yield* spawner.spawn(cmd)
+
+        if (stdio === "inherit") {
+          const exitCode = yield* handle.exitCode
+          return { stdout: "", stderr: "", exitCode } as ChildProcessResult
+        }
+
         const [stdout, stderr] = yield* Effect.all(
           [collectStream(handle.stdout), collectStream(handle.stderr)],
           { concurrency: "unbounded" },

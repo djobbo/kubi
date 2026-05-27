@@ -4,23 +4,17 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "turbo run build",
+    "check": "vp check",
     "check:deadcode": "NODE_ENV=deadcode knip",
-    "check:format": "oxfmt --check",
-    "check:lint": "oxlint --type-aware --type-check",
-    "check:types": "turbo run check:types",
+    "check:fix": "vp check --fix",
     "compose": "vp exec tsx scripts/compose.ts",
     "compose:down": "vp exec tsx scripts/compose.ts down",
-    "compose:up": "vp exec tsx scripts/compose.ts up --wait",
-    "dev": "turbo run dev studio",
-    "lint": "oxfmt && syncpack format && syncpack fix && oxlint --type-aware --type-check --fix --fix-suggestions",
     "prepare": "vp config && effect-language-service patch",
-    "server:build": "turbo run build --filter=@dair/api",
-    "server:start": "turbo run start --filter=@dair/api",
+    "server:build": "vp run -F @dair/api build",
+    "server:start": "vp run -F @dair/api start",
     "setup": "vp exec tsx scripts/setup/setup.mts",
-    "test": "turbo run test",
-    "workers:dev": "turbo run dev --filter=@dair/workers",
-    "workers:start": "turbo run start --filter=@dair/workers"
+    "workers:dev": "vp run -F @dair/workers dev",
+    "workers:start": "vp run -F @dair/workers start"
   },
   "devDependencies": {
     "@effect/language-service": "catalog:",
@@ -37,7 +31,6 @@
     "oxlint-tsgolint": "catalog:",
     "syncpack": "catalog:",
     "tsx": "catalog:",
-    "turbo": "catalog:",
     "typescript": "catalog:",
     "vite-plus": "catalog:"
   },
@@ -47,5 +40,5 @@
   "engines": {
     "node": ">=22.12.0"
   },
-  "packageManager": "pnpm@10.33.2"
+  "packageManager": "pnpm@11.4.0"
 }

@@ -8,13 +8,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Lint
-            action: vp run check:lint
-          - name: Format
-            action: vp run check:format
+          - name: Check
+            action: vp run check
           # TODO: incrementally add these checks back
-          # - name: Typecheck
-          #   action: vp run check:types
           # - name: Build
           #   action: vp run build
           - name: Dead Code

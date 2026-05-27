@@ -1,115 +1,73 @@
-import { spawn } from "node:child_process"
 import { Command, Flag } from "effect/unstable/cli"
 import * as NodeRuntime from "@effect/platform-node/NodeRuntime"
 import * as NodeServices from "@effect/platform-node/NodeServices"
+import { ChildProcessSpawner } from "effect/unstable/process"
 import { Console, Effect } from "effect"
+
+import { runChildProcess } from "./setup/run-child-process.mts"
 
 const composeFile = "compose.dev.yml"
 
-const spawnCompose = (
+const logComposeOutput = (stdout: string, stderr: string) => {
+  const output = stderr.trim() || stdout.trim()
+  return output ? Console.log(output) : Effect.void
+}
+
+const runDockerCompose = (
   args: ReadonlyArray<string>,
-  stdio: ["inherit", "inherit", "inherit"] | ["inherit", "pipe", "inherit"],
+  options: { readonly stdio?: "pipe" | "inherit" } = {},
 ) =>
-  Effect.tryPromise({
-    try: () =>
-      new Promise<{ exitCode: number; stdout: string }>((resolve, reject) => {
-        const proc = spawn("docker", ["compose", "-f", composeFile, ...args], {
-          stdio,
-        })
-
-        let stdout = ""
-        if (proc.stdout) {
-          proc.stdout.on("data", (chunk: Buffer) => {
-            stdout += chunk.toString()
-          })
-        }
-
-        proc.on("error", reject)
-        proc.on("close", (code) => {
-          resolve({ exitCode: code ?? 1, stdout })
-        })
-      }),
-    catch: (error: unknown) =>
-      new Error(`Docker compose failed: ${String(error)}`),
-  })
-
-const runDockerCompose = (args: ReadonlyArray<string>) =>
   Effect.gen(function* () {
     yield* Console.log(
       `Running: docker compose -f ${composeFile} ${args.join(" ")}`,
     )
 
-    const { exitCode } = yield* spawnCompose(args, [
-      "inherit",
-      "inherit",
-      "inherit",
-    ])
+    const { stdout, stderr, exitCode } = yield* dockerCompose(args, options).pipe(
+      Effect.mapError(
+        (cause) => new Error(`Docker compose failed: ${String(cause)}`),
+      ),
+    )
 
-    if (exitCode !== 0) {
+    if (options.stdio !== "inherit") {
+      yield* logComposeOutput(stdout, stderr)
+    }
+
+    if (exitCode !== ChildProcessSpawner.ExitCode(0)) {
       return yield* Effect.fail(
         new Error(`Docker compose exited with code ${exitCode}`),
       )
     }
   })
 
-const waitForHealth = (): Effect.Effect<void, Error, never> =>
-  Effect.gen(function* () {
-    yield* Console.log("Waiting for services to be healthy...")
-
-    const { exitCode, stdout } = yield* spawnCompose(
-      ["ps", "--format", "json"],
-      ["inherit", "pipe", "inherit"],
-    )
-
-    if (exitCode !== 0) {
-      return yield* Effect.fail(
-        new Error(`Failed to check service status: ${exitCode}`),
-      )
-    }
-
-    const services = stdout
-      .trim()
-      .split("\n")
-      .filter((line: string) => line.trim())
-      .map(
-        (line: string) =>
-          JSON.parse(line) as { Health?: string; State?: string },
-      )
-
-    const unhealthyServices = services.filter((service) => {
-      const health = service.Health || ""
-      const state = service.State || ""
-      return (
-        state.includes("unhealthy") ||
-        (state.includes("starting") && !health.includes("healthy"))
-      )
-    })
-
-    if (unhealthyServices.length > 0) {
-      yield* Console.log("Some services are not yet healthy, waiting...")
-      yield* Effect.sleep("2 seconds")
-      yield* waitForHealth()
-    } else {
-      yield* Console.log("All services are healthy!")
-    }
+const dockerCompose = (
+  args: ReadonlyArray<string>,
+  options: { readonly stdio?: "pipe" | "inherit" } = {},
+) =>
+  runChildProcess({
+    command: "docker",
+    args: ["compose", "-f", composeFile, ...args],
+    stdio: options.stdio,
   })
 
 const waitForHealthFlag = Flag.boolean("wait").pipe(
   Flag.withAlias("w"),
-  Flag.withDescription("Wait for services to be healthy before returning"),
+  Flag.withDescription(
+    "Wait for services to be healthy (streams logs until ready)",
+  ),
 )
 
 const composeUp = Command.make("up", { wait: waitForHealthFlag }, ({ wait }) =>
   Effect.gen(function* () {
-    yield* runDockerCompose(["up", "-d"])
-
     if (wait) {
-      yield* waitForHealth()
-    } else {
-      yield* Console.log(
-        "Services started. Use --wait to wait for health checks.",
-      )
+      yield* runDockerCompose(["up", "--wait"], { stdio: "inherit" })
+      yield* Console.log("All services are healthy!")
+      return
     }
+
+    yield* runDockerCompose(["up", "-d"])
+    yield* Console.log(
+      "Services started. Use --wait to wait for health checks.",
+    )
   }),
 )
 

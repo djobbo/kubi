@@ -24,22 +24,37 @@ export const relations = defineRelations(schema, (r) => ({
     sessions: r.many.sessionsTable(),
   },
   sessionsTable: {
-    user: r.one.usersTable(),
+    user: r.one.usersTable({
+      from: r.sessionsTable.userId,
+      to: r.usersTable.id,
+    }),
   },
   bookmarksTable: {
-    user: r.one.usersTable(),
+    user: r.one.usersTable({
+      from: r.bookmarksTable.userId,
+      to: r.usersTable.id,
+    }),
   },
   oauthAccountsTable: {
-    user: r.one.usersTable(),
+    user: r.one.usersTable({
+      from: r.oauthAccountsTable.userId,
+      to: r.usersTable.id,
+    }),
   },
   playerHistoryTable: {
     legendHistory: r.many.playerLegendHistoryTable(),
     weaponHistory: r.many.playerWeaponHistoryTable(),
   },
   playerLegendHistoryTable: {
-    playerHistory: r.one.playerHistoryTable(),
+    playerHistory: r.one.playerHistoryTable({
+      from: r.playerLegendHistoryTable.playerHistoryId,
+      to: r.playerHistoryTable.id,
+    }),
   },
   playerWeaponHistoryTable: {
-    playerHistory: r.one.playerHistoryTable(),
+    playerHistory: r.one.playerHistoryTable({
+      from: r.playerWeaponHistoryTable.playerHistoryId,
+      to: r.playerHistoryTable.id,
+    }),
   },
 }))

@@ -37,7 +37,7 @@ kubi/
 | ------------------------------ | --------------------------------- |
 | First-time bootstrap           | `vp run setup`                    |
 | Install deps                   | `vp install`                      |
-| Dev (turbo)                    | `vp run dev`                      |
+| Dev                            | `vp run dev`                      |
 | Lint / format                  | `vp run lint` or `vp check --fix` |
 | Typecheck                      | `vp run check:types`              |
 | Run script in workspace        | `vp run -F @dair/api dev`         |
