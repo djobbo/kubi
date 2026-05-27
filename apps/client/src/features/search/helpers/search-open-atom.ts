@@ -1,3 +1,3 @@
-import { Atom } from "@effect-atom/atom-react"
+import * as Atom from "effect/unstable/reactivity/Atom"
 
 export const searchOpenAtom = Atom.make(false)

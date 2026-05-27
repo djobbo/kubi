@@ -2,16 +2,19 @@
   "name": "@dair/api-contract",
   "version": "0.0.0",
   "dependencies": {
+    "@dair/brawltools-api": "workspace:*",
     "@dair/db": "workspace:*",
-    "@effect/platform": "catalog:",
     "effect": "catalog:"
   },
   "devDependencies": {
-    "@types/node": "catalog:",
     "@typescript/native-preview": "catalog:"
   },
-  "module": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./src/*.ts": "./src/*.ts",
+    "./src/*": "./src/*.ts"
+  },
+  "module": "./src/index.ts",
   "private": true,
-  "type": "module",
-  "types": "src/index.ts"
+  "type": "module"
 }

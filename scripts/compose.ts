@@ -1,5 +1,5 @@
 import { spawn } from "node:child_process"
-import { Command, Options } from "@effect/cli"
+import { Command, Flag } from "effect/unstable/cli"
 import * as NodeRuntime from "@effect/platform-node/NodeRuntime"
 import * as NodeServices from "@effect/platform-node/NodeServices"
 import { Console, Effect } from "effect"
@@ -89,14 +89,14 @@ const waitForHealth = (): Effect.Effect<void, Error, never> =>
     }
   })
 
-const waitForHealthOption = Options.boolean("wait").pipe(
-  Options.withAlias("w"),
-  Options.withDescription("Wait for services to be healthy before returning"),
+const waitForHealthFlag = Flag.boolean("wait").pipe(
+  Flag.withAlias("w"),
+  Flag.withDescription("Wait for services to be healthy before returning"),
 )
 
 const composeUp = Command.make(
   "up",
-  { wait: waitForHealthOption },
+  { wait: waitForHealthFlag },
   ({ wait }) =>
     Effect.gen(function* () {
       yield* runDockerCompose(["up", "-d"])
@@ -121,12 +121,9 @@ const compose = Command.make("compose", {}, () =>
   Console.log("Docker Compose CLI — use 'up' or 'down' subcommands"),
 ).pipe(Command.withSubcommands([composeUp, composeDown]))
 
-const cli = Command.run(compose, {
-  name: "Docker Compose Manager",
+Command.run(compose, {
   version: "1.0.0",
-})
-
-cli(process.argv).pipe(
+}).pipe(
   Effect.provide(NodeServices.layer),
   NodeRuntime.runMain,
 )

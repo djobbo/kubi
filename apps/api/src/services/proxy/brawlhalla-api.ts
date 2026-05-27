@@ -3,7 +3,7 @@ import {
   HttpClientRequest,
   HttpServerRequest,
   HttpServerResponse,
-} from "@effect/platform"
+} from "effect/unstable/http"
 import { Config, Duration, Effect, Option, Redacted, Schema } from "effect"
 import { Cache } from "@/services/cache"
 
@@ -86,7 +86,7 @@ export const brawlhallaApiProxy = <E, R>(
     const cache = yield* Cache
     const cachedResult = yield* cache
       .get(cacheKey, CachedProxyResponseSchema)
-      .pipe(Effect.catchAll(() => Effect.succeed(Option.none())))
+      .pipe(Effect.catch(() => Effect.succeed(Option.none())))
 
     if (Option.isSome(cachedResult)) {
       const cached = cachedResult.value
@@ -153,8 +153,8 @@ export const brawlhallaApiProxy = <E, R>(
                 Effect.tap(() =>
                   Effect.log(`Cached proxy response for: ${proxyPath}`),
                 ),
-                Effect.catchAll(() => Effect.void),
-                Effect.fork,
+                Effect.catch(() => Effect.void),
+                Effect.forkDetach,
               )
           }
 
@@ -168,7 +168,7 @@ export const brawlhallaApiProxy = <E, R>(
           return response
         }),
       ),
-      Effect.catchAll((error) =>
+      Effect.catch((error) =>
         Effect.gen(function* () {
           yield* Effect.logError("Proxy error", error)
 

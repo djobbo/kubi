@@ -8,6 +8,13 @@
       "when": 1765800513595,
       "tag": "0000_quick_puck",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1779882004175,
+      "tag": "0002_spotty_firedrake",
+      "breakpoints": true
     }
   ]
 }

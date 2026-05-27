@@ -1,0 +1,16 @@
+{
+  "name": "@dair/brawltools-api",
+  "version": "0.0.0",
+  "dependencies": {
+    "effect": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@typescript/native-preview": "catalog:"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "private": true,
+  "type": "module"
+}

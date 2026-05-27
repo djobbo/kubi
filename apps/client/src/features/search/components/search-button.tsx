@@ -1,5 +1,5 @@
 import { Button } from "@/shared/components/button"
-import { useAtomSet } from "@effect-atom/atom-react"
+import { useAtomSet } from "@effect/atom-react"
 import { searchOpenAtom } from "../helpers/search-open-atom"
 
 export const SearchButton = () => {

@@ -45,12 +45,12 @@ vp run dev
 
 - [x] Root [vite.config.ts](../vite.config.ts), [pnpm-workspace.yaml](../pnpm-workspace.yaml), `packageManager: pnpm@10.33.2`
 - [x] `"setup"` script via `vp exec tsx`
-- [ ] Commit `pnpm-lock.yaml` after successful `vp install`
-- [ ] Align [scripts/setup/setup.mts](../scripts/setup/setup.mts) with compose + `vp install` + `vp run -F @dair/api db:migrate`
+- [x] Commit `pnpm-lock.yaml` after successful `vp install`
+- [x] Align [scripts/setup/setup.mts](../scripts/setup/setup.mts) with compose + `vp install` + drizzle migrate
 
 ### 1.2 Root environment template
 
-- [ ] Add [`.env.example`](../.env.example) at repo root.
+- [x] Add [`.env.example`](../.env.example) at repo root.
 - [ ] Minimum keys:
 
 ```bash
@@ -69,16 +69,16 @@ OAUTH_SECRET=
 # MIGRATION_SUPABASE_SERVICE_KEY=
 ```
 
-- [ ] Remove default Supabase key sync from setup; gate behind `--with-supabase`.
+- [x] Remove default Supabase key sync from setup; gate behind `--with-supabase`.
 
 ### 1.3 Replace Supabase bootstrap with compose
 
-- [ ] `vp run compose:up` instead of `vp exec supabase start`.
-- [ ] Drop `dotenv` CLI — use `dotenv/config` in entrypoints and `vp exec tsx`.
+- [x] Compose via `vp exec tsx scripts/compose.ts up --wait` (avoids turbo graph during bootstrap).
+- [x] Drop `dotenv` CLI — use `dotenv/config` in entrypoints and `vp exec tsx`.
 
 ### 1.4 Fix migration step
 
-- [ ] `runCommand("vp", ["run", "-F", "@dair/api", "db:migrate"])` with retries.
+- [x] `vp exec drizzle-kit migrate` in `apps/api` with retries.
 
 ### 1.5 Effect compatibility (short-term)
 

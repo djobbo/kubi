@@ -2,7 +2,6 @@
   "name": "dair",
   "version": "0.0.0",
   "devDependencies": {
-    "@effect/cli": "catalog:",
     "@effect/language-service": "catalog:",
     "@effect/platform-node": "catalog:",
     "@types/node": "catalog:",

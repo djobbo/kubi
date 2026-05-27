@@ -1,4 +1,4 @@
-import { HttpServerRequest, HttpServerResponse } from "@effect/platform"
+import { HttpServerRequest, HttpServerResponse } from "effect/unstable/http"
 import { Duration, Effect, Option, Schema } from "effect"
 import { Cache } from "@/services/cache"
 
@@ -6,7 +6,7 @@ import { Cache } from "@/services/cache"
 const CachedResponseSchema = Schema.Struct({
   status: Schema.Number,
   body: Schema.String,
-  headers: Schema.Record({ key: Schema.String, value: Schema.String }),
+  headers: Schema.Record(Schema.String, Schema.String),
   updatedAt: Schema.Date,
 })
 
@@ -133,7 +133,7 @@ export const responseCache = (options: ResponseCacheOptions = {}) => {
       // Try to get from cache first
       const cachedResult = yield* cache
         .get(cacheKey, CachedResponseSchema)
-        .pipe(Effect.catchAll(() => Effect.succeed(Option.none())))
+        .pipe(Effect.catch(() => Effect.succeed(Option.none())))
 
       if (Option.isSome(cachedResult)) {
         const cached = cachedResult.value
@@ -200,8 +200,8 @@ export const responseCache = (options: ResponseCacheOptions = {}) => {
           yield* cache
             .set(cacheKey, cacheData, Option.some(Duration.seconds(ttlSeconds)))
             .pipe(
-              Effect.catchAll(() => Effect.void),
-              Effect.fork, // Fork to not block the response
+              Effect.catch(() => Effect.void),
+              Effect.forkDetach, // Fork to not block the response
             )
         }
       }

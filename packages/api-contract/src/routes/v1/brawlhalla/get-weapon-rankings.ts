@@ -1,7 +1,5 @@
 import { Schema } from "effect"
 import type { PlayerWeaponHistory } from "@dair/db"
-import { HttpApiSchema } from "@effect/platform"
-
 export const WeaponRanking = Schema.Struct({
   weaponName: Schema.String,
   playerId: Schema.Number,
@@ -16,22 +14,15 @@ export const WeaponRanking = Schema.Struct({
   damageDealt: Schema.Number,
 })
 
-export const WeaponNameParam = HttpApiSchema.param(
-  "name",
-  Schema.NonEmptyTrimmedString,
-)
-
-export const GlobalWeaponRankingsOrderBy = Schema.Literal(
-  ...([
-    "xp",
-    "games",
-    "wins",
-    "losses",
-    "timeHeld",
-    "kos",
-    "damageDealt",
-  ] satisfies (keyof PlayerWeaponHistory)[]),
-)
+export const GlobalWeaponRankingsOrderBy = Schema.Literals([
+  "xp",
+  "games",
+  "wins",
+  "losses",
+  "timeHeld",
+  "kos",
+  "damageDealt",
+] as const satisfies readonly (keyof PlayerWeaponHistory)[])
 
 null as unknown as PlayerWeaponHistory satisfies Omit<
   typeof WeaponRanking.Type,

@@ -1,4 +1,4 @@
-import { z } from "zod/v4"
+import { Schema, SchemaTransformation } from "effect"
 
 export const rankedRegions = [
   "all",
@@ -12,12 +12,39 @@ export const rankedRegions = [
   "sa",
   "me",
 ] as const
+
 const upperCaseRankedRegions = rankedRegions.map(
-  (region) => region.toUpperCase() as Uppercase<(typeof rankedRegions)[number]>,
+  (region) =>
+    region.toUpperCase() as Uppercase<(typeof rankedRegions)[number]>,
 )
 
-export const rankedRegionSchema = z
-  .enum([...rankedRegions, ...upperCaseRankedRegions])
-  .catch("all")
+export type RankedRegion = (typeof rankedRegions)[number]
 
-export type RankedRegion = z.infer<typeof rankedRegionSchema>
+/** Normalized region slug used in decoded API models. */
+export const RankedRegionSchema = Schema.Literals(rankedRegions)
+
+export const isRankedRegion = (value: string): value is RankedRegion =>
+  (rankedRegions as readonly string[]).includes(value) ||
+  upperCaseRankedRegions.includes(
+    value as (typeof upperCaseRankedRegions)[number],
+  )
+
+/** Accepts lowercase or uppercase region slugs in route paths and query strings. */
+export const RankedRegionParamSchema = Schema.String.pipe(
+  Schema.decodeTo(
+    RankedRegionSchema,
+    SchemaTransformation.transform({
+      decode: (input) => {
+        const region = input.toLowerCase()
+        return isRankedRegion(region) ? region : "all"
+      },
+      encode: (region) => region,
+    }),
+  ),
+)
+
+/** @deprecated Use {@link rankedRegions} */
+export const rankedRegionValues = [
+  ...rankedRegions,
+  ...upperCaseRankedRegions,
+] as const

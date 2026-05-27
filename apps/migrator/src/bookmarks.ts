@@ -2,9 +2,12 @@ import { sql as drizzleSql } from "drizzle-orm"
 import postgres from "postgres"
 import { z } from "zod/v4"
 
-import { PRE_MIGRATION_DISCORD_USER_ID_PREFIX } from "@/features/bookmarks/constants"
-import type { NewBookmark } from "@dair/schema"
-import { bookmarksTable, usersTable } from "@dair/schema"
+import { placeholderUserIdFromDiscord } from "@dair/common/src/constants/bookmarks"
+import {
+  type NewBookmark,
+  bookmarksTable,
+  usersTable,
+} from "@dair/db"
 
 import { supabase } from "./client"
 import { migrationDb } from "./db"
@@ -149,9 +152,8 @@ const migrateBookmarks = async (offset: number, limit: number) => {
   const tempUsers = bookmarks
     .map((bookmark) => ({
       id: bookmark.userId,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      email: "",
+      email: `migration+${bookmark.userId}@placeholder.local`,
+      username: `migration-${bookmark.userId.slice(0, 8)}`,
     }))
     .filter(
       (user, index, self) => self.findIndex((u) => u.id === user.id) === index,
@@ -192,7 +194,7 @@ export const migrateAllBookmarks = async (maxBookmarks: number) => {
   console.time("Migrate all bookmarks")
 
   const { count } = await supabase
-    .from("BHPlayerAlias")
+    .from("UserFavorite")
     .select("*", { count: "exact", head: true })
 
   console.log(`Migrating ${count} bookmarks`)

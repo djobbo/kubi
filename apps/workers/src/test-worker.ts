@@ -110,9 +110,9 @@ const defineRankedWorker = Effect.fn("worker")(function* (
 
 const program = Effect.gen(function* () {
   yield* Effect.log("Starting workers")
-  const worker = yield* Effect.fork(defineRankedWorker("Ranked Worker"))
+  const worker = yield* Effect.forkDetach(defineRankedWorker("Ranked Worker"))
   yield* Effect.sleep(Duration.seconds(1))
-  const playerWorker = yield* Effect.fork(
+  const playerWorker = yield* Effect.forkDetach(
     defineRankedWorker("Player Worker", true),
   )
   yield* Fiber.await(worker)

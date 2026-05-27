@@ -20,4 +20,3 @@ export { ConfigError } from "./errors"
 // Re-export other config services for convenience
 export { DatabaseConfig } from "../db/config"
 export { OAuthConfig } from "../authorization/config"
-export { CacheConfig } from "../cache/config"

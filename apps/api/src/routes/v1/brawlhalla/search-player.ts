@@ -10,16 +10,17 @@ import { getRankings1v1 } from "./get-rankings"
 export const searchPlayer = Effect.fn("searchPlayer")(function* (name: string) {
   const archive = yield* Archive
   yield* Effect.log(`Searching for player: ${name}`)
-  yield* getRankings1v1("all", 1, name).pipe(
-    Effect.tap((rankings) => Effect.log(JSON.stringify(rankings, null, 2))),
-    Effect.timeout(Duration.seconds(1)),
-    Effect.catchAll(() => Effect.succeed(null)),
-    Effect.fork,
+  yield* Effect.forkDetach(
+    getRankings1v1("all", 1, name).pipe(
+      Effect.tap((rankings) => Effect.log(JSON.stringify(rankings, null, 2))),
+      Effect.timeout(Duration.seconds(1)),
+      Effect.catch(() => Effect.succeed(null)),
+    ),
   )
 
   const searchResult = yield* archive
     .searchPlayers(name)
-    .pipe(Effect.catchAll(() => Effect.succeed({ data: [], nextCursor: null })))
+    .pipe(Effect.catch(() => Effect.succeed({ data: [], nextCursor: null })))
 
   Effect.log(searchResult)
 

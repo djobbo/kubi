@@ -39,6 +39,7 @@ dair/
 │   │   │   ├── routes/           # TanStack Router pages
 │   │   │   └── shared/           # Shared components & utilities
 │   │   └── public/               # Static assets
+│   ├── migrator/                 # Supabase → PG data migration (phase 3)
 │   └── monitoring/               # Grafana observability stack config
 │       ├── alloy/                # OpenTelemetry collector config
 │       ├── grafana/              # Dashboards & datasources
@@ -64,7 +65,7 @@ dair/
 │
 └── scripts/
     ├── compose.ts                # Docker compose CLI helper
-    └── migration/                # Data migration scripts
+    └── setup/                    # vp run setup bootstrap
 ```
 
 ## API Architecture
@@ -155,39 +156,27 @@ Two scheduled crawlers run alongside the API server:
 - [Node.js](https://nodejs.org/) >= 22.12
 - [Docker](https://www.docker.com/) (for PostgreSQL, Redis, and observability stack)
 
-### 1. Install Dependencies
+### 1. Bootstrap (recommended)
+
+From the repo root:
 
 ```bash
 vp install
+vp run setup
+vp run dev
 ```
 
-### 2. Configure Environment
+`vp run setup` copies `.env.example` → `.env` when needed, starts Postgres + Redis via compose, installs dependencies, syncs `.repos/`, and runs Drizzle migrations.
 
-Create `apps/api/.env`:
+Optional Supabase credentials for legacy data migration:
 
 ```bash
-# Required
-API_URL=http://localhost:3000
-DATABASE_URL=postgresql://dair:dair@localhost:5432/dair
-DEFAULT_CLIENT_URL=http://localhost:3001
-BRAWLHALLA_API_KEY=your_api_key_here
-
-# OAuth (required for authentication)
-OAUTH_SECRET=your_random_secret
-DISCORD_CLIENT_ID=your_discord_client_id
-DISCORD_CLIENT_SECRET=your_discord_client_secret
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-
-# Optional
-API_PORT=3000                      # default: 3000
-ALLOWED_ORIGINS=*                  # default: * (comma-separated)
-REDIS_URL=redis://localhost:6379   # default: redis://localhost:6379
-CACHE_PREFIX=api:cache             # default: api:cache
-OTLP_ENDPOINT=http://localhost:4318
-SERVICE_NAME=api
-SERVICE_VERSION=0.0.0
+vp run setup -- --with-supabase
 ```
+
+### 2. Environment
+
+Root [`.env.example`](.env.example) lists compose defaults (`DATABASE_URL`, `REDIS_URL`, API/client URLs). The API also reads these from the root `.env` when started via turbo.
 
 ### 3. Start Services & Dev Servers
 
@@ -197,7 +186,7 @@ vp run dev
 
 This command:
 
-1. Starts Docker services (PostgreSQL, Redis, observability stack)
+1. Starts Docker services (PostgreSQL, Redis, observability stack) when not already up
 2. Runs database migrations
 3. Starts the API server with hot reload
 4. Starts the client dev server

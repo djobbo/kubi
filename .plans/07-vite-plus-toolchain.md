@@ -95,7 +95,7 @@ See [.cursor/rules/node-toolchain.mdc](../.cursor/rules/node-toolchain.mdc). **D
 ## Migration tasks
 
 - [x] Add root `vite.config.ts`, `pnpm-workspace.yaml`, `packageManager`
-- [ ] Run `vp install` and commit `pnpm-lock.yaml`
+- [x] Run `vp install` and commit `pnpm-lock.yaml`
 - [x] CI uses `vp install` + `vp run check:*` ([`.github/workflows/code-qa.yml`](../.github/workflows/code-qa.yml))
 - [ ] `prepare`: `vp config` (hooks) + keep `effect-language-service patch` if still needed
 - [ ] Migrate `lint-staged` → `vp staged` in `vite.config.ts`; remove redundant husky/lint-staged when stable

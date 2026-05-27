@@ -1,5 +1,4 @@
-// TODO: Add translations
-import { z } from "zod/v4"
+import { Schema } from "effect"
 
 export const rankedTiers = [
   "Valhallan",
@@ -34,7 +33,10 @@ export const rankedTiers = [
 
 export type RankedTier = (typeof rankedTiers)[number]
 
-export const rankedTierSchema = z.enum(rankedTiers).catch("Tin 0")
+export const RankedTierSchema = Schema.Literals(rankedTiers)
+
+export const isRankedTier = (value: string): value is RankedTier =>
+  (rankedTiers as readonly string[]).includes(value)
 
 const RankedTiers = {
   Valhallan: 9999,

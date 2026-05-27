@@ -6,7 +6,7 @@ import type {
 import { ServerDiscovery, type ServerInfo } from "@/services/server-discovery"
 
 const IpApiResponse = Schema.Struct({
-  status: Schema.Literal("success"),
+  status: Schema.Literals(["success"]),
   lat: Schema.Number,
   lon: Schema.Number,
 })
@@ -87,11 +87,11 @@ export const getNearestServer = (ip: string | null) =>
       catch: () => null,
     }).pipe(
       Effect.flatMap((data) =>
-        Schema.decodeUnknown(IpApiResponse)(data).pipe(
-          Effect.catchAll(() => Effect.succeed(null)),
+        Schema.decodeUnknownEffect(IpApiResponse)(data).pipe(
+          Effect.catch(() => Effect.succeed(null)),
         ),
       ),
-      Effect.catchAll(() => Effect.succeed(null)),
+      Effect.catch(() => Effect.succeed(null)),
     )
 
     if (!result) {

@@ -1,6 +1,6 @@
 import "dotenv/config"
 
-import { HttpClient, FetchHttpClient } from "@effect/platform"
+import { FetchHttpClient, HttpClient } from "effect/unstable/http"
 import { WorkerConfig } from "@/services/config"
 import {
   Duration,
@@ -31,7 +31,7 @@ const waitForApiHealth = Effect.gen(function* () {
 
       const response = yield* httpClient.get(healthUrl).pipe(
         Effect.timeout(Duration.seconds(5)),
-        Effect.catchAll((error) =>
+        Effect.catch((error) =>
           Effect.fail(new Error(`Health check failed: ${String(error)}`)),
         ),
       )
@@ -171,7 +171,7 @@ const SharedDependencies = Layer.mergeAll(
 const program = Effect.gen(function* () {
   yield* waitForApiHealth
   yield* Effect.log("Starting workers")
-  const worker = yield* Effect.fork(
+  const worker = yield* Effect.forkDetach(
     defineRankedWorker("Ranked Worker", {
       brackets: ["1v1", "2v2", "rotating"],
       regions: ["eu", "us-e", "sa", "sea", "brz", "aus", "us-w", "jpn", "me"],
@@ -189,7 +189,7 @@ const program = Effect.gen(function* () {
     }),
   )
   yield* Effect.sleep(Duration.seconds(1))
-  const playerWorker = yield* Effect.fork(
+  const playerWorker = yield* Effect.forkDetach(
     defineRankedWorker(
       "Player Worker",
       {

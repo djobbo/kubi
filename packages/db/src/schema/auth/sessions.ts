@@ -1,4 +1,5 @@
-import { relations, sql } from "drizzle-orm"
+import { sql } from "drizzle-orm"
+import { relations } from "drizzle-orm/_relations"
 import { pgTable, uuid } from "drizzle-orm/pg-core"
 import { withExpiry, withTimestamp } from "../../helpers/with-timestamp"
 import { usersTable } from "./users"

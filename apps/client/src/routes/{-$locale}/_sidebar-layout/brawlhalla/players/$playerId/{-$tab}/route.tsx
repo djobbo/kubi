@@ -9,7 +9,8 @@ import { OverviewTab } from "./-overview-tab"
 import { TeamsTab } from "./-teams-tab"
 import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
-import { Result, useAtomValue } from "@effect-atom/atom-react"
+import * as AsyncResult from "effect/unstable/reactivity/AsyncResult"
+import { useAtomValue } from "@effect/atom-react"
 import { ApiClient } from "@/shared/api-client"
 import { Breadcrumb } from "@/shared/components/breadcrumb"
 
@@ -77,7 +78,7 @@ function RouteComponent() {
     }),
   )
 
-  return Result.builder(playerDataResult)
+  return AsyncResult.builder(playerDataResult)
     .onInitialOrWaiting(() => {
       return <div className="px-8 pt-4 flex flex-col gap-2">Loading...</div>
     })

@@ -2,6 +2,8 @@
 
 **Goal:** Restore corehalla UX on TanStack Router / Start under `apps/client`, consuming `@dair/api-contract` via typed client.
 
+**Prerequisites:** [02-effect-v4-remaining.md](./02-effect-v4-remaining.md) (stable `Api` + Atom client); [04-api-and-auth-parity.md](./04-api-and-auth-parity.md) for bookmarks/auth endpoints used by new routes.
+
 Reference routes: `.repos/corehalla/app/src/routes/`
 
 ## Current client surface

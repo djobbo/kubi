@@ -6,7 +6,8 @@ export const getWeeklyRotation = () =>
   Effect.gen(function* () {
     // TODO: const session = yield* Authorization.getSession();
 
-    const weeklyRotation = yield* BrawlhallaGql.getWeeklyRotation()
+    const gql = yield* BrawlhallaGql
+    const weeklyRotation = yield* gql.getWeeklyRotation()
 
     const response: typeof GetWeeklyRotationResponse.Type = {
       data: weeklyRotation.data,

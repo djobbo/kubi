@@ -11,19 +11,17 @@ import type {
   PlayerRanked2v2,
   PlayerRankedRotating,
 } from "@dair/api-contract/src/routes/v1/brawlhalla/get-player-by-id"
-import { rankedRegions } from "@dair/brawlhalla-api/src/constants/ranked/regions"
 import {
+  getLegendOrTeamRatingReset,
   getLegendsAccumulativeData,
+  getPersonalRatingReset,
+  getSeasonStats,
+  getTeamPlayers,
   getWeaponlessData,
   getWeaponsData,
   parsePlayerLegends,
-} from "@dair/brawlhalla-api/src/helpers/parser"
-import {
-  getPersonalRatingReset,
-  getSeasonStats,
-} from "@dair/brawlhalla-api/src/helpers/season-reset"
-import { getLegendOrTeamRatingReset } from "@dair/brawlhalla-api/src/helpers/season-reset"
-import { getTeamPlayers } from "@dair/brawlhalla-api/src/helpers/team-players"
+  rankedRegions,
+} from "@dair/brawlhalla-api"
 import { cleanString } from "@dair/common/src/helpers/clean-string"
 import { Effect } from "effect"
 import { getEntitySlug } from "@/helpers/entity-slug"
@@ -50,7 +48,7 @@ export const getPlayerById = Effect.fn("getPlayerById")(function* (
     clanId
       ? brawlhallaApi
           .getClanById(clanId)
-          .pipe(Effect.catchAll(() => Effect.succeed(null)))
+          .pipe(Effect.catch(() => Effect.succeed(null)))
       : Effect.succeed(null),
     Effect.succeed([null]), // TODO: bookmark service,
     Effect.succeed([null]), // TODO: bookmark service,
@@ -274,7 +272,7 @@ export const getPlayerById = Effect.fn("getPlayerById")(function* (
     ],
     { mode: "validate", concurrency: "unbounded" },
   ).pipe(
-    Effect.catchAll((error) => {
+    Effect.catch((error) => {
       return Effect.logError("Error adding player history or aliases", error)
     }),
   )

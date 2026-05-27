@@ -1,4 +1,4 @@
-import { HttpServerRequest, HttpServerResponse } from "@effect/platform"
+import { HttpServerRequest, HttpServerResponse } from "effect/unstable/http"
 import { Effect, Layer, Option, Redacted } from "effect"
 import { ApiServerConfig } from "@/services/config/api-server-config"
 import { RequestFetchStrategy } from "@/services/fetch-strategy"

@@ -18,7 +18,7 @@ import {
   rankedRotatingHistoryTable,
 } from "@dair/db"
 import { and, eq, desc, or, lt, max, gte, count, ilike } from "drizzle-orm"
-import { Effect, Layer } from "effect"
+import { Context, Effect, Layer } from "effect"
 import { BadRequest } from "@dair/api-contract/src/shared/errors"
 import type { BrawlhallaApiPlayerStats } from "../brawlhalla-api/schema/player-stats"
 import type { BrawlhallaApiPlayerRanked } from "../brawlhalla-api/schema/player-ranked"
@@ -35,10 +35,10 @@ import type { GameDelta } from "@dair/api-contract/src/routes/v1/brawlhalla/get-
 
 const MIN_ALIAS_SEARCH_LENGTH = 3
 
-export class Archive extends Effect.Service<Archive>()(
+export class Archive extends Context.Service<Archive>()(
   "@dair/services/Archive",
   {
-    effect: Effect.gen(function* () {
+    make: Effect.gen(function* () {
       const db = yield* Database
 
       return {
@@ -69,8 +69,8 @@ export class Archive extends Effect.Service<Archive>()(
           offset = 0,
         ) {
           return yield* db.query.playerHistoryTable.findMany({
-            where: eq(playerHistoryTable.playerId, playerId),
-            orderBy: desc(playerHistoryTable.recordedAt),
+            where: { playerId: { eq: playerId } },
+            orderBy: { recordedAt: "desc" },
             limit,
             offset,
             with: {
@@ -933,5 +933,7 @@ export class Archive extends Effect.Service<Archive>()(
     }),
   },
 ) {
-  static readonly layer = this.Default.pipe(Layer.provide(Database.layer))
+  static readonly layer = Layer.effect(this, this.make).pipe(
+    Layer.provide(Database.layer),
+  )
 }

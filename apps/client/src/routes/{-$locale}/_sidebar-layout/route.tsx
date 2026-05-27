@@ -2,7 +2,7 @@ import { LandingBackground } from "@/features/layout/components/landing-backgrou
 import { Outlet, createFileRoute } from "@tanstack/react-router"
 import * as layoutStyles from "./-layout.css.ts"
 import { cx } from "@dair/common/src/helpers/ui"
-import { useAtomSet } from "@effect-atom/atom-react"
+import { useAtomSet } from "@effect/atom-react"
 import { breadCrumbContainerAtom } from "@/shared/components/breadcrumb"
 
 export const Route = createFileRoute("/{-$locale}/_sidebar-layout")({

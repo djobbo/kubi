@@ -5,8 +5,6 @@
     "@dair/api-contract": "workspace:*",
     "@dair/brawlhalla-api": "workspace:*",
     "@dair/common": "workspace:*",
-    "@effect/experimental": "catalog:",
-    "@effect/platform": "catalog:",
     "dotenv": "catalog:",
     "effect": "catalog:",
     "tsx": "catalog:"

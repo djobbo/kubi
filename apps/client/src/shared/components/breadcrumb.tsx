@@ -1,4 +1,5 @@
-import { Atom, useAtomValue } from "@effect-atom/atom-react"
+import * as Atom from "effect/unstable/reactivity/Atom"
+import { useAtomValue } from "@effect/atom-react"
 import { createPortal } from "react-dom"
 
 export const breadCrumbContainerAtom = Atom.make<HTMLElement | null>(null)

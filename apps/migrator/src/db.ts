@@ -1,7 +1,7 @@
 import { drizzle } from "drizzle-orm/postgres-js"
 import postgres from "postgres"
 
-import * as schema from "@dair/schema"
+import * as schema from "@dair/db"
 
 import { MIGRATION_DATABASE_URL } from "./env"
 

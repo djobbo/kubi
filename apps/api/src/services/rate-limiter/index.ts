@@ -1,21 +1,28 @@
-import { Effect, Duration, Layer } from "effect"
-import { RateLimiter } from "@effect/experimental"
+import { Context, Effect, Duration, Layer } from "effect"
+import {
+  RateLimiter,
+  makeWithRateLimiter,
+  layer as rateLimiterLayer,
+  RateLimiterStore,
+  layerStoreMemory,
+  RateLimiterError,
+} from "effect/unstable/persistence/RateLimiter"
 import { RateLimiterStatus } from "@dair/api-contract/src/routes/v1/brawlhalla/get-rate-limiter-status"
 
-export class BrawlhallaRateLimiter extends Effect.Service<BrawlhallaRateLimiter>()(
+export class BrawlhallaRateLimiter extends Context.Service<BrawlhallaRateLimiter>()(
   "@dair/services/BrawlhallaRateLimiter",
   {
-    effect: Effect.gen(function* () {
-      const limiter = yield* RateLimiter.RateLimiter
-      const withLimiter = yield* RateLimiter.makeWithRateLimiter
+    make: Effect.gen(function* () {
+      const limiter = yield* RateLimiter
+      const withLimiter = yield* makeWithRateLimiter
 
-      const per15MinLimiterConfig: Parameters<typeof limiter.consume>[0] = {
+      const per15MinLimiterConfig = {
         key: "brawlhalla-api-request-per-15-minutes",
         limit: 2000,
         tokens: 1,
         window: Duration.minutes(15),
-        algorithm: "token-bucket",
-        onExceeded: "delay",
+        algorithm: "token-bucket" as const,
+        onExceeded: "delay" as const,
       }
 
       const limitPerSecond = withLimiter({
@@ -58,8 +65,8 @@ export class BrawlhallaRateLimiter extends Effect.Service<BrawlhallaRateLimiter>
     }),
   },
 ) {
-  static readonly layer = this.Default.pipe(
-    Layer.provide(RateLimiter.layer),
-    Layer.provide(RateLimiter.layerStoreMemory),
+  static readonly layer = Layer.effect(this, this.make).pipe(
+    Layer.provide(rateLimiterLayer),
+    Layer.provide(layerStoreMemory),
   )
 }

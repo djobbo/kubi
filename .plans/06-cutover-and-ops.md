@@ -6,6 +6,7 @@
 
 - [ ] [01-dev-setup.md](./01-dev-setup.md) — reproducible bootstrap
 - [ ] [02-effect-v4.md](./02-effect-v4.md) — stable runtime
+- [ ] [02-effect-v4-remaining.md](./02-effect-v4-remaining.md) — monorepo `check:types`, no Zod, migrator on Effect Schema
 - [ ] [03-supabase-to-pg.md](./03-supabase-to-pg.md) — migrator tested on staging snapshot
 - [ ] [04-api-and-auth-parity.md](./04-api-and-auth-parity.md) — bookmarks + session + clan rankings
 - [ ] [05-client-routes.md](./05-client-routes.md) — critical user journeys

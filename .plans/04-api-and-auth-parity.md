@@ -2,6 +2,8 @@
 
 **Goal:** HTTP API covers everything the Next/tRPC app exposed, with real sessions and bookmarks.
 
+**Prerequisites:** [02-effect-v4-remaining.md](./02-effect-v4-remaining.md) § 2b.1–2b.2 (`vp run -F @dair/api check:types` green). Bookmarks HTTP needs `Bookmarks` on `Context.Service` (§ 2b.1).
+
 Reference router: `.repos/corehalla/packages/server/router/index.ts`
 
 ## Already at parity (or better)

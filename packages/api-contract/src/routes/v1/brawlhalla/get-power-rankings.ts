@@ -1,54 +1,33 @@
 import { Schema } from "effect"
+import {
+  PowerRankingsGameModeSchema,
+  PowerRankingsOrderBySchema,
+  PowerRankingsPlayer,
+  PowerRankingsRegionSchema,
+  powerRankingsOrders,
+  type PowerRankingsGameMode as PowerRankingsGameModeType,
+  type PowerRankingsOrderBy as PowerRankingsOrderByType,
+  type PowerRankingsRegion as PowerRankingsRegionType,
+} from "@dair/brawltools-api"
 
-export const PowerRankingsGameMode = Schema.Literal("1v1", "2v2")
-export type PowerRankingsGameMode = typeof PowerRankingsGameMode.Type
+export const PowerRankingsGameMode = PowerRankingsGameModeSchema
+export const PowerRankingsRegion = PowerRankingsRegionSchema
+export const PowerRankingsOrderBy = PowerRankingsOrderBySchema
+export { PowerRankingsPlayer }
 
-export const PowerRankingsRegion = Schema.Literal(
-  "NA",
-  "EU",
-  "SA",
-  "SEA",
-  "MENA",
-  "LAN",
-)
-export type PowerRankingsRegion = typeof PowerRankingsRegion.Type
+export type PowerRankingsGameMode = PowerRankingsGameModeType
+export type PowerRankingsRegion = PowerRankingsRegionType
+export type PowerRankingsOrderBy = PowerRankingsOrderByType
 
-export const PowerRankingsOrderBy = Schema.Literal(
-  "top8",
-  "top32",
-  "gold",
-  "silver",
-  "bronze",
-  "powerRanking",
-  "points",
-  "earnings",
-)
-export type PowerRankingsOrderBy = typeof PowerRankingsOrderBy.Type
-
-export const PowerRankingsOrder = Schema.Literal("ASC", "DESC")
+export const PowerRankingsOrder = Schema.Literals(powerRankingsOrders)
 export type PowerRankingsOrder = typeof PowerRankingsOrder.Type
-
-export const PowerRankingsPlayer = Schema.Struct({
-  playerId: Schema.Number,
-  playerName: Schema.String,
-  twitter: Schema.optional(Schema.String),
-  twitch: Schema.optional(Schema.String),
-  top8: Schema.Number,
-  top32: Schema.Number,
-  gold: Schema.Number,
-  silver: Schema.Number,
-  bronze: Schema.Number,
-  powerRanking: Schema.Number,
-  points: Schema.Number,
-  earnings: Schema.Number,
-})
 
 export const GetPowerRankingsResponse = Schema.Struct({
   data: Schema.Array(PowerRankingsPlayer),
   meta: Schema.Struct({
     page: Schema.Number,
     totalPages: Schema.Number,
-    region: PowerRankingsRegion,
+    region: PowerRankingsRegionSchema,
     gameMode: Schema.String,
     orderBy: Schema.String,
     order: Schema.String,

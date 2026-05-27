@@ -3,19 +3,10 @@ import { Config, Context, Effect, Layer, Option, Redacted } from "effect"
 /**
  * API Server configuration
  */
-export class ApiServerConfig extends Context.Tag("@app/ApiServerConfig")<
-  ApiServerConfig,
+export class ApiServerConfig extends Context.Service<ApiServerConfig>()(
+  "@app/ApiServerConfig",
   {
-    readonly port: number
-    readonly url: string
-    readonly allowedOrigins: ReadonlyArray<string>
-    /** Optional API key for worker authentication. When provided, requests with matching X-Worker-API-Key header use fetch-first strategy. */
-    readonly workerApiKey: Option.Option<Redacted.Redacted<string>>
-  }
->() {
-  static readonly layer = Layer.effect(
-    ApiServerConfig,
-    Effect.gen(function* () {
+    make: Effect.gen(function* () {
       const port = yield* Config.number("API_PORT").pipe(
         Config.orElse(() => Config.succeed(3000)),
       )
@@ -33,12 +24,14 @@ export class ApiServerConfig extends Context.Tag("@app/ApiServerConfig")<
         Config.option,
       )
 
-      return ApiServerConfig.of({
+      return {
         port,
         url,
         allowedOrigins: origins,
         workerApiKey,
-      })
+      }
     }),
-  )
+  },
+) {
+  static readonly layer = Layer.effect(this, this.make)
 }

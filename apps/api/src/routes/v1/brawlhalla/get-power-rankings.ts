@@ -35,8 +35,8 @@ export const getPowerRankings = Effect.fn("getPowerRankings")(function* ({
     data: result.rankings.prPlayers.map((player) => ({
       playerId: player.playerId,
       playerName: player.playerName,
-      twitter: player.twitter,
-      twitch: player.twitch,
+      ...(player.twitter !== undefined ? { twitter: player.twitter } : {}),
+      ...(player.twitch !== undefined ? { twitch: player.twitch } : {}),
       top8: player.top8,
       top32: player.top32,
       gold: player.gold,

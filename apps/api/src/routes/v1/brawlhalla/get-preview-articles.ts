@@ -4,8 +4,9 @@ import { Effect } from "effect"
 
 export const getPreviewArticles = () =>
   Effect.gen(function* () {
-    const articles = yield* BrawlhallaGql.getArticles({
-      withContent: false,
+    const gql = yield* BrawlhallaGql
+    const articles = yield* gql.getArticles({
+      preview: true,
       first: 3,
     })
 

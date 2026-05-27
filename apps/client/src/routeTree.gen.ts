@@ -41,7 +41,7 @@ const Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar12
   )
 
 export interface FileRoutesByFullPath {
-  '/{-$locale}': typeof Char123LocaleChar125SidebarLayoutRouteRouteWithChildren
+  '/{-$locale}': typeof Char123LocaleChar125RouteRouteWithChildren
   '/{-$locale}/': typeof Char123LocaleChar125SidebarLayoutIndexRoute
   '/{-$locale}/brawlhalla/players/$playerId/{-$tab}': typeof Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute
 }

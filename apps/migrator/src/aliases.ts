@@ -3,7 +3,7 @@ import { sql } from "drizzle-orm"
 import {
   type NewPlayerAliases,
   playerAliasesTable,
-} from "@dair/db/src/schema/archive/brawlhalla/player-aliases"
+} from "@dair/db"
 
 import { supabase } from "./client"
 import { migrationDb } from "./db"
@@ -20,14 +20,13 @@ const migrateAliases = async (offset: number, limit: number) => {
     throw new Error("Failed to fetch aliases")
   }
 
-  const migratedAliases: NewPlayerAliases[] = aliases.data?.map((alias) => {
-    return {
+  const migratedAliases: NewPlayerAliases[] =
+    aliases.data?.map((alias) => ({
       alias: alias.alias,
-      createdAt: new Date(alias.createdAt),
+      recordedAt: new Date(alias.createdAt),
       playerId: alias.playerId,
       public: alias.public,
-    }
-  })
+    })) ?? []
 
   try {
     await migrationDb
@@ -37,7 +36,7 @@ const migrateAliases = async (offset: number, limit: number) => {
         set: {
           public: sql`excluded.public`,
         },
-        target: [aliasesTable.playerId, aliasesTable.alias],
+        target: [playerAliasesTable.playerId, playerAliasesTable.alias],
       })
       .execute()
   } catch (error) {

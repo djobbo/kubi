@@ -1,11 +1,7 @@
 import { Dialog } from "@base-ui-components/react/dialog"
-import {
-  Atom,
-  Result,
-  useAtom,
-  useAtomValue,
-  useAtomSet,
-} from "@effect-atom/atom-react"
+import * as Atom from "effect/unstable/reactivity/Atom"
+import * as AsyncResult from "effect/unstable/reactivity/AsyncResult"
+import { useAtom, useAtomSet, useAtomValue } from "@effect/atom-react"
 import { searchOpenAtom } from "../helpers/search-open-atom"
 import * as searchCommandStyles from "./search-command.css"
 import { ApiClient } from "@/shared/api-client"
@@ -135,7 +131,7 @@ const CategoryBadge = ({
 const SearchResults = () => {
   const search = useAtomValue(searchAtom)
   const searchResult = useAtomValue(searchResultAtom)
-  const results = Result.builder(searchResult)
+  const results = AsyncResult.builder(searchResult)
     .onSuccess(({ data }) => data)
     .orElse(() => [])
     .filter((item) => item.name.toLowerCase().startsWith(search.toLowerCase()))

@@ -1,27 +1,34 @@
-import { z } from "zod/v4"
+import "dotenv/config"
 
-import { envField } from "@/env/envField"
+const required = (name: string): string => {
+  const value = process.env[name]
+  if (!value) {
+    throw new Error(
+      `Missing ${name}. Set it in the repo root .env (see .env.example).`,
+    )
+  }
+  return value
+}
 
-export const MIGRATION_SUPABASE_URL = envField(
-  "MIGRATION_SUPABASE_URL",
-  process.env.MIGRATION_SUPABASE_URL,
-  z.string().min(1),
-)
+/** Supabase project URL (migration source). */
+export const MIGRATION_SUPABASE_URL = required("MIGRATION_SUPABASE_URL")
 
-export const MIGRATION_SUPABASE_SERVICE_KEY = envField(
+/** Supabase service role key (migration source). */
+export const MIGRATION_SUPABASE_SERVICE_KEY = required(
   "MIGRATION_SUPABASE_SERVICE_KEY",
-  process.env.MIGRATION_SUPABASE_SERVICE_KEY,
-  z.string().min(1),
 )
 
-export const MIGRATION_SUPABASE_DATABASE_URL = envField(
-  "MIGRATION_SUPABASE_DATABASE_URL",
-  process.env.MIGRATION_SUPABASE_DATABASE_URL,
-  z.string().min(1),
-)
+/**
+ * Direct Postgres URL for the legacy Supabase database (raw SQL in bookmarks).
+ * Falls back to DATABASE_URL when not set.
+ */
+export const MIGRATION_SUPABASE_DATABASE_URL =
+  process.env.MIGRATION_SUPABASE_DATABASE_URL ??
+  process.env.DATABASE_URL ??
+  required("MIGRATION_SUPABASE_DATABASE_URL")
 
-export const MIGRATION_DATABASE_URL = envField(
-  "MIGRATION_DATABASE_URL",
-  process.env.DATABASE_URL,
-  z.string().min(1),
-)
+/** Target kubi Postgres (Drizzle). */
+export const MIGRATION_DATABASE_URL =
+  process.env.MIGRATION_DATABASE_URL ??
+  process.env.DATABASE_URL ??
+  required("DATABASE_URL")

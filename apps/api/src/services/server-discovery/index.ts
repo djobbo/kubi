@@ -1,5 +1,5 @@
 import { lookup } from "node:dns/promises"
-import { Duration, Effect, Layer, Option, Schema } from "effect"
+import { Context, Duration, Effect, Layer, Option, Schema } from "effect"
 import type { RankedRegion } from "@dair/brawlhalla-api/src/constants/ranked/regions"
 import { Cache } from "@/services/cache"
 
@@ -16,7 +16,7 @@ const SERVERS = [
 ] satisfies { id: RankedRegion; url: string }[]
 
 const IpApiResponse = Schema.Struct({
-  status: Schema.Literal("success"),
+  status: Schema.Literals(["success"]),
   city: Schema.String,
   country: Schema.String,
   lat: Schema.Number,
@@ -41,9 +41,7 @@ export type ServerInfo = typeof ServerInfo.Type
 
 const ServersArray = Schema.Array(ServerInfo)
 
-class ServerDiscoveryError extends Schema.TaggedError<ServerDiscoveryError>(
-  "ServerDiscoveryError",
-)("ServerDiscoveryError", {
+class ServerDiscoveryError extends Schema.TaggedErrorClass<ServerDiscoveryError>()("ServerDiscoveryError", {
   message: Schema.String,
   cause: Schema.optional(Schema.Unknown),
 }) {}
@@ -51,10 +49,10 @@ class ServerDiscoveryError extends Schema.TaggedError<ServerDiscoveryError>(
 const CACHE_KEY = "brawlhalla:servers"
 const CACHE_TTL = Duration.hours(6)
 
-export class ServerDiscovery extends Effect.Service<ServerDiscovery>()(
+export class ServerDiscovery extends Context.Service<ServerDiscovery>()(
   "@dair/services/ServerDiscovery",
   {
-    effect: Effect.gen(function* () {
+    make: Effect.gen(function* () {
       const cache = yield* Cache
 
       const discoverServer = (server: { id: RankedRegion; url: string }) =>
@@ -66,7 +64,7 @@ export class ServerDiscovery extends Effect.Service<ServerDiscovery>()(
                 message: `DNS lookup failed for ${server.url}`,
                 cause: error,
               }),
-          }).pipe(Effect.catchAll(() => Effect.succeed(null)))
+          }).pipe(Effect.catch(() => Effect.succeed(null)))
 
           if (!ip) {
             yield* Effect.logWarning(
@@ -83,7 +81,7 @@ export class ServerDiscovery extends Effect.Service<ServerDiscovery>()(
                 message: `IP API request failed for ${ip}`,
                 cause: error,
               }),
-          }).pipe(Effect.catchAll(() => Effect.succeed(null)))
+          }).pipe(Effect.catch(() => Effect.succeed(null)))
 
           if (!locationResult) {
             yield* Effect.logWarning(
@@ -92,10 +90,10 @@ export class ServerDiscovery extends Effect.Service<ServerDiscovery>()(
             return null
           }
 
-          const location = yield* Schema.decodeUnknown(IpApiResponse)(
+          const location = yield* Schema.decodeUnknownEffect(IpApiResponse)(
             locationResult,
           ).pipe(
-            Effect.catchAll(() => {
+            Effect.catch(() => {
               return Effect.succeed(null)
             }),
           )
@@ -161,5 +159,7 @@ export class ServerDiscovery extends Effect.Service<ServerDiscovery>()(
     }),
   },
 ) {
-  static readonly layer = this.Default.pipe(Layer.provide(Cache.layer))
+  static readonly layer = Layer.effect(this, this.make).pipe(
+    Layer.provide(Cache.layer),
+  )
 }

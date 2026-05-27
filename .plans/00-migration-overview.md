@@ -13,10 +13,10 @@ Target stack: this monorepo (`apps/api`, `apps/client`, `apps/workers`, `package
 | Background crawlers | **Done** | `apps/workers` (leaderboard + full player crawl via API) |
 | Client UI | **Early** | 2 real routes: home stub + player profile (overview/2v2 only) |
 | Toolchain | **In progress** | Adopting **vp + pnpm@10.33.2** (from `.repos/vite-plus`); see [07-vite-plus-toolchain.md](./07-vite-plus-toolchain.md) |
-| Dev setup | **Broken** | `scripts/setup/setup.mts` still Supabase-centric; needs compose + `vp run` wiring |
-| Effect version | **Split** | App code on **Effect v3**; setup scripts written for **Effect v4** (`effect-smol`) |
+| Dev setup | **Fixed (local)** | `vp run setup` uses compose + drizzle; needs Postgres on `DATABASE_URL` |
+| Effect version | **In progress** | Catalog on **v4 beta**; `@dair/api-contract` green; `apps/api` ~400 TS errors — [02-effect-v4-remaining.md](./02-effect-v4-remaining.md) |
 | Legacy data | **Started** | `apps/migrator` (aliases/bookmarks); incomplete, some imports invalid |
-| Bookmarks schema | **Split** | SQLite tables in `@dair/schema`; API imports from `@dair/db` (PG) — not aligned |
+| Bookmarks schema | **PG in @dair/db** | Migrator + API aligned; `@dair/schema` SQLite copy remains for DTOs until trimmed |
 
 ## Phased plans
 
@@ -28,6 +28,7 @@ Execute in order where dependencies apply. Each phase has its own doc.
 | **0b** | [07-vite-plus-toolchain.md](./07-vite-plus-toolchain.md) | `vp` + pnpm aligned with `.repos/vite-plus` | Phase 1 |
 | **1** | [01-dev-setup.md](./01-dev-setup.md) | One-command dev bootstrap (`vp run setup`) | Phase 0b |
 | **2** | [02-effect-v4.md](./02-effect-v4.md) | Align runtime + `@effect/*` on Effect v4 (`effect-smol`) | Setup scripts, new Effect code |
+| **2b** | [02-effect-v4-remaining.md](./02-effect-v4-remaining.md) | API typecheck: Context.Service, Schema, no Zod | Phases 4–6 |
 | **3** | [03-supabase-to-pg.md](./03-supabase-to-pg.md) | Move production/user data off Supabase | Auth, favorites, aliases |
 | **4** | [04-api-and-auth-parity.md](./04-api-and-auth-parity.md) | Close API gaps vs corehalla tRPC | Client features needing data |
 | **5** | [05-client-routes.md](./05-client-routes.md) | TanStack Start routes ≈ corehalla UX | Phases 3–4 for bookmarks/auth |

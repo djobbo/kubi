@@ -4,15 +4,15 @@ import {
   GOOGLE_PROVIDER_ID,
   type Provider,
 } from "@dair/db"
-import { HttpApiBuilder, HttpApiSecurity, HttpClient } from "@effect/platform"
-import { Unauthorized } from "@effect/platform/HttpApiError"
+import { HttpApiBuilder, HttpApiSecurity } from "effect/unstable/httpapi"
+import { Unauthorized } from "effect/unstable/httpapi/HttpApiError"
+import { HttpClient } from "effect/unstable/http"
 import type {
   RequestError,
   ResponseError,
-} from "@effect/platform/HttpClientError"
+} from "effect/unstable/http/HttpClientError"
 import { Discord, Google, type OAuth2Tokens } from "arctic"
-import { Effect, flow, Layer, Redacted, Schema } from "effect"
-import type { ParseError } from "effect/ParseResult"
+import { Context, Effect, flow, Layer, Redacted, Schema } from "effect"
 import { OAuthConfig } from "./config"
 import { ClientConfig } from "@/services/config/client-config"
 import { ApiServerConfig } from "@/services/config/api-server-config"
@@ -63,10 +63,10 @@ const DiscordUser = Schema.Struct({
   verified: Schema.optional(Schema.Boolean),
 })
 
-export class Authorization extends Effect.Service<Authorization>()(
+export class Authorization extends Context.Service<Authorization>()(
   "@dair/services/Authorization",
   {
-    effect: Effect.gen(function* () {
+    make: Effect.gen(function* () {
       const oauthConfig = yield* OAuthConfig
       const clientConfig = yield* ClientConfig
       const serverConfig = yield* ApiServerConfig
@@ -114,7 +114,7 @@ export class Authorization extends Effect.Service<Authorization>()(
               )
               const data = yield* response.json
 
-              const userInfo = yield* Schema.decodeUnknown(GoogleUser)(data)
+              const userInfo = yield* Schema.decodeUnknownEffect(GoogleUser)(data)
               return userInfo as typeof GoogleUser.Type
             }),
             createAuthorizationURL: (state: string) =>
@@ -150,7 +150,7 @@ export class Authorization extends Effect.Service<Authorization>()(
               )
               const data = yield* response.json
 
-              const userInfo = yield* Schema.decodeUnknown(DiscordUser)(data)
+              const userInfo = yield* Schema.decodeUnknownEffect(DiscordUser)(data)
               if (!userInfo.verified) {
                 return yield* OAuthValidationError.make({
                   provider: "discord",
@@ -171,7 +171,7 @@ export class Authorization extends Effect.Service<Authorization>()(
     }),
   },
 ) {
-  static readonly layer = this.Default.pipe(
+  static readonly layer = Layer.effect(this, this.make).pipe(
     Layer.provide(OAuthConfig.layer),
     Layer.provide(ClientConfig.layer),
     Layer.provide(ApiServerConfig.layer),
@@ -189,7 +189,7 @@ export interface AuthorizationProvider<
   ) => Effect.Effect<
     UserInfo,
     | Unauthorized
-    | ParseError
+    | Schema.SchemaError
     | RequestError
     | ResponseError
     | OAuthValidationError,
@@ -238,13 +238,13 @@ const makeAuthorization = (options: AuthorizationOptions) => {
     createRedirectUrl: Effect.fn("createRedirectUrl")(
       function* (state: string) {
         const { path = "/", baseUrl = options.defaultClientUrl } =
-          yield* Schema.decodeUnknown(State)(JSON.parse(atob(state)))
+          yield* Schema.decodeUnknownEffect(State)(JSON.parse(atob(state)))
 
         const url = new URL(path, new URL(baseUrl).origin)
         return url
       },
       flow(
-        Effect.catchAll((error) =>
+        Effect.catch((error) =>
           OAuthValidationError.make({
             provider: "unknown",
             cause: error,

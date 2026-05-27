@@ -51,17 +51,17 @@ Historical snapshots can be **re-crawled** instead of bulk-imported if acceptabl
 
 - `@dair/schema` defines `bookmarksTable` as **SQLite** ([packages/schema/src/bookmarks/bookmarks.ts](../packages/schema/src/bookmarks/bookmarks.ts)).
 - `apps/api` imports bookmarks from **`@dair/db`** ([bookmarks service](../apps/api/src/services/bookmarks/index.ts)) but **PG tables are not in `packages/db`**.
-- [ ] Move bookmarks + `legacy_bookmarks` to `packages/db` as `pgTable` (match [auth schema](../packages/db/src/schema/auth/) style).
-- [ ] Generate migration in `apps/api`.
+- [x] Move bookmarks + `legacy_bookmarks` to `packages/db` as `pgTable` (match [auth schema](../packages/db/src/schema/auth/) style).
+- [x] Generate migration in `apps/api` (`0002_spotty_firedrake.sql`).
 - [ ] Export types from `@dair/db`; trim or alias `@dair/schema` to contract-only DTOs.
-- [ ] Fix migrator imports: `@dair/db` not `@/features/...` (corehalla path).
+- [x] Fix migrator imports: `@dair/db` not `@/features/...` (corehalla path).
 
 ### 3.2 Fix `apps/migrator`
 
-- [ ] [aliases.ts](../apps/migrator/src/aliases.ts): `aliasesTable` typo in `onConflictDoUpdate` → `playerAliasesTable`.
-- [ ] [bookmarks.ts](../apps/migrator/src/bookmarks.ts): remove `@/features/bookmarks/constants`; use shared constant from `@dair/common` or `@dair/db`.
-- [ ] [env.ts](../apps/migrator/src/env.ts): document `MIGRATION_SUPABASE_URL`, `MIGRATION_SUPABASE_SERVICE_KEY`, `MIGRATION_DATABASE_URL`.
-- [ ] Wire `package.json` `"migrate": "bun run src/migrate.ts"`; add to turbo if needed.
+- [x] [aliases.ts](../apps/migrator/src/aliases.ts): `aliasesTable` typo in `onConflictDoUpdate` → `playerAliasesTable`.
+- [x] [bookmarks.ts](../apps/migrator/src/bookmarks.ts): use `placeholderUserIdFromDiscord` from `@dair/common`.
+- [x] [env.ts](../apps/migrator/src/env.ts): document `MIGRATION_SUPABASE_*` / `MIGRATION_DATABASE_URL`.
+- [x] Wire `package.json` `"migrate": "tsx ./src/migrate.ts"` (Node, not Bun).
 - [ ] Convert to Effect service (optional, after phase 2) with `Effect.fn`, retries, structured logging.
 
 ### 3.3 Supabase client types

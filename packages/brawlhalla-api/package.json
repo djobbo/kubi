@@ -3,11 +3,15 @@
   "version": "0.0.0",
   "dependencies": {
     "@dair/common": "workspace:*",
-    "zod": "catalog:"
+    "effect": "catalog:"
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "@typescript/native-preview": "catalog:"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./src/*": "./src/*"
   },
   "private": true,
   "type": "module"

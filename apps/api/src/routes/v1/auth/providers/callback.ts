@@ -1,6 +1,6 @@
 import { Authorization } from "@/services/authorization"
 import type { Provider } from "@dair/db"
-import { HttpServerResponse } from "@effect/platform"
+import { HttpServerResponse } from "effect/unstable/http"
 import { Effect } from "effect"
 
 export const providerCallback = (
@@ -20,7 +20,7 @@ export const providerCallback = (
     return HttpServerResponse.redirect(redirectUrl)
   }).pipe(
     Effect.withSpan("provider-callback"),
-    Effect.catchAll((e) =>
+    Effect.catch((e) =>
       Effect.gen(function* () {
         console.log(e)
         const authorizationService = yield* Authorization

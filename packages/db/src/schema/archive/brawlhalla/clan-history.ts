@@ -1,4 +1,5 @@
-import { relations, sql } from "drizzle-orm"
+import { sql } from "drizzle-orm"
+import { relations } from "drizzle-orm/_relations"
 import { bigint, index, jsonb, pgTable, text, uuid } from "drizzle-orm/pg-core"
 import { withRecordedAt } from "../../../helpers/with-timestamp"
 

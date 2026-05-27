@@ -14,35 +14,31 @@ import { BookmarkError, DiscordAccountNotFoundError } from "./errors"
 /**
  * Bookmarks service for managing user bookmarks
  */
-export class Bookmarks extends Context.Tag("@app/Bookmarks")<
-  Bookmarks,
+type BookmarksService = {
+  readonly getBookmarks: (
+    userId: string,
+  ) => Effect.Effect<ReadonlyArray<Bookmark>, BookmarkError>
+  readonly addBookmark: (
+    userId: string,
+    bookmark: Omit<NewBookmark, "userId">,
+  ) => Effect.Effect<Bookmark, BookmarkError>
+  readonly getBookmarksByPageIds: (
+    userId: string | undefined,
+    bookmarks: ReadonlyArray<Pick<Bookmark, "pageId" | "pageType">>,
+  ) => Effect.Effect<ReadonlyArray<Bookmark>, BookmarkError>
+  readonly deleteBookmark: (
+    userId: string,
+    bookmark: Pick<Bookmark, "pageId" | "pageType">,
+  ) => Effect.Effect<void, BookmarkError>
+  readonly migrateLegacyBookmarks: (
+    session: SessionWithUser,
+  ) => Effect.Effect<void, BookmarkError | DiscordAccountNotFoundError>
+}
+
+export class Bookmarks extends Context.Service<Bookmarks, BookmarksService>()(
+  "@app/Bookmarks",
   {
-    readonly getBookmarks: (
-      userId: string,
-    ) => Effect.Effect<ReadonlyArray<Bookmark>, BookmarkError>
-    readonly addBookmark: (
-      userId: string,
-      bookmark: Omit<NewBookmark, "userId">,
-    ) => Effect.Effect<Bookmark, BookmarkError>
-    readonly getBookmarksByPageIds: (
-      userId: string | undefined,
-      bookmarks: ReadonlyArray<Pick<Bookmark, "pageId" | "pageType">>,
-    ) => Effect.Effect<ReadonlyArray<Bookmark>, BookmarkError>
-    readonly deleteBookmark: (
-      userId: string,
-      bookmark: Pick<Bookmark, "pageId" | "pageType">,
-    ) => Effect.Effect<void, BookmarkError>
-    readonly migrateLegacyBookmarks: (
-      session: SessionWithUser,
-    ) => Effect.Effect<void, BookmarkError | DiscordAccountNotFoundError>
-  }
->() {
-  /**
-   * Live layer for Bookmarks service
-   */
-  static readonly layer = Layer.effect(
-    Bookmarks,
-    Effect.gen(function* () {
+    make: Effect.gen(function* () {
       const db = yield* Database
 
       const getBookmarks = Effect.fn("Bookmarks.getBookmarks")(function* (
@@ -191,13 +187,17 @@ export class Bookmarks extends Context.Tag("@app/Bookmarks")<
         })
       })
 
-      return Bookmarks.of({
+      return {
         getBookmarks,
         addBookmark,
         getBookmarksByPageIds,
         deleteBookmark,
         migrateLegacyBookmarks,
-      })
+      }
     }),
+  },
+) {
+  static readonly layer = Layer.effect(this, this.make).pipe(
+    Layer.provide(Database.layer),
   )
 }

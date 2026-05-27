@@ -1,3 +1,5 @@
+export * from "./bookmarks"
+export * from "./legacy-bookmarks"
 export * from "./oauth-accounts"
 export * from "./sessions"
 export * from "./users"

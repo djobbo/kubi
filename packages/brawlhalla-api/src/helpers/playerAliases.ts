@@ -1,7 +1,7 @@
 import { cleanString } from "@dair/common/src/helpers/clean-string"
 
-import type { PlayerRanked } from "../api/schema/player-ranked"
-import type { PlayerStats } from "../api/schema/player-stats"
+import type { PlayerRanked } from "../schema/player-ranked.js"
+import type { PlayerStats } from "../schema/player-stats.js"
 import { getPlayerTeam } from "./team-players"
 
 export const getPlayerAliases = (

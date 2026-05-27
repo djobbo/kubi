@@ -1,7 +1,7 @@
 import { arrayToMap } from "@dair/common/src/helpers/arrayToMap"
 
-import type { PlayerRanked } from "../api/schema/player-ranked"
-import type { PlayerStats } from "../api/schema/player-stats"
+import type { PlayerRanked } from "../schema/player-ranked.js"
+import type { PlayerStats } from "../schema/player-stats.js"
 // TODO: Dont use "legends" here, use "allLegends" instead
 import { type Legend, legends } from "../constants/legends"
 import { getLegendOrTeamRatingReset } from "./season-reset"

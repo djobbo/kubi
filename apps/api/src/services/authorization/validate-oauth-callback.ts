@@ -30,7 +30,7 @@ export const validateOAuthCallback =
       }
 
       const tokens = yield* provider.getTokens(code).pipe(
-        Effect.catchAll((error) =>
+        Effect.catch((error) =>
           Effect.fail(
             new OAuthValidationError({
               provider: providerName,
@@ -47,7 +47,7 @@ export const validateOAuthCallback =
       const updatedAt = new Date()
 
       const userInfo = yield* provider.getUserInfo(accessToken).pipe(
-        Effect.catchAll((error) =>
+        Effect.catch((error) =>
           Effect.fail(
             new OAuthValidationError({
               provider: providerName,
@@ -63,10 +63,10 @@ export const validateOAuthCallback =
       // Check if user exists with this OAuth account
       const existingOAuthAccount = yield* db.query.oauthAccountsTable.findFirst(
         {
-          where: and(
-            eq(oauthAccountsTable.provider, providerName),
-            eq(oauthAccountsTable.providerUserId, userInfo.id),
-          ),
+          where: {
+            provider: { eq: providerName },
+            providerUserId: { eq: userInfo.id },
+          },
           with: {
             user: true,
           },
@@ -94,7 +94,7 @@ export const validateOAuthCallback =
       }
 
       const existingUser = yield* db.query.usersTable.findFirst({
-        where: eq(usersTable.email, userInfo.email),
+        where: { email: { eq: userInfo.email } },
       })
 
       if (existingUser) {
