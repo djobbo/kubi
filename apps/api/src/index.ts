@@ -84,7 +84,9 @@ const ServerLive = Layer.unwrap(
 
 const server = Layer.launch(ServerLive).pipe(Effect.catchCause(Effect.logError))
 
-Effect.runPromise(server).catch((error) => {
-  console.error(error)
-  process.exit(1)
-})
+Effect.runPromise(server as Effect.Effect<void, never, never>).catch(
+  (error) => {
+    console.error(error)
+    process.exit(1)
+  },
+)

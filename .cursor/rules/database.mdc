@@ -13,15 +13,17 @@ This project uses PostgreSQL with Drizzle ORM for database operations.
 Located at `apps/api/src/services/db/index.ts`:
 
 ```typescript
-export class Database extends Effect.Service<Database>()(
+export class Database extends Context.Service<Database>()(
   "@dair/services/Database",
   {
-    effect: PgDrizzle.make({ schema }),
+    make: PgDrizzle.make({ relations }).pipe(
+      Effect.provide(PgDrizzle.DefaultServices),
+    ),
   },
 ) {
-  static readonly layer = this.Default.pipe(
+  static readonly layer = Layer.effect(this, this.make).pipe(
     Layer.provide(
-      Layer.unwrapEffect(
+      Layer.unwrap(
         Effect.gen(function* () {
           const config = yield* DatabaseConfig
           return PgClient.layer({ url: config.url })
@@ -116,18 +118,18 @@ export const withRecordedAt = {
 
 ## Table Relations
 
-Define relations for Drizzle's relational queries:
+Define all relations centrally in `packages/db/src/relations.ts` using Drizzle 1.0 `defineRelations` (not per-table `relations()` or `drizzle-orm/_relations`):
 
 ```typescript
-import { relations } from "drizzle-orm"
+import { defineRelations } from "drizzle-orm"
 
-export const playerHistoryRelations = relations(
-  playerHistoryTable,
-  ({ many }) => ({
-    legendHistory: many(playerLegendHistoryTable),
-    weaponHistory: many(playerWeaponHistoryTable),
-  }),
-)
+export const relations = defineRelations(schema, (r) => ({
+  playerHistoryTable: {
+    legendHistory: r.many.playerLegendHistoryTable(),
+    weaponHistory: r.many.playerWeaponHistoryTable(),
+  },
+  // ...
+}))
 ```
 
 ## Using Database in Services

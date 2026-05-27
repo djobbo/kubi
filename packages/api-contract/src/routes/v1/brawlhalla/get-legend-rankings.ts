@@ -19,18 +19,18 @@ export const LegendRanking = Schema.Struct({
 })
 
 export const GlobalLegendRankingsOrderBy = Schema.Literals([
-    "xp",
-    "games",
-    "wins",
-    "losses",
-    "matchtime",
-    "kos",
-    "falls",
-    "suicides",
-    "teamKos",
-    "damageDealt",
-    "damageTaken",
-  ] as const satisfies readonly (keyof PlayerLegendHistory)[])
+  "xp",
+  "games",
+  "wins",
+  "losses",
+  "matchtime",
+  "kos",
+  "falls",
+  "suicides",
+  "teamKos",
+  "damageDealt",
+  "damageTaken",
+] as const satisfies readonly (keyof PlayerLegendHistory)[])
 
 null as unknown as PlayerLegendHistory satisfies Omit<
   typeof LegendRanking.Type,

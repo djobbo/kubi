@@ -252,8 +252,7 @@ const migrateDatabase = Effect.fnUntraced(function* () {
         )
         return yield* Effect.fail(
           new SetupError({
-            message:
-              "Max retries exceeded — database migrations failed",
+            message: "Max retries exceeded — database migrations failed",
           }),
         )
       }),
@@ -308,9 +307,7 @@ const program = Effect.gen(function* () {
     yield* runCommand("vp", ["exec", "supabase", "start"]).pipe(
       Effect.catchTag("CommandError", () =>
         Effect.gen(function* () {
-          yield* Effect.logError(
-            "Failed to start Supabase. Is Docker running?",
-          )
+          yield* Effect.logError("Failed to start Supabase. Is Docker running?")
           return yield* Effect.fail(
             new SetupError({ message: "Failed to start Supabase" }),
           )

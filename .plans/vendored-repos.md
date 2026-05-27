@@ -11,7 +11,7 @@ Trees under `.repos/<name>` are the **authoritative local copy** for how we reas
 Configured repos (see `VENDORED_REPOS` in [scripts/setup/sync-vendored-repos.mts](../scripts/setup/sync-vendored-repos.mts)):
 
 | Prefix                   | Upstream                                                                | Branch   |
-| ------------------------ | ----------------------------------------------------------------------- | -------- |
+| ------------------------ | ----------------------------------------------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------- |
 | `.repos/effect`          | [Effect-TS/effect-smol](https://github.com/Effect-TS/effect-smol)       | `main`   |
 | `.repos/tanstack-router` | [TanStack/router](https://github.com/TanStack/router)                   | `main`   |
 | `.repos/tanstack-query`  | [TanStack/query](https://github.com/TanStack/query)                     | `main`   |

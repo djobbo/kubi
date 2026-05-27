@@ -1,13 +1,25 @@
 {
   "name": "@dair/client",
   "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "module": "src/router.tsx",
+  "scripts": {
+    "build": "vite build",
+    "dev": "pnpm run locales:build && vite dev --host --port 3001",
+    "locales:build": "pnpm run locales:extract && pnpm run locales:compile",
+    "locales:compile": "lingui compile",
+    "locales:extract": "lingui extract --clean",
+    "prepare": "effect-language-service patch",
+    "serve": "vite preview",
+    "test": "vitest run"
+  },
   "dependencies": {
     "@base-ui-components/react": "catalog:",
     "@dair/api-contract": "workspace:*",
     "@dair/brawlhalla-api": "workspace:*",
     "@dair/common": "workspace:*",
     "@effect/atom-react": "catalog:",
-    "effect": "catalog:",
     "@lingui/conf": "catalog:",
     "@lingui/core": "catalog:",
     "@lingui/react": "catalog:",
@@ -19,6 +31,7 @@
     "@tanstack/react-start": "catalog:",
     "@tanstack/router-plugin": "catalog:",
     "@vanilla-extract/css": "catalog:",
+    "effect": "catalog:",
     "lucide-react": "catalog:",
     "nitro": "catalog:",
     "react": "catalog:",
@@ -48,18 +61,5 @@
     "vite": "catalog:",
     "vitest": "catalog:",
     "web-vitals": "catalog:"
-  },
-  "module": "src/router.tsx",
-  "private": true,
-  "scripts": {
-    "build": "vite build",
-    "dev": "pnpm run locales:build && vite dev --host --port 3001",
-    "locales:build": "pnpm run locales:extract && pnpm run locales:compile",
-    "locales:compile": "lingui compile",
-    "locales:extract": "lingui extract --clean",
-    "prepare": "effect-language-service patch",
-    "serve": "vite preview",
-    "test": "vitest run"
-  },
-  "type": "module"
+  }
 }

@@ -23,9 +23,7 @@ export class RequestFetchStrategy extends Context.Service<
 /**
  * Helper to get the current fetch strategy, defaulting to cache-first
  */
-export const getFetchStrategy = Effect.serviceOption(
-  RequestFetchStrategy,
-).pipe(
+export const getFetchStrategy = Effect.serviceOption(RequestFetchStrategy).pipe(
   Effect.map((strategy) =>
     Option.getOrElse(strategy, () => "cache-first" as const),
   ),

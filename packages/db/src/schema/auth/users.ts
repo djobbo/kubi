@@ -1,10 +1,6 @@
 import { sql } from "drizzle-orm"
-import { relations } from "drizzle-orm/_relations"
 import { pgTable, uuid, text } from "drizzle-orm/pg-core"
 import { withTimestamp } from "../../helpers/with-timestamp"
-import { bookmarksTable } from "./bookmarks"
-import { oauthAccountsTable } from "./oauth-accounts"
-import { sessionsTable } from "./sessions"
 
 export const usersTable = pgTable("users", {
   id: uuid("id")
@@ -19,9 +15,3 @@ export const usersTable = pgTable("users", {
 
 export type User = typeof usersTable.$inferSelect
 export type NewUser = typeof usersTable.$inferInsert
-
-export const usersRelations = relations(usersTable, ({ many }) => ({
-  bookmarks: many(bookmarksTable),
-  oauthAccounts: many(oauthAccountsTable),
-  sessions: many(sessionsTable),
-}))

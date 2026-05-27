@@ -4,17 +4,17 @@ A Brawlhalla statistics and analytics platform built with Effect, featuring real
 
 ## Tech Stack
 
-| Component       | Technology                                         |
-| --------------- | -------------------------------------------------- |
-| Toolchain       | Vite+ (`vp`) + pnpm (from `.repos/vite-plus`)      |
-| Monorepo        | Turborepo                                          |
-| Backend         | Node.js + Effect + `@effect/platform-node`         |
-| Frontend        | React 19 + Vite + TanStack Router + TailwindCSS    |
-| Database        | PostgreSQL + Drizzle ORM                           |
-| Cache           | Redis (LRU eviction)                               |
-| Observability   | OpenTelemetry + Grafana Stack (Alloy, Loki, Tempo) |
-| i18n            | Lingui                                             |
-| Type Safety     | TypeScript + Effect Schema                         |
+| Component     | Technology                                         |
+| ------------- | -------------------------------------------------- |
+| Toolchain     | Vite+ (`vp`) + pnpm (from `.repos/vite-plus`)      |
+| Monorepo      | Turborepo                                          |
+| Backend       | Node.js + Effect + `@effect/platform-node`         |
+| Frontend      | React 19 + Vite + TanStack Router + TailwindCSS    |
+| Database      | PostgreSQL + Drizzle ORM                           |
+| Cache         | Redis (LRU eviction)                               |
+| Observability | OpenTelemetry + Grafana Stack (Alloy, Loki, Tempo) |
+| i18n          | Lingui                                             |
+| Type Safety   | TypeScript + Effect Schema                         |
 
 ## Project Structure
 

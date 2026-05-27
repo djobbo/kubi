@@ -115,7 +115,8 @@ export class Authorization extends Context.Service<Authorization>()(
               )
               const data = yield* response.json
 
-              const userInfo = yield* Schema.decodeUnknownEffect(GoogleUser)(data)
+              const userInfo =
+                yield* Schema.decodeUnknownEffect(GoogleUser)(data)
               return userInfo as typeof GoogleUser.Type
             }),
             createAuthorizationURL: (state: string) =>
@@ -151,7 +152,8 @@ export class Authorization extends Context.Service<Authorization>()(
               )
               const data = yield* response.json
 
-              const userInfo = yield* Schema.decodeUnknownEffect(DiscordUser)(data)
+              const userInfo =
+                yield* Schema.decodeUnknownEffect(DiscordUser)(data)
               if (!userInfo.verified) {
                 return yield* OAuthValidationError.make({
                   provider: "discord",

@@ -22,9 +22,9 @@ When working on code that uses these libraries:
 | `.repos/vite-plus`       | [voidzero-dev/vite-plus](https://github.com/voidzero-dev/vite-plus) (`main`)     | `vite-plus`, `@voidzero-dev/vite-plus-core`, Oxlint/Oxfmt config, and `vp` CLI behavior                  |
 | `.repos/drizzle-orm`     | [drizzle-team/drizzle-orm](https://github.com/drizzle-team/drizzle-orm) (`main`) | `drizzle-orm`, `drizzle-kit`, and related workspace packages in that monorepo                            |
 | `.repos/kubi`            | [djobbo/kubi](https://github.com/djobbo/kubi) (`main`)                           | [dair.gg](https://dair.gg) reference monorepo — API, workers, and packages under `apps/` and `packages/` |
-| `.repos/corehalla`       | [djobbo/corehalla](https://github.com/djobbo/corehalla) (`next`)                 | Legacy [corehalla.com](https://corehalla.com) monorepo — Next.js app, tRPC, worker, and packages           |
+| `.repos/corehalla`       | [djobbo/corehalla](https://github.com/djobbo/corehalla) (`next`)                 | Legacy [corehalla.com](https://corehalla.com) monorepo — Next.js app, tRPC, worker, and packages         |
 | `.repos/alchemy`         | [alchemy-run/alchemy](https://github.com/alchemy-run/alchemy) (`main`)           | `alchemy` IaC library, provider resources, examples, and docs in that monorepo                           |
-| `.repos/shadcn-ui`       | [shadcn-ui/ui](https://github.com/shadcn-ui/ui) (`main`)                           | `shadcn` CLI, component registry source, templates, and docs in that monorepo                              |
+| `.repos/shadcn-ui`       | [shadcn-ui/ui](https://github.com/shadcn-ui/ui) (`main`)                         | `shadcn` CLI, component registry source, templates, and docs in that monorepo                            |
 
 If `.repos/` is missing, run `vp run setup` or `syncVendoredRepos({})` before relying on vendored source. Do not treat vendored trees as editable forks unless the task explicitly requires upstream contributions.
 
@@ -100,7 +100,7 @@ vp run -F @dair/client locales:compile
 ```typescript
 // Effect imports - use named imports from "effect"
 import { Effect, Layer, Config, Schema, Duration, Option, flow } from "effect"
-import { HttpApiBuilder, HttpClient } from "@effect/platform"
+import { HttpApiBuilder, HttpClient } from "effect/unstable/http"
 
 // Internal packages - use workspace:* protocol
 import { Api } from "@dair/api-contract"
@@ -124,15 +124,18 @@ import { BrawlhallaApi } from "@/services/brawlhalla-api"
 
 ### Effect Service Pattern (REQUIRED)
 
+Use **Effect v4** `Context.Service` with `make` and `Layer.effect` (not `Effect.Service` / `this.Default`).
+
 ```typescript
-export class MyService extends Effect.Service<MyService>()(
-  "@dair/services/MyService", // Tag convention
+import { Context, Effect, Layer } from "effect"
+
+export class MyService extends Context.Service<MyService>()(
+  "@dair/services/MyService",
   {
-    effect: Effect.gen(function* () {
+    make: Effect.gen(function* () {
       const dep = yield* SomeDependency
 
       return {
-        // ALL methods use Effect.fn for tracing
         myMethod: Effect.fn("myMethod")(function* (param: string) {
           return yield* dep.doSomething(param)
         }),
@@ -140,7 +143,9 @@ export class MyService extends Effect.Service<MyService>()(
     }),
   },
 ) {
-  static readonly layer = this.Default.pipe(Layer.provide(SomeDependency.layer))
+  static readonly layer = Layer.effect(this, this.make).pipe(
+    Layer.provide(SomeDependency.layer),
+  )
 }
 ```
 
@@ -148,13 +153,12 @@ export class MyService extends Effect.Service<MyService>()(
 
 ```typescript
 // ALL properties MUST be in schema - never add class properties
-export class MyError extends Schema.TaggedError<MyError>("MyError")("MyError", {
+export class MyError extends Schema.TaggedErrorClass<MyError>()("MyError", {
   message: Schema.String,
   cause: Schema.optional(Schema.Unknown),
-  status: Schema.Number.pipe(Schema.optionalWith({ default: () => 500 })),
 }) {}
 
-// HTTP-specific errors
+// HTTP-specific errors (effect/unstable/httpapi)
 export class NotFound extends HttpApiSchema.EmptyError<NotFound>()({
   tag: "NotFound",
   status: 404,

@@ -9,29 +9,29 @@ Ported from [kubi’s `brawlhalla-gql` service](https://github.com/djobbo/kubi/t
 ```ts
 import { Effect } from "effect"
 import {
-    layerBrawlhallaGqlApiClient,
-    BrawlhallaGqlApiClientService,
-    getWeeklyRotation,
+  layerBrawlhallaGqlApiClient,
+  BrawlhallaGqlApiClientService,
+  getWeeklyRotation,
 } from "@corehalla/brawlhalla-gql-api"
 
 const articlesProgram = Effect.gen(function* () {
-    const api = yield* BrawlhallaGqlApiClientService
+  const api = yield* BrawlhallaGqlApiClientService
 
-    const preview = yield* api.articles.preview({ payload: {} })
+  const preview = yield* api.articles.preview({ payload: {} })
 
-    const posts = yield* api.articles.list({
-        payload: { first: 6, category: "news" },
-    })
+  const posts = yield* api.articles.list({
+    payload: { first: 6, category: "news" },
+  })
 
-    const withHtml = yield* api.articles.withContent({
-        payload: { first: 1, category: "weekly-rotation" },
-    })
+  const withHtml = yield* api.articles.withContent({
+    payload: { first: 1, category: "weekly-rotation" },
+  })
 
-    return { preview, posts, withHtml }
+  return { preview, posts, withHtml }
 })
 
 const rotationProgram = getWeeklyRotation.pipe(
-    Effect.provide(layerBrawlhallaGqlApiClient()),
+  Effect.provide(layerBrawlhallaGqlApiClient()),
 )
 
 articlesProgram.pipe(Effect.provide(layerBrawlhallaGqlApiClient()))

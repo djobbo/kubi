@@ -6,54 +6,53 @@
 
 ## Source of truth
 
-| Legacy (corehalla) | Location |
-|------------------|----------|
-| Prisma schema | `.repos/corehalla/packages/db/prisma/schema.prisma` |
-| tRPC + raw SQL | `.repos/corehalla/packages/server/router/` |
-| Crawler writes | `.repos/corehalla/worker/src/crawler/` |
+| Legacy (corehalla) | Location                                            |
+| ------------------ | --------------------------------------------------- |
+| Prisma schema      | `.repos/corehalla/packages/db/prisma/schema.prisma` |
+| tRPC + raw SQL     | `.repos/corehalla/packages/server/router/`          |
+| Crawler writes     | `.repos/corehalla/worker/src/crawler/`              |
 
-| Target (kubi) | Location |
-|---------------|----------|
-| PG schema | [packages/db/src/schema/](../packages/db/src/schema/) |
-| Migrations | [apps/api/migrations/](../apps/api/migrations/) |
-| Migrator app | [apps/migrator/](../apps/migrator/) |
+| Target (kubi) | Location                                              |
+| ------------- | ----------------------------------------------------- |
+| PG schema     | [packages/db/src/schema/](../packages/db/src/schema/) |
+| Migrations    | [apps/api/migrations/](../apps/api/migrations/)       |
+| Migrator app  | [apps/migrator/](../apps/migrator/)                   |
 
 ## Data mapping
 
 ### Must migrate (user/product data)
 
-| Supabase / Prisma | Kubi table(s) | Status |
-|-------------------|---------------|--------|
-| `BHPlayerAlias` | `brawlhalla_player_aliases` | Started — [aliases.ts](../apps/migrator/src/aliases.ts); fix bugs (see below) |
+| Supabase / Prisma                             | Kubi table(s)                          | Status                                                                                                            |
+| --------------------------------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `BHPlayerAlias`                               | `brawlhalla_player_aliases`            | Started — [aliases.ts](../apps/migrator/src/aliases.ts); fix bugs (see below)                                     |
 | `UserFavorite` + `UserProfile` + `auth.users` | `users`, `oauth_accounts`, `bookmarks` | Started — [bookmarks.ts](../apps/migrator/src/bookmarks.ts); Effect Schema decode, `placeholderUserIdFromDiscord` |
-| `UserConnection` | `oauth_accounts` or metadata JSON | Not started |
+| `UserConnection`                              | `oauth_accounts` or metadata JSON      | Not started                                                                                                       |
 
 ### Optional / regenerate via workers
 
 Historical snapshots can be **re-crawled** instead of bulk-imported if acceptable downtime:
 
-| Legacy | Kubi | Recommendation |
-|--------|------|----------------|
-| `BHPlayerData` (+ legends/weapons) | `player_history`, `player_legend_history`, `player_weapon_history` | Prefer workers after cutover OR import latest row per player only |
-| `BHClan` | `clan_history` | Import latest per clan or crawl |
-| Ranked leaderboard rows (if stored in Supabase outside Prisma file) | `ranked_*_history` | Prefer `apps/workers` |
+| Legacy                                                              | Kubi                                                               | Recommendation                                                    |
+| ------------------------------------------------------------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------- |
+| `BHPlayerData` (+ legends/weapons)                                  | `player_history`, `player_legend_history`, `player_weapon_history` | Prefer workers after cutover OR import latest row per player only |
+| `BHClan`                                                            | `clan_history`                                                     | Import latest per clan or crawl                                   |
+| Ranked leaderboard rows (if stored in Supabase outside Prisma file) | `ranked_*_history`                                                 | Prefer `apps/workers`                                             |
 
 ### Skip
 
-| Legacy | Reason |
-|--------|--------|
-| `CrawlProgress` | Kubi workers use different scheduling |
-| Supabase Realtime / RLS | Not used on PG stack |
+| Legacy                  | Reason                                |
+| ----------------------- | ------------------------------------- |
+| `CrawlProgress`         | Kubi workers use different scheduling |
+| Supabase Realtime / RLS | Not used on PG stack                  |
 
 ## Blockers to fix first
 
 ### 3.1 Bookmarks schema unification
 
-- `@dair/schema` defines `bookmarksTable` as **SQLite** ([packages/schema/src/bookmarks/bookmarks.ts](../packages/schema/src/bookmarks/bookmarks.ts)).
-- `apps/api` imports bookmarks from **`@dair/db`** ([bookmarks service](../apps/api/src/services/bookmarks/index.ts)) but **PG tables are not in `packages/db`**.
+- [x] Removed legacy `@dair/schema` SQLite package; bookmarks live in `@dair/db` only.
 - [x] Move bookmarks + `legacy_bookmarks` to `packages/db` as `pgTable` (match [auth schema](../packages/db/src/schema/auth/) style).
 - [x] Generate migration in `apps/api` (`0002_spotty_firedrake.sql`).
-- [ ] Export types from `@dair/db`; trim or alias `@dair/schema` to contract-only DTOs.
+- [x] Export types from `@dair/db` (`Bookmark`, `NewBookmark`, `BookmarkMeta`, etc.).
 - [x] Fix migrator imports: `@dair/db` not `@/features/...` (corehalla path).
 
 ### 3.2 Fix `apps/migrator`
@@ -82,7 +81,7 @@ Recommended order inside [migrate.ts](../apps/migrator/src/migrate.ts):
 2. **Aliases** — batched `BHPlayerAlias`
 3. **Bookmarks** — `UserFavorite` → `bookmarks` (dedupe by userId + pageId + pageType)
 4. **Legacy bookmark migration flag** — call same logic as API `Bookmarks.migrateLegacyBookmarks` for session login path
-5. *(Optional)* **Latest player/clan snapshot** — one row per id into history tables
+5. _(Optional)_ **Latest player/clan snapshot** — one row per id into history tables
 
 - [ ] Add CLI flags: `--only=aliases,bookmarks`, `--dry-run`, `--batch-size`.
 - [ ] Idempotency: all inserts use `onConflictDoUpdate` / `onConflictDoNothing`.
@@ -111,10 +110,10 @@ See [06-cutover-and-ops.md](./06-cutover-and-ops.md): freeze writes on corehalla
 
 ## Env vars (migrator)
 
-| Variable | Purpose |
-|----------|---------|
-| `MIGRATION_DATABASE_URL` | Target PG (kubi) |
-| `MIGRATION_SUPABASE_URL` | Legacy API URL |
+| Variable                         | Purpose               |
+| -------------------------------- | --------------------- |
+| `MIGRATION_DATABASE_URL`         | Target PG (kubi)      |
+| `MIGRATION_SUPABASE_URL`         | Legacy API URL        |
 | `MIGRATION_SUPABASE_SERVICE_KEY` | Service role for read |
 
 Do **not** commit keys; use `.env` locally and CI secrets for one-off jobs.

@@ -1,5 +1,4 @@
 import { sql } from "drizzle-orm"
-import { relations } from "drizzle-orm/_relations"
 import { pgTable, uuid } from "drizzle-orm/pg-core"
 import { withExpiry, withTimestamp } from "../../helpers/with-timestamp"
 import { usersTable } from "./users"
@@ -18,10 +17,3 @@ export const sessionsTable = pgTable("sessions", {
 
 export type Session = typeof sessionsTable.$inferSelect
 export type NewSession = typeof sessionsTable.$inferInsert
-
-export const sessionsRelations = relations(sessionsTable, ({ one }) => ({
-  user: one(usersTable, {
-    fields: [sessionsTable.userId],
-    references: [usersTable.id],
-  }),
-}))

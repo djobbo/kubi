@@ -110,11 +110,11 @@ const defineRankedWorker = Effect.fn("worker")(function* <
         `${workerName}: Processing task ${formatCrawlTask(task)}`,
       )
 
-      const { data: rankings } = yield* (task.bracket === "1v1"
+      const { data: rankings } = yield* task.bracket === "1v1"
         ? apiClient.brawlhalla.getRankings1v1(task.region, task.page)
         : task.bracket === "2v2"
           ? apiClient.brawlhalla.getRankings2v2(task.region, task.page)
-          : apiClient.brawlhalla.getRankingsRotating(task.region, task.page))
+          : apiClient.brawlhalla.getRankingsRotating(task.region, task.page)
       yield* Effect.log(
         `${workerName}: Completed task ${formatCrawlTask(task)}`,
       )

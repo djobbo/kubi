@@ -8,17 +8,17 @@ Reference router: `.repos/corehalla/packages/server/router/index.ts`
 
 ## Already at parity (or better)
 
-| Corehalla tRPC | Kubi endpoint | Notes |
-|----------------|---------------|-------|
-| `getPlayerStats` + `getPlayerRanked` | `get-player-by-id` | Merged response |
-| `get1v1Rankings` / `get2v2Rankings` | `get-ranked-1v1`, `get-ranked-2v2` | + rotating |
-| `getPowerRankings` | `get-power-rankings` | |
-| `getGlobalPlayerRankings` | `get-player-rankings` | |
-| `getWeeklyRotation` | `get-weekly-rotation` | |
-| `getBHArticles` | `get-preview-articles` | |
-| `getClanStats` | `get-guild-by-id` | |
-| `searchPlayerAlias` | `search-player` | Archive-backed; verify alias table usage |
-| Queue snapshots | `get-ranked-*-queue` | New vs corehalla |
+| Corehalla tRPC                       | Kubi endpoint                      | Notes                                    |
+| ------------------------------------ | ---------------------------------- | ---------------------------------------- |
+| `getPlayerStats` + `getPlayerRanked` | `get-player-by-id`                 | Merged response                          |
+| `get1v1Rankings` / `get2v2Rankings`  | `get-ranked-1v1`, `get-ranked-2v2` | + rotating                               |
+| `getPowerRankings`                   | `get-power-rankings`               |                                          |
+| `getGlobalPlayerRankings`            | `get-player-rankings`              |                                          |
+| `getWeeklyRotation`                  | `get-weekly-rotation`              |                                          |
+| `getBHArticles`                      | `get-preview-articles`             |                                          |
+| `getClanStats`                       | `get-guild-by-id`                  |                                          |
+| `searchPlayerAlias`                  | `search-player`                    | Archive-backed; verify alias table usage |
+| Queue snapshots                      | `get-ranked-*-queue`               | New vs corehalla                         |
 
 ## Gaps to implement
 
@@ -62,12 +62,12 @@ Contract already has `bookmark: Schema.NullOr(Bookmark)` on player/guild respons
 
 ## Auth parity checklist
 
-| Feature | Corehalla | Kubi |
-|---------|-----------|------|
-| Discord OAuth | Supabase Auth | Arctic + [authorization](../apps/api/src/services/authorization/) |
-| Google OAuth | — | Config present |
-| Session cookie | Supabase | Custom `sessions` table |
-| Favorites | DB + RLS | Bookmarks service (needs HTTP + PG) |
+| Feature        | Corehalla     | Kubi                                                              |
+| -------------- | ------------- | ----------------------------------------------------------------- |
+| Discord OAuth  | Supabase Auth | Arctic + [authorization](../apps/api/src/services/authorization/) |
+| Google OAuth   | —             | Config present                                                    |
+| Session cookie | Supabase      | Custom `sessions` table                                           |
+| Favorites      | DB + RLS      | Bookmarks service (needs HTTP + PG)                               |
 
 ## Testing
 

@@ -1,15 +1,14 @@
 import { Database } from "@/services/db"
-import type { SessionWithUser } from "@/services/authorization"
 import {
   type Bookmark,
-  DISCORD_PROVIDER_ID,
   type NewBookmark,
+  type Provider,
   bookmarksTable,
   legacyBookmarksTable,
 } from "@dair/db"
-import { and, eq } from "drizzle-orm"
+import { and, eq, sql } from "drizzle-orm"
 import { Context, Effect, Layer } from "effect"
-import { BookmarkError, DiscordAccountNotFoundError } from "./errors"
+import { BookmarkError } from "./errors"
 
 const mapBookmarkError = <A, E, R>(effect: Effect.Effect<A, E, R>) =>
   effect.pipe(
@@ -41,9 +40,10 @@ type BookmarksService = {
     userId: string,
     bookmark: Pick<Bookmark, "pageId" | "pageType">,
   ) => Effect.Effect<void, BookmarkError>
-  readonly migrateLegacyBookmarks: (
-    session: SessionWithUser,
-  ) => Effect.Effect<void, BookmarkError | DiscordAccountNotFoundError>
+  readonly migrateLegacyBookmarks: (options: {
+    readonly userId: string
+    readonly provider: Provider
+  }) => Effect.Effect<void, BookmarkError>
 }
 
 export class Bookmarks extends Context.Service<Bookmarks, BookmarksService>()(
@@ -154,47 +154,86 @@ export class Bookmarks extends Context.Service<Bookmarks, BookmarksService>()(
 
       const migrateLegacyBookmarks = Effect.fn(
         "Bookmarks.migrateLegacyBookmarks",
-      )(function* (session: SessionWithUser) {
-        const oauthAccounts = session.user.oauthAccounts as ReadonlyArray<{
-          provider: string
-          providerUserId: string
-        }>
-        const discordAccount = oauthAccounts.find(
-          (account) => account.provider === DISCORD_PROVIDER_ID,
+      )(function* ({
+        userId,
+        provider,
+      }: {
+        userId: string
+        provider: Provider
+      }) {
+        const oauthAccount = yield* mapBookmarkError(
+          db.query.oauthAccountsTable.findFirst({
+            where: {
+              userId: { eq: userId },
+              provider: { eq: provider },
+            },
+          }),
         )
-        const discordId = discordAccount?.providerUserId
 
-        if (!discordId) {
-          return yield* Effect.fail(
-            new DiscordAccountNotFoundError({
-              userId: session.user.id,
-            }),
-          )
+        const providerUserId = oauthAccount?.providerUserId
+        if (!providerUserId) {
+          return
         }
 
         const legacyBookmarks = yield* mapBookmarkError(
           db
             .select()
             .from(legacyBookmarksTable)
-            .where(eq(legacyBookmarksTable.discordId, discordId)),
+            .where(
+              and(
+                eq(legacyBookmarksTable.provider, provider),
+                eq(legacyBookmarksTable.providerUserId, providerUserId),
+              ),
+            ),
         )
 
-        if (legacyBookmarks.length > 0) {
-          yield* mapBookmarkError(
-            db.insert(bookmarksTable).values(
-              legacyBookmarks.map(({ discordId: _discordId, ...bookmark }) => ({
-                ...bookmark,
-                userId: session.user.id,
-              })),
-            ),
-          )
-
-          yield* mapBookmarkError(
-            db
-              .delete(legacyBookmarksTable)
-              .where(eq(legacyBookmarksTable.discordId, discordId)),
-          )
+        if (legacyBookmarks.length === 0) {
+          return
         }
+
+        yield* mapBookmarkError(
+          db
+            .insert(bookmarksTable)
+            .values(
+              legacyBookmarks.map(
+                ({
+                  provider: _provider,
+                  providerUserId: _providerUserId,
+                  ...bookmark
+                }) => ({
+                  ...bookmark,
+                  userId,
+                }),
+              ),
+            )
+            .onConflictDoUpdate({
+              set: {
+                name: sql`excluded.name`,
+              },
+              target: [
+                bookmarksTable.userId,
+                bookmarksTable.pageId,
+                bookmarksTable.pageType,
+              ],
+            }),
+        )
+
+        yield* mapBookmarkError(
+          db
+            .delete(legacyBookmarksTable)
+            .where(
+              and(
+                eq(legacyBookmarksTable.provider, provider),
+                eq(legacyBookmarksTable.providerUserId, providerUserId),
+              ),
+            ),
+        )
+
+        yield* Effect.log("Migrated legacy bookmarks to user", {
+          userId,
+          provider,
+          count: legacyBookmarks.length,
+        })
       })
 
       return {

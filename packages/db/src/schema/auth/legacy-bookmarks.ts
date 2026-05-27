@@ -3,6 +3,7 @@ import { sql } from "drizzle-orm"
 
 import { withTimestamp } from "../../helpers/with-timestamp"
 import { type BookmarkMeta, pageTypes } from "./bookmarks"
+import { providers } from "./oauth-accounts"
 
 export const legacyBookmarksTable = pgTable(
   "legacy_bookmarks",
@@ -14,12 +15,14 @@ export const legacyBookmarksTable = pgTable(
     pageId: text("page_id").notNull(),
     name: text("name").notNull(),
     meta: jsonb("meta").$type<BookmarkMeta>(),
-    discordId: text("discord_id").notNull(),
+    provider: text("provider", { enum: providers }).notNull(),
+    providerUserId: text("provider_user_id").notNull(),
     ...withTimestamp,
   },
   (table) => [
     uniqueIndex("unique_legacy_bookmark").on(
-      table.discordId,
+      table.provider,
+      table.providerUserId,
       table.pageType,
       table.pageId,
     ),

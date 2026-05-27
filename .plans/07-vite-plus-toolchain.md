@@ -12,11 +12,11 @@
 
 Read from [`.repos/vite-plus/package.json`](../.repos/vite-plus/package.json) when refreshing:
 
-| Field | Current vendored value |
-|-------|------------------------|
-| `packageManager` | `pnpm@10.33.2` |
-| `vite-plus` (CLI) | `0.1.22` (`packages/cli`) |
-| Node (engines) | `>=22.18.0` (vite-plus monorepo) |
+| Field             | Current vendored value           |
+| ----------------- | -------------------------------- |
+| `packageManager`  | `pnpm@10.33.2`                   |
+| `vite-plus` (CLI) | `0.1.22` (`packages/cli`)        |
+| Node (engines)    | `>=22.18.0` (vite-plus monorepo) |
 
 Root [package.json](../package.json) must keep `packageManager` in sync after `syncVendoredRepos` updates vite-plus.
 
@@ -33,16 +33,16 @@ kubi/
 
 ## Commands (use `vp`; do not use Bun)
 
-| Task | Command |
-|------|---------|
-| First-time bootstrap | `vp run setup` |
-| Install deps | `vp install` |
-| Dev (turbo) | `vp run dev` |
-| Lint / format | `vp run lint` or `vp check --fix` |
-| Typecheck | `vp run check:types` |
-| Run script in workspace | `vp run -F @dair/api dev` |
-| Run binary with local PATH | `vp exec drizzle-kit migrate` |
-| Pre-commit (after `vp config`) | `vp staged` |
+| Task                           | Command                           |
+| ------------------------------ | --------------------------------- |
+| First-time bootstrap           | `vp run setup`                    |
+| Install deps                   | `vp install`                      |
+| Dev (turbo)                    | `vp run dev`                      |
+| Lint / format                  | `vp run lint` or `vp check --fix` |
+| Typecheck                      | `vp run check:types`              |
+| Run script in workspace        | `vp run -F @dair/api dev`         |
+| Run binary with local PATH     | `vp exec drizzle-kit migrate`     |
+| Pre-commit (after `vp config`) | `vp staged`                       |
 
 `vp` resolves **pnpm** from `packageManager`; you do not need a global pnpm install when using vp.
 
@@ -84,11 +84,11 @@ App-level Vite (TanStack Start) stays in [apps/client/vite.config.ts](../apps/cl
 
 ## Runtime
 
-| Layer | Tool |
-|-------|------|
-| Install, scripts, lint, hooks | **vp** + **pnpm** |
-| API / workers / scripts | **Node.js** + **tsx** (`NodeHttpServer`, `dotenv/config`) |
-| Setup | `vp exec tsx scripts/setup/setup.mts` |
+| Layer                         | Tool                                                      |
+| ----------------------------- | --------------------------------------------------------- |
+| Install, scripts, lint, hooks | **vp** + **pnpm**                                         |
+| API / workers / scripts       | **Node.js** + **tsx** (`NodeHttpServer`, `dotenv/config`) |
+| Setup                         | `vp exec tsx scripts/setup/setup.mts`                     |
 
 See [.cursor/rules/node-toolchain.mdc](../.cursor/rules/node-toolchain.mdc). **Do not use Bun** anywhere in this repo.
 

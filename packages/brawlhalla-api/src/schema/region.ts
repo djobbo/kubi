@@ -1,9 +1,9 @@
 import { Schema, SchemaTransformation } from "effect"
 
 import {
-    RankedRegionSchema,
-    isRankedRegion,
-    rankedRegions,
+  RankedRegionSchema,
+  isRankedRegion,
+  rankedRegions,
 } from "../constants/ranked/regions.js"
 
 /**
@@ -11,34 +11,34 @@ import {
  * arbitrary region list.
  */
 export const BrawlhallaApiRegion = Schema.NullOr(
-    Schema.Union([Schema.String, Schema.Number]),
+  Schema.Union([Schema.String, Schema.Number]),
 ).pipe(
-    Schema.decodeTo(
-        Schema.NullOr(RankedRegionSchema),
-        SchemaTransformation.transform({
-            decode: (input) => {
-                if (input === null) {
-                    return null
-                }
+  Schema.decodeTo(
+    Schema.NullOr(RankedRegionSchema),
+    SchemaTransformation.transform({
+      decode: (input) => {
+        if (input === null) {
+          return null
+        }
 
-                if (input === "none") {
-                    return null
-                }
+        if (input === "none") {
+          return null
+        }
 
-                const region =
-                    typeof input === "number"
-                        ? rankedRegions[input - 1]
-                        : input.toLowerCase()
+        const region =
+          typeof input === "number"
+            ? rankedRegions[input - 1]
+            : input.toLowerCase()
 
-                if (!region || !isRankedRegion(region)) {
-                    return null
-                }
+        if (!region || !isRankedRegion(region)) {
+          return null
+        }
 
-                return region
-            },
-            encode: (region) => (region === null ? "none" : region),
-        }),
-    ),
+        return region
+      },
+      encode: (region) => (region === null ? "none" : region),
+    }),
+  ),
 )
 
 export type BrawlhallaApiRegion = typeof BrawlhallaApiRegion.Type

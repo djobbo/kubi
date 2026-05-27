@@ -22,8 +22,7 @@ dair/
 │   ├── brawlhalla-replays/ # Replay file parser
 │   ├── brawlhalla-servers/ # Server location data
 │   ├── common/        # Shared utilities
-│   ├── db/            # Drizzle schema
-│   └── schema/        # Effect Schema definitions
+│   └── db/            # Drizzle schema + relations
 └── scripts/           # Build & migration helpers
 ```
 

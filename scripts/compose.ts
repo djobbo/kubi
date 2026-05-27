@@ -13,11 +13,9 @@ const spawnCompose = (
   Effect.tryPromise({
     try: () =>
       new Promise<{ exitCode: number; stdout: string }>((resolve, reject) => {
-        const proc = spawn(
-          "docker",
-          ["compose", "-f", composeFile, ...args],
-          { stdio },
-        )
+        const proc = spawn("docker", ["compose", "-f", composeFile, ...args], {
+          stdio,
+        })
 
         let stdout = ""
         if (proc.stdout) {
@@ -41,7 +39,11 @@ const runDockerCompose = (args: ReadonlyArray<string>) =>
       `Running: docker compose -f ${composeFile} ${args.join(" ")}`,
     )
 
-    const { exitCode } = yield* spawnCompose(args, ["inherit", "inherit", "inherit"])
+    const { exitCode } = yield* spawnCompose(args, [
+      "inherit",
+      "inherit",
+      "inherit",
+    ])
 
     if (exitCode !== 0) {
       return yield* Effect.fail(
@@ -69,7 +71,10 @@ const waitForHealth = (): Effect.Effect<void, Error, never> =>
       .trim()
       .split("\n")
       .filter((line: string) => line.trim())
-      .map((line: string) => JSON.parse(line) as { Health?: string; State?: string })
+      .map(
+        (line: string) =>
+          JSON.parse(line) as { Health?: string; State?: string },
+      )
 
     const unhealthyServices = services.filter((service) => {
       const health = service.Health || ""
@@ -94,21 +99,18 @@ const waitForHealthFlag = Flag.boolean("wait").pipe(
   Flag.withDescription("Wait for services to be healthy before returning"),
 )
 
-const composeUp = Command.make(
-  "up",
-  { wait: waitForHealthFlag },
-  ({ wait }) =>
-    Effect.gen(function* () {
-      yield* runDockerCompose(["up", "-d"])
+const composeUp = Command.make("up", { wait: waitForHealthFlag }, ({ wait }) =>
+  Effect.gen(function* () {
+    yield* runDockerCompose(["up", "-d"])
 
-      if (wait) {
-        yield* waitForHealth()
-      } else {
-        yield* Console.log(
-          "Services started. Use --wait to wait for health checks.",
-        )
-      }
-    }),
+    if (wait) {
+      yield* waitForHealth()
+    } else {
+      yield* Console.log(
+        "Services started. Use --wait to wait for health checks.",
+      )
+    }
+  }),
 )
 
 const composeDown = Command.make("down", {}, () =>
@@ -123,7 +125,4 @@ const compose = Command.make("compose", {}, () =>
 
 Command.run(compose, {
   version: "1.0.0",
-}).pipe(
-  Effect.provide(NodeServices.layer),
-  NodeRuntime.runMain,
-)
+}).pipe(Effect.provide(NodeServices.layer), NodeRuntime.runMain)

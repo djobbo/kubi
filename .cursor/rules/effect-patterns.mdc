@@ -24,20 +24,18 @@ Local Effect source for reference: `~/.local/share/effect-solutions/effect`
 
 ## Service Pattern
 
-Every service MUST follow this structure:
+Every service MUST use **Effect v4** `Context.Service` with `make` and `Layer.effect`:
 
 ```typescript
-import { Effect, Layer } from "effect"
+import { Context, Effect, Layer } from "effect"
 
-export class MyService extends Effect.Service<MyService>()(
-  "@dair/services/MyService",  // Tag: @dair/services/<Name>
+export class MyService extends Context.Service<MyService>()(
+  "@dair/services/MyService",
   {
-    effect: Effect.gen(function* () {
-      // Yield dependencies
+    make: Effect.gen(function* () {
       const dep = yield* SomeDependency
-      
+
       return {
-        // Use Effect.fn for all methods (enables tracing)
         myMethod: Effect.fn("myMethod")(function* (param: string) {
           return yield* dep.doSomething(param)
         }),
@@ -45,8 +43,7 @@ export class MyService extends Effect.Service<MyService>()(
     }),
   },
 ) {
-  // Static layer with ALL dependencies
-  static readonly layer = this.Default.pipe(
+  static readonly layer = Layer.effect(this, this.make).pipe(
     Layer.provide(SomeDependency.layer),
   )
 }
@@ -67,28 +64,18 @@ export class MyService extends Effect.Service<MyService>()(
 import { Schema } from "effect"
 
 // ✅ CORRECT
-export class MyError extends Schema.TaggedError<MyError>(
-  "MyError",
-)("MyError", {
+export class MyError extends Schema.TaggedErrorClass<MyError>()("MyError", {
   message: Schema.String,
   cause: Schema.optional(Schema.Unknown),
-  status: Schema.Number.pipe(Schema.optionalWith({ default: () => 500 })),
 }) {}
 
-// ❌ WRONG - Never add class properties
-export class BadError extends Schema.TaggedError<BadError>(
-  "BadError",
-)("BadError", {
-  message: Schema.String,
-}) {
-  status = 500  // DON'T DO THIS!
-}
+// ❌ WRONG - Never add class properties outside the schema
 ```
 
 ### HTTP API Errors
 
 ```typescript
-import { HttpApiSchema } from "@effect/platform"
+import { HttpApiSchema } from "effect/unstable/httpapi"
 
 export class TooManyRequests extends HttpApiSchema.EmptyError<TooManyRequests>()({
   tag: "TooManyRequests",
@@ -108,21 +95,20 @@ yield* MyError.make({ message: "Something went wrong" })
 ```typescript
 import { Config, Effect, Layer, Redacted } from "effect"
 
-export class MyConfig extends Effect.Service<MyConfig>()(
+export class MyConfig extends Context.Service<MyConfig>()(
   "@dair/services/MyConfig",
   {
-    effect: Effect.gen(function* () {
+    make: Effect.gen(function* () {
       return {
         url: yield* Config.nonEmptyString("MY_URL"),
-        secret: yield* Config.redacted("MY_SECRET"),  // For sensitive data
+        secret: yield* Config.redacted("MY_SECRET"),
         port: yield* Config.number("MY_PORT").pipe(Config.withDefault(3000)),
       }
     }),
   },
 ) {
-  static readonly layer = this.Default
-  
-  // For testing
+  static readonly layer = Layer.effect(this, this.make)
+
   static readonly testLayer = Layer.succeed(this, {
     url: "http://test",
     secret: Redacted.make("test-secret"),
@@ -155,8 +141,8 @@ Effect.fn("myOperation")(
 
 ```typescript
 import { Effect, Layer, Config, Schema, Duration, Option, Redacted, flow } from "effect"
-import { HttpApiBuilder, HttpClient, FetchHttpClient } from "@effect/platform"
-import { HttpApiEndpoint, HttpApiGroup, HttpApiSchema, HttpApi } from "@effect/platform"
+import { HttpApiBuilder, HttpClient, FetchHttpClient } from "effect/unstable/http"
+import { HttpApiEndpoint, HttpApiGroup, HttpApiSchema, HttpApi } from "effect/unstable/httpapi"
 ```
 
 ## Anti-Patterns to Avoid

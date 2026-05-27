@@ -1,9 +1,5 @@
 import { Schema } from "effect"
-import {
-  HttpApi,
-  HttpApiEndpoint,
-  HttpApiGroup,
-} from "effect/unstable/httpapi"
+import { HttpApi, HttpApiEndpoint, HttpApiGroup } from "effect/unstable/httpapi"
 import { providers } from "@dair/db"
 import {
   BadRequest,

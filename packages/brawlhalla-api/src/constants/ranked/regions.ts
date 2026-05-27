@@ -14,8 +14,7 @@ export const rankedRegions = [
 ] as const
 
 const upperCaseRankedRegions = rankedRegions.map(
-  (region) =>
-    region.toUpperCase() as Uppercase<(typeof rankedRegions)[number]>,
+  (region) => region.toUpperCase() as Uppercase<(typeof rankedRegions)[number]>,
 )
 
 export type RankedRegion = (typeof rankedRegions)[number]

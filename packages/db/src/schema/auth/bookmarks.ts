@@ -1,12 +1,5 @@
 import { sql } from "drizzle-orm"
-import { relations } from "drizzle-orm/_relations"
-import {
-  jsonb,
-  pgTable,
-  text,
-  uniqueIndex,
-  uuid,
-} from "drizzle-orm/pg-core"
+import { jsonb, pgTable, text, uniqueIndex, uuid } from "drizzle-orm/pg-core"
 
 import { withTimestamp } from "../../helpers/with-timestamp"
 import { usersTable } from "./users"
@@ -56,10 +49,3 @@ export const bookmarksTable = pgTable(
 
 export type Bookmark = typeof bookmarksTable.$inferSelect
 export type NewBookmark = typeof bookmarksTable.$inferInsert
-
-export const bookmarksRelations = relations(bookmarksTable, ({ one }) => ({
-  user: one(usersTable, {
-    fields: [bookmarksTable.userId],
-    references: [usersTable.id],
-  }),
-}))

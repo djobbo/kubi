@@ -1,6 +1,12 @@
 {
   "name": "@dair/brawlhalla-api",
   "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./src/*": "./src/*"
+  },
   "dependencies": {
     "@dair/common": "workspace:*",
     "effect": "catalog:"
@@ -8,11 +14,5 @@
   "devDependencies": {
     "@types/node": "catalog:",
     "@typescript/native-preview": "catalog:"
-  },
-  "exports": {
-    ".": "./src/index.ts",
-    "./src/*": "./src/*"
-  },
-  "private": true,
-  "type": "module"
+  }
 }

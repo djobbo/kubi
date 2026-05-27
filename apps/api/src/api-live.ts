@@ -61,7 +61,8 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
         function* ({ params }) {
           return yield* getPlayerById(params.id)
         },
-        flow(Effect.catchTags({
+        flow(
+          Effect.catchTags({
             BrawlhallaPlayerNotFound: () => Effect.fail(new NotFound()),
             BrawlhallaRateLimitError: () => Effect.fail(new TooManyRequests()),
             BrawlhallaServiceUnavailable: () =>
@@ -71,7 +72,9 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
             CacheOperationError: () => Effect.fail(new InternalServerError()),
             CacheSerializationError: () =>
               Effect.fail(new InternalServerError()),
-          }), Effect.catch(() => Effect.fail(new InternalServerError()))),
+          }),
+          Effect.catch(() => Effect.fail(new InternalServerError())),
+        ),
       ),
     )
     .handle(
@@ -89,7 +92,8 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
         function* ({ params }) {
           return yield* getGuildById(params.id)
         },
-        flow(Effect.catchTags({
+        flow(
+          Effect.catchTags({
             BrawlhallaClanNotFound: () => Effect.fail(new NotFound()),
             BrawlhallaRateLimitError: () => Effect.fail(new TooManyRequests()),
             BrawlhallaServiceUnavailable: () =>
@@ -99,27 +103,28 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
             CacheOperationError: () => Effect.fail(new InternalServerError()),
             CacheSerializationError: () =>
               Effect.fail(new InternalServerError()),
-          }), Effect.catch(() => Effect.fail(new InternalServerError()))),
+          }),
+          Effect.catch(() => Effect.fail(new InternalServerError())),
+        ),
       ),
     )
     .handle(
       "get-ranked-1v1",
       Effect.fn("get-ranked-1v1")(
         function* ({ query }) {
-          return yield* getRankings1v1(
-            query.region,
-            query.page,
-            query.name,
-          )
+          return yield* getRankings1v1(query.region, query.page, query.name)
         },
-        flow(Effect.catchTags({
+        flow(
+          Effect.catchTags({
             CacheOperationError: () => Effect.fail(new InternalServerError()),
             RateLimiterError: () => Effect.fail(new TooManyRequests()),
             BrawlhallaServiceUnavailable: () =>
               Effect.fail(new ServiceUnavailable()),
             CacheSerializationError: () =>
               Effect.fail(new InternalServerError()),
-          }), Effect.catch(() => Effect.fail(new InternalServerError()))),
+          }),
+          Effect.catch(() => Effect.fail(new InternalServerError())),
+        ),
       ),
     )
     .handle(
@@ -128,7 +133,8 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
         function* ({ query }) {
           return yield* getRankings2v2(query.region, query.page)
         },
-        flow(Effect.catchTags({
+        flow(
+          Effect.catchTags({
             BrawlhallaRateLimitError: () => Effect.fail(new TooManyRequests()),
             BrawlhallaServiceUnavailable: () =>
               Effect.fail(new ServiceUnavailable()),
@@ -137,7 +143,9 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
             CacheOperationError: () => Effect.fail(new InternalServerError()),
             CacheSerializationError: () =>
               Effect.fail(new InternalServerError()),
-          }), Effect.catch(() => Effect.fail(new InternalServerError()))),
+          }),
+          Effect.catch(() => Effect.fail(new InternalServerError())),
+        ),
       ),
     )
     .handle(
@@ -146,7 +154,8 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
         function* ({ query }) {
           return yield* getRankingsRotating(query.region, query.page)
         },
-        flow(Effect.catchTags({
+        flow(
+          Effect.catchTags({
             BrawlhallaApiError: () => Effect.fail(new InternalServerError()),
             RateLimiterError: () => Effect.fail(new TooManyRequests()),
             BrawlhallaRateLimitError: () => Effect.fail(new TooManyRequests()),
@@ -155,7 +164,9 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
             CacheOperationError: () => Effect.fail(new InternalServerError()),
             CacheSerializationError: () =>
               Effect.fail(new InternalServerError()),
-          }), Effect.catch(() => Effect.fail(new InternalServerError()))),
+          }),
+          Effect.catch(() => Effect.fail(new InternalServerError())),
+        ),
       ),
     )
     .handle(
@@ -164,8 +175,10 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
         function* ({ query }) {
           return yield* getRanked1v1Queue(query.region)
         },
-        flow(Effect.catchTags({
-          }), Effect.catch(() => Effect.fail(new InternalServerError()))),
+        flow(
+          Effect.catchTags({}),
+          Effect.catch(() => Effect.fail(new InternalServerError())),
+        ),
       ),
     )
     .handle(
@@ -174,8 +187,10 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
         function* ({ query }) {
           return yield* getRanked2v2Queue(query.region)
         },
-        flow(Effect.catchTags({
-          }), Effect.catch(() => Effect.fail(new InternalServerError()))),
+        flow(
+          Effect.catchTags({}),
+          Effect.catch(() => Effect.fail(new InternalServerError())),
+        ),
       ),
     )
     .handle(
@@ -184,8 +199,10 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
         function* ({ query }) {
           return yield* getRankedRotatingQueue(query.region)
         },
-        flow(Effect.catchTags({
-          }), Effect.catch(() => Effect.fail(new InternalServerError()))),
+        flow(
+          Effect.catchTags({}),
+          Effect.catch(() => Effect.fail(new InternalServerError())),
+        ),
       ),
     )
     .handle(
@@ -194,8 +211,10 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
         function* ({ query }) {
           return yield* getGlobalPlayerRankings(query.orderBy)
         },
-        flow(Effect.catchTags({
-          }), Effect.catch(() => Effect.fail(new InternalServerError()))),
+        flow(
+          Effect.catchTags({}),
+          Effect.catch(() => Effect.fail(new InternalServerError())),
+        ),
       ),
     )
     .handle(
@@ -204,8 +223,10 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
         function* ({ params, query }) {
           return yield* getGlobalLegendRankings(params.id, query.orderBy)
         },
-        flow(Effect.catchTags({
-          }), Effect.catch(() => Effect.fail(new InternalServerError()))),
+        flow(
+          Effect.catchTags({}),
+          Effect.catch(() => Effect.fail(new InternalServerError())),
+        ),
       ),
     )
     .handle(
@@ -214,8 +235,10 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
         function* ({ params, query }) {
           return yield* getGlobalWeaponRankings(params.name, query.orderBy)
         },
-        flow(Effect.catchTags({
-          }), Effect.catch(() => Effect.fail(new InternalServerError()))),
+        flow(
+          Effect.catchTags({}),
+          Effect.catch(() => Effect.fail(new InternalServerError())),
+        ),
       ),
     )
     .handle(
@@ -291,8 +314,10 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
             name: query.name,
           })
         },
-        flow(Effect.catchTags({
-          }), Effect.catch(() => Effect.fail(new InternalServerError()))),
+        flow(
+          Effect.catchTags({}),
+          Effect.catch(() => Effect.fail(new InternalServerError())),
+        ),
       ),
     )
     .handle(
@@ -316,22 +341,28 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
     )
     .handle(
       "get-servers",
-      Effect.fn("get-servers")(function* () {
-        return yield* getServers()
-      }, flow(Effect.catch(() => Effect.fail(new InternalServerError())))),
+      Effect.fn("get-servers")(
+        function* () {
+          return yield* getServers()
+        },
+        flow(Effect.catch(() => Effect.fail(new InternalServerError()))),
+      ),
     )
     .handle(
       "get-nearest-server",
-      Effect.fn("get-nearest-server")(function* () {
-        // Get client IP from headers (x-forwarded-for for proxied requests)
-        const request = yield* HttpServerRequest.HttpServerRequest
-        const headers = request.headers
-        const forwardedFor = headers["x-forwarded-for"]
-        const ip = forwardedFor
-          ? forwardedFor.split(",")[0]?.trim()
-          : (headers["x-real-ip"] ?? null)
-        return yield* getNearestServer(ip ?? null)
-      }, flow(Effect.catch(() => Effect.fail(new InternalServerError())))),
+      Effect.fn("get-nearest-server")(
+        function* () {
+          // Get client IP from headers (x-forwarded-for for proxied requests)
+          const request = yield* HttpServerRequest.HttpServerRequest
+          const headers = request.headers
+          const forwardedFor = headers["x-forwarded-for"]
+          const ip = forwardedFor
+            ? forwardedFor.split(",")[0]?.trim()
+            : (headers["x-real-ip"] ?? null)
+          return yield* getNearestServer(ip ?? null)
+        },
+        flow(Effect.catch(() => Effect.fail(new InternalServerError()))),
+      ),
     ),
 )
 
@@ -349,8 +380,10 @@ const AuthLive = HttpApiBuilder.group(Api, "auth", (handlers) =>
         function* () {
           return yield* getSession()
         },
-        flow(Effect.catchTags({
-          }), Effect.catch(() => Effect.fail(new InternalServerError()))),
+        flow(
+          Effect.catchTags({}),
+          Effect.catch(() => Effect.fail(new InternalServerError())),
+        ),
       ),
     )
     .handle(
@@ -359,8 +392,10 @@ const AuthLive = HttpApiBuilder.group(Api, "auth", (handlers) =>
         function* () {
           return yield* deleteSession()
         },
-        flow(Effect.catchTags({
-          }), Effect.catch(() => Effect.fail(new InternalServerError()))),
+        flow(
+          Effect.catchTags({}),
+          Effect.catch(() => Effect.fail(new InternalServerError())),
+        ),
       ),
     )
     .handle(
@@ -369,24 +404,18 @@ const AuthLive = HttpApiBuilder.group(Api, "auth", (handlers) =>
         function* () {
           return yield* deleteSession()
         },
-        flow(Effect.catchTags({
-          }), Effect.catch(() => Effect.fail(new InternalServerError()))),
+        flow(
+          Effect.catchTags({}),
+          Effect.catch(() => Effect.fail(new InternalServerError())),
+        ),
       ),
     )
     .handle(
       "callback",
       Effect.fn("callback")(function* ({ params, query }) {
-        return yield* providerCallback(
-          params.provider,
-          query.code,
-          query.state,
-        )
+        return yield* providerCallback(params.provider, query.code, query.state)
       }),
     ),
 )
 
-export const ApiLive = Layer.mergeAll(
-  HealthLive,
-  BrawlhallaLive,
-  AuthLive,
-)
+export const ApiLive = Layer.mergeAll(HealthLive, BrawlhallaLive, AuthLive)

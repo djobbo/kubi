@@ -48,17 +48,17 @@ Recommended: **isolate setup on v4** early, migrate apps bottom-up.
 
 Work workspace order: `packages/common` → `db` → `api-contract` → `brawlhalla-*` → `apps/api` → `apps/workers` → `apps/client` → `scripts/setup` → deprecate `schema`.
 
-| Area | v3 pattern | v4 action | Status |
-|------|------------|-----------|--------|
-| Errors | `Schema.TaggedError` | `Schema.TaggedErrorClass` | API errors done |
-| Services | `Effect.Service` | `Context.Service` + `Layer.effect` | **TODO** — 2b.1 |
-| Platform | `HttpApi` template tags | `HttpApiEndpoint.get(name, path, opts)` | api-contract done |
-| Platform imports | `@effect/platform` | `effect/unstable/http(api)` | Done |
-| Schema | `optionalWith`, `Literal(...)` | See schema.md | api-contract done; **API TODO** 2b.2 |
-| Atom | `@effect-atom/atom-react` barrel | `effect/unstable/reactivity` + `@effect/atom-react` hooks | Client done |
-| Zod | `zod/v4` in brawlhalla-api | Types or Effect Schema | **TODO** — 2b.3 |
-| SQL | Drizzle + `@effect/sql-pg` | `drizzle-orm/effect-postgres` | DB service done |
-| Relations | `relations()` | `defineRelations` (shim: `_relations`) | **TODO** — 2b.5 |
+| Area             | v3 pattern                       | v4 action                                                 | Status                               |
+| ---------------- | -------------------------------- | --------------------------------------------------------- | ------------------------------------ |
+| Errors           | `Schema.TaggedError`             | `Schema.TaggedErrorClass`                                 | API errors done                      |
+| Services         | `Effect.Service`                 | `Context.Service` + `Layer.effect`                        | **TODO** — 2b.1                      |
+| Platform         | `HttpApi` template tags          | `HttpApiEndpoint.get(name, path, opts)`                   | api-contract done                    |
+| Platform imports | `@effect/platform`               | `effect/unstable/http(api)`                               | Done                                 |
+| Schema           | `optionalWith`, `Literal(...)`   | See schema.md                                             | api-contract done; **API TODO** 2b.2 |
+| Atom             | `@effect-atom/atom-react` barrel | `effect/unstable/reactivity` + `@effect/atom-react` hooks | Client done                          |
+| Zod              | `zod/v4` in brawlhalla-api       | Types or Effect Schema                                    | **TODO** — 2b.3                      |
+| SQL              | Drizzle + `@effect/sql-pg`       | `drizzle-orm/effect-postgres`                             | DB service done                      |
+| Relations        | `relations()`                    | `defineRelations` (shim: `_relations`)                    | **TODO** — 2b.5                      |
 
 - [x] Replace `@effect/platform` imports in apps and setup.
 - [ ] Complete [02-effect-v4-remaining.md](./02-effect-v4-remaining.md) § 2b.1–2b.5.
@@ -94,8 +94,8 @@ Keep a git branch `effect-v3` until staging passes. Pin versions in root `packag
 
 ## Sub-plans
 
-| Doc | Scope |
-|-----|--------|
+| Doc                                                      | Scope                                                                                                    |
+| -------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
 | [02-effect-v4-remaining.md](./02-effect-v4-remaining.md) | API typecheck blockers: Context.Service, Schema, Zod, schema package, Drizzle relations, phase 4–6 gates |
 
 ## Files (high churn)

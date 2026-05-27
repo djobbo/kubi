@@ -1,18 +1,18 @@
 export { BrawlhallaGqlApi, BRAWLHALLA_GQL_BASE_URL } from "./api/definition.js"
 export { BrawlhallaGqlApiConfig } from "./api/config.js"
 export {
-    BrawlhallaGqlApiClientService,
-    layerBrawlhallaGqlApiClient,
-    makeBrawlhallaGqlApiClient,
-    type BrawlhallaGqlApiClient,
+  BrawlhallaGqlApiClientService,
+  layerBrawlhallaGqlApiClient,
+  makeBrawlhallaGqlApiClient,
+  type BrawlhallaGqlApiClient,
 } from "./api/client.js"
 export {
-    ArticlesListQueryMiddleware,
-    ArticlesPreviewQueryMiddleware,
-    ArticlesWithContentQueryMiddleware,
-    layerArticlesListQueryMiddleware,
-    layerArticlesPreviewQueryMiddleware,
-    layerArticlesWithContentQueryMiddleware,
+  ArticlesListQueryMiddleware,
+  ArticlesPreviewQueryMiddleware,
+  ArticlesWithContentQueryMiddleware,
+  layerArticlesListQueryMiddleware,
+  layerArticlesPreviewQueryMiddleware,
+  layerArticlesWithContentQueryMiddleware,
 } from "./api/middleware.js"
 
 export { gql } from "./helpers/gql.js"

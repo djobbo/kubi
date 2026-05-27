@@ -120,15 +120,7 @@ const cloneRepo = (repo: VendoredRepo) =>
 const pullRepo = (repo: VendoredRepo) =>
   Effect.gen(function* () {
     const path = repoPath(repo.name)
-    yield* runGit([
-      "-C",
-      path,
-      "fetch",
-      "--depth",
-      "1",
-      "origin",
-      repo.branch,
-    ])
+    yield* runGit(["-C", path, "fetch", "--depth", "1", "origin", repo.branch])
     yield* runGit(["-C", path, "reset", "--hard", `origin/${repo.branch}`])
   })
 

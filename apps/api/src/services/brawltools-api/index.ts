@@ -56,7 +56,10 @@ export class BrawltoolsApi extends Context.Service<BrawltoolsApi>()(
             : client.powerRankings.oneVOne({ query })
 
         const result = yield* cache
-          .getOrSet(cacheKey, PowerRankingsResponse, fetchFromApi,
+          .getOrSet(
+            cacheKey,
+            PowerRankingsResponse,
+            fetchFromApi,
             Option.some(Duration.seconds(CACHE_MAX_AGE)),
           )
           .pipe(

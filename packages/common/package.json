@@ -1,6 +1,8 @@
 {
   "name": "@dair/common",
   "version": "0.0.0",
+  "private": true,
+  "type": "module",
   "dependencies": {
     "class-variance-authority": "catalog:",
     "clsx": "catalog:",
@@ -10,7 +12,5 @@
   "devDependencies": {
     "@types/node": "catalog:",
     "@typescript/native-preview": "catalog:"
-  },
-  "private": true,
-  "type": "module"
+  }
 }

@@ -9,31 +9,31 @@ This package mirrors [kubi’s `brawltools-api` service](https://github.com/djob
 ```ts
 import { Effect } from "effect"
 import {
-    layerBrawltoolsApiClient,
-    BrawltoolsApiClientService,
+  layerBrawltoolsApiClient,
+  BrawltoolsApiClientService,
 } from "@corehalla/brawltools-api"
 
 const program = Effect.gen(function* () {
-    const api = yield* BrawltoolsApiClientService
+  const api = yield* BrawltoolsApiClientService
 
-    const oneVOne = yield* api.powerRankings.oneVOne({
-        query: {
-            region: "EU",
-            page: 1,
-            orderBy: "powerRanking",
-        },
-    })
+  const oneVOne = yield* api.powerRankings.oneVOne({
+    query: {
+      region: "EU",
+      page: 1,
+      orderBy: "powerRanking",
+    },
+  })
 
-    const twoVTwo = yield* api.powerRankings.twoVTwo({
-        query: {
-            region: "NA",
-            page: 1,
-            orderBy: "points",
-            query: "player name",
-        },
-    })
+  const twoVTwo = yield* api.powerRankings.twoVTwo({
+    query: {
+      region: "NA",
+      page: 1,
+      orderBy: "points",
+      query: "player name",
+    },
+  })
 
-    return { oneVOne, twoVTwo }
+  return { oneVOne, twoVTwo }
 })
 
 program.pipe(Effect.provide(layerBrawltoolsApiClient()))
@@ -79,12 +79,12 @@ Player name filter uses the query parameter **`query`** (not `search` or `name`)
 
 ```ts
 api.powerRankings.oneVOne({
-    query: {
-        region: "EU",
-        page: 1,
-        orderBy: "powerRanking",
-        query: "Sandstorm",
-    },
+  query: {
+    region: "EU",
+    page: 1,
+    orderBy: "powerRanking",
+    query: "Sandstorm",
+  },
 })
 ```
 

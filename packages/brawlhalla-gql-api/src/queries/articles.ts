@@ -1,7 +1,7 @@
 import { gql } from "../helpers/gql.js"
 
 export const articlesQuery = (withContent: boolean) =>
-    gql`
+  gql`
         query ($category: String, $after: String, $first: Int = 6) {
             posts(
                 first: $first

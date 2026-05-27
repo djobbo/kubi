@@ -33,10 +33,7 @@ export const runChildProcess = Effect.fn("runChildProcess")(
       Effect.gen(function* () {
         const handle = yield* spawner.spawn(cmd)
         const [stdout, stderr] = yield* Effect.all(
-          [
-            collectStream(handle.stdout),
-            collectStream(handle.stderr),
-          ],
+          [collectStream(handle.stdout), collectStream(handle.stderr)],
           { concurrency: "unbounded" },
         )
         const exitCode = yield* handle.exitCode

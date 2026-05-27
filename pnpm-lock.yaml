@@ -517,6 +517,9 @@ importers:
       '@dair/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@effect/sql-pg':
+        specifier: 'catalog:'
+        version: 4.0.0-beta.71(effect@4.0.0-beta.71)
       '@supabase/supabase-js':
         specifier: ^2.49.1
         version: 2.106.2
@@ -539,6 +542,9 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.19
+      '@typescript/native-preview':
+        specifier: 'catalog:'
+        version: 7.0.0-dev.20260527.1
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -570,6 +576,9 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 22.19.19
+      '@typescript/native-preview':
+        specifier: 'catalog:'
+        version: 7.0.0-dev.20260527.1
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -703,22 +712,6 @@ importers:
       drizzle-kit:
         specifier: 'catalog:'
         version: 1.0.0-rc.4-ca0f029
-
-  packages/schema:
-    dependencies:
-      drizzle-orm:
-        specifier: 'catalog:'
-        version: 1.0.0-rc.1(@effect/sql-pg@4.0.0-beta.71(effect@4.0.0-beta.71))(@libsql/client@0.17.3)(@opentelemetry/api@1.9.1)(bun-types@1.3.7)(effect@4.0.0-beta.71)(pg@8.21.0)(postgres@3.4.9)(zod@4.4.3)
-      effect:
-        specifier: 'catalog:'
-        version: 4.0.0-beta.71
-    devDependencies:
-      '@types/node':
-        specifier: 'catalog:'
-        version: 22.19.19
-      '@typescript/native-preview':
-        specifier: 'catalog:'
-        version: 7.0.0-dev.20260527.1
 
 packages:
 
@@ -6092,7 +6085,7 @@ snapshots:
       react: 19.2.6
       scheduler: 0.27.0
 
-  '@effect/cli@0.72.1(@effect/platform@0.93.8(effect@3.21.2))(@effect/printer-ansi@0.47.0(@effect/typeclass@0.38.0(effect@4.0.0-beta.71))(effect@4.0.0-beta.71))(@effect/printer@0.47.0(@effect/typeclass@0.38.0(effect@4.0.0-beta.71))(effect@4.0.0-beta.71))(effect@3.21.2)':
+  '@effect/cli@0.72.1(@effect/platform@0.93.8(effect@4.0.0-beta.71))(@effect/printer-ansi@0.47.0(@effect/typeclass@0.38.0(effect@4.0.0-beta.71))(effect@4.0.0-beta.71))(@effect/printer@0.47.0(@effect/typeclass@0.38.0(effect@4.0.0-beta.71))(effect@4.0.0-beta.71))(effect@3.21.2)':
     dependencies:
       '@effect/platform': 0.93.8(effect@3.21.2)
       '@effect/printer': 0.47.0(@effect/typeclass@0.38.0(effect@4.0.0-beta.71))(effect@4.0.0-beta.71)
@@ -6135,11 +6128,11 @@ snapshots:
       '@opentelemetry/sdk-trace-node': 2.7.1(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-trace-web': 2.7.1(@opentelemetry/api@1.9.1)
 
-  '@effect/platform-bun@0.84.0(d43470872528ce544ea6e56307373cc9)':
+  '@effect/platform-bun@0.84.0(1cdc378fe79947d0fd3b6a0ccc2dc179)':
     dependencies:
       '@effect/cluster': 0.56.4(@effect/platform@0.93.8(effect@4.0.0-beta.71))(@effect/rpc@0.73.2(@effect/platform@0.93.8(effect@4.0.0-beta.71))(effect@4.0.0-beta.71))(@effect/sql@0.49.0(@effect/experimental@0.58.0(@effect/platform@0.93.8(effect@4.0.0-beta.71))(effect@4.0.0-beta.71)(ioredis@5.11.0))(@effect/platform@0.93.8(effect@4.0.0-beta.71))(effect@4.0.0-beta.71))(@effect/workflow@0.16.0(@effect/experimental@0.58.0(@effect/platform@0.93.8(effect@4.0.0-beta.71))(effect@4.0.0-beta.71)(ioredis@5.11.0))(@effect/platform@0.93.8(effect@4.0.0-beta.71))(@effect/rpc@0.73.2(@effect/platform@0.93.8(effect@4.0.0-beta.71))(effect@4.0.0-beta.71))(effect@4.0.0-beta.71))(effect@4.0.0-beta.71)
       '@effect/platform': 0.93.8(effect@3.21.2)
-      '@effect/platform-node-shared': 0.54.0(d43470872528ce544ea6e56307373cc9)
+      '@effect/platform-node-shared': 0.54.0(1cdc378fe79947d0fd3b6a0ccc2dc179)
       '@effect/rpc': 0.73.2(@effect/platform@0.93.8(effect@4.0.0-beta.71))(effect@4.0.0-beta.71)
       '@effect/sql': 0.49.0(@effect/experimental@0.58.0(@effect/platform@0.93.8(effect@4.0.0-beta.71))(effect@4.0.0-beta.71)(ioredis@5.11.0))(@effect/platform@0.93.8(effect@4.0.0-beta.71))(effect@4.0.0-beta.71)
       effect: 3.21.2
@@ -6148,7 +6141,7 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@effect/platform-node-shared@0.54.0(d43470872528ce544ea6e56307373cc9)':
+  '@effect/platform-node-shared@0.54.0(1cdc378fe79947d0fd3b6a0ccc2dc179)':
     dependencies:
       '@effect/cluster': 0.56.4(@effect/platform@0.93.8(effect@4.0.0-beta.71))(@effect/rpc@0.73.2(@effect/platform@0.93.8(effect@4.0.0-beta.71))(effect@4.0.0-beta.71))(@effect/sql@0.49.0(@effect/experimental@0.58.0(@effect/platform@0.93.8(effect@4.0.0-beta.71))(effect@4.0.0-beta.71)(ioredis@5.11.0))(@effect/platform@0.93.8(effect@4.0.0-beta.71))(effect@4.0.0-beta.71))(@effect/workflow@0.16.0(@effect/experimental@0.58.0(@effect/platform@0.93.8(effect@4.0.0-beta.71))(effect@4.0.0-beta.71)(ioredis@5.11.0))(@effect/platform@0.93.8(effect@4.0.0-beta.71))(@effect/rpc@0.73.2(@effect/platform@0.93.8(effect@4.0.0-beta.71))(effect@4.0.0-beta.71))(effect@4.0.0-beta.71))(effect@4.0.0-beta.71)
       '@effect/platform': 0.93.8(effect@3.21.2)
@@ -8630,9 +8623,9 @@ snapshots:
 
   effect-solutions@0.4.13(5c8863f21e7e44d624159c3762f58845):
     dependencies:
-      '@effect/cli': 0.72.1(@effect/platform@0.93.8(effect@3.21.2))(@effect/printer-ansi@0.47.0(@effect/typeclass@0.38.0(effect@4.0.0-beta.71))(effect@4.0.0-beta.71))(@effect/printer@0.47.0(@effect/typeclass@0.38.0(effect@4.0.0-beta.71))(effect@4.0.0-beta.71))(effect@3.21.2)
+      '@effect/cli': 0.72.1(@effect/platform@0.93.8(effect@4.0.0-beta.71))(@effect/printer-ansi@0.47.0(@effect/typeclass@0.38.0(effect@4.0.0-beta.71))(effect@4.0.0-beta.71))(@effect/printer@0.47.0(@effect/typeclass@0.38.0(effect@4.0.0-beta.71))(effect@4.0.0-beta.71))(effect@3.21.2)
       '@effect/platform': 0.93.8(effect@3.21.2)
-      '@effect/platform-bun': 0.84.0(d43470872528ce544ea6e56307373cc9)
+      '@effect/platform-bun': 0.84.0(1cdc378fe79947d0fd3b6a0ccc2dc179)
       effect: 3.21.2
       gray-matter: 4.0.3
       picocolors: 1.1.1

@@ -9,6 +9,6 @@ export default defineConfig({
     cache: true,
   },
   staged: {
-    "*": "vp check --fix --fix-suggestions",
+    "*": "vp check --fix",
   },
 })

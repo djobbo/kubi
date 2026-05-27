@@ -1,16 +1,30 @@
-import { Config, Context, Duration, Effect, Layer, Option, Schema } from "effect"
+import {
+  Config,
+  Context,
+  Duration,
+  Effect,
+  Layer,
+  Option,
+  Schema,
+} from "effect"
 import { Redis } from "ioredis"
 
-class CacheSerializationError extends Schema.TaggedErrorClass<CacheSerializationError>()("CacheSerializationError", {
-  cause: Schema.optional(Schema.Unknown),
-  message: Schema.String,
-}) {}
+class CacheSerializationError extends Schema.TaggedErrorClass<CacheSerializationError>()(
+  "CacheSerializationError",
+  {
+    cause: Schema.optional(Schema.Unknown),
+    message: Schema.String,
+  },
+) {}
 
-class CacheOperationError extends Schema.TaggedErrorClass<CacheOperationError>()("CacheOperationError", {
-  method: Schema.String,
-  cause: Schema.optional(Schema.Unknown),
-  message: Schema.String,
-}) {}
+class CacheOperationError extends Schema.TaggedErrorClass<CacheOperationError>()(
+  "CacheOperationError",
+  {
+    method: Schema.String,
+    cause: Schema.optional(Schema.Unknown),
+    message: Schema.String,
+  },
+) {}
 
 export class Cache extends Context.Service<Cache>()("@dair/services/Cache", {
   make: Effect.gen(function* () {

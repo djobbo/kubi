@@ -24,15 +24,15 @@
 
 ## Cutover window (suggested)
 
-| Step | Action |
-|------|--------|
-| T-24h | Freeze corehalla deploys; announce maintenance |
-| T-1h | Scale workers down on corehalla; final Supabase export if needed |
-| T0 | Maintenance mode on corehalla |
-| T0 | Run migrator against production PG |
-| T0 | Deploy kubi API + workers + client |
-| T+1h | Smoke tests; monitor rate limits + error rate |
-| T+24h | Keep Supabase read-only backup 7–30 days |
+| Step  | Action                                                           |
+| ----- | ---------------------------------------------------------------- |
+| T-24h | Freeze corehalla deploys; announce maintenance                   |
+| T-1h  | Scale workers down on corehalla; final Supabase export if needed |
+| T0    | Maintenance mode on corehalla                                    |
+| T0    | Run migrator against production PG                               |
+| T0    | Deploy kubi API + workers + client                               |
+| T+1h  | Smoke tests; monitor rate limits + error rate                    |
+| T+24h | Keep Supabase read-only backup 7–30 days                         |
 
 ## DNS and traffic
 
@@ -54,13 +54,13 @@
 
 ## Ongoing ops
 
-| Job | Interval | Owner |
-|-----|----------|-------|
-| Leaderboard crawler | 10 min | workers |
-| Rankings / player crawl | 6 h | workers |
-| DB backups | daily | infra |
-| Redis persistence | per policy | infra |
-| Dependency updates | weekly | dev — watch Effect smol |
+| Job                     | Interval   | Owner                   |
+| ----------------------- | ---------- | ----------------------- |
+| Leaderboard crawler     | 10 min     | workers                 |
+| Rankings / player crawl | 6 h        | workers                 |
+| DB backups              | daily      | infra                   |
+| Redis persistence       | per policy | infra                   |
+| Dependency updates      | weekly     | dev — watch Effect smol |
 
 ## Documentation updates at cutover
 

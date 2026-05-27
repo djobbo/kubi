@@ -1,12 +1,23 @@
 {
   "name": "@dair/api",
   "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "module": "src/index.ts",
+  "scripts": {
+    "check:types": "tsgo --noEmit",
+    "db:migrate": "drizzle-kit generate && drizzle-kit migrate",
+    "dev": "drizzle-kit generate && drizzle-kit push && tsx watch ./src/index.ts",
+    "prepare": "effect-language-service patch",
+    "start": "pnpm run db:migrate && tsx ./src/index.ts",
+    "studio": "drizzle-kit studio"
+  },
   "dependencies": {
     "@dair/api-contract": "workspace:*",
     "@dair/brawlhalla-api": "workspace:*",
     "@dair/brawlhalla-gql-api": "workspace:*",
-    "@dair/brawltools-api": "workspace:*",
     "@dair/brawlhalla-servers": "workspace:*",
+    "@dair/brawltools-api": "workspace:*",
     "@dair/common": "workspace:*",
     "@dair/db": "workspace:*",
     "@effect/opentelemetry": "catalog:",
@@ -33,16 +44,5 @@
     "@typescript/native-preview": "catalog:",
     "drizzle-kit": "catalog:",
     "typescript": "catalog:"
-  },
-  "module": "src/index.ts",
-  "private": true,
-  "scripts": {
-    "check:types": "tsgo --noEmit",
-    "db:migrate": "drizzle-kit generate && drizzle-kit migrate",
-    "dev": "drizzle-kit generate && drizzle-kit push && tsx watch ./src/index.ts",
-    "prepare": "effect-language-service patch",
-    "start": "pnpm run db:migrate && tsx ./src/index.ts",
-    "studio": "drizzle-kit studio"
-  },
-  "type": "module"
+  }
 }

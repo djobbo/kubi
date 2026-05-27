@@ -103,13 +103,13 @@ vp run -F @dair/client dev
 
 ## Files to touch
 
-| File | Change |
-|------|--------|
-| [package.json](../package.json) | `setup`, `packageManager`, vite-plus |
-| [vite.config.ts](../vite.config.ts) | staged / run |
-| [scripts/setup/setup.mts](../scripts/setup/setup.mts) | compose + vp + branding |
-| `.env.example` | new |
-| [AGENTS.md](../AGENTS.md), [README.md](../README.md) | vp + pnpm |
+| File                                                  | Change                               |
+| ----------------------------------------------------- | ------------------------------------ |
+| [package.json](../package.json)                       | `setup`, `packageManager`, vite-plus |
+| [vite.config.ts](../vite.config.ts)                   | staged / run                         |
+| [scripts/setup/setup.mts](../scripts/setup/setup.mts) | compose + vp + branding              |
+| `.env.example`                                        | new                                  |
+| [AGENTS.md](../AGENTS.md), [README.md](../README.md)  | vp + pnpm                            |
 
 ## Depends on
 

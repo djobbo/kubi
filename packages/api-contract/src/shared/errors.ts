@@ -9,11 +9,14 @@ export * from "effect/unstable/httpapi/HttpApiError"
 
 export class TooManyRequests extends Schema.ErrorClass<TooManyRequests>(
   "effect/HttpApiError/TooManyRequests",
-)({
-  _tag: Schema.tag("TooManyRequests"),
-}, {
-  httpApiStatus: 429,
-}) {
+)(
+  {
+    _tag: Schema.tag("TooManyRequests"),
+  },
+  {
+    httpApiStatus: 429,
+  },
+) {
   override readonly [ErrorReporter.ignore] = true;
   [HttpServerRespondable.symbol]() {
     return Effect.succeed(HttpServerResponse.empty({ status: 429 }))

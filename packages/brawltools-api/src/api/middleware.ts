@@ -5,50 +5,46 @@ import { HttpApiMiddleware } from "effect/unstable/httpapi"
 import type { powerRankingsGameModeWire } from "../constants/game-mode.js"
 import type { PowerRankingsOrderBy } from "../constants/order-by.js"
 import {
-    formatPowerRankingsOrderByWire,
-    powerRankingsOrderBy,
+  formatPowerRankingsOrderByWire,
+  powerRankingsOrderBy,
 } from "../constants/order-by.js"
 
 const isPowerRankingsOrderBy = (value: string): value is PowerRankingsOrderBy =>
-    (powerRankingsOrderBy as readonly string[]).includes(value)
+  (powerRankingsOrderBy as readonly string[]).includes(value)
 
 export const formatPowerRankingsRequest = (
-    request: HttpClientRequest.HttpClientRequest,
-    gameMode: (typeof powerRankingsGameModeWire)[keyof typeof powerRankingsGameModeWire],
-    maxResults: number,
+  request: HttpClientRequest.HttpClientRequest,
+  gameMode: (typeof powerRankingsGameModeWire)[keyof typeof powerRankingsGameModeWire],
+  maxResults: number,
 ): HttpClientRequest.HttpClientRequest => {
-    const rawOrderBy = Option.getOrElse(
-        UrlParams.getFirst(request.urlParams, "orderBy"),
-        () => "powerRanking",
-    )
-    const orderBy = isPowerRankingsOrderBy(rawOrderBy)
-        ? rawOrderBy
-        : "powerRanking"
+  const rawOrderBy = Option.getOrElse(
+    UrlParams.getFirst(request.urlParams, "orderBy"),
+    () => "powerRanking",
+  )
+  const orderBy = isPowerRankingsOrderBy(rawOrderBy)
+    ? rawOrderBy
+    : "powerRanking"
 
-    let next = HttpClientRequest.setUrlParam(
-        request,
-        "orderBy",
-        formatPowerRankingsOrderByWire(orderBy),
-    )
-    next = HttpClientRequest.setUrlParam(next, "gameMode", gameMode)
+  let next = HttpClientRequest.setUrlParam(
+    request,
+    "orderBy",
+    formatPowerRankingsOrderByWire(orderBy),
+  )
+  next = HttpClientRequest.setUrlParam(next, "gameMode", gameMode)
 
-    if (Option.isNone(UrlParams.getFirst(next.urlParams, "maxResults"))) {
-        next = HttpClientRequest.setUrlParam(
-            next,
-            "maxResults",
-            String(maxResults),
-        )
-    }
+  if (Option.isNone(UrlParams.getFirst(next.urlParams, "maxResults"))) {
+    next = HttpClientRequest.setUrlParam(next, "maxResults", String(maxResults))
+  }
 
-    return next
+  return next
 }
 
 export class OneVOneGameModeMiddleware extends HttpApiMiddleware.Service<OneVOneGameModeMiddleware>()(
-    "BrawltoolsApi/OneVOneGameMode",
-    { requiredForClient: true },
+  "BrawltoolsApi/OneVOneGameMode",
+  { requiredForClient: true },
 ) {}
 
 export class TwoVTwoGameModeMiddleware extends HttpApiMiddleware.Service<TwoVTwoGameModeMiddleware>()(
-    "BrawltoolsApi/TwoVTwoGameMode",
-    { requiredForClient: true },
+  "BrawltoolsApi/TwoVTwoGameMode",
+  { requiredForClient: true },
 ) {}
