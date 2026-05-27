@@ -58,7 +58,7 @@ Phase 2 and 3 can overlap **after** setup runs on a pinned Effect version (see [
 ```
                     Corehalla    Kubi API    Kubi client    Notes
 ──────────────────────────────────────────────────────────────────
-Player profile         ✓            ✓           partial      legends/weapons tabs missing
+Player profile         ✓            ✓           partial      page complete; favorites/share need auth
 Ranked 1v1/2v2         ✓            ✓           partial      client routes live
 Rotating ranked        ✗            ✓           ✗            kubi-only API
 Global rankings        ✓            ✓           ✗

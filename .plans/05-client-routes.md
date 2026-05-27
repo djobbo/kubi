@@ -49,16 +49,16 @@ Suggested path prefix: `/{-$locale}/_sidebar-layout/brawlhalla/...` (consistent 
 
 File: [route.tsx](../apps/client/src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/route.tsx)
 
-| Tab      | Corehalla component | Kubi                     |
-| -------- | ------------------- | ------------------------ |
-| Overview | `PlayerOverviewTab` | `-overview-tab.tsx` ✓    |
-| 2v2      | `Player2v2Tab`      | `-teams-tab.tsx` ✓       |
-| Legends  | `PlayerLegendsTab`  | Nav only — **implement** |
-| Weapons  | `PlayerWeaponsTab`  | **Missing**              |
+| Tab      | Corehalla component | Kubi                                      |
+| -------- | ------------------- | ----------------------------------------- |
+| Overview | `PlayerOverviewTab` | `features/player/player-overview-tab` ✓   |
+| 2v2      | `Player2v2Tab`      | `features/player/player-teams-tab` ✓      |
+| Legends  | `PlayerLegendsTab`  | `features/player/player-legends-tab` ✓    |
+| Weapons  | `PlayerWeaponsTab`  | `features/player/player-weapons-tab` ✓    |
 
-- [ ] Port legend/weapon tabs from `.repos/corehalla/app/components/stats/player/`
-- [ ] Use data already returned by `get-player-by-id` (legends/weapons in archive/API shape)
-- [ ] i18n: run `bun locales:extract` after UI strings added
+- [x] Port legend/weapon tabs from `.repos/corehalla/app/components/stats/player/`
+- [x] Use data already returned by `get-player-by-id` (legends/weapons in archive/API shape)
+- [ ] i18n: run `vp run -F @dair/client locales:extract` after UI strings added
 
 ## Home page
 
