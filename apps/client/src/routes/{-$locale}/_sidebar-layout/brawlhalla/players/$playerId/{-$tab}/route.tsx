@@ -73,7 +73,7 @@ function RouteComponent() {
   const { pathname } = useLocation()
   const playerDataResult = useAtomValue(
     ApiClient.query("brawlhalla", "get-player-by-id", {
-      path: { id: playerId },
+      params: { id: playerId },
       reactivityKeys: ["brawlhalla-player-id", playerId],
     }),
   )

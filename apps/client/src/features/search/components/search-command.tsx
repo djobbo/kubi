@@ -28,7 +28,7 @@ const searchResultAtom = ApiClient.runtime.atom((get) =>
     yield* Effect.sleep(DEBOUNCE_TIME)
 
     return yield* apiClient.brawlhalla["search-player"]({
-      urlParams: { name: search },
+      query: { name: search },
     })
   }),
 )

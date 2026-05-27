@@ -86,7 +86,7 @@ export const Rankings2v2Page = ({
           ))
           .onSuccess(({ data: rankings }) => (
             <div className="mb-4 flex flex-col overflow-hidden rounded-lg border border-border">
-              {rankings.data.map((entry, index) => {
+              {rankings.map((entry, index) => {
                 const [playerOne, playerTwo] = entry.team
 
                 return (

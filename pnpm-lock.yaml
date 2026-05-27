@@ -126,9 +126,6 @@ catalogs:
     clsx:
       specifier: ^2.1.1
       version: 2.1.1
-    dayjs:
-      specifier: ^1.11.19
-      version: 1.11.21
     dotenv:
       specifier: ^16.6.1
       version: 16.6.1
@@ -668,9 +665,9 @@ importers:
       clsx:
         specifier: 'catalog:'
         version: 2.1.1
-      dayjs:
+      effect:
         specifier: 'catalog:'
-        version: 1.11.21
+        version: 4.0.0-beta.71
       tailwind-merge:
         specifier: 'catalog:'
         version: 3.6.0

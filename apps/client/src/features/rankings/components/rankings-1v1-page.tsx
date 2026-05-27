@@ -123,7 +123,7 @@ export const Rankings1v1Page = ({
           ))
           .onSuccess(({ data: rankings }) => (
             <div className="mb-4 flex flex-col overflow-hidden rounded-lg border border-border">
-              {rankings.data
+              {rankings
                 .filter((player) =>
                   player.name
                     .toLowerCase()

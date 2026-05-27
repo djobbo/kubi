@@ -1,20 +1,15 @@
-// TODO: remove dayjs
-import { unix } from "dayjs"
+import { DateTime } from "effect"
 
-/**
- * @error returns different dates in client or ssr mode
- * @issue https://github.com/iamkun/dayjs/issues/1690
- */
+const unixTimeToDateTime = (unixTime: number) =>
+  DateTime.makeUnsafe(unixTime * 1000)
+
 export const getDateStringFromUnixTime = (
   unixTime: number,
-  template?: string,
-) => unix(unixTime).format(template)
+  options?: Intl.DateTimeFormatOptions & { locale?: string },
+) => DateTime.formatLocal(unixTimeToDateTime(unixTime), options)
 
-/**
- * @error returns different dates in client or ssr mode
- * @issue https://github.com/iamkun/dayjs/issues/1690
- */
-export const getDateFromUnixTime = (unixTime: number) => unix(unixTime).toDate()
+export const getDateFromUnixTime = (unixTime: number) =>
+  DateTime.toDate(unixTimeToDateTime(unixTime))
 
 interface HMSTime {
   hours: number
@@ -49,4 +44,8 @@ export const formatTime = (seconds: number) =>
   )
 
 export const formatUnixTime = (unixTime: number) =>
-  getDateStringFromUnixTime(unixTime, "MMM DD, YYYY")
+  getDateStringFromUnixTime(unixTime, {
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+  })
