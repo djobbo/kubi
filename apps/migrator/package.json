@@ -13,12 +13,13 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
+    "@typescript/native-preview": "catalog:",
     "typescript": "catalog:"
   },
   "module": "src/migrate.ts",
   "private": true,
   "scripts": {
-    "check:types": "tsc --noEmit",
+    "check:types": "tsgo --noEmit",
     "migrate": "tsx ./src/migrate.ts",
     "start": "tsx ./src/migrate.ts"
   },

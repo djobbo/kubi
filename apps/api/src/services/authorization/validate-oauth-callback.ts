@@ -90,7 +90,15 @@ export const validateOAuthCallback =
             ),
           )
 
-        return yield* Effect.succeed(existingOAuthAccount.user)
+        if (!existingOAuthAccount.user) {
+          return yield* Effect.fail(
+            new UserNotFoundError({
+              userId: existingOAuthAccount.userId,
+            }),
+          )
+        }
+
+        return existingOAuthAccount.user
       }
 
       const existingUser = yield* db.query.usersTable.findFirst({

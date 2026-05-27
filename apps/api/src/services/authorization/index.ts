@@ -7,9 +7,10 @@ import {
 import { HttpApiBuilder, HttpApiSecurity } from "effect/unstable/httpapi"
 import { Unauthorized } from "effect/unstable/httpapi/HttpApiError"
 import { HttpClient } from "effect/unstable/http"
-import type {
-  RequestError,
-  ResponseError,
+import {
+  HttpClientError,
+  type RequestError,
+  type ResponseError,
 } from "effect/unstable/http/HttpClientError"
 import { Discord, Google, type OAuth2Tokens } from "arctic"
 import { Context, Effect, flow, Layer, Redacted, Schema } from "effect"
@@ -192,6 +193,7 @@ export interface AuthorizationProvider<
     | Schema.SchemaError
     | RequestError
     | ResponseError
+    | HttpClientError
     | OAuthValidationError,
     HttpClient.HttpClient
   >

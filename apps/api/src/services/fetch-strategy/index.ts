@@ -1,4 +1,4 @@
-import { Context, Effect, Layer } from "effect"
+import { Context, Effect, Layer, Option } from "effect"
 
 /**
  * Fetch strategy for BrawlhallaApi requests.
@@ -25,7 +25,11 @@ export class RequestFetchStrategy extends Context.Service<
  */
 export const getFetchStrategy = Effect.serviceOption(
   RequestFetchStrategy,
-).pipe(Effect.orElseSucceed(() => "cache-first" as const))
+).pipe(
+  Effect.map((strategy) =>
+    Option.getOrElse(strategy, () => "cache-first" as const),
+  ),
+)
 
 /**
  * Check if the current request should use fetch-first strategy

@@ -7,11 +7,11 @@ import {
   Effect,
   Fiber,
   Layer,
-  Match,
   Option,
   Schedule,
   Stream,
 } from "effect"
+import type { Ranking1v1 } from "@dair/api-contract/src/routes/v1/brawlhalla/get-rankings"
 import { WorkerApiClient } from "@/services/api-client"
 
 const waitForApiHealth = Effect.gen(function* () {
@@ -44,8 +44,9 @@ const waitForApiHealth = Effect.gen(function* () {
 
       yield* Effect.log("API is healthy!")
     }),
-    Schedule.linear(Duration.seconds(1)).pipe(
-      Schedule.union(Schedule.spaced(Duration.seconds(5))),
+    Schedule.either(
+      Schedule.spaced(Duration.seconds(1)),
+      Schedule.spaced(Duration.seconds(5)),
     ),
   )
 }).pipe(Effect.provide(FetchHttpClient.layer))
@@ -109,24 +110,19 @@ const defineRankedWorker = Effect.fn("worker")(function* <
         `${workerName}: Processing task ${formatCrawlTask(task)}`,
       )
 
-      const rankingsFetcher = Match.value(task.bracket).pipe(
-        Match.when(Match.is("1v1"), () => apiClient.brawlhalla.getRankings1v1),
-        Match.when(Match.is("2v2"), () => apiClient.brawlhalla.getRankings2v2),
-        Match.when(
-          Match.is("rotating"),
-          () => apiClient.brawlhalla.getRankingsRotating,
-        ),
-        Match.exhaustive,
-      )
-      const { data: rankings } = yield* rankingsFetcher(task.region, task.page)
+      const { data: rankings } = yield* (task.bracket === "1v1"
+        ? apiClient.brawlhalla.getRankings1v1(task.region, task.page)
+        : task.bracket === "2v2"
+          ? apiClient.brawlhalla.getRankings2v2(task.region, task.page)
+          : apiClient.brawlhalla.getRankingsRotating(task.region, task.page))
       yield* Effect.log(
         `${workerName}: Completed task ${formatCrawlTask(task)}`,
       )
 
-      if (processPlayers) {
-        const playerStream = Stream.fromIterable(rankings).pipe(
-          Stream.schedule(Schedule.spaced("1 second")),
-        )
+      if (processPlayers && task.bracket === "1v1") {
+        const playerStream = Stream.fromIterable(
+          rankings as ReadonlyArray<typeof Ranking1v1.Type>,
+        ).pipe(Stream.schedule(Schedule.spaced("1 second")))
         yield* Stream.runForEach(playerStream, (player) =>
           Effect.gen(function* () {
             yield* Effect.log(`${workerName}: Fetching player ${player.id}`)
@@ -136,9 +132,9 @@ const defineRankedWorker = Effect.fn("worker")(function* <
         ).pipe(
           Effect.timeout(Duration.seconds(10)),
           Effect.retry(
-            Schedule.union(
+            Schedule.either(
               Schedule.spaced("10 second"),
-              Schedule.linear("1 second"),
+              Schedule.spaced("1 second"),
             ),
           ),
           Effect.withSpan(
@@ -149,9 +145,9 @@ const defineRankedWorker = Effect.fn("worker")(function* <
     }).pipe(
       Effect.timeout(Duration.seconds(10)),
       Effect.retry(
-        Schedule.union(
+        Schedule.either(
           Schedule.spaced("10 second"),
-          Schedule.linear("1 second"),
+          Schedule.spaced("1 second"),
         ),
       ),
       Effect.withSpan(
@@ -163,10 +159,7 @@ const defineRankedWorker = Effect.fn("worker")(function* <
   yield* Effect.log(`${workerName} worker completed`)
 })
 
-const SharedDependencies = Layer.mergeAll(
-  WorkerConfig.layer,
-  WorkerApiClient.layer,
-)
+const SharedDependencies = WorkerApiClient.layer
 
 const program = Effect.gen(function* () {
   yield* waitForApiHealth
@@ -207,4 +200,4 @@ const program = Effect.gen(function* () {
   yield* Effect.log("Workers completed")
 }).pipe(Effect.provide(SharedDependencies))
 
-await Effect.runPromise(program)
+await Effect.runPromise(program as Effect.Effect<void, unknown, never>)

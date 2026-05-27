@@ -203,19 +203,19 @@ export const getPlayerById = Effect.fn("getPlayerById")(function* (
   const gadgetsData: typeof PlayerGadgets.Type = {
     ...gadgets,
     bomb: {
-      damage_dealt: playerStats.data.damagebomb,
+      damage_dealt: Number(playerStats.data.damagebomb),
       kos: playerStats.data.kobomb,
     },
     mine: {
-      damage_dealt: playerStats.data.damagemine,
+      damage_dealt: Number(playerStats.data.damagemine),
       kos: playerStats.data.komine,
     },
     spikeball: {
-      damage_dealt: playerStats.data.damagespikeball,
+      damage_dealt: Number(playerStats.data.damagespikeball),
       kos: playerStats.data.kospikeball,
     },
     sidekick: {
-      damage_dealt: playerStats.data.damagesidekick,
+      damage_dealt: Number(playerStats.data.damagesidekick),
       kos: playerStats.data.kosidekick,
     },
     snowball: {
@@ -270,7 +270,7 @@ export const getPlayerById = Effect.fn("getPlayerById")(function* (
         }),
       ]),
     ],
-    { mode: "validate", concurrency: "unbounded" },
+    { concurrency: "unbounded" },
   ).pipe(
     Effect.catch((error) => {
       return Effect.logError("Error adding player history or aliases", error)

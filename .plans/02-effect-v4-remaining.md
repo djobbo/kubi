@@ -13,8 +13,8 @@
 | Import paths (`@effect/platform` → `effect/unstable/*`) | **Done** | API, workers, setup, api-contract |
 | `@dair/api-contract` HttpApi v4 | **Done** | `tsgo --noEmit` clean |
 | Client Atom | **Done** | `effect/unstable/reactivity` + `@effect/atom-react` hooks |
-| `apps/api` typecheck | **Blocked** | ~400 errors; main work below |
-| Zod removal | **Not started** | 14 files in `brawlhalla-api` + migrator + `@dair/schema` |
+| `apps/api` typecheck | **Done** | `vp run -F @dair/api check:types` green (May 2026) |
+| Zod removal | **In progress** | `brawlhalla-api` + migrator bookmarks clean; `@dair/schema` still uses zod |
 | Drizzle `defineRelations` | **Shimmed** | `drizzle-orm/_relations` — replace later |
 
 ## Recommended order
@@ -297,7 +297,7 @@ Do **not** start feature work until `apps/api` typechecks. Then:
 
 ## Definition of done (Phase 2b)
 
-- [ ] `vp run check:types` passes for all workspaces in `turbo.json`
+- [x] `vp run check:types` passes for all workspaces in `turbo.json` (api, workers, migrator, api-contract)
 - [ ] No `effect@3` or `@effect/platform` (non-node) in lockfile
 - [ ] No `zod` / `drizzle-zod` in catalog or active package imports
 - [ ] `rg 'Effect\.Service|from "zod|@effect/platform"' apps packages scripts` clean (except docs/comments)

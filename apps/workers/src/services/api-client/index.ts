@@ -1,10 +1,10 @@
 import { Api } from "@dair/api-contract"
 import {
-  HttpApiClient,
   HttpClient,
   HttpClientRequest,
   FetchHttpClient,
 } from "effect/unstable/http"
+import { HttpApiClient } from "effect/unstable/httpapi"
 import { Context, Effect, Layer, Redacted } from "effect"
 import { WorkerConfig } from "@/services/config"
 
@@ -37,7 +37,7 @@ export class WorkerApiClient extends Context.Service<WorkerApiClient>()(
             playerId: number,
           ) {
             return yield* client.brawlhalla["get-player-by-id"]({
-              path: { id: playerId },
+              params: { id: playerId },
             }).pipe(Effect.tapError(Effect.logError))
           }),
           getRankings1v1: Effect.fn("getRankings1v1")(function* (

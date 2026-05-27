@@ -48,6 +48,30 @@ export class Fetcher extends Context.Service<Fetcher>()("@app/Fetcher", {
     const httpClient = yield* HttpClient.HttpClient
     const cache = yield* Cache
 
+    const executeJsonRequest = <T>(
+      schema: Schema.Schema<T>,
+      options: Pick<
+        FetchJsonOptions,
+        "url" | "method" | "body" | "timeout" | "retries"
+      >,
+    ) =>
+      Effect.gen(function* () {
+        const request = yield* pipe(
+          options.url,
+          HttpClientRequest.make(options.method),
+          HttpClientRequest.bodyJson(options.body),
+        )
+
+        const response = yield* httpClient.execute(request)
+        return yield* HttpClientResponse.schemaBodyJson(schema)(response)
+      }).pipe(
+        Effect.timeout(options.timeout ?? DEFAULT_TIMEOUT),
+        Effect.retry({
+          times: options.retries ?? DEFAULT_RETRIES,
+          schedule: Schedule.exponential(1000),
+        }),
+      )
+
     /**
      * Simple fetch without cache-first behavior
      * Used by workers that need fresh data
@@ -56,17 +80,8 @@ export class Fetcher extends Context.Service<Fetcher>()("@app/Fetcher", {
       schema: Schema.Schema<T>,
       options: FetchJsonOptions,
     ) {
-      const fetchFromApi = pipe(
-        options.url,
-        HttpClientRequest.make(options.method),
-        HttpClientRequest.bodyJson(options.body),
-        Effect.flatMap(httpClient.execute),
-        Effect.flatMap(HttpClientResponse.schemaBodyJson(schema)),
-        Effect.timeout(options.timeout ?? DEFAULT_TIMEOUT),
-        Effect.retry({
-          times: options.retries ?? DEFAULT_RETRIES,
-          schedule: Schedule.exponential(1000),
-        }),
+      const fetchFromApi = executeJsonRequest(schema, options).pipe(
+        Effect.provideService(HttpClient.HttpClient, httpClient),
       )
 
       // If no cache name is provided, just fetch directly
@@ -87,7 +102,7 @@ export class Fetcher extends Context.Service<Fetcher>()("@app/Fetcher", {
       return yield* cache.getOrSet(
         cacheKey,
         schema,
-        fetchFromApi,
+        fetchFromApi as Effect.Effect<T, never, never>,
         Option.some(Duration.seconds(ttl)),
       )
     })
@@ -115,17 +130,8 @@ export class Fetcher extends Context.Service<Fetcher>()("@app/Fetcher", {
       // Use staleMaxAge for cache TTL - data can be served while revalidating in the background
       const staleTtl = options.staleMaxAge ?? DEFAULT_STALE_MAX_AGE
 
-      const fetchFromApi = pipe(
-        options.url,
-        HttpClientRequest.make(options.method),
-        HttpClientRequest.bodyJson(options.body),
-        Effect.flatMap(httpClient.execute),
-        Effect.flatMap(HttpClientResponse.schemaBodyJson(schema)),
-        Effect.timeout(options.timeout ?? DEFAULT_TIMEOUT),
-        Effect.retry({
-          times: options.retries ?? DEFAULT_RETRIES,
-          schedule: Schedule.exponential(1000),
-        }),
+      const fetchFromApi = executeJsonRequest(schema, options).pipe(
+        Effect.provideService(HttpClient.HttpClient, httpClient),
       )
 
       // If no cache name, fetch directly with rate limiting

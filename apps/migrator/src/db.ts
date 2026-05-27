@@ -1,10 +1,7 @@
 import { drizzle } from "drizzle-orm/postgres-js"
-import postgres from "postgres"
 
-import * as schema from "@dair/db"
+import { relations } from "@dair/db"
 
 import { MIGRATION_DATABASE_URL } from "./env"
 
-const queryClient = postgres(MIGRATION_DATABASE_URL)
-
-export const migrationDb = drizzle(queryClient, { schema })
+export const migrationDb = drizzle(MIGRATION_DATABASE_URL, { relations })

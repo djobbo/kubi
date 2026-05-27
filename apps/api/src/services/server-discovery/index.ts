@@ -1,6 +1,5 @@
 import { lookup } from "node:dns/promises"
 import { Context, Duration, Effect, Layer, Option, Schema } from "effect"
-import type { RankedRegion } from "@dair/brawlhalla-api/src/constants/ranked/regions"
 import { Cache } from "@/services/cache"
 
 const SERVERS = [
@@ -13,7 +12,7 @@ const SERVERS = [
   { id: "JPN", url: "pingtest-jpn.brawlhalla.com" },
   { id: "ME", url: "pingtest-mde.brawlhalla.com" },
   { id: "SA", url: "pingtest-saf.brawlhalla.com" },
-] satisfies { id: RankedRegion; url: string }[]
+] as const satisfies ReadonlyArray<{ id: string; url: string }>
 
 const IpApiResponse = Schema.Struct({
   status: Schema.Literals(["success"]),
@@ -41,10 +40,13 @@ export type ServerInfo = typeof ServerInfo.Type
 
 const ServersArray = Schema.Array(ServerInfo)
 
-class ServerDiscoveryError extends Schema.TaggedErrorClass<ServerDiscoveryError>()("ServerDiscoveryError", {
-  message: Schema.String,
-  cause: Schema.optional(Schema.Unknown),
-}) {}
+class ServerDiscoveryError extends Schema.TaggedErrorClass<ServerDiscoveryError>()(
+  "ServerDiscoveryError",
+  {
+    message: Schema.String,
+    cause: Schema.optional(Schema.Unknown),
+  },
+) {}
 
 const CACHE_KEY = "brawlhalla:servers"
 const CACHE_TTL = Duration.hours(6)
@@ -55,7 +57,7 @@ export class ServerDiscovery extends Context.Service<ServerDiscovery>()(
     make: Effect.gen(function* () {
       const cache = yield* Cache
 
-      const discoverServer = (server: { id: RankedRegion; url: string }) =>
+      const discoverServer = (server: { id: string; url: string }) =>
         Effect.gen(function* () {
           const ip = yield* Effect.tryPromise({
             try: () => lookup(server.url).then((result) => result.address),
@@ -143,7 +145,7 @@ export class ServerDiscovery extends Context.Service<ServerDiscovery>()(
           const result = yield* cache.getOrSet(
             CACHE_KEY,
             ServersArray,
-            discoverAllServers() as Effect.Effect<ServerInfo[], never, never>,
+            discoverAllServers(),
             Option.some(CACHE_TTL),
           )
           return result.data

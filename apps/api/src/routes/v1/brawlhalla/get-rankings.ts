@@ -7,7 +7,7 @@ import type {
   NewRankedRotatingHistory,
 } from "@dair/db"
 import { getTeamPlayers, legendsMap } from "@dair/brawlhalla-api"
-import type { AnyRegion } from "@dair/api-contract/src/shared/region"
+import type { AnyRegion, Region } from "@dair/api-contract/src/shared/region"
 import type {
   GetRankings1v1Response,
   GetRankings2v2Response,
@@ -24,6 +24,17 @@ import {
   TooManyRequests,
 } from "@dair/api-contract/src/shared/errors"
 import { getEntitySlug } from "@/helpers/entity-slug"
+
+const resolveRankingRegion = (
+  rankingRegion: string | null | undefined,
+  queryRegion: typeof AnyRegion.Type,
+): typeof Region.Type => {
+  if (rankingRegion && rankingRegion !== "all") {
+    return rankingRegion as typeof Region.Type
+  }
+
+  return queryRegion === "all" ? null : (queryRegion as typeof Region.Type)
+}
 
 export const getRankings1v1 = (
   region: typeof AnyRegion.Type,
@@ -82,7 +93,7 @@ export const getRankings1v1 = (
         tier: ranking.tier ?? "Tin 0",
         games: ranking.games,
         wins: ranking.wins,
-        region: ranking.region ?? region,
+        region: resolveRankingRegion(ranking.region, region),
         peak_rating: ranking.peak_rating,
         name: ranking.name,
         id: ranking.brawlhalla_id,
@@ -182,7 +193,7 @@ export const getRankings2v2 = (region: typeof AnyRegion.Type, page: number) =>
         tier: ranking.tier ?? "Tin 0",
         games: ranking.games,
         wins: ranking.wins,
-        region: ranking.region ?? region,
+        region: resolveRankingRegion(ranking.region, region),
         peak_rating: ranking.peak_rating,
         team: [
           {
@@ -262,7 +273,7 @@ export const getRankingsRotating = (
         tier: ranking.tier ?? "Tin 0",
         games: ranking.games,
         wins: ranking.wins,
-        region: ranking.region ?? region,
+        region: resolveRankingRegion(ranking.region, region),
         peak_rating: ranking.peak_rating,
         name: ranking.name,
         id: ranking.brawlhalla_id,

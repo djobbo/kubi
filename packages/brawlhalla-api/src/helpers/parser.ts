@@ -23,14 +23,14 @@ export const parsePlayerLegends = (
   stats: PlayerStats["legends"] | undefined,
   ranked: PlayerRanked["legends"] | undefined,
   allLegends:
-    | {
+    | ReadonlyArray<{
         legend_id: number
         legend_name_key: string
         bio_name: string
         bio_aka: string
         weapon_one: string
         weapon_two: string
-      }[]
+      }>
     | undefined,
 ) => {
   const statsMap = arrayToMap(stats ?? [], "legend_id")

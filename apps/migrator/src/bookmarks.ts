@@ -1,6 +1,6 @@
 import { sql as drizzleSql } from "drizzle-orm"
+import { Schema } from "effect"
 import postgres from "postgres"
-import { z } from "zod/v4"
 
 import { placeholderUserIdFromDiscord } from "@dair/common/src/constants/bookmarks"
 import {
@@ -15,50 +15,50 @@ import { MIGRATION_SUPABASE_DATABASE_URL } from "./env"
 
 const sql = postgres(MIGRATION_SUPABASE_DATABASE_URL)
 
-const bookmarkSchema = z.array(
-  z.object({
-    favorite_data: z.object({
-      id: z.string(),
-      name: z.string(),
-      type: z.union([z.literal("clan"), z.literal("player")]),
-      userId: z.string(),
-      meta: z.object({
-        icon: z
-          .object({
-            legend_id: z.number(),
-            type: z.literal("legend"),
-          })
-          .optional(),
+const bookmarkSchema = Schema.Array(
+  Schema.Struct({
+    favorite_data: Schema.Struct({
+      id: Schema.String,
+      name: Schema.String,
+      type: Schema.Literals(["clan", "player"]),
+      userId: Schema.String,
+      meta: Schema.Struct({
+        icon: Schema.optional(
+          Schema.Struct({
+            legend_id: Schema.Number,
+            type: Schema.Literals(["legend"]),
+          }),
+        ),
       }),
     }),
-    profile_data: z.object({
-      id: z.string(),
-      username: z.string(),
-      avatarUrl: z.string().optional(),
+    profile_data: Schema.Struct({
+      id: Schema.String,
+      username: Schema.String,
+      avatarUrl: Schema.optional(Schema.String),
     }),
-    user_data: z.object({
-      id: z.string(),
-      created_at: z.string(),
-      updated_at: z.string(),
-      raw_app_meta_data: z.object({
-        provider: z.literal("discord"),
+    user_data: Schema.Struct({
+      id: Schema.String,
+      created_at: Schema.String,
+      updated_at: Schema.String,
+      raw_app_meta_data: Schema.Struct({
+        provider: Schema.Literals(["discord"]),
       }),
-      raw_user_meta_data: z.object({
-        name: z.string(),
-        email: z.string(),
-        picture: z.string(),
-        full_name: z.string(),
-        avatar_url: z.string(),
-        provider_id: z.string(),
+      raw_user_meta_data: Schema.Struct({
+        name: Schema.String,
+        email: Schema.String,
+        picture: Schema.String,
+        full_name: Schema.String,
+        avatar_url: Schema.String,
+        provider_id: Schema.String,
       }),
     }),
   }),
 )
 
 const parseOldBookmarks = (rawBookmarks: unknown, userId?: string) => {
-  const bookmarks = bookmarkSchema.parse(rawBookmarks)
-  const migratedBookmarks = bookmarks
-    .map((bookmark) => {
+  const bookmarks = Schema.decodeUnknownSync(bookmarkSchema)(rawBookmarks)
+  const migratedBookmarks: NewBookmark[] = bookmarks
+    .map((bookmark): NewBookmark | null => {
       if (!["player", "clan"].includes(bookmark.favorite_data.type)) {
         return null
       }
@@ -72,7 +72,9 @@ const parseOldBookmarks = (rawBookmarks: unknown, userId?: string) => {
 
       const icon = bookmark.favorite_data.meta?.icon
 
-      const tempId = `${PRE_MIGRATION_DISCORD_USER_ID_PREFIX}${bookmark.user_data.raw_user_meta_data.provider_id}`
+      const tempId = placeholderUserIdFromDiscord(
+        bookmark.user_data.raw_user_meta_data.provider_id,
+      )
 
       return {
         name: bookmark.favorite_data.name,
@@ -91,9 +93,9 @@ const parseOldBookmarks = (rawBookmarks: unknown, userId?: string) => {
               : null,
           },
         },
-      } as const satisfies NewBookmark
+      }
     })
-    .filter((bookmark) => !!bookmark)
+    .filter((bookmark): bookmark is NewBookmark => bookmark !== null)
 
   return migratedBookmarks
 }

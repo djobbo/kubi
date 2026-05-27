@@ -14,8 +14,8 @@ Target stack: this monorepo (`apps/api`, `apps/client`, `apps/workers`, `package
 | Client UI | **Early** | 2 real routes: home stub + player profile (overview/2v2 only) |
 | Toolchain | **In progress** | Adopting **vp + pnpm@10.33.2** (from `.repos/vite-plus`); see [07-vite-plus-toolchain.md](./07-vite-plus-toolchain.md) |
 | Dev setup | **Fixed (local)** | `vp run setup` uses compose + drizzle; needs Postgres on `DATABASE_URL` |
-| Effect version | **In progress** | Catalog on **v4 beta**; `@dair/api-contract` green; `apps/api` ~400 TS errors — [02-effect-v4-remaining.md](./02-effect-v4-remaining.md) |
-| Legacy data | **Started** | `apps/migrator` (aliases/bookmarks); incomplete, some imports invalid |
+| Effect version | **Mostly done** | `vp run check:types` green; trim `@dair/schema` zod next — [02-effect-v4-remaining.md](./02-effect-v4-remaining.md) |
+| Legacy data | **Started** | `apps/migrator` aliases + bookmarks (Effect Schema); needs Supabase creds to run |
 | Bookmarks schema | **PG in @dair/db** | Migrator + API aligned; `@dair/schema` SQLite copy remains for DTOs until trimmed |
 
 ## Phased plans

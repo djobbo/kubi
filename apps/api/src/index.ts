@@ -6,7 +6,6 @@ import { Api } from "@dair/api-contract"
 import { HttpApiBuilder } from "effect/unstable/httpapi"
 import { FetchHttpClient, HttpRouter, HttpServer } from "effect/unstable/http"
 import * as NodeHttpServer from "@effect/platform-node/NodeHttpServer"
-import * as NodeRuntime from "@effect/platform-node/NodeRuntime"
 import { Effect, Layer, Duration, flow } from "effect"
 import { ApiLive } from "./api-live"
 import { Archive } from "./services/archive"
@@ -83,8 +82,9 @@ const ServerLive = Layer.unwrap(
   Layer.provide(ObservabilityLive),
 )
 
-const server = Layer.launch(ServerLive).pipe(
-  Effect.catchCause(Effect.logError),
-)
+const server = Layer.launch(ServerLive).pipe(Effect.catchCause(Effect.logError))
 
-NodeRuntime.runMain(server)
+Effect.runPromise(server).catch((error) => {
+  console.error(error)
+  process.exit(1)
+})

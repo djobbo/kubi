@@ -306,12 +306,12 @@ const BrawlhallaLive = HttpApiBuilder.group(Api, "brawlhalla", (handlers) =>
             gameMode: query.gameMode,
           })
         },
-        flow(Effect.catchTags({
+        flow(
+          Effect.catchTags({
             BrawltoolsApiError: () => Effect.fail(new InternalServerError()),
-            CacheOperationError: () => Effect.fail(new InternalServerError()),
-            CacheSerializationError: () =>
-              Effect.fail(new InternalServerError()),
-          }), Effect.catch(() => Effect.fail(new InternalServerError()))),
+          }),
+          Effect.catch(() => Effect.fail(new InternalServerError())),
+        ),
       ),
     )
     .handle(

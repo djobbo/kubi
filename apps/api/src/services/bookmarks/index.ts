@@ -11,6 +11,17 @@ import { and, eq } from "drizzle-orm"
 import { Context, Effect, Layer } from "effect"
 import { BookmarkError, DiscordAccountNotFoundError } from "./errors"
 
+const mapBookmarkError = <A, E, R>(effect: Effect.Effect<A, E, R>) =>
+  effect.pipe(
+    Effect.mapError(
+      (cause) =>
+        new BookmarkError({
+          message: "Bookmark database operation failed",
+          cause,
+        }),
+    ),
+  )
+
 /**
  * Bookmarks service for managing user bookmarks
  */
@@ -44,10 +55,12 @@ export class Bookmarks extends Context.Service<Bookmarks, BookmarksService>()(
       const getBookmarks = Effect.fn("Bookmarks.getBookmarks")(function* (
         userId: string,
       ) {
-        return yield* db
-          .select()
-          .from(bookmarksTable)
-          .where(eq(bookmarksTable.userId, userId))
+        return yield* mapBookmarkError(
+          db
+            .select()
+            .from(bookmarksTable)
+            .where(eq(bookmarksTable.userId, userId)),
+        )
       })
 
       const addBookmark = Effect.fn("Bookmarks.addBookmark")(function* (
@@ -59,20 +72,22 @@ export class Bookmarks extends Context.Service<Bookmarks, BookmarksService>()(
           userId,
         }
 
-        const result = yield* db
-          .insert(bookmarksTable)
-          .values(newBookmark)
-          .returning()
-          .onConflictDoUpdate({
-            set: {
-              name: newBookmark.name,
-            },
-            target: [
-              bookmarksTable.userId,
-              bookmarksTable.pageId,
-              bookmarksTable.pageType,
-            ],
-          })
+        const result = yield* mapBookmarkError(
+          db
+            .insert(bookmarksTable)
+            .values(newBookmark)
+            .returning()
+            .onConflictDoUpdate({
+              set: {
+                name: newBookmark.name,
+              },
+              target: [
+                bookmarksTable.userId,
+                bookmarksTable.pageId,
+                bookmarksTable.pageType,
+              ],
+            }),
+        )
 
         if (!result[0]) {
           return yield* Effect.fail(
@@ -95,23 +110,12 @@ export class Bookmarks extends Context.Service<Bookmarks, BookmarksService>()(
           return yield* Effect.succeed([])
         }
 
-        const bookmarksData = yield* db.transaction(async (tx) => {
-          const results = await Promise.all(
-            bookmarks.map((bookmark) =>
-              tx
-                .select()
-                .from(bookmarksTable)
-                .where(
-                  and(
-                    eq(bookmarksTable.userId, userId),
-                    eq(bookmarksTable.pageId, bookmark.pageId),
-                    eq(bookmarksTable.pageType, bookmark.pageType),
-                  ),
-                ),
-            ),
-          )
-          return results.flat()
-        })
+        const bookmarksData = yield* mapBookmarkError(
+          db
+            .select()
+            .from(bookmarksTable)
+            .where(eq(bookmarksTable.userId, userId)),
+        )
 
         return bookmarks
           .map((bookmark) => {
@@ -135,15 +139,17 @@ export class Bookmarks extends Context.Service<Bookmarks, BookmarksService>()(
         userId: string,
         bookmark: Pick<Bookmark, "pageId" | "pageType">,
       ) {
-        yield* db
-          .delete(bookmarksTable)
-          .where(
-            and(
-              eq(bookmarksTable.userId, userId),
-              eq(bookmarksTable.pageId, bookmark.pageId),
-              eq(bookmarksTable.pageType, bookmark.pageType),
+        yield* mapBookmarkError(
+          db
+            .delete(bookmarksTable)
+            .where(
+              and(
+                eq(bookmarksTable.userId, userId),
+                eq(bookmarksTable.pageId, bookmark.pageId),
+                eq(bookmarksTable.pageType, bookmark.pageType),
+              ),
             ),
-          )
+        )
       })
 
       const migrateLegacyBookmarks = Effect.fn(
@@ -166,25 +172,29 @@ export class Bookmarks extends Context.Service<Bookmarks, BookmarksService>()(
           )
         }
 
-        yield* db.transaction(async (tx) => {
-          const legacyBookmarks = await tx
+        const legacyBookmarks = yield* mapBookmarkError(
+          db
             .select()
             .from(legacyBookmarksTable)
-            .where(eq(legacyBookmarksTable.discordId, discordId))
+            .where(eq(legacyBookmarksTable.discordId, discordId)),
+        )
 
-          if (legacyBookmarks.length > 0) {
-            await tx.insert(bookmarksTable).values(
-              legacyBookmarks.map(({ discordId: _, ...bookmark }) => ({
+        if (legacyBookmarks.length > 0) {
+          yield* mapBookmarkError(
+            db.insert(bookmarksTable).values(
+              legacyBookmarks.map(({ discordId: _discordId, ...bookmark }) => ({
                 ...bookmark,
                 userId: session.user.id,
               })),
-            )
+            ),
+          )
 
-            await tx
+          yield* mapBookmarkError(
+            db
               .delete(legacyBookmarksTable)
-              .where(eq(legacyBookmarksTable.discordId, discordId))
-          }
-        })
+              .where(eq(legacyBookmarksTable.discordId, discordId)),
+          )
+        }
       })
 
       return {

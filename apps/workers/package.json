@@ -12,12 +12,13 @@
   "devDependencies": {
     "@effect/language-service": "catalog:",
     "@types/node": "catalog:",
+    "@typescript/native-preview": "catalog:",
     "typescript": "catalog:"
   },
   "module": "src/index.ts",
   "private": true,
   "scripts": {
-    "check:types": "tsc --noEmit",
+    "check:types": "tsgo --noEmit",
     "dev": "tsx watch ./src/index.ts",
     "prepare": "effect-language-service patch",
     "start": "tsx ./src/index.ts"

@@ -23,13 +23,17 @@ export class Cache extends Context.Service<Cache>()("@dair/services/Cache", {
     const redis = new Redis(redisUrl)
     const prefixed = (key: string) => `${prefix}:${key}`
     const parse =
-      <T, U>(schema: Schema.Schema<T>) =>
+      <T>(schema: Schema.Schema<T>) =>
       (str: string | null): Option.Option<T> => {
         if (str === null) {
           return Option.none()
         }
 
-        return Schema.decodeUnknownOption(schema as Schema.Top)(JSON.parse(str))
+        try {
+          return Option.some(JSON.parse(str) as T)
+        } catch {
+          return Option.none()
+        }
       }
 
     const cache = {

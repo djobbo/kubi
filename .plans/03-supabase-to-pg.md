@@ -25,7 +25,7 @@
 | Supabase / Prisma | Kubi table(s) | Status |
 |-------------------|---------------|--------|
 | `BHPlayerAlias` | `brawlhalla_player_aliases` | Started — [aliases.ts](../apps/migrator/src/aliases.ts); fix bugs (see below) |
-| `UserFavorite` + `UserProfile` + `auth.users` | `users`, `oauth_accounts`, `bookmarks` | Started — [bookmarks.ts](../apps/migrator/src/bookmarks.ts); **broken imports** |
+| `UserFavorite` + `UserProfile` + `auth.users` | `users`, `oauth_accounts`, `bookmarks` | Started — [bookmarks.ts](../apps/migrator/src/bookmarks.ts); Effect Schema decode, `placeholderUserIdFromDiscord` |
 | `UserConnection` | `oauth_accounts` or metadata JSON | Not started |
 
 ### Optional / regenerate via workers

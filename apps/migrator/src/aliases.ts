@@ -24,7 +24,7 @@ const migrateAliases = async (offset: number, limit: number) => {
     aliases.data?.map((alias) => ({
       alias: alias.alias,
       recordedAt: new Date(alias.createdAt),
-      playerId: alias.playerId,
+      playerId: Number(alias.playerId),
       public: alias.public,
     })) ?? []
 

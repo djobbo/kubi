@@ -1,3 +1,4 @@
+import type { Ranking1v1 } from "@dair/api-contract/src/routes/v1/brawlhalla/get-rankings"
 import { Duration, Effect, Fiber, Schedule, Stream } from "effect"
 import { WorkerApiClient } from "@/services/api-client"
 
@@ -69,9 +70,9 @@ const defineRankedWorker = Effect.fn("worker")(function* (
       )
 
       if (processPlayers) {
-        const playerStream = Stream.fromIterable(rankings).pipe(
-          Stream.schedule(Schedule.spaced("1 second")),
-        )
+        const playerStream = Stream.fromIterable(
+          rankings as ReadonlyArray<typeof Ranking1v1.Type>,
+        ).pipe(Stream.schedule(Schedule.spaced("1 second")))
         yield* Stream.runForEach(playerStream, (player) =>
           Effect.gen(function* () {
             yield* Effect.log(`${workerName}: Fetching player ${player.id}`)
@@ -81,9 +82,9 @@ const defineRankedWorker = Effect.fn("worker")(function* (
         ).pipe(
           Effect.timeout(Duration.seconds(10)),
           Effect.retry(
-            Schedule.union(
+            Schedule.either(
               Schedule.spaced("10 second"),
-              Schedule.linear("1 second"),
+              Schedule.spaced("1 second"),
             ),
           ),
           Effect.withSpan(
@@ -94,9 +95,9 @@ const defineRankedWorker = Effect.fn("worker")(function* (
     }).pipe(
       Effect.timeout(Duration.seconds(10)),
       Effect.retry(
-        Schedule.union(
+        Schedule.either(
           Schedule.spaced("10 second"),
-          Schedule.linear("1 second"),
+          Schedule.spaced("1 second"),
         ),
       ),
       Effect.withSpan(
@@ -120,4 +121,10 @@ const program = Effect.gen(function* () {
   yield* Effect.log("Workers completed")
 })
 
-await Effect.runPromise(program.pipe(Effect.provide(WorkerApiClient.layer)))
+await Effect.runPromise(
+  program.pipe(Effect.provide(WorkerApiClient.layer)) as Effect.Effect<
+    void,
+    unknown,
+    never
+  >,
+)
