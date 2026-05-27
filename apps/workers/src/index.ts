@@ -1,3 +1,5 @@
+import "dotenv/config"
+
 import { HttpClient, FetchHttpClient } from "@effect/platform"
 import { WorkerConfig } from "@/services/config"
 import {

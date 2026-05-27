@@ -1,7 +1,9 @@
 import { sql } from "drizzle-orm"
 
-import type { NewAlias } from "../../../db/src/schema/archive/aliases"
-import { aliasesTable } from "../../../db/src/schema/archive/aliases"
+import {
+  type NewPlayerAliases,
+  playerAliasesTable,
+} from "@dair/db/src/schema/archive/brawlhalla/player-aliases"
 
 import { supabase } from "./client"
 import { migrationDb } from "./db"
@@ -18,7 +20,7 @@ const migrateAliases = async (offset: number, limit: number) => {
     throw new Error("Failed to fetch aliases")
   }
 
-  const migratedAliases: NewAlias[] = aliases.data?.map((alias) => {
+  const migratedAliases: NewPlayerAliases[] = aliases.data?.map((alias) => {
     return {
       alias: alias.alias,
       createdAt: new Date(alias.createdAt),
@@ -29,7 +31,7 @@ const migrateAliases = async (offset: number, limit: number) => {
 
   try {
     await migrationDb
-      .insert(aliasesTable)
+      .insert(playerAliasesTable)
       .values(migratedAliases)
       .onConflictDoUpdate({
         set: {

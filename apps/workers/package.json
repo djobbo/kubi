@@ -5,23 +5,24 @@
     "@dair/api-contract": "workspace:*",
     "@dair/brawlhalla-api": "workspace:*",
     "@dair/common": "workspace:*",
-    "@effect/experimental": "^0.58.0",
-    "@effect/platform": "^0.94.2",
-    "@effect/platform-bun": "^0.87.1",
-    "effect": "^3.19.15"
+    "@effect/experimental": "catalog:",
+    "@effect/platform": "catalog:",
+    "dotenv": "catalog:",
+    "effect": "catalog:",
+    "tsx": "catalog:"
   },
   "devDependencies": {
-    "@effect/language-service": "^0.72.0",
-    "@types/bun": "1.3.7",
-    "typescript": "^5"
+    "@effect/language-service": "catalog:",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
   },
   "module": "src/index.ts",
   "private": true,
   "scripts": {
     "check:types": "tsc --noEmit",
-    "dev": "bun --watch run ./src/index.ts",
+    "dev": "tsx watch ./src/index.ts",
     "prepare": "effect-language-service patch",
-    "start": "bun run src/index.ts"
+    "start": "tsx ./src/index.ts"
   },
   "type": "module"
 }

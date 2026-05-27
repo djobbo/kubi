@@ -6,9 +6,9 @@ A Brawlhalla statistics and analytics platform built with Effect, featuring real
 
 | Component       | Technology                                         |
 | --------------- | -------------------------------------------------- |
-| Package Manager | Bun (v1.3.4)                                       |
+| Toolchain       | Vite+ (`vp`) + pnpm (from `.repos/vite-plus`)      |
 | Monorepo        | Turborepo                                          |
-| Backend         | Bun + Effect + @effect/platform                    |
+| Backend         | Node.js + Effect + `@effect/platform-node`         |
 | Frontend        | React 19 + Vite + TanStack Router + TailwindCSS    |
 | Database        | PostgreSQL + Drizzle ORM                           |
 | Cache           | Redis (LRU eviction)                               |
@@ -152,13 +152,13 @@ Two scheduled crawlers run alongside the API server:
 
 ### Prerequisites
 
-- [Bun](https://bun.sh) >= 1.3.4
+- [Node.js](https://nodejs.org/) >= 22.12
 - [Docker](https://www.docker.com/) (for PostgreSQL, Redis, and observability stack)
 
 ### 1. Install Dependencies
 
 ```bash
-bun install
+vp install
 ```
 
 ### 2. Configure Environment
@@ -192,7 +192,7 @@ SERVICE_VERSION=0.0.0
 ### 3. Start Services & Dev Servers
 
 ```bash
-bun dev
+vp run dev
 ```
 
 This command:
@@ -219,31 +219,31 @@ This command:
 
 ```bash
 # Start everything (services + dev servers)
-bun dev
+vp run dev
 
 # Docker services
-bun compose up         # Start Docker services only
-bun compose down       # Stop Docker services
+vp run compose:up
+vp run compose:down
 
 # Production
-bun server:start       # Start API in production mode
-bun build              # Build all packages
+vp run server:start
+vp run build
 
 # Code quality
-bun lint               # Format + lint + fix
-bun check:types        # Type checking
-bun check:lint         # Lint only
-bun check:format       # Format check
-bun check:deadcode     # Find unused exports
-bun test               # Run tests
+vp run lint
+vp run check:types
+vp run check:lint
+vp run check:format
+vp run check:deadcode
+vp run test
 
-# Database (run from apps/api)
-bun db:migrate         # Generate + apply migrations
-bun studio             # Open Drizzle Studio
+# Database
+vp run -F @dair/api db:migrate
+vp run -F @dair/api studio
 
-# Localization (run from apps/client)
-bun locales:extract    # Extract strings from code
-bun locales:compile    # Compile translation files
+# Localization
+vp run -F @dair/client locales:extract
+vp run -F @dair/client locales:compile
 ```
 
 ## Observability
@@ -275,8 +275,8 @@ bun locales:compile    # Compile translation files
 This project follows idiomatic Effect patterns. For guidance:
 
 ```bash
-bunx effect-solutions list         # List all topics
-bunx effect-solutions show <slug>  # Read a specific topic
+vp exec npx effect-solutions list         # List all topics
+vp exec npx effect-solutions show <slug>  # Read a specific topic
 ```
 
 Key patterns used:

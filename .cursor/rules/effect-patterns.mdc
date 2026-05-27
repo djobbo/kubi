@@ -13,9 +13,9 @@ This project uses Effect TypeScript extensively. Follow these patterns strictly.
 **ALWAYS run Effect Solutions CLI first:**
 
 ```bash
-bunx effect-solutions list              # List available topics
-bunx effect-solutions show <topic>      # Read specific topic
-bunx effect-solutions search <term>     # Search by keyword
+vp exec npx effect-solutions list              # List available topics
+vp exec npx effect-solutions show <topic>      # Read specific topic
+vp exec npx effect-solutions search <term>     # Search by keyword
 ```
 
 Key topics: `basics`, `services-and-layers`, `data-modeling`, `error-handling`, `config`

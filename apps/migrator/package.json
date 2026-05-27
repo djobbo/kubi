@@ -1,0 +1,24 @@
+{
+  "name": "@dair/migrator",
+  "version": "0.0.0",
+  "dependencies": {
+    "@dair/db": "workspace:*",
+    "dotenv": "catalog:",
+    "drizzle-orm": "catalog:",
+    "postgres": "catalog:",
+    "tsx": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  },
+  "module": "src/migrate.ts",
+  "private": true,
+  "scripts": {
+    "check:types": "tsc --noEmit",
+    "migrate": "tsx ./src/migrate.ts",
+    "start": "tsx ./src/migrate.ts"
+  },
+  "type": "module"
+}

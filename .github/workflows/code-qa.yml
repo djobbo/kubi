@@ -9,24 +9,22 @@ jobs:
       matrix:
         include:
           - name: Lint
-            action: bun run check:lint
+            action: vp run check:lint
           - name: Format
-            action: bun run check:format
+            action: vp run check:format
           # TODO: incrementally add these checks back
           # - name: Typecheck
-          #   action: bun run check:types
+          #   action: vp run check:types
           # - name: Build
-          #   action: bun run build
+          #   action: vp run build
           - name: Dead Code
-            action: bun run check:deadcode
-          # - name: Locales
-          #   action: bun run check:locales
+            action: vp run check:deadcode
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
         with:
-          bun-version: latest
+          node-version: "22"
+      - run: corepack enable
+      - run: vp install --frozen-lockfile
       - name: ${{ matrix.name }}
-        run: |
-          bun i --frozen-lockfile
-          ${{ matrix.action }}
+        run: ${{ matrix.action }}

@@ -231,10 +231,10 @@ const nextCursor = results.length === pageSize && lastResult
 
 ```bash
 # Generate + apply migrations (from apps/api)
-bun db:migrate
+vp run -F @dair/api db:migrate
 
 # Open Drizzle Studio
-bun studio
+vp run -F @dair/api studio
 ```
 
 Migration files are in `apps/api/migrations/`.

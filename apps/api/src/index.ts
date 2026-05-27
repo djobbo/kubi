@@ -1,6 +1,10 @@
+import "dotenv/config"
+
+import { createServer } from "node:http"
+
 import { Api } from "@dair/api-contract"
 import { HttpApiBuilder, HttpServer, FetchHttpClient } from "@effect/platform"
-import { BunHttpServer } from "@effect/platform-bun"
+import * as NodeHttpServer from "@effect/platform-node/NodeHttpServer"
 import { Effect, Layer, Duration, flow } from "effect"
 import { ApiLive } from "./api-live"
 import { Archive } from "./services/archive"
@@ -55,7 +59,7 @@ const ServerLive = Layer.unwrapEffect(
       HttpServer.withLogAddress,
       Layer.provide(ApiLive),
       Layer.provide(
-        BunHttpServer.layer({
+        NodeHttpServer.layer(createServer, {
           port: serverConfig.port,
         }),
       ),
