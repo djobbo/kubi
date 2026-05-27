@@ -1,4 +1,4 @@
-import "dotenv/config"
+import "../env.js"
 
 import { FetchHttpClient, HttpClient } from "effect/unstable/http"
 import { WorkerConfig } from "@/services/config"

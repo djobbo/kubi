@@ -35,7 +35,8 @@ Monorepo driver: **[vite-plus](https://viteplus.dev)** (`vp`). Package manager: 
 ```bash
 vp install           # Install deps (pnpm via vp)
 vp run setup         # Bootstrap .env, compose, vendored repos, migrations
-vp run dev           # Compose + API + client + Drizzle studio
+vp run dev           # API + client + workers (start DB: vp run compose:up)
+vp run studio        # Drizzle Studio (@dair/api)
 vp run lint          # Format + lint
 vp run check:types   # Typecheck all workspaces
 vp exec <cmd>        # Run with node_modules/.bin on PATH
@@ -56,7 +57,7 @@ vp exec npx effect-solutions search <term>     # Search by keyword
 
 ```bash
 # Root commands (run from project root)
-vp run dev              # Start all services (API, client, DB studio)
+vp run dev              # API, client, Drizzle studio (DB: vp run compose:up first)
 vp run build            # Build all packages
 vp run lint             # Format (oxfmt) + lint (oxlint) + fix
 vp run check:types      # Type check all workspaces

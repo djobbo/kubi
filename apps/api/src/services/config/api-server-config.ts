@@ -1,3 +1,4 @@
+import { devWorkerApiKey } from "@dair/common/src/constants/dev-worker-api-key"
 import { Config, Context, Effect, Layer, Option, Redacted } from "effect"
 
 /**
@@ -21,7 +22,8 @@ export class ApiServerConfig extends Context.Service<ApiServerConfig>()(
       ]
 
       const workerApiKey = yield* Config.redacted("WORKER_API_KEY").pipe(
-        Config.option,
+        Config.orElse(() => Config.succeed(Redacted.make(devWorkerApiKey))),
+        Effect.map(Option.some),
       )
 
       return {

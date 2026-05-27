@@ -1,8 +1,4 @@
-import { config } from "dotenv"
-import { resolve } from "node:path"
-
-config({ path: resolve(import.meta.dirname, "../.env") })
-config({ path: resolve(import.meta.dirname, "../../.env"), override: true })
+import "../env.js"
 
 import { createServer } from "node:http"
 

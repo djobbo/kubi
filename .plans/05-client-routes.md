@@ -12,6 +12,8 @@ Reference routes: `.repos/corehalla/app/src/routes/`
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | `/{locale}/`                                  | [\_sidebar-layout/index.tsx](../apps/client/src/routes/{-$locale}/_sidebar-layout/index.tsx) — placeholder          |
 | `/{locale}/brawlhalla/players/$playerId/$tab` | [player route](../apps/client/src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/route.tsx) |
+| `/{locale}/brawlhalla/rankings/1v1/...`       | [1v1 route](../apps/client/src/routes/{-$locale}/_sidebar-layout/brawlhalla/rankings/1v1.{-$region}.{-$page}.tsx)   |
+| `/{locale}/brawlhalla/rankings/2v2/...`       | [2v2 route](../apps/client/src/routes/{-$locale}/_sidebar-layout/brawlhalla/rankings/2v2.{-$region}.{-$page}.tsx)   |
 
 Shared: [search-command.tsx](../apps/client/src/features/search/components/search-command.tsx) (players only; guild stubbed).
 
@@ -90,7 +92,7 @@ Follow existing player route:
 
 ## Suggested implementation order
 
-1. Rankings 1v1 / 2v2 (API ready, high traffic)
+1. ~~Rankings 1v1 / 2v2~~ (done — API + client routes)
 2. Guild profile + search guild wiring
 3. Player legends/weapons tabs
 4. Home page

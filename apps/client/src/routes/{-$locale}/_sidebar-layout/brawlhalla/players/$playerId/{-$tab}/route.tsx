@@ -1,7 +1,7 @@
 import { formatTime } from "@dair/common/src/helpers/date"
 import { SEO } from "@dair/common/src/helpers/seo"
 import { createFileRoute, notFound, useLocation } from "@tanstack/react-router"
-import { Schema } from "effect"
+import { Schema, SchemaTransformation } from "effect"
 import { Card } from "@/shared/components/card"
 import { StatGrid } from "@/shared/components/stat-grid"
 import { Tab } from "@/shared/components/tabs"
@@ -24,24 +24,24 @@ const playerIdRegex = /(^\d+).*/
  * "abcdef-1234567890" -> null
  * "1234567890-abcdef-ghijklmnopqrstuvwxyz" -> 1234567890
  */
-const PlayerIdParamSchema = Schema.transform(
-  Schema.NonEmptyTrimmedString,
-  Schema.NullOr(Schema.Number),
-  {
-    strict: true,
-    decode: (input) => {
-      const match = input.match(playerIdRegex)
-      const parsed = match?.[1]
-      if (!parsed) return null
+const PlayerIdParamSchema = Schema.NonEmptyString.pipe(
+  Schema.decodeTo(
+    Schema.NullOr(Schema.Number),
+    SchemaTransformation.transform({
+      decode: (input) => {
+        const match = input.match(playerIdRegex)
+        const parsed = match?.[1]
+        if (!parsed) return null
 
-      try {
-        return Number.parseInt(parsed, 10)
-      } catch {
-        return null
-      }
-    },
-    encode: (input) => (input ?? "").toString(),
-  },
+        try {
+          return Number.parseInt(parsed, 10)
+        } catch {
+          return null
+        }
+      },
+      encode: (input) => (input ?? "").toString(),
+    }),
+  ),
 )
 
 const ParamsSchema = Schema.Struct({

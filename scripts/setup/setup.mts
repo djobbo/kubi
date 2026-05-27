@@ -10,6 +10,7 @@ import * as Ref from "effect/Ref"
 import * as Schedule from "effect/Schedule"
 import { ChildProcessSpawner } from "effect/unstable/process"
 
+import { devWorkerApiKey } from "@dair/common/src/constants/dev-worker-api-key"
 import { runChildProcess } from "./run-child-process.mts"
 import { syncVendoredRepos } from "./sync-vendored-repos.mts"
 
@@ -225,6 +226,7 @@ const syncLocalDevUrls = Effect.fnUntraced(function* () {
     DEFAULT_CLIENT_URL: `http://localhost:${appPort}`,
     ALLOWED_ORIGINS: `http://localhost:${appPort}`,
     DATABASE_URL: `postgresql://${encodeURIComponent(postgresUser)}:${encodeURIComponent(postgresPassword)}@localhost:${postgresPort}/${postgresDb}`,
+    WORKER_API_KEY: getEnvVar(existing, "WORKER_API_KEY", devWorkerApiKey),
   })
   yield* fs.writeFileString(
     ENV_PATH,

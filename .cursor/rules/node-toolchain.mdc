@@ -15,7 +15,8 @@ alwaysApply: true
 ```bash
 # Workspace (root)
 vp install
-vp run dev
+vp run dev          # API + client + workers (not compose; not studio)
+vp run studio       # Drizzle Studio
 vp run setup
 vp run compose:up
 vp exec tsx scripts/compose.ts up --wait

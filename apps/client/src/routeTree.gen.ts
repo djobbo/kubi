@@ -12,7 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as Char123LocaleChar125RouteRouteImport } from './routes/{-$locale}/route'
 import { Route as Char123LocaleChar125SidebarLayoutRouteRouteImport } from './routes/{-$locale}/_sidebar-layout/route'
 import { Route as Char123LocaleChar125SidebarLayoutIndexRouteImport } from './routes/{-$locale}/_sidebar-layout/index'
+import { Route as Char123LocaleChar125SidebarLayoutBrawlhallaRankingsIndexRouteImport } from './routes/{-$locale}/_sidebar-layout/brawlhalla/rankings/index'
 import { Route as Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRouteImport } from './routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/route'
+import { Route as Char123LocaleChar125SidebarLayoutBrawlhallaRankings2v2Char123RegionChar125Char123PageChar125RouteImport } from './routes/{-$locale}/_sidebar-layout/brawlhalla/rankings/2v2.{-$region}.{-$page}'
+import { Route as Char123LocaleChar125SidebarLayoutBrawlhallaRankings1v1Char123RegionChar125Char123PageChar125RouteImport } from './routes/{-$locale}/_sidebar-layout/brawlhalla/rankings/1v1.{-$region}.{-$page}'
 
 const Char123LocaleChar125RouteRoute =
   Char123LocaleChar125RouteRouteImport.update({
@@ -31,6 +34,12 @@ const Char123LocaleChar125SidebarLayoutIndexRoute =
     path: '/',
     getParentRoute: () => Char123LocaleChar125SidebarLayoutRouteRoute,
   } as any)
+const Char123LocaleChar125SidebarLayoutBrawlhallaRankingsIndexRoute =
+  Char123LocaleChar125SidebarLayoutBrawlhallaRankingsIndexRouteImport.update({
+    id: '/brawlhalla/rankings/',
+    path: '/brawlhalla/rankings/',
+    getParentRoute: () => Char123LocaleChar125SidebarLayoutRouteRoute,
+  } as any)
 const Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute =
   Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRouteImport.update(
     {
@@ -39,37 +48,73 @@ const Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar12
       getParentRoute: () => Char123LocaleChar125SidebarLayoutRouteRoute,
     } as any,
   )
+const Char123LocaleChar125SidebarLayoutBrawlhallaRankings2v2Char123RegionChar125Char123PageChar125Route =
+  Char123LocaleChar125SidebarLayoutBrawlhallaRankings2v2Char123RegionChar125Char123PageChar125RouteImport.update(
+    {
+      id: '/brawlhalla/rankings/2v2/{-$region}/{-$page}',
+      path: '/brawlhalla/rankings/2v2/{-$region}/{-$page}',
+      getParentRoute: () => Char123LocaleChar125SidebarLayoutRouteRoute,
+    } as any,
+  )
+const Char123LocaleChar125SidebarLayoutBrawlhallaRankings1v1Char123RegionChar125Char123PageChar125Route =
+  Char123LocaleChar125SidebarLayoutBrawlhallaRankings1v1Char123RegionChar125Char123PageChar125RouteImport.update(
+    {
+      id: '/brawlhalla/rankings/1v1/{-$region}/{-$page}',
+      path: '/brawlhalla/rankings/1v1/{-$region}/{-$page}',
+      getParentRoute: () => Char123LocaleChar125SidebarLayoutRouteRoute,
+    } as any,
+  )
 
 export interface FileRoutesByFullPath {
   '/{-$locale}': typeof Char123LocaleChar125RouteRouteWithChildren
   '/{-$locale}/': typeof Char123LocaleChar125SidebarLayoutIndexRoute
+  '/{-$locale}/brawlhalla/rankings/': typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankingsIndexRoute
   '/{-$locale}/brawlhalla/players/$playerId/{-$tab}': typeof Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute
+  '/{-$locale}/brawlhalla/rankings/1v1/{-$region}/{-$page}': typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankings1v1Char123RegionChar125Char123PageChar125Route
+  '/{-$locale}/brawlhalla/rankings/2v2/{-$region}/{-$page}': typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankings2v2Char123RegionChar125Char123PageChar125Route
 }
 export interface FileRoutesByTo {
   '/{-$locale}': typeof Char123LocaleChar125SidebarLayoutIndexRoute
+  '/{-$locale}/brawlhalla/rankings': typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankingsIndexRoute
   '/{-$locale}/brawlhalla/players/$playerId/{-$tab}': typeof Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute
+  '/{-$locale}/brawlhalla/rankings/1v1/{-$region}/{-$page}': typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankings1v1Char123RegionChar125Char123PageChar125Route
+  '/{-$locale}/brawlhalla/rankings/2v2/{-$region}/{-$page}': typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankings2v2Char123RegionChar125Char123PageChar125Route
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/{-$locale}': typeof Char123LocaleChar125RouteRouteWithChildren
   '/{-$locale}/_sidebar-layout': typeof Char123LocaleChar125SidebarLayoutRouteRouteWithChildren
   '/{-$locale}/_sidebar-layout/': typeof Char123LocaleChar125SidebarLayoutIndexRoute
+  '/{-$locale}/_sidebar-layout/brawlhalla/rankings/': typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankingsIndexRoute
   '/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}': typeof Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute
+  '/{-$locale}/_sidebar-layout/brawlhalla/rankings/1v1/{-$region}/{-$page}': typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankings1v1Char123RegionChar125Char123PageChar125Route
+  '/{-$locale}/_sidebar-layout/brawlhalla/rankings/2v2/{-$region}/{-$page}': typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankings2v2Char123RegionChar125Char123PageChar125Route
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/{-$locale}'
     | '/{-$locale}/'
+    | '/{-$locale}/brawlhalla/rankings/'
     | '/{-$locale}/brawlhalla/players/$playerId/{-$tab}'
+    | '/{-$locale}/brawlhalla/rankings/1v1/{-$region}/{-$page}'
+    | '/{-$locale}/brawlhalla/rankings/2v2/{-$region}/{-$page}'
   fileRoutesByTo: FileRoutesByTo
-  to: '/{-$locale}' | '/{-$locale}/brawlhalla/players/$playerId/{-$tab}'
+  to:
+    | '/{-$locale}'
+    | '/{-$locale}/brawlhalla/rankings'
+    | '/{-$locale}/brawlhalla/players/$playerId/{-$tab}'
+    | '/{-$locale}/brawlhalla/rankings/1v1/{-$region}/{-$page}'
+    | '/{-$locale}/brawlhalla/rankings/2v2/{-$region}/{-$page}'
   id:
     | '__root__'
     | '/{-$locale}'
     | '/{-$locale}/_sidebar-layout'
     | '/{-$locale}/_sidebar-layout/'
+    | '/{-$locale}/_sidebar-layout/brawlhalla/rankings/'
     | '/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}'
+    | '/{-$locale}/_sidebar-layout/brawlhalla/rankings/1v1/{-$region}/{-$page}'
+    | '/{-$locale}/_sidebar-layout/brawlhalla/rankings/2v2/{-$region}/{-$page}'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -99,6 +144,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char123LocaleChar125SidebarLayoutIndexRouteImport
       parentRoute: typeof Char123LocaleChar125SidebarLayoutRouteRoute
     }
+    '/{-$locale}/_sidebar-layout/brawlhalla/rankings/': {
+      id: '/{-$locale}/_sidebar-layout/brawlhalla/rankings/'
+      path: '/brawlhalla/rankings'
+      fullPath: '/{-$locale}/brawlhalla/rankings/'
+      preLoaderRoute: typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankingsIndexRouteImport
+      parentRoute: typeof Char123LocaleChar125SidebarLayoutRouteRoute
+    }
     '/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}': {
       id: '/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}'
       path: '/brawlhalla/players/$playerId/{-$tab}'
@@ -106,20 +158,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRouteImport
       parentRoute: typeof Char123LocaleChar125SidebarLayoutRouteRoute
     }
+    '/{-$locale}/_sidebar-layout/brawlhalla/rankings/2v2/{-$region}/{-$page}': {
+      id: '/{-$locale}/_sidebar-layout/brawlhalla/rankings/2v2/{-$region}/{-$page}'
+      path: '/brawlhalla/rankings/2v2/{-$region}/{-$page}'
+      fullPath: '/{-$locale}/brawlhalla/rankings/2v2/{-$region}/{-$page}'
+      preLoaderRoute: typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankings2v2Char123RegionChar125Char123PageChar125RouteImport
+      parentRoute: typeof Char123LocaleChar125SidebarLayoutRouteRoute
+    }
+    '/{-$locale}/_sidebar-layout/brawlhalla/rankings/1v1/{-$region}/{-$page}': {
+      id: '/{-$locale}/_sidebar-layout/brawlhalla/rankings/1v1/{-$region}/{-$page}'
+      path: '/brawlhalla/rankings/1v1/{-$region}/{-$page}'
+      fullPath: '/{-$locale}/brawlhalla/rankings/1v1/{-$region}/{-$page}'
+      preLoaderRoute: typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankings1v1Char123RegionChar125Char123PageChar125RouteImport
+      parentRoute: typeof Char123LocaleChar125SidebarLayoutRouteRoute
+    }
   }
 }
 
 interface Char123LocaleChar125SidebarLayoutRouteRouteChildren {
   Char123LocaleChar125SidebarLayoutIndexRoute: typeof Char123LocaleChar125SidebarLayoutIndexRoute
+  Char123LocaleChar125SidebarLayoutBrawlhallaRankingsIndexRoute: typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankingsIndexRoute
   Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute: typeof Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute
+  Char123LocaleChar125SidebarLayoutBrawlhallaRankings1v1Char123RegionChar125Char123PageChar125Route: typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankings1v1Char123RegionChar125Char123PageChar125Route
+  Char123LocaleChar125SidebarLayoutBrawlhallaRankings2v2Char123RegionChar125Char123PageChar125Route: typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankings2v2Char123RegionChar125Char123PageChar125Route
 }
 
 const Char123LocaleChar125SidebarLayoutRouteRouteChildren: Char123LocaleChar125SidebarLayoutRouteRouteChildren =
   {
     Char123LocaleChar125SidebarLayoutIndexRoute:
       Char123LocaleChar125SidebarLayoutIndexRoute,
+    Char123LocaleChar125SidebarLayoutBrawlhallaRankingsIndexRoute:
+      Char123LocaleChar125SidebarLayoutBrawlhallaRankingsIndexRoute,
     Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute:
       Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute,
+    Char123LocaleChar125SidebarLayoutBrawlhallaRankings1v1Char123RegionChar125Char123PageChar125Route:
+      Char123LocaleChar125SidebarLayoutBrawlhallaRankings1v1Char123RegionChar125Char123PageChar125Route,
+    Char123LocaleChar125SidebarLayoutBrawlhallaRankings2v2Char123RegionChar125Char123PageChar125Route:
+      Char123LocaleChar125SidebarLayoutBrawlhallaRankings2v2Char123RegionChar125Char123PageChar125Route,
   }
 
 const Char123LocaleChar125SidebarLayoutRouteRouteWithChildren =

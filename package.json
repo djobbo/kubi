@@ -25,7 +25,6 @@
     "effect-solutions": "catalog:",
     "husky": "catalog:",
     "knip": "catalog:",
-    "lint-staged": "catalog:",
     "oxfmt": "catalog:",
     "oxlint": "catalog:",
     "oxlint-tsgolint": "catalog:",
@@ -33,9 +32,6 @@
     "tsx": "catalog:",
     "typescript": "catalog:",
     "vite-plus": "catalog:"
-  },
-  "lint-staged": {
-    "*": "vp check --fix"
   },
   "engines": {
     "node": ">=22.12.0"

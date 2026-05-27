@@ -97,8 +97,8 @@ See [.cursor/rules/node-toolchain.mdc](../.cursor/rules/node-toolchain.mdc). **D
 - [x] Add root `vite.config.ts`, `pnpm-workspace.yaml`, `packageManager`
 - [x] Run `vp install` and commit `pnpm-lock.yaml`
 - [x] CI uses `vp install` + `vp run check:*` ([`.github/workflows/code-qa.yml`](../.github/workflows/code-qa.yml))
-- [ ] `prepare`: `vp config` (hooks) + keep `effect-language-service patch` if still needed
-- [ ] Migrate `lint-staged` → `vp staged` in `vite.config.ts`; remove redundant husky/lint-staged when stable
+- [x] `prepare`: `vp config` (hooks) + keep `effect-language-service patch` if still needed
+- [x] Migrate `lint-staged` → `vp staged` in `vite.config.ts`; `.husky/pre-commit` runs `vp staged`
 - [x] [.cursor/rules/node-toolchain.mdc](../.cursor/rules/node-toolchain.mdc) — vp/pnpm + Node (replaced bun-runtime)
 - [ ] Refresh vendored vite-plus and bump `packageManager` when upstream changes
 

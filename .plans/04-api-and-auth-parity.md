@@ -24,11 +24,11 @@ Reference router: `.repos/corehalla/packages/server/router/index.ts`
 
 ### 4.1 Clan rankings API
 
-- [ ] Add contract (TODO at [packages/api-contract/src/index.ts](../packages/api-contract/src/index.ts) ~L137): `GET /v1/brawlhalla/guilds/rankings`
-- [ ] Port logic from `.repos/corehalla/packages/server/router/stats/getClansRankings.ts`
-- [ ] Handler in `apps/api/src/routes/v1/brawlhalla/`
-- [ ] Wire in [api-live.ts](../apps/api/src/api-live.ts)
-- [ ] Archive query or live BH API + cache (match existing rankings handlers)
+`search-guild` already exposes archive-backed clan rankings (`Archive.searchGuilds`). Optional alias endpoint only if clients need a dedicated path.
+
+- [ ] Decide: keep `GET /v1/brawlhalla/guilds/search` only, or add `GET /v1/brawlhalla/guilds/rankings` alias
+- [x] Port logic from corehalla `getClansRankings` → [search-guild.ts](../apps/api/src/routes/v1/brawlhalla/search-guild.ts) + archive
+- [ ] Client clans rankings page → `search-guild` (phase 5)
 
 ### 4.2 Bookmarks HTTP API
 
