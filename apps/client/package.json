@@ -6,7 +6,7 @@
   "module": "src/router.tsx",
   "scripts": {
     "build": "vite build",
-    "dev": "pnpm run locales:build && vite dev --host --port 3001",
+    "dev": "pnpm run locales:build && vite dev --host",
     "locales:build": "pnpm run locales:extract && pnpm run locales:compile",
     "locales:compile": "lingui compile",
     "locales:extract": "lingui extract --clean",

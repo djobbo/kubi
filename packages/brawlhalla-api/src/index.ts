@@ -6,6 +6,18 @@ export {
   makeBrawlhallaApiClient,
   type BrawlhallaApiClient,
 } from "./api/client.js"
+export { layerBrawlhallaApiClientMock } from "./mock/layer.js"
+export {
+  mockClan,
+  mockLegend,
+  mockLegends,
+  mockPlayerRanked,
+  mockPlayerStats,
+  mockRankings1v1,
+  mockRankings2v2,
+  mockRankingsRotating,
+  mockSearchBySteamId,
+} from "./mock/fixtures.js"
 export { ApiKeyMiddleware } from "./api/middleware.js"
 
 export {

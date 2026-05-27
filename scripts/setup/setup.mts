@@ -10,7 +10,6 @@ import * as Ref from "effect/Ref"
 import * as Schedule from "effect/Schedule"
 import { ChildProcessSpawner } from "effect/unstable/process"
 
-import { devWorkerApiKey } from "@dair/common/src/constants/dev-worker-api-key"
 import { runChildProcess } from "./run-child-process.mts"
 import { syncVendoredRepos } from "./sync-vendored-repos.mts"
 
@@ -220,13 +219,15 @@ const syncLocalDevUrls = Effect.fnUntraced(function* () {
   const postgresPassword = getEnvVar(existing, "POSTGRES_PASSWORD", "dair")
   const postgresDb = getEnvVar(existing, "POSTGRES_DB", "dair")
   const apiUrl = `http://localhost:${apiPort}`
+  const clientUrl = `http://localhost:${appPort}`
   const merged = mergeEnvFile(existing, {
     API_URL: apiUrl,
     VITE_API_URL: apiUrl,
-    DEFAULT_CLIENT_URL: `http://localhost:${appPort}`,
-    ALLOWED_ORIGINS: `http://localhost:${appPort}`,
+    VITE_CLIENT_URL: clientUrl,
+    DEFAULT_CLIENT_URL: clientUrl,
+    ALLOWED_ORIGINS: clientUrl,
     DATABASE_URL: `postgresql://${encodeURIComponent(postgresUser)}:${encodeURIComponent(postgresPassword)}@localhost:${postgresPort}/${postgresDb}`,
-    WORKER_API_KEY: getEnvVar(existing, "WORKER_API_KEY", devWorkerApiKey),
+    WORKER_API_KEY: getEnvVar(existing, "WORKER_API_KEY", "dev-worker-key"),
   })
   yield* fs.writeFileString(
     ENV_PATH,

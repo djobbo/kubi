@@ -7,9 +7,9 @@
   "scripts": {
     "check:types": "tsgo --noEmit",
     "db:migrate": "drizzle-kit generate && drizzle-kit migrate",
-    "dev": "drizzle-kit generate && drizzle-kit push && tsx watch ./src/index.ts",
+    "dev": "export NODE_ENV=development && drizzle-kit generate && drizzle-kit push && tsx watch ./src/index.ts",
     "prepare": "effect-language-service patch",
-    "start": "pnpm run db:migrate && tsx ./src/index.ts",
+    "start": "export NODE_ENV=production && pnpm run db:migrate && tsx ./src/index.ts",
     "studio": "drizzle-kit studio"
   },
   "dependencies": {

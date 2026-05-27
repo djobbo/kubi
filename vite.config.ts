@@ -43,7 +43,7 @@ export default defineConfig({
         dependsOn: ["build"],
       },
       dev: {
-        command: "vp run -r --parallel dev",
+        command: "vp run -F @dair/api -F @dair/client --parallel dev",
         cache: false,
       },
       studio: {

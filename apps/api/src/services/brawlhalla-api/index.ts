@@ -4,6 +4,7 @@ import { shouldUseFetchFirst } from "@/services/fetch-strategy"
 import {
   BrawlhallaApiClientService,
   layerBrawlhallaApiClient,
+  layerBrawlhallaApiClientMock,
   PlayerRanked,
   PlayerStats,
   Rankings1v1,
@@ -13,7 +14,7 @@ import {
   Legends,
   type RankedRegion,
 } from "@dair/brawlhalla-api"
-import { Config, Context, Effect, Layer, Redacted, Schema, pipe } from "effect"
+import { Config, Context, Effect, Layer, Option, Redacted, Schema, pipe } from "effect"
 import { BrawlhallaPlayerNotFound } from "./errors"
 
 type CachedResult<T> = {
@@ -215,6 +216,30 @@ export class BrawlhallaApi extends Context.Service<BrawlhallaApi>()(
     Layer.provide(
       Layer.unwrap(
         Effect.gen(function* () {
+          const isDevelopment = process.env.NODE_ENV === "development"
+
+          if (isDevelopment) {
+            const useMock = yield* Config.boolean("BRAWLHALLA_API_MOCK").pipe(
+              Config.orElse(() => Config.succeed(true)),
+            )
+
+            if (useMock) {
+              yield* Effect.log("Using Brawlhalla API mock layer")
+              return layerBrawlhallaApiClientMock
+            }
+          } else {
+            yield* Config.boolean("BRAWLHALLA_API_MOCK").pipe(
+              Config.option,
+              Effect.flatMap((mockConfig) =>
+                Option.isSome(mockConfig) && mockConfig.value
+                  ? Effect.logWarning(
+                      "BRAWLHALLA_API_MOCK is ignored outside development",
+                    )
+                  : Effect.void,
+              ),
+            )
+          }
+
           const apiKey = yield* Config.redacted("BRAWLHALLA_API_KEY")
           return layerBrawlhallaApiClient({ apiKey })
         }),

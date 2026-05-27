@@ -3,7 +3,7 @@ import "../env.js"
 import { createServer } from "node:http"
 
 import { Api } from "@dair/api-contract"
-import { HttpApiBuilder } from "effect/unstable/httpapi"
+import { HttpApiBuilder, HttpApiScalar } from "effect/unstable/httpapi"
 import { FetchHttpClient, HttpRouter, HttpServer } from "effect/unstable/http"
 import * as NodeHttpServer from "@effect/platform-node/NodeHttpServer"
 import { Effect, Layer, Duration, flow } from "effect"
@@ -13,7 +13,6 @@ import { Authorization } from "./services/authorization"
 import { Cache } from "./services/cache"
 import { ApiServerConfig } from "./services/config/api-server-config"
 import { Database } from "./services/db"
-import * as Docs from "./services/docs"
 import { BrawlhallaApi } from "./services/brawlhalla-api"
 import { BrawlhallaGql } from "./services/brawlhalla-gql"
 import { BrawltoolsApi } from "./services/brawltools-api"
@@ -53,9 +52,11 @@ const ServerLive = Layer.unwrap(
   Effect.gen(function* () {
     const serverConfig = yield* ApiServerConfig
 
-    const ApiRouterLive = HttpApiBuilder.layer(Api).pipe(
+    const ApiRouterLive = HttpApiBuilder.layer(Api, {
+      openapiPath: "/openapi",
+    }).pipe(
       Layer.provide(ApiLive),
-      Layer.provide(Docs.layer(Api)),
+      Layer.provide(HttpApiScalar.layerCdn(Api)),
       Layer.provide(
         HttpRouter.cors({
           allowedOrigins: serverConfig.allowedOrigins,
