@@ -16,6 +16,7 @@ import { Collapsible } from "@base-ui-components/react/collapsible"
 import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
 import { ChevronDownIcon } from "lucide-react"
+import type { ReactNode } from "react"
 import { Cell, Pie, PieChart } from "recharts"
 
 type PlayerLegend = (typeof Player.Type)["legends"][number]
@@ -25,6 +26,7 @@ type LegendCardProps = {
   matchtime: number
   games: number
   rank: number
+  sortSummary?: ReactNode
 }
 
 const collapsiblePanelClassName = cn(
@@ -38,6 +40,7 @@ export const LegendCard = ({
   matchtime,
   games,
   rank,
+  sortSummary,
 }: LegendCardProps) => {
   const { stats, ranked, weapon_one, weapon_two, unarmed, weapon_throws, gadgets } =
     legend
@@ -89,7 +92,7 @@ export const LegendCard = ({
             <span className="font-semibold">{legend.name}</span>
           </span>
           <span className="flex items-center gap-2 text-sm text-text-muted">
-            {formatTime(stats.matchtime)}
+            {sortSummary ?? formatTime(stats.matchtime)}
             <ChevronDownIcon className="size-4 shrink-0 transition-transform duration-150 group-data-panel-open:rotate-180" />
           </span>
         </Collapsible.Trigger>

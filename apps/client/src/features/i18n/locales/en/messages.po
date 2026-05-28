@@ -13,86 +13,152 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#: src/features/player/components/player-overview-tab.tsx:436
+#: src/features/player/components/player-overview-tab.tsx:459
+msgid "1 KO every"
+msgstr "1 KO every"
+
 #: src/features/rankings/components/rankings-1v1-page.tsx:70
 #: src/routes/{-$locale}/_sidebar-layout/route.tsx:61
 msgid "1v1 rankings"
 msgstr "1v1 rankings"
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/route.tsx:134
+msgid "2v2"
+msgstr "2v2"
 
 #: src/features/rankings/components/rankings-2v2-page.tsx:38
 #: src/routes/{-$locale}/_sidebar-layout/route.tsx:68
 msgid "2v2 rankings"
 msgstr "2v2 rankings"
 
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/route.tsx:139
+#: src/features/player/components/player-header.tsx:34
 msgid "Account level"
 msgstr "Account level"
 
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/route.tsx:143
+#: src/features/player/components/player-header.tsx:38
 msgid "Account XP"
 msgstr "Account XP"
 
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:408
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:410
+#: src/features/player/components/player-legends-tab.tsx:46
+msgid "All weapons"
+msgstr "All weapons"
+
+#: src/features/player/components/player-overview-tab.tsx:382
 msgid "Average damage dealt per game"
 msgstr "Average damage dealt per game"
 
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:413
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:415
+#: src/features/player/components/player-overview-tab.tsx:386
 msgid "Average damage taken per game"
 msgstr "Average damage taken per game"
 
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:393
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:395
+#: src/features/player/components/player-overview-tab.tsx:370
 msgid "Average falls per game"
 msgstr "Average falls per game"
 
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:418
+#: src/features/player/components/player-overview-tab.tsx:390
 msgid "Average game length"
 msgstr "Average game length"
 
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:420
-msgid "Average game length in seconds"
-msgstr "Average game length in seconds"
-
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:398
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:400
+#: src/features/player/components/player-overview-tab.tsx:374
 msgid "Average games between each suicide"
 msgstr "Average games between each suicide"
 
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:403
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:405
+#: src/features/player/components/player-overview-tab.tsx:378
 msgid "Average games between each Team KO"
 msgstr "Average games between each Team KO"
 
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:388
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:390
+#: src/features/player/components/player-overview-tab.tsx:366
 msgid "Average KOs per game"
 msgstr "Average KOs per game"
 
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:327
+#: src/features/player/components/player-overview-tab.tsx:444
+#: src/features/player/components/player-overview-tab.tsx:467
+msgid "Avg. dmg dealt per game"
+msgstr "Avg. dmg dealt per game"
+
+#: src/features/player/components/player-teams-tab.tsx:52
+msgid "Avg. games per teammate"
+msgstr "Avg. games per teammate"
+
+#: src/features/player/components/player-overview-tab.tsx:413
+msgid "Avg. KOs per game"
+msgstr "Avg. KOs per game"
+
+#: src/features/player/components/player-legends-tab.tsx:222
+msgid "Avg. level"
+msgstr "Avg. level"
+
+#: src/features/player/components/player-teams-tab.tsx:56
+msgid "Avg. team rating"
+msgstr "Avg. team rating"
+
+#: src/features/player/components/player-overview-tab.tsx:473
+msgid "Bomb KOs"
+msgstr "Bomb KOs"
+
+#: src/features/player/components/player-overview-tab.tsx:211
+msgid "Clan"
+msgstr "Clan"
+
+#: src/features/player/components/player-overview-tab.tsx:218
+msgid "Clan XP"
+msgstr "Clan XP"
+
+#: src/features/player/components/weapon-card.tsx:116
+msgid "Combat"
+msgstr "Combat"
+
+#: src/features/player/components/player-overview-tab.tsx:222
+msgid "Contribution"
+msgstr "Contribution"
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/route.tsx:187
+msgid "Could not load this player."
+msgstr "Could not load this player."
+
+#: src/features/player/components/legend-card.tsx:179
+#: src/features/player/components/legend-card.tsx:270
+#: src/features/player/components/player-overview-tab.tsx:316
+msgid "Damage"
+msgstr "Damage"
+
+#: src/features/player/components/legend-card.tsx:184
+#: src/features/player/components/player-overview-tab.tsx:321
+#: src/features/player/components/player-overview-tab.tsx:417
+#: src/features/player/components/player-overview-tab.tsx:440
+#: src/features/player/components/player-overview-tab.tsx:463
+#: src/features/player/components/weapon-card.tsx:133
 msgid "Damage dealt"
 msgstr "Damage dealt"
 
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:357
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:361
+#: src/features/player/components/player-overview-tab.tsx:342
 msgid "Damage dealt per second"
 msgstr "Damage dealt per second"
 
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:332
+#: src/features/player/components/legend-card.tsx:185
+#: src/features/player/components/player-overview-tab.tsx:322
 msgid "Damage taken"
 msgstr "Damage taken"
 
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:364
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:368
+#: src/features/player/components/player-overview-tab.tsx:346
 msgid "Damage taken per second"
 msgstr "Damage taken per second"
 
+#: src/features/player/components/player-overview-tab.tsx:421
+#: src/features/player/components/weapon-card.tsx:151
+msgid "DPS"
+msgstr "DPS"
+
+#: src/features/player/components/player-legends-tab.tsx:113
 #: src/features/rankings/components/rankings-1v1-page.tsx:110
 #: src/features/rankings/components/rankings-2v2-page.tsx:73
 msgid "Elo"
 msgstr "Elo"
 
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:90
+#: src/features/player/components/legend-card.tsx:239
+#: src/features/player/components/player-overview-tab.tsx:89
+#: src/features/player/components/team-card.tsx:88
 msgid "Elo reset"
 msgstr "Elo reset"
 
@@ -101,18 +167,45 @@ msgstr "Elo reset"
 msgid "Failed to load rankings."
 msgstr "Failed to load rankings."
 
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:265
+#: src/features/player/components/legend-card.tsx:162
+#: src/features/player/components/player-overview-tab.tsx:293
 msgid "Falls"
 msgstr "Falls"
 
+#: src/features/player/components/legend-card.tsx:290
+msgid "Gadget KOs"
+msgstr "Gadget KOs"
+
+#: src/features/player/components/player-overview-tab.tsx:453
+msgid "Gadgets"
+msgstr "Gadgets"
+
+#: src/features/player/components/legend-card.tsx:118
+#: src/features/player/components/legend-card.tsx:233
+#: src/features/player/components/player-legends-tab.tsx:83
+#: src/features/player/components/player-overview-tab.tsx:85
+#: src/features/player/components/player-overview-tab.tsx:154
+#: src/features/player/components/player-overview-tab.tsx:237
+#: src/features/player/components/player-overview-tab.tsx:247
+#: src/features/player/components/player-weapons-tab.tsx:62
+#: src/features/player/components/team-card.tsx:84
+#: src/features/player/components/weapon-card.tsx:73
 #: src/features/rankings/components/rankings-1v1-page.tsx:101
 #: src/features/rankings/components/rankings-2v2-page.tsx:64
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:86
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:155
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:178
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:189
 msgid "Games"
 msgstr "Games"
+
+#: src/features/player/components/player-overview-tab.tsx:232
+msgid "General stats"
+msgstr "General stats"
+
+#: src/features/player/components/player-overview-tab.tsx:190
+msgid "Glory from rating"
+msgstr "Glory from rating"
+
+#: src/features/player/components/player-overview-tab.tsx:194
+msgid "Glory from wins"
+msgstr "Glory from wins"
 
 #: src/routes/{-$locale}/_sidebar-layout/route.tsx:54
 msgid "Home"
@@ -122,18 +215,51 @@ msgstr "Home"
 msgid "Improve your Brawlhalla Game, and find your place among the Elite with our in-depth Player and Clan stats tracking and live leaderboards."
 msgstr "Improve your Brawlhalla Game, and find your place among the Elite with our in-depth Player and Clan stats tracking and live leaderboards."
 
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/route.tsx:147
+#: src/features/player/components/player-header.tsx:42
 msgid "In-game time"
 msgstr "In-game time"
 
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:247
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:253
+#: src/features/player/components/legend-card.tsx:156
+#: src/features/player/components/legend-card.tsx:161
+#: src/features/player/components/legend-card.tsx:266
+#: src/features/player/components/player-overview-tab.tsx:287
+#: src/features/player/components/player-overview-tab.tsx:292
+#: src/features/player/components/player-overview-tab.tsx:411
+#: src/features/player/components/player-overview-tab.tsx:434
+#: src/features/player/components/player-overview-tab.tsx:457
+#: src/features/player/components/weapon-card.tsx:122
+#: src/features/player/components/weapon-card.tsx:167
 msgid "KOs"
 msgstr "KOs"
 
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:28
+#: src/features/player/components/legend-card.tsx:51
+#: src/features/player/components/player-overview-tab.tsx:26
+#: src/features/player/components/weapon-card.tsx:44
 msgid "L"
 msgstr "L"
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/route.tsx:144
+msgid "Legends"
+msgstr "Legends"
+
+#: src/features/player/components/player-legends-tab.tsx:205
+msgid "Legends played"
+msgstr "Legends played"
+
+#: src/features/player/components/weapon-card.tsx:158
+msgid "Legends using this weapon"
+msgstr "Legends using this weapon"
+
+#: src/features/player/components/legend-card.tsx:103
+#: src/features/player/components/player-legends-tab.tsx:73
+#: src/features/player/components/player-weapons-tab.tsx:52
+msgid "Level"
+msgstr "Level"
+
+#: src/features/player/components/player-legends-tab.tsx:69
+#: src/features/player/components/player-weapons-tab.tsx:48
+msgid "Level / XP"
+msgstr "Level / XP"
 
 #: src/features/rankings/components/rankings-2v2-page.tsx:41
 msgid "Live 2v2 ranked teams by region"
@@ -148,13 +274,57 @@ msgstr "Live ranked leaderboard by region"
 msgid "Loading rankings..."
 msgstr "Loading rankings..."
 
+#: src/features/player/components/player-legends-tab.tsx:93
+#: src/features/player/components/player-weapons-tab.tsx:72
+msgid "Losses"
+msgstr "Losses"
+
+#: src/features/player/components/player-header.tsx:46
+msgid "Main legends"
+msgstr "Main legends"
+
+#: src/features/player/components/player-header.tsx:61
+msgid "Main weapons"
+msgstr "Main weapons"
+
+#: src/features/player/components/player-legends-tab.tsx:78
+#: src/features/player/components/player-weapons-tab.tsx:57
+msgid "Matchtime"
+msgstr "Matchtime"
+
+#: src/features/player/components/player-overview-tab.tsx:481
+msgid "Mine KOs"
+msgstr "Mine KOs"
+
+#: src/features/player/components/player-overview-tab.tsx:201
+msgid "N/A (not enough games)"
+msgstr "N/A (not enough games)"
+
+#: src/features/player/components/player-legends-tab.tsx:65
+#: src/features/player/components/player-weapons-tab.tsx:44
 #: src/features/rankings/components/rankings-1v1-page.tsx:98
 msgid "Name"
 msgstr "Name"
 
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:171
+#: src/features/player/components/player-overview-tab.tsx:101
+msgid "No ranked 1v1 data available"
+msgstr "No ranked 1v1 data available"
+
+#: src/features/player/components/player-overview-tab.tsx:170
 msgid "No ranked 2v2 data available"
 msgstr "No ranked 2v2 data available"
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/route.tsx:124
+msgid "Overview"
+msgstr "Overview"
+
+#: src/features/player/components/player-legends-tab.tsx:118
+msgid "Peak elo"
+msgstr "Peak elo"
+
+#: src/features/player/components/player-legends-tab.tsx:209
+msgid "Played in ranked"
+msgstr "Played in ranked"
 
 #: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/route.tsx:107
 msgid "players"
@@ -164,6 +334,18 @@ msgstr "players"
 #: src/features/rankings/components/rankings-2v2-page.tsx:52
 msgid "Rank"
 msgstr "Rank"
+
+#: src/features/player/components/player-overview-tab.tsx:38
+msgid "Ranked 1v1"
+msgstr "Ranked 1v1"
+
+#: src/features/player/components/player-overview-tab.tsx:107
+msgid "Ranked 2v2"
+msgstr "Ranked 2v2"
+
+#: src/features/player/components/legend-card.tsx:206
+msgid "Ranked season"
+msgstr "Ranked season"
 
 #: src/routes/{-$locale}/_sidebar-layout/route.tsx:41
 msgid "Rankings"
@@ -182,7 +364,16 @@ msgstr "Search must start with an exact match. Only players who completed placem
 msgid "Search player..."
 msgstr "Search player..."
 
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:276
+#: src/features/player/components/player-overview-tab.tsx:180
+msgid "Season winrate"
+msgstr "Season winrate"
+
+#: src/features/player/components/player-sort-controls.tsx:39
+msgid "Sort by"
+msgstr "Sort by"
+
+#: src/features/player/components/legend-card.tsx:163
+#: src/features/player/components/player-overview-tab.tsx:294
 msgid "Suicides"
 msgstr "Suicides"
 
@@ -190,34 +381,95 @@ msgstr "Suicides"
 msgid "Team"
 msgstr "Team"
 
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:287
+#: src/features/player/components/legend-card.tsx:164
+#: src/features/player/components/player-overview-tab.tsx:295
 msgid "Team KOs"
 msgstr "Team KOs"
 
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:159
+#: src/features/player/components/player-overview-tab.tsx:158
+#: src/features/player/components/player-teams-tab.tsx:50
 msgid "Teammates"
 msgstr "Teammates"
+
+#: src/features/player/components/legend-card.tsx:286
+msgid "Throw KOs"
+msgstr "Throw KOs"
 
 #: src/features/rankings/components/rankings-1v1-page.tsx:92
 #: src/features/rankings/components/rankings-2v2-page.tsx:55
 msgid "Tier"
 msgstr "Tier"
 
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:383
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:385
+#: src/features/player/components/player-overview-tab.tsx:362
 msgid "Time between each fall"
 msgstr "Time between each fall"
 
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:378
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:380
+#: src/features/player/components/player-overview-tab.tsx:358
 msgid "Time between each KO"
 msgstr "Time between each KO"
+
+#: src/features/player/components/legend-card.tsx:274
+msgid "Time held"
+msgstr "Time held"
+
+#: src/features/player/components/weapon-card.tsx:143
+msgid "Time held (%)"
+msgstr "Time held (%)"
+
+#: src/features/player/components/legend-card.tsx:106
+msgid "Time played (%)"
+msgstr "Time played (%)"
+
+#: src/features/player/components/player-overview-tab.tsx:404
+msgid "Time unarmed"
+msgstr "Time unarmed"
+
+#: src/features/player/components/player-overview-tab.tsx:408
+msgid "Time unarmed (%)"
+msgstr "Time unarmed (%)"
+
+#: src/features/player/components/player-sort-controls.tsx:76
+msgid "Toggle sort direction"
+msgstr "Toggle sort direction"
+
+#: src/features/player/components/player-teams-tab.tsx:40
+msgid "Total games"
+msgstr "Total games"
+
+#: src/features/player/components/player-overview-tab.tsx:186
+#: src/features/player/components/player-overview-tab.tsx:200
+msgid "Total glory"
+msgstr "Total glory"
+
+#: src/features/player/components/player-legends-tab.tsx:216
+msgid "Total legends level"
+msgstr "Total legends level"
+
+#: src/features/player/components/player-teams-tab.tsx:43
+msgid "Total losses"
+msgstr "Total losses"
+
+#: src/features/player/components/player-teams-tab.tsx:41
+msgid "Total wins"
+msgstr "Total wins"
 
 #: src/routes/{-$locale}/route.tsx:41
 msgid "Track your Brawlhalla stats, view rankings, and more! • Corehalla"
 msgstr "Track your Brawlhalla stats, view rankings, and more! • Corehalla"
 
-#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/-overview-tab.tsx:24
+#: src/features/player/components/legend-card.tsx:66
+#: src/features/player/components/player-overview-tab.tsx:399
+msgid "Unarmed"
+msgstr "Unarmed"
+
+#: src/features/player/components/legend-card.tsx:110
+#: src/features/player/components/weapon-card.tsx:147
+msgid "Usage rate (games)"
+msgstr "Usage rate (games)"
+
+#: src/features/player/components/legend-card.tsx:50
+#: src/features/player/components/player-overview-tab.tsx:25
+#: src/features/player/components/weapon-card.tsx:43
 msgid "W"
 msgstr "W"
 
@@ -226,7 +478,44 @@ msgstr "W"
 msgid "W/L"
 msgstr "W/L"
 
+#: src/features/player/components/legend-card.tsx:248
+msgid "Weapon distribution"
+msgstr "Weapon distribution"
+
+#: src/features/player/components/weapon-card.tsx:140
+msgid "Weapon level"
+msgstr "Weapon level"
+
+#: src/features/player/components/player-overview-tab.tsx:430
+msgid "Weapon throws"
+msgstr "Weapon throws"
+
+#: src/features/player/components/weapon-card.tsx:141
+msgid "Weapon XP"
+msgstr "Weapon XP"
+
+#: src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/route.tsx:153
+msgid "Weapons"
+msgstr "Weapons"
+
+#: src/features/player/components/legend-card.tsx:235
+#: src/features/player/components/player-legends-tab.tsx:101
+#: src/features/player/components/player-teams-tab.tsx:47
+#: src/features/player/components/player-weapons-tab.tsx:80
 #: src/features/rankings/components/rankings-1v1-page.tsx:107
 #: src/features/rankings/components/rankings-2v2-page.tsx:70
 msgid "Winrate"
 msgstr "Winrate"
+
+#: src/features/player/components/player-legends-tab.tsx:88
+#: src/features/player/components/player-weapons-tab.tsx:67
+msgid "Wins"
+msgstr "Wins"
+
+#: src/features/player/components/weapon-card.tsx:84
+msgid "WR"
+msgstr "WR"
+
+#: src/features/player/components/legend-card.tsx:104
+msgid "XP"
+msgstr "XP"

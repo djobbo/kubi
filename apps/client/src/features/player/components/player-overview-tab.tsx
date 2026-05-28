@@ -1,33 +1,33 @@
-import { RankedTierBanner } from "@/shared/components/image"
-import { Card } from "@/shared/components/card"
-import { Progress } from "@/shared/components/progress"
-import { StatGrid } from "@/shared/components/stat-grid"
-import { calculateWinrate } from "@dair/brawlhalla-api"
-import type { Player } from "@dair/api-contract/src/routes/v1/brawlhalla/get-player-by-id"
-import type { TierName } from "@dair/api-contract/src/shared/tier"
-import { formatTime } from "@dair/common/src/helpers/date"
-import { cn } from "@dair/common/src/helpers/ui"
-import { t } from "@lingui/core/macro"
-import { Trans } from "@lingui/react/macro"
-import { Cell, LabelList, Pie, PieChart } from "recharts"
+import { RankedTierBanner } from "@/shared/components/image";
+import { Card } from "@/shared/components/card";
+import { Progress } from "@/shared/components/progress";
+import { StatGrid } from "@/shared/components/stat-grid";
+import { calculateWinrate } from "@dair/brawlhalla-api";
+import type { Player } from "@dair/api-contract/src/routes/v1/brawlhalla/get-player-by-id";
+import type { TierName } from "@dair/api-contract/src/shared/tier";
+import { formatTime } from "@dair/common/src/helpers/date";
+import { cn } from "@dair/common/src/helpers/ui";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
+import { Cell, LabelList, Pie, PieChart } from "recharts";
 
 type PlayerOverviewTabProps = {
-  playerData: typeof Player.Type
-}
+  playerData: typeof Player.Type;
+};
 
 export const PlayerOverviewTab = ({ playerData }: PlayerOverviewTabProps) => {
-  const { stats, ranked, clan, unarmed, weapon_throws, gadgets } = playerData
-  const { "1v1": ranked1v1, "2v2": ranked2v2 } = ranked ?? {}
-  const bestTeam = ranked2v2?.teams[0]
-  const hasEnoughGames = (ranked?.stats.games ?? 0) >= 10
+  const { stats, ranked, clan, unarmed, weapon_throws, gadgets } = playerData;
+  const { "1v1": ranked1v1, "2v2": ranked2v2 } = ranked ?? {};
+  const bestTeam = ranked2v2?.teams[0];
+  const hasEnoughGames = (ranked?.stats.games ?? 0) >= 10;
 
   const gamesPieData = [
     { name: t`W`, value: stats.wins },
     { name: t`L`, value: stats.games - stats.wins },
-  ]
+  ];
 
-  const koMax = Math.max(stats.kos, stats.falls, stats.suicides, stats.team_kos)
-  const damageMax = Math.max(stats.damage_dealt, stats.damage_taken)
+  const koMax = Math.max(stats.kos, stats.falls, stats.suicides, stats.team_kos);
+  const damageMax = Math.max(stats.damage_dealt, stats.damage_taken);
 
   return (
     <>
@@ -52,11 +52,7 @@ export const PlayerOverviewTab = ({ playerData }: PlayerOverviewTabProps) => {
                     / {ranked1v1.peak_rating} peak
                   </span>
                 </span>
-                <Progress
-                  value={ranked1v1.wins / ranked1v1.games}
-                  max={1}
-                  intent="success"
-                />
+                <Progress value={ranked1v1.wins / ranked1v1.games} max={1} intent="success" />
                 <div className="flex justify-between">
                   <span>
                     {ranked1v1.wins}W{" "}
@@ -67,18 +63,14 @@ export const PlayerOverviewTab = ({ playerData }: PlayerOverviewTabProps) => {
                   <span>
                     {ranked1v1.games - ranked1v1.wins}L{" "}
                     <span className="text-sm font-normal text-text-muted">
-                      (
-                      {(
-                        ((ranked1v1.games - ranked1v1.wins) / ranked1v1.games) *
-                        100
-                      ).toFixed(2)}
+                      ({(((ranked1v1.games - ranked1v1.wins) / ranked1v1.games) * 100).toFixed(2)}
                       %)
                     </span>
                   </span>
                 </div>
               </div>
             </div>
-            <Card variant="inset" className="@container mt-4">
+            <Card variant="inset" className="@container">
               <StatGrid
                 stats={[
                   {
@@ -94,10 +86,7 @@ export const PlayerOverviewTab = ({ playerData }: PlayerOverviewTabProps) => {
             </Card>
           </Card>
         ) : (
-          <Card
-            variant="dashed"
-            className="grid place-items-center text-text-muted"
-          >
+          <Card variant="dashed" className="grid place-items-center text-text-muted">
             <Trans>No ranked 1v1 data available</Trans>
           </Card>
         )}
@@ -121,11 +110,7 @@ export const PlayerOverviewTab = ({ playerData }: PlayerOverviewTabProps) => {
                     / {bestTeam.peak_rating} peak
                   </span>
                 </span>
-                <Progress
-                  value={bestTeam.wins / bestTeam.games}
-                  max={1}
-                  intent="success"
-                />
+                <Progress value={bestTeam.wins / bestTeam.games} max={1} intent="success" />
                 <div className="flex justify-between">
                   <span>
                     {bestTeam.wins}W{" "}
@@ -136,18 +121,14 @@ export const PlayerOverviewTab = ({ playerData }: PlayerOverviewTabProps) => {
                   <span>
                     {bestTeam.games - bestTeam.wins}L{" "}
                     <span className="text-sm font-normal text-text-muted">
-                      (
-                      {(
-                        ((bestTeam.games - bestTeam.wins) / bestTeam.games) *
-                        100
-                      ).toFixed(2)}
+                      ({(((bestTeam.games - bestTeam.wins) / bestTeam.games) * 100).toFixed(2)}
                       %)
                     </span>
                   </span>
                 </div>
               </div>
             </div>
-            <Card variant="inset" className="@container mt-4">
+            <Card variant="inset" className="@container">
               <StatGrid
                 stats={[
                   {
@@ -163,10 +144,7 @@ export const PlayerOverviewTab = ({ playerData }: PlayerOverviewTabProps) => {
             </Card>
           </Card>
         ) : (
-          <Card
-            variant="dashed"
-            className="grid place-items-center text-text-muted"
-          >
+          <Card variant="dashed" className="grid place-items-center text-text-muted">
             <Trans>No ranked 2v2 data available</Trans>
           </Card>
         )}
@@ -175,33 +153,33 @@ export const PlayerOverviewTab = ({ playerData }: PlayerOverviewTabProps) => {
       {ranked && ranked1v1 ? (
         <StatGrid
           className="mt-4"
-            stats={[
-              {
-                title: t`Season winrate`,
-                value: `${calculateWinrate(ranked.stats.wins, ranked.stats.games).toFixed(2)}%`,
-              },
-              ...(hasEnoughGames
-                ? [
-                    {
-                      title: t`Total glory`,
-                      value: ranked.stats.glory.total.toLocaleString(),
-                    },
-                    {
-                      title: t`Glory from rating`,
-                      value: ranked.stats.glory.from_peak_rating.toLocaleString(),
-                    },
-                    {
-                      title: t`Glory from wins`,
-                      value: ranked.stats.glory.from_wins.toLocaleString(),
-                    },
-                  ]
-                : [
-                    {
-                      title: t`Total glory`,
-                      value: t`N/A (not enough games)`,
-                    },
-                  ]),
-            ]}
+          stats={[
+            {
+              title: t`Season winrate`,
+              value: `${calculateWinrate(ranked.stats.wins, ranked.stats.games).toFixed(2)}%`,
+            },
+            ...(hasEnoughGames
+              ? [
+                  {
+                    title: t`Total glory`,
+                    value: ranked.stats.glory.total.toLocaleString(),
+                  },
+                  {
+                    title: t`Glory from rating`,
+                    value: ranked.stats.glory.from_peak_rating.toLocaleString(),
+                  },
+                  {
+                    title: t`Glory from wins`,
+                    value: ranked.stats.glory.from_wins.toLocaleString(),
+                  },
+                ]
+              : [
+                  {
+                    title: t`Total glory`,
+                    value: t`N/A (not enough games)`,
+                  },
+                ]),
+          ]}
         />
       ) : null}
 
@@ -236,14 +214,9 @@ export const PlayerOverviewTab = ({ playerData }: PlayerOverviewTabProps) => {
             <h3 className="text-sm font-semibold uppercase text-text-muted">
               <Trans>Games</Trans>
             </h3>
-            <div
-              className="grid place-items-center"
-              style={{ gridTemplateAreas: '"content"' }}
-            >
+            <div className="grid place-items-center" style={{ gridTemplateAreas: '"content"' }}>
               <div className="[grid-area:content] flex flex-col items-center">
-                <span className="text-3xl font-bold">
-                  {stats.games.toLocaleString()}
-                </span>
+                <span className="text-3xl font-bold">{stats.games.toLocaleString()}</span>
                 <span className="text-sm text-text-muted">{t`Games`}</span>
               </div>
               <PieChart
@@ -265,8 +238,8 @@ export const PlayerOverviewTab = ({ playerData }: PlayerOverviewTabProps) => {
                     position="outside"
                     offset={12}
                     valueAccessor={(_, i) => {
-                      const data = gamesPieData[i]!
-                      return `${data.value}${data.name}`
+                      const data = gamesPieData[i]!;
+                      return `${data.value}${data.name}`;
                     }}
                     className="fill-text-muted"
                   />
@@ -297,13 +270,9 @@ export const PlayerOverviewTab = ({ playerData }: PlayerOverviewTabProps) => {
               ).map((item) => (
                 <div key={item.title} className="w-full">
                   <p>
-                    <span
-                      className={cn("text-sm", { "text-lg": item.large })}
-                    >
+                    <span className={cn("text-sm", { "text-lg": item.large })}>
                       {item.value.toLocaleString()}{" "}
-                      <span className="text-sm text-text-muted">
-                        {item.title}
-                      </span>
+                      <span className="text-sm text-text-muted">{item.title}</span>
                     </span>
                   </p>
                   <Progress value={item.value} max={koMax} size="sm" />
@@ -326,9 +295,7 @@ export const PlayerOverviewTab = ({ playerData }: PlayerOverviewTabProps) => {
                   <p>
                     <span className="text-lg">
                       {item.value.toLocaleString()}{" "}
-                      <span className="text-sm text-text-muted">
-                        {item.title}
-                      </span>
+                      <span className="text-sm text-text-muted">{item.title}</span>
                     </span>
                   </p>
                   <Progress value={item.value} max={damageMax} size="sm" />
@@ -487,5 +454,5 @@ export const PlayerOverviewTab = ({ playerData }: PlayerOverviewTabProps) => {
         />
       </Card>
     </>
-  )
-}
+  );
+};
