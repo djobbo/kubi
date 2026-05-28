@@ -17,7 +17,7 @@ export const Route = createRootRoute({
           name: "viewport",
           content: "width=device-width, initial-scale=1",
         },
-        { name: "theme-color", content: "#1A1C22" },
+        { name: "theme-color", content: "#181A1F" },
       ],
       links: [
         { rel: "stylesheet", href: styles },
@@ -50,7 +50,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className="dark">
+      <body className="light">
         <div id="root">
           {children}
           <Grain />

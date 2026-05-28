@@ -6,7 +6,7 @@
   color-scheme: dark;
 
   /* Dark theme (hex → oklch) */
-  --bg-root: oklch(0.227 0.012 270.8); /* #1A1C22 — page */
+  --bg-root: oklch(0.218 0.01 268.2); /* #181A1F — page */
   --bg-dark: oklch(0.236 0.014 272.7); /* #1C1E25 — chrome / inset */
   --bg: oklch(0.223 0.012 270.8); /* #191B21 — cards */
   --bg-light: oklch(0.276 0.016 264.3); /* #242830 — hover / elevated */

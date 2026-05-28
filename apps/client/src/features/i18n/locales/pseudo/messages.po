@@ -13,13 +13,14 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/features/player/components/player-overview-tab.tsx:436
-#: src/features/player/components/player-overview-tab.tsx:459
+#: src/features/player/components/player-overview-tab.tsx:403
+#: src/features/player/components/player-overview-tab.tsx:426
 msgid "1 KO every"
 msgstr ""
 
+#: src/features/layout/components/app-sidebar.tsx:63
+#: src/features/layout/components/app-sidebar.tsx:67
 #: src/features/rankings/components/rankings-1v1-page.tsx:70
-#: src/routes/{-$locale}/_sidebar-layout/route.tsx:61
 msgid "1v1 rankings"
 msgstr ""
 
@@ -27,8 +28,9 @@ msgstr ""
 msgid "2v2"
 msgstr ""
 
+#: src/features/layout/components/app-sidebar.tsx:75
+#: src/features/layout/components/app-sidebar.tsx:79
 #: src/features/rankings/components/rankings-2v2-page.tsx:38
-#: src/routes/{-$locale}/_sidebar-layout/route.tsx:68
 msgid "2v2 rankings"
 msgstr ""
 
@@ -44,36 +46,36 @@ msgstr ""
 msgid "All weapons"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:382
+#: src/features/player/components/player-overview-tab.tsx:349
 msgid "Average damage dealt per game"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:386
+#: src/features/player/components/player-overview-tab.tsx:353
 msgid "Average damage taken per game"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:370
+#: src/features/player/components/player-overview-tab.tsx:337
 msgid "Average falls per game"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:390
+#: src/features/player/components/player-overview-tab.tsx:357
 msgid "Average game length"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:374
+#: src/features/player/components/player-overview-tab.tsx:341
 msgid "Average games between each suicide"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:378
+#: src/features/player/components/player-overview-tab.tsx:345
 msgid "Average games between each Team KO"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:366
+#: src/features/player/components/player-overview-tab.tsx:333
 msgid "Average KOs per game"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:444
-#: src/features/player/components/player-overview-tab.tsx:467
+#: src/features/player/components/player-overview-tab.tsx:411
+#: src/features/player/components/player-overview-tab.tsx:434
 msgid "Avg. dmg dealt per game"
 msgstr ""
 
@@ -81,7 +83,7 @@ msgstr ""
 msgid "Avg. games per teammate"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:413
+#: src/features/player/components/player-overview-tab.tsx:380
 msgid "Avg. KOs per game"
 msgstr ""
 
@@ -93,15 +95,15 @@ msgstr ""
 msgid "Avg. team rating"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:473
+#: src/features/player/components/player-overview-tab.tsx:440
 msgid "Bomb KOs"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:211
+#: src/features/player/components/player-overview-tab.tsx:189
 msgid "Clan"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:218
+#: src/features/player/components/player-overview-tab.tsx:196
 msgid "Clan XP"
 msgstr ""
 
@@ -109,7 +111,7 @@ msgstr ""
 msgid "Combat"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:222
+#: src/features/player/components/player-overview-tab.tsx:200
 msgid "Contribution"
 msgstr ""
 
@@ -119,33 +121,33 @@ msgstr ""
 
 #: src/features/player/components/legend-card.tsx:179
 #: src/features/player/components/legend-card.tsx:270
-#: src/features/player/components/player-overview-tab.tsx:316
+#: src/features/player/components/player-overview-tab.tsx:285
 msgid "Damage"
 msgstr ""
 
 #: src/features/player/components/legend-card.tsx:184
-#: src/features/player/components/player-overview-tab.tsx:321
-#: src/features/player/components/player-overview-tab.tsx:417
-#: src/features/player/components/player-overview-tab.tsx:440
-#: src/features/player/components/player-overview-tab.tsx:463
+#: src/features/player/components/player-overview-tab.tsx:290
+#: src/features/player/components/player-overview-tab.tsx:384
+#: src/features/player/components/player-overview-tab.tsx:407
+#: src/features/player/components/player-overview-tab.tsx:430
 #: src/features/player/components/weapon-card.tsx:133
 msgid "Damage dealt"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:342
+#: src/features/player/components/player-overview-tab.tsx:309
 msgid "Damage dealt per second"
 msgstr ""
 
 #: src/features/player/components/legend-card.tsx:185
-#: src/features/player/components/player-overview-tab.tsx:322
+#: src/features/player/components/player-overview-tab.tsx:291
 msgid "Damage taken"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:346
+#: src/features/player/components/player-overview-tab.tsx:313
 msgid "Damage taken per second"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:421
+#: src/features/player/components/player-overview-tab.tsx:388
 #: src/features/player/components/weapon-card.tsx:151
 msgid "DPS"
 msgstr ""
@@ -157,7 +159,7 @@ msgid "Elo"
 msgstr ""
 
 #: src/features/player/components/legend-card.tsx:239
-#: src/features/player/components/player-overview-tab.tsx:89
+#: src/features/player/components/player-overview-tab.tsx:81
 #: src/features/player/components/team-card.tsx:88
 msgid "Elo reset"
 msgstr ""
@@ -168,7 +170,7 @@ msgid "Failed to load rankings."
 msgstr ""
 
 #: src/features/player/components/legend-card.tsx:162
-#: src/features/player/components/player-overview-tab.tsx:293
+#: src/features/player/components/player-overview-tab.tsx:266
 msgid "Falls"
 msgstr ""
 
@@ -176,17 +178,17 @@ msgstr ""
 msgid "Gadget KOs"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:453
+#: src/features/player/components/player-overview-tab.tsx:420
 msgid "Gadgets"
 msgstr ""
 
 #: src/features/player/components/legend-card.tsx:118
 #: src/features/player/components/legend-card.tsx:233
 #: src/features/player/components/player-legends-tab.tsx:83
-#: src/features/player/components/player-overview-tab.tsx:85
-#: src/features/player/components/player-overview-tab.tsx:154
-#: src/features/player/components/player-overview-tab.tsx:237
-#: src/features/player/components/player-overview-tab.tsx:247
+#: src/features/player/components/player-overview-tab.tsx:77
+#: src/features/player/components/player-overview-tab.tsx:135
+#: src/features/player/components/player-overview-tab.tsx:215
+#: src/features/player/components/player-overview-tab.tsx:220
 #: src/features/player/components/player-weapons-tab.tsx:62
 #: src/features/player/components/team-card.tsx:84
 #: src/features/player/components/weapon-card.tsx:73
@@ -195,19 +197,20 @@ msgstr ""
 msgid "Games"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:232
+#: src/features/player/components/player-overview-tab.tsx:210
 msgid "General stats"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:190
+#: src/features/player/components/player-overview-tab.tsx:168
 msgid "Glory from rating"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:194
+#: src/features/player/components/player-overview-tab.tsx:172
 msgid "Glory from wins"
 msgstr ""
 
-#: src/routes/{-$locale}/_sidebar-layout/route.tsx:54
+#: src/features/layout/components/app-sidebar.tsx:50
+#: src/features/layout/components/app-sidebar.tsx:55
 msgid "Home"
 msgstr ""
 
@@ -222,11 +225,11 @@ msgstr ""
 #: src/features/player/components/legend-card.tsx:156
 #: src/features/player/components/legend-card.tsx:161
 #: src/features/player/components/legend-card.tsx:266
-#: src/features/player/components/player-overview-tab.tsx:287
-#: src/features/player/components/player-overview-tab.tsx:292
-#: src/features/player/components/player-overview-tab.tsx:411
-#: src/features/player/components/player-overview-tab.tsx:434
-#: src/features/player/components/player-overview-tab.tsx:457
+#: src/features/player/components/player-overview-tab.tsx:260
+#: src/features/player/components/player-overview-tab.tsx:265
+#: src/features/player/components/player-overview-tab.tsx:378
+#: src/features/player/components/player-overview-tab.tsx:401
+#: src/features/player/components/player-overview-tab.tsx:424
 #: src/features/player/components/weapon-card.tsx:122
 #: src/features/player/components/weapon-card.tsx:167
 msgid "KOs"
@@ -292,11 +295,11 @@ msgstr ""
 msgid "Matchtime"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:481
+#: src/features/player/components/player-overview-tab.tsx:448
 msgid "Mine KOs"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:201
+#: src/features/player/components/player-overview-tab.tsx:179
 msgid "N/A (not enough games)"
 msgstr ""
 
@@ -306,11 +309,11 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:101
+#: src/features/player/components/player-overview-tab.tsx:90
 msgid "No ranked 1v1 data available"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:170
+#: src/features/player/components/player-overview-tab.tsx:148
 msgid "No ranked 2v2 data available"
 msgstr ""
 
@@ -339,16 +342,12 @@ msgstr ""
 msgid "Ranked 1v1"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:107
+#: src/features/player/components/player-overview-tab.tsx:96
 msgid "Ranked 2v2"
 msgstr ""
 
 #: src/features/player/components/legend-card.tsx:206
 msgid "Ranked season"
-msgstr ""
-
-#: src/routes/{-$locale}/_sidebar-layout/route.tsx:41
-msgid "Rankings"
 msgstr ""
 
 #: src/features/rankings/components/rankings-1v1-page.tsx:95
@@ -364,7 +363,7 @@ msgstr ""
 msgid "Search player..."
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:180
+#: src/features/player/components/player-overview-tab.tsx:158
 msgid "Season winrate"
 msgstr ""
 
@@ -373,7 +372,7 @@ msgid "Sort by"
 msgstr ""
 
 #: src/features/player/components/legend-card.tsx:163
-#: src/features/player/components/player-overview-tab.tsx:294
+#: src/features/player/components/player-overview-tab.tsx:267
 msgid "Suicides"
 msgstr ""
 
@@ -382,11 +381,11 @@ msgid "Team"
 msgstr ""
 
 #: src/features/player/components/legend-card.tsx:164
-#: src/features/player/components/player-overview-tab.tsx:295
+#: src/features/player/components/player-overview-tab.tsx:268
 msgid "Team KOs"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:158
+#: src/features/player/components/player-overview-tab.tsx:139
 #: src/features/player/components/player-teams-tab.tsx:50
 msgid "Teammates"
 msgstr ""
@@ -400,11 +399,11 @@ msgstr ""
 msgid "Tier"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:362
+#: src/features/player/components/player-overview-tab.tsx:329
 msgid "Time between each fall"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:358
+#: src/features/player/components/player-overview-tab.tsx:325
 msgid "Time between each KO"
 msgstr ""
 
@@ -420,11 +419,11 @@ msgstr ""
 msgid "Time played (%)"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:404
+#: src/features/player/components/player-overview-tab.tsx:371
 msgid "Time unarmed"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:408
+#: src/features/player/components/player-overview-tab.tsx:375
 msgid "Time unarmed (%)"
 msgstr ""
 
@@ -436,8 +435,8 @@ msgstr ""
 msgid "Total games"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:186
-#: src/features/player/components/player-overview-tab.tsx:200
+#: src/features/player/components/player-overview-tab.tsx:164
+#: src/features/player/components/player-overview-tab.tsx:178
 msgid "Total glory"
 msgstr ""
 
@@ -458,7 +457,7 @@ msgid "Track your Brawlhalla stats, view rankings, and more! • Corehalla"
 msgstr ""
 
 #: src/features/player/components/legend-card.tsx:66
-#: src/features/player/components/player-overview-tab.tsx:399
+#: src/features/player/components/player-overview-tab.tsx:366
 msgid "Unarmed"
 msgstr ""
 
@@ -486,7 +485,7 @@ msgstr ""
 msgid "Weapon level"
 msgstr ""
 
-#: src/features/player/components/player-overview-tab.tsx:430
+#: src/features/player/components/player-overview-tab.tsx:397
 msgid "Weapon throws"
 msgstr ""
 
