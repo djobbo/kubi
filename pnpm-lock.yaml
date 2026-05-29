@@ -60,9 +60,6 @@ catalogs:
     '@opentelemetry/sdk-trace-node':
       specifier: ^2.7.1
       version: 2.7.1
-    '@opentelemetry/sdk-trace-web':
-      specifier: ^2.7.1
-      version: 2.7.1
     '@tailwindcss/vite':
       specifier: ^4.1.18
       version: 4.3.0
@@ -290,9 +287,9 @@ importers:
       '@dair/db':
         specifier: workspace:*
         version: link:../../packages/db
-      '@effect/opentelemetry':
-        specifier: 'catalog:'
-        version: 4.0.0-beta.71(@opentelemetry/api-logs@0.211.0)(@opentelemetry/api@1.9.1)(@opentelemetry/resources@2.7.1(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-logs@0.211.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-metrics@2.7.1(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.7.1(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-node@2.7.1(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-web@2.7.1(@opentelemetry/api@1.9.1))(@opentelemetry/semantic-conventions@1.41.1)(effect@4.0.0-beta.71)
+      '@dair/observability':
+        specifier: workspace:*
+        version: link:../../packages/observability
       '@effect/platform-node':
         specifier: 'catalog:'
         version: 4.0.0-beta.71(effect@4.0.0-beta.71)(ioredis@5.11.0)
@@ -302,24 +299,6 @@ importers:
       '@libsql/client':
         specifier: 'catalog:'
         version: 0.17.3
-      '@opentelemetry/exporter-metrics-otlp-http':
-        specifier: 'catalog:'
-        version: 0.211.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/exporter-trace-otlp-http':
-        specifier: 'catalog:'
-        version: 0.211.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-metrics':
-        specifier: 'catalog:'
-        version: 2.7.1(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-trace-base':
-        specifier: 'catalog:'
-        version: 2.7.1(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-trace-node':
-        specifier: 'catalog:'
-        version: 2.7.1(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-trace-web':
-        specifier: 'catalog:'
-        version: 2.7.1(@opentelemetry/api@1.9.1)
       arctic:
         specifier: 'catalog:'
         version: 3.7.0
@@ -502,6 +481,9 @@ importers:
       '@dair/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@dair/observability':
+        specifier: workspace:*
+        version: link:../../packages/observability
       '@effect/sql-pg':
         specifier: 'catalog:'
         version: 4.0.0-beta.71(effect@4.0.0-beta.71)
@@ -545,6 +527,9 @@ importers:
       '@dair/common':
         specifier: workspace:*
         version: link:../../packages/common
+      '@dair/observability':
+        specifier: workspace:*
+        version: link:../../packages/observability
       dotenv:
         specifier: 'catalog:'
         version: 16.6.1
@@ -697,6 +682,40 @@ importers:
       drizzle-kit:
         specifier: 'catalog:'
         version: 1.0.0-rc.4-ca0f029
+
+  packages/observability:
+    dependencies:
+      '@effect/opentelemetry':
+        specifier: 'catalog:'
+        version: 4.0.0-beta.71(@opentelemetry/api-logs@0.211.0)(@opentelemetry/api@1.9.1)(@opentelemetry/resources@2.7.1(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-logs@0.211.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-metrics@2.7.1(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.7.1(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-node@2.7.1(@opentelemetry/api@1.9.1))(@opentelemetry/semantic-conventions@1.41.1)(effect@4.0.0-beta.71)
+      '@opentelemetry/exporter-metrics-otlp-http':
+        specifier: 'catalog:'
+        version: 0.211.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/exporter-trace-otlp-http':
+        specifier: 'catalog:'
+        version: 0.211.0(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-metrics':
+        specifier: 'catalog:'
+        version: 2.7.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-trace-base':
+        specifier: 'catalog:'
+        version: 2.7.1(@opentelemetry/api@1.9.1)
+      '@opentelemetry/sdk-trace-node':
+        specifier: 'catalog:'
+        version: 2.7.1(@opentelemetry/api@1.9.1)
+      effect:
+        specifier: 'catalog:'
+        version: 4.0.0-beta.71
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 22.19.19
+      '@typescript/native-preview':
+        specifier: 'catalog:'
+        version: 7.0.0-dev.20260527.1
 
 packages:
 
@@ -1694,12 +1713,6 @@ packages:
 
   '@opentelemetry/sdk-trace-node@2.7.1':
     resolution: {integrity: sha512-pCpQxU68lV+I9s9svqMyVu5iHdDDUnqUpSxqwyCU8A9ejEsSnMPCbearwsUO4yk08ZJzAIUCFuReMdVQvHrdvg==}
-    engines: {node: ^18.19.0 || >=20.6.0}
-    peerDependencies:
-      '@opentelemetry/api': '>=1.0.0 <1.10.0'
-
-  '@opentelemetry/sdk-trace-web@2.7.1':
-    resolution: {integrity: sha512-K806OouCSOjMd8Nr7+ZCq3QT22tdAzzS/7h8vprfiKjkgFQ99/dvwU8d12WJANA6D5Qtme65hyBAqAu9CkQuxQ==}
     engines: {node: ^18.19.0 || >=20.6.0}
     peerDependencies:
       '@opentelemetry/api': '>=1.0.0 <1.10.0'
@@ -5861,7 +5874,7 @@ snapshots:
 
   '@effect/language-service@0.85.1': {}
 
-  '@effect/opentelemetry@4.0.0-beta.71(@opentelemetry/api-logs@0.211.0)(@opentelemetry/api@1.9.1)(@opentelemetry/resources@2.7.1(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-logs@0.211.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-metrics@2.7.1(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.7.1(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-node@2.7.1(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-web@2.7.1(@opentelemetry/api@1.9.1))(@opentelemetry/semantic-conventions@1.41.1)(effect@4.0.0-beta.71)':
+  '@effect/opentelemetry@4.0.0-beta.71(@opentelemetry/api-logs@0.211.0)(@opentelemetry/api@1.9.1)(@opentelemetry/resources@2.7.1(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-logs@0.211.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-metrics@2.7.1(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.7.1(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-node@2.7.1(@opentelemetry/api@1.9.1))(@opentelemetry/semantic-conventions@1.41.1)(effect@4.0.0-beta.71)':
     dependencies:
       '@opentelemetry/semantic-conventions': 1.41.1
       effect: 4.0.0-beta.71
@@ -5873,7 +5886,6 @@ snapshots:
       '@opentelemetry/sdk-metrics': 2.7.1(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-trace-base': 2.7.1(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-trace-node': 2.7.1(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-trace-web': 2.7.1(@opentelemetry/api@1.9.1)
 
   '@effect/platform-bun@0.84.0(b0f2904316bceeabb6f328aab442654f)':
     dependencies:
@@ -6527,12 +6539,6 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/context-async-hooks': 2.7.1(@opentelemetry/api@1.9.1)
-      '@opentelemetry/core': 2.7.1(@opentelemetry/api@1.9.1)
-      '@opentelemetry/sdk-trace-base': 2.7.1(@opentelemetry/api@1.9.1)
-
-  '@opentelemetry/sdk-trace-web@2.7.1(@opentelemetry/api@1.9.1)':
-    dependencies:
-      '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 2.7.1(@opentelemetry/api@1.9.1)
       '@opentelemetry/sdk-trace-base': 2.7.1(@opentelemetry/api@1.9.1)
 

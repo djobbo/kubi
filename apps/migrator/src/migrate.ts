@@ -1,5 +1,6 @@
-import "dotenv/config"
+import "../env.js"
 
+import { observabilityLayer } from "@dair/observability"
 import { Effect, Layer } from "effect"
 
 import { AliasesMigration } from "./services/aliases"
@@ -36,6 +37,7 @@ const MainLayer = Layer.mergeAll(
 Effect.runPromise(
   program.pipe(
     Effect.provide(MainLayer),
+    Effect.provide(observabilityLayer("migrator")),
     Effect.tapError(Effect.logError),
   ) as Effect.Effect<void, unknown, never>,
 ).catch((error) => {

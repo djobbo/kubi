@@ -8,6 +8,8 @@ export class Database extends Context.Service<Database>()(
   "@dair/services/Database",
   {
     make: PgDrizzle.make({ relations }).pipe(
+      // Layer init only — not tied to an HTTP request; avoid a stray root trace.
+      Effect.withTracerEnabled(false),
       Effect.provide(PgDrizzle.DefaultServices),
     ),
   },

@@ -20,7 +20,11 @@ import { Fetcher } from "./services/fetcher"
 import { responseCache } from "./services/middleware/response-cache"
 import { workerAuthMiddleware } from "./services/middleware/worker-auth"
 import { brawlhallaApiProxy } from "./services/proxy"
-import { ObservabilityLive } from "./services/observability"
+import {
+  disableBuiltInHttpTracer,
+  httpServerTracer,
+  observabilityLayer,
+} from "@dair/observability"
 import { BrawlhallaRateLimiter } from "./services/rate-limiter"
 import { ServerDiscovery } from "./services/server-discovery"
 import { Bookmarks } from "./services/bookmarks"
@@ -46,6 +50,7 @@ const composedMiddleware = flow(
     ttlSeconds: Duration.toSeconds(Duration.minutes(5)),
     exclude: ["/auth", "/health", "/session", "/docs", "/openapi", "/proxy"],
   }),
+  httpServerTracer,
 )
 
 const ServerLive = Layer.unwrap(
@@ -80,7 +85,8 @@ const ServerLive = Layer.unwrap(
 ).pipe(
   Layer.provide(ApiServerConfig.layer),
   Layer.provide(FetchHttpClient.layer),
-  Layer.provide(ObservabilityLive),
+  Layer.provide(observabilityLayer("api")),
+  Layer.provide(disableBuiltInHttpTracer),
 )
 
 const server = Layer.launch(ServerLive).pipe(Effect.catchCause(Effect.logError))

@@ -12,6 +12,7 @@
   "dependencies": {
     "@dair/common": "workspace:*",
     "@dair/db": "workspace:*",
+    "@dair/observability": "workspace:*",
     "@effect/sql-pg": "catalog:",
     "@supabase/supabase-js": "^2.49.1",
     "dotenv": "catalog:",

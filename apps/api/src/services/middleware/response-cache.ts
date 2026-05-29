@@ -197,16 +197,15 @@ export const responseCache = (options: ResponseCacheOptions = {}) => {
           yield* Effect.log(`Caching response for ${cacheKey}`)
 
           // Store in cache (fire and forget - don't block the response)
-          yield* cache
-            .set(cacheKey, cacheData, Option.some(Duration.seconds(ttlSeconds)))
-            .pipe(
-              Effect.catch(() => Effect.void),
-              Effect.forkDetach, // Fork to not block the response
-            )
+          yield* Effect.forkChild(
+            cache
+              .set(cacheKey, cacheData, Option.some(Duration.seconds(ttlSeconds)))
+              .pipe(Effect.catch(() => Effect.void)),
+          )
         }
       }
 
       // Add cache miss header
       return HttpServerResponse.setHeader(response, "X-Cache", "MISS")
-    }).pipe(Effect.withSpan("ResponseCacheOptional"))
+    })
 }

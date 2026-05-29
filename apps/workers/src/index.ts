@@ -12,6 +12,7 @@ import {
   Stream,
 } from "effect"
 import type { Ranking1v1 } from "@dair/api-contract/src/routes/v1/brawlhalla/get-rankings"
+import { observabilityLayer } from "@dair/observability"
 import { WorkerApiClient } from "@/services/api-client"
 
 const waitForApiHealth = Effect.gen(function* () {
@@ -198,6 +199,9 @@ const program = Effect.gen(function* () {
   yield* Fiber.await(worker)
   yield* Fiber.await(playerWorker)
   yield* Effect.log("Workers completed")
-}).pipe(Effect.provide(SharedDependencies))
+}).pipe(
+  Effect.provide(SharedDependencies),
+  Effect.provide(observabilityLayer("workers")),
+)
 
 await Effect.runPromise(program as Effect.Effect<void, unknown, never>)
