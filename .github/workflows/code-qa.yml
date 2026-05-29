@@ -16,11 +16,15 @@ jobs:
           - name: Dead Code
             action: vp run check:deadcode
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+
+      - uses: voidzero-dev/setup-vp@v1
         with:
-          node-version: "22"
-      - run: corepack enable
-      - run: vp install --frozen-lockfile
+          node-version: "24"
+          cache: true
+          sfw: true
+          run-install: |
+            - args: ['--frozen-lockfile']
+
       - name: ${{ matrix.name }}
         run: ${{ matrix.action }}
