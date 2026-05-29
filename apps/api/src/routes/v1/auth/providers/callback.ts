@@ -1,6 +1,7 @@
 import { Authorization } from "@/services/authorization"
-import type { Provider } from "@dair/db"
-import { HttpServerResponse } from "@effect/platform"
+import { Bookmarks } from "@/services/bookmarks"
+import { DISCORD_PROVIDER_ID, type Provider } from "@dair/db"
+import { HttpServerResponse } from "effect/unstable/http"
 import { Effect } from "effect"
 
 export const providerCallback = (
@@ -15,12 +16,21 @@ export const providerCallback = (
       code,
     )
     yield* authorizationService.createSession(user.id)
+
+    if (provider === DISCORD_PROVIDER_ID) {
+      const bookmarks = yield* Bookmarks
+      yield* bookmarks.migrateLegacyBookmarks({
+        userId: user.id,
+        provider: DISCORD_PROVIDER_ID,
+      })
+    }
+
     const redirectUrl = yield* authorizationService.createRedirectUrl(state)
 
     return HttpServerResponse.redirect(redirectUrl)
   }).pipe(
     Effect.withSpan("provider-callback"),
-    Effect.catchAll((e) =>
+    Effect.catch((e) =>
       Effect.gen(function* () {
         console.log(e)
         const authorizationService = yield* Authorization

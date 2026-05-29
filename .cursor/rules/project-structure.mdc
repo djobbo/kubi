@@ -6,14 +6,14 @@ alwaysApply: true
 
 # Project Structure
 
-This is a Turborepo monorepo with Bun as the package manager.
+This is a Turborepo monorepo with Vite+ (`vp`) and pnpm.
 
 ## Workspace Layout
 
 ```
 dair/
 ├── apps/
-│   ├── api/           # Backend API (Effect + Bun)
+│   ├── api/           # Backend API (Effect + Node)
 │   ├── client/        # Frontend (React + Vite + TanStack Router)
 │   └── monitoring/    # Grafana stack config
 ├── packages/
@@ -22,8 +22,7 @@ dair/
 │   ├── brawlhalla-replays/ # Replay file parser
 │   ├── brawlhalla-servers/ # Server location data
 │   ├── common/        # Shared utilities
-│   ├── db/            # Drizzle schema
-│   └── schema/        # Effect Schema definitions
+│   └── db/            # Drizzle schema + relations
 └── scripts/           # Build & migration helpers
 ```
 
@@ -36,11 +35,12 @@ Use workspace protocol for internal packages:
   "dependencies": {
     "@dair/api-contract": "workspace:*",
     "@dair/brawlhalla-api": "workspace:*",
-    "@dair/common": "workspace:*",
-    "@dair/db": "workspace:*"
+    "effect": "catalog:"
   }
 }
 ```
+
+External versions are defined once in [pnpm-workspace.yaml](../../pnpm-workspace.yaml) under `catalog:`.
 
 ## Import Aliases
 
@@ -158,22 +158,23 @@ src/
 
 ```bash
 # Root commands
-bun dev           # Start all services
-bun build         # Build all packages
-bun lint          # Lint + format all
-bun check:types   # Type check all
-bun check:deadcode # Find unused exports
+vp run dev
+vp run build
+vp run lint
+vp run check:types
+vp run health
+vp run audit
 
-# API commands (from apps/api)
-bun dev           # Dev server with watch
-bun db:migrate    # Run migrations
-bun studio        # Drizzle Studio
+# API commands
+vp run -F @dair/api dev
+vp run -F @dair/api db:migrate
+vp run -F @dair/api studio
 
-# Client commands (from apps/client)
-bun dev           # Vite dev server
-bun build         # Production build
-bun locales:extract
-bun locales:compile
+# Client commands
+vp run -F @dair/client dev
+vp run -F @dair/client build
+vp run -F @dair/client locales:extract
+vp run -F @dair/client locales:compile
 ```
 
 ## Adding New Features
@@ -197,11 +198,11 @@ bun locales:compile
 1. Define in `packages/db/src/schema/<domain>/<table>.ts`
 2. Export from `packages/db/src/schema/<domain>/index.ts`
 3. Export from `packages/db/src/index.ts`
-4. Run `bun db:migrate` from apps/api
+4. Run `vp run -F @dair/api db:migrate`
 
 ### New Package
 
 1. Create folder in `packages/<name>/`
 2. Add `package.json` with `@dair/<name>` name
 3. Add to consuming apps' dependencies
-4. Run `bun install` from root
+4. Run `vp install` from root

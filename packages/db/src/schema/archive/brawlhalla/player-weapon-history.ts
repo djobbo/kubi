@@ -1,4 +1,4 @@
-import { relations, sql } from "drizzle-orm"
+import { sql } from "drizzle-orm"
 import { bigint, index, pgTable, uuid, text } from "drizzle-orm/pg-core"
 import { playerHistoryTable } from "./player-history"
 import { withRecordedAt } from "../../../helpers/with-timestamp"
@@ -70,13 +70,3 @@ export const playerWeaponHistoryTable = pgTable(
 export type PlayerWeaponHistory = typeof playerWeaponHistoryTable.$inferSelect
 export type NewPlayerWeaponHistory =
   typeof playerWeaponHistoryTable.$inferInsert
-
-export const playerWeaponHistoryRelations = relations(
-  playerWeaponHistoryTable,
-  ({ one }) => ({
-    playerHistory: one(playerHistoryTable, {
-      fields: [playerWeaponHistoryTable.playerHistoryId],
-      references: [playerHistoryTable.id],
-    }),
-  }),
-)

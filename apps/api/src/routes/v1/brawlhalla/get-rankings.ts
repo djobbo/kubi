@@ -6,8 +6,8 @@ import type {
   NewRanked2v2History,
   NewRankedRotatingHistory,
 } from "@dair/db"
-import { getTeamPlayers } from "@dair/brawlhalla-api/src/helpers/team-players"
-import type { AnyRegion } from "@dair/api-contract/src/shared/region"
+import { getTeamPlayers, legendsMap } from "@dair/brawlhalla-api"
+import type { AnyRegion, Region } from "@dair/api-contract/src/shared/region"
 import type {
   GetRankings1v1Response,
   GetRankings2v2Response,
@@ -19,12 +19,22 @@ import type {
   RankingRotating,
   GetRankingsRotatingResponse,
 } from "@dair/api-contract/src/routes/v1/brawlhalla/get-rankings"
-import { legendsMap } from "@dair/brawlhalla-api/src/constants/legends"
 import {
   InternalServerError,
   TooManyRequests,
 } from "@dair/api-contract/src/shared/errors"
 import { getEntitySlug } from "@/helpers/entity-slug"
+
+const resolveRankingRegion = (
+  rankingRegion: string | null | undefined,
+  queryRegion: typeof AnyRegion.Type,
+): typeof Region.Type => {
+  if (rankingRegion && rankingRegion !== "all") {
+    return rankingRegion as typeof Region.Type
+  }
+
+  return queryRegion === "all" ? null : (queryRegion as typeof Region.Type)
+}
 
 export const getRankings1v1 = (
   region: typeof AnyRegion.Type,
@@ -52,8 +62,22 @@ export const getRankings1v1 = (
     yield* archive
       .addRanked1v1History(entries)
       .pipe(
-        Effect.catchAll((error) =>
+        Effect.catch((error) =>
           Effect.logWarning("Failed to archive 1v1 rankings", error),
+        ),
+      )
+
+    yield* archive
+      .addAliases(
+        rankings.data.map((r) => ({
+          playerId: r.brawlhalla_id,
+          alias: r.name,
+          public: true,
+        })),
+      )
+      .pipe(
+        Effect.catch((error) =>
+          Effect.logWarning("Failed to archive 1v1 aliases", error),
         ),
       )
 
@@ -66,10 +90,10 @@ export const getRankings1v1 = (
       return {
         rank: ranking.rank,
         rating: ranking.rating,
-        tier: ranking.tier,
+        tier: ranking.tier ?? "Tin 0",
         games: ranking.games,
         wins: ranking.wins,
-        region: ranking.region,
+        region: resolveRankingRegion(ranking.region, region),
         peak_rating: ranking.peak_rating,
         name: ranking.name,
         id: ranking.brawlhalla_id,
@@ -129,8 +153,32 @@ export const getRankings2v2 = (region: typeof AnyRegion.Type, page: number) =>
     yield* archive
       .addRanked2v2History(entries)
       .pipe(
-        Effect.catchAll((error) =>
+        Effect.catch((error) =>
           Effect.logWarning("Failed to archive 2v2 rankings", error),
+        ),
+      )
+
+    yield* archive
+      .addAliases(
+        rankings.data.flatMap((r) => {
+          const teamPlayers = getTeamPlayers(r)
+          return [
+            {
+              playerId: teamPlayers[0].id,
+              alias: teamPlayers[0].name,
+              public: true,
+            },
+            {
+              playerId: teamPlayers[1].id,
+              alias: teamPlayers[1].name,
+              public: true,
+            },
+          ]
+        }),
+      )
+      .pipe(
+        Effect.catch((error) =>
+          Effect.logWarning("Failed to archive 2v2 aliases", error),
         ),
       )
 
@@ -142,10 +190,10 @@ export const getRankings2v2 = (region: typeof AnyRegion.Type, page: number) =>
       return {
         rank: ranking.rank,
         rating: ranking.rating,
-        tier: ranking.tier,
+        tier: ranking.tier ?? "Tin 0",
         games: ranking.games,
         wins: ranking.wins,
-        region: ranking.region,
+        region: resolveRankingRegion(ranking.region, region),
         peak_rating: ranking.peak_rating,
         team: [
           {
@@ -197,8 +245,22 @@ export const getRankingsRotating = (
     yield* archive
       .addRankedRotatingHistory(entries)
       .pipe(
-        Effect.catchAll((error) =>
+        Effect.catch((error) =>
           Effect.logWarning("Failed to archive rotating rankings", error),
+        ),
+      )
+
+    yield* archive
+      .addAliases(
+        rankings.data.map((r) => ({
+          playerId: r.brawlhalla_id,
+          alias: r.name,
+          public: true,
+        })),
+      )
+      .pipe(
+        Effect.catch((error) =>
+          Effect.logWarning("Failed to archive rotating aliases", error),
         ),
       )
 
@@ -208,10 +270,10 @@ export const getRankingsRotating = (
       return {
         rank: ranking.rank,
         rating: ranking.rating,
-        tier: ranking.tier,
+        tier: ranking.tier ?? "Tin 0",
         games: ranking.games,
         wins: ranking.wins,
-        region: ranking.region,
+        region: resolveRankingRegion(ranking.region, region),
         peak_rating: ranking.peak_rating,
         name: ranking.name,
         id: ranking.brawlhalla_id,

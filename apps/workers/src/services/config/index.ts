@@ -1,21 +1,22 @@
-import { Config, Effect } from "effect"
+import { devWorkerApiKey } from "@dair/common/src/constants/dev-worker-api-key"
+import { Config, Context, Effect, Layer, Redacted } from "effect"
 
 /**
  * Worker configuration service.
  * Manages environment variables for the workers app.
  */
-export class WorkerConfig extends Effect.Service<WorkerConfig>()(
+export class WorkerConfig extends Context.Service<WorkerConfig>()(
   "@dair/workers/WorkerConfig",
   {
-    effect: Effect.gen(function* () {
+    make: Effect.gen(function* () {
       return {
-        /** Base URL of the API server */
         apiUrl: yield* Config.nonEmptyString("API_URL"),
-        /** API key for worker authentication (enables fetch-first strategy) */
-        workerApiKey: yield* Config.redacted("WORKER_API_KEY"),
+        workerApiKey: yield* Config.redacted("WORKER_API_KEY").pipe(
+          Config.orElse(() => Config.succeed(Redacted.make(devWorkerApiKey))),
+        ),
       }
     }),
   },
 ) {
-  static readonly layer = this.Default
+  static readonly layer = Layer.effect(this, this.make)
 }

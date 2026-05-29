@@ -1,5 +1,5 @@
 export const arrayToMap = <T, Key extends keyof T>(
-  arr: (T & Record<Key, string | number | symbol>)[],
+  arr: readonly (T & Record<Key, string | number | symbol>)[],
   key: Key,
   // @ts-expect-error ts doesn't know that T[Key] is a string | number | symbol
 ): Record<T[Key], T> =>

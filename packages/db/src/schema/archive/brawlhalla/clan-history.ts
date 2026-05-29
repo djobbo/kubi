@@ -1,4 +1,4 @@
-import { relations, sql } from "drizzle-orm"
+import { sql } from "drizzle-orm"
 import { bigint, index, jsonb, pgTable, text, uuid } from "drizzle-orm/pg-core"
 import { withRecordedAt } from "../../../helpers/with-timestamp"
 
@@ -43,7 +43,3 @@ export const clanHistoryTable = pgTable(
 
 export type ClanHistory = typeof clanHistoryTable.$inferSelect
 export type NewClanHistory = typeof clanHistoryTable.$inferInsert
-
-export const clanHistoryRelations = relations(clanHistoryTable, () => ({
-  // Relations can be added here if needed in the future
-}))

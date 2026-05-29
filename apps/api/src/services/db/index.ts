@@ -1,25 +1,25 @@
-import { Effect, Layer } from "effect"
-import * as PgDrizzle from "@effect/sql-drizzle/Pg"
+import { Context, Effect, Layer } from "effect"
+import * as PgDrizzle from "drizzle-orm/effect-postgres"
 import { PgClient } from "@effect/sql-pg"
 import { DatabaseConfig } from "./config"
-import * as schema from "@dair/db"
+import { relations } from "@dair/db"
 
-export class Database extends Effect.Service<Database>()(
+export class Database extends Context.Service<Database>()(
   "@dair/services/Database",
   {
-    effect: PgDrizzle.make({
-      schema,
-    }),
+    make: PgDrizzle.make({ relations }).pipe(
+      // Layer init only — not tied to an HTTP request; avoid a stray root trace.
+      Effect.withTracerEnabled(false),
+      Effect.provide(PgDrizzle.DefaultServices),
+    ),
   },
 ) {
-  static readonly layer = this.Default.pipe(
+  static readonly layer = Layer.effect(this, this.make).pipe(
     Layer.provide(
-      Layer.unwrapEffect(
+      Layer.unwrap(
         Effect.gen(function* () {
           const config = yield* DatabaseConfig
-          return PgClient.layer({
-            url: config.url,
-          })
+          return PgClient.layer({ url: config.url })
         }),
       ),
     ),

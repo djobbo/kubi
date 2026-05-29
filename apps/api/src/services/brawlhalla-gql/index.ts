@@ -1,98 +1,71 @@
-import { gql } from "@/helpers/gql"
 import { Fetcher } from "@/services/fetcher"
-import { Effect } from "effect"
-import { parseWeeklyRotation } from "./helpers/parse-weekly-rotation"
-import { Articles } from "./schema"
+import {
+  ArticlesResponse,
+  BrawlhallaGqlApiClientService,
+  getWeeklyRotation as fetchWeeklyRotation,
+  layerBrawlhallaGqlApiClient,
+} from "@dair/brawlhalla-gql-api"
+import { Context, Effect, Layer, Schema } from "effect"
 
-export const BRAWLHALLA_GRAPHQL_API_URL = "https://cms.brawlhalla.com/graphql"
 
-const getArticleQuery = (withContent?: boolean) => gql`
-  query ($category: String, $after: String, $first: Int = 6) {
-    posts(first: $first, after: $after, where: { categoryName: $category }) {
-      pageInfo {
-        endCursor
+export class BrawlhallaGql extends Context.Service<BrawlhallaGql>()(
+  "@dair/services/BrawlhallaGql",
+  {
+    make: Effect.gen(function* () {
+      const client = yield* BrawlhallaGqlApiClientService
+      const fetcher = yield* Fetcher
+
+      const getArticles = Effect.fn("getArticles")(function* (
+        query: {
+          first?: number
+          category?: string
+          after?: string
+          withContent?: boolean
+          preview?: boolean
+        } = {},
+      ) {
+        const cacheName = `brawlhalla-gql-articles-${query.preview ? "preview" : query.withContent ? "content" : "list"}-${query.category ?? ""}-${query.first ?? 6}-${query.after ?? ""}`
+
+        const payload = {
+          ...(query.first !== undefined ? { first: query.first } : {}),
+          ...(query.category !== undefined ? { category: query.category } : {}),
+          ...(query.after !== undefined ? { after: query.after } : {}),
+        }
+
+        const fetch = query.withContent
+          ? client.articles.withContent({ payload })
+          : query.preview
+            ? client.articles.preview({ payload })
+            : client.articles.list({ payload })
+
+        return yield* fetcher.runCacheFirst({
+          cacheName,
+          schema: ArticlesResponse,
+          fetch,
+        })
+      })
+
+      return {
+        getArticles,
+        getWeeklyRotation: Effect.fn("getWeeklyRotation")(function* () {
+          return yield* fetcher.runCacheFirst({
+            cacheName: "brawlhalla-gql-weekly-rotation",
+            schema: Schema.Array(
+              Schema.Struct({
+                id: Schema.Number,
+                name_key: Schema.String,
+                name: Schema.String,
+              }),
+            ),
+            fetch: fetchWeeklyRotation(),
+          })
+        }),
       }
-      nodes {
-        title
-        slug
-        dateGmt
-        excerpt
-        ${withContent ? "content" : ""}
-        author {
-          node {
-            databaseId
-            name
-          }
-        }
-        categories {
-          nodes {
-            name
-            slug
-          }
-        }
-        featuredImage {
-          node {
-            sourceUrl
-            mediaDetails {
-              height
-              width
-              sizes {
-                name
-                mimeType
-                sourceUrl
-                width
-                height
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`
-
-const getArticles = Effect.fn(function* (
-  query: {
-    first?: number
-    category?: string
-    after?: string
-    withContent?: boolean
-  } = {},
+    }),
+  },
 ) {
-  const fetcher = yield* Fetcher
-  const articles = yield* fetcher.fetchJson(Articles, {
-    method: "POST",
-    url: BRAWLHALLA_GRAPHQL_API_URL,
-    body: {
-      query: getArticleQuery(query.withContent),
-      variables: {
-        first: query.first,
-        category: query.category,
-        after: query.after,
-      },
-    },
-  })
-
-  return articles
-})
-
-export const BrawlhallaGql = {
-  getArticles,
-  getWeeklyRotation: Effect.fn(function* () {
-    const articles = yield* getArticles({
-      category: "weekly-rotation",
-      withContent: true,
-      first: 1,
-    })
-
-    const weeklyRotation = yield* parseWeeklyRotation(
-      articles.data.data.posts.nodes[0]?.content,
-    )
-
-    return {
-      data: weeklyRotation,
-      updatedAt: articles.updatedAt,
-      cached: articles.cached,
-    }
-  }),
+  static readonly layer = Layer.effect(this, this.make).pipe(
+    Layer.provide(layerBrawlhallaGqlApiClient()),
+    Layer.provide(Fetcher.layer),
+  )
 }

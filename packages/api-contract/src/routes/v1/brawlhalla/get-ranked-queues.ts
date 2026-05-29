@@ -6,7 +6,7 @@ export const GameDelta = Schema.Struct({
   rating: Schema.Number,
 })
 
-export const QueueItem = Schema.Struct({
+const queueItemFields = {
   rating: Schema.Number,
   peakRating: Schema.Number,
   games: Schema.Number,
@@ -15,17 +15,17 @@ export const QueueItem = Schema.Struct({
   region: Schema.NullOr(Schema.String),
   gamesDelta: GameDelta,
   lastSeenAt: Schema.Date,
-})
+} as const
 
 export const QueueItem1v1 = Schema.Struct({
-  ...QueueItem.fields,
+  ...queueItemFields,
   name: Schema.String,
   playerId: Schema.Number,
   slug: Schema.String,
 })
 
 export const QueueItem2v2 = Schema.Struct({
-  ...QueueItem.fields,
+  ...queueItemFields,
   players: Schema.Array(
     Schema.Struct({
       playerId: Schema.Number,
@@ -36,7 +36,7 @@ export const QueueItem2v2 = Schema.Struct({
 })
 
 export const QueueItemRotating = Schema.Struct({
-  ...QueueItem.fields,
+  ...queueItemFields,
   name: Schema.String,
   playerId: Schema.Number,
   slug: Schema.String,

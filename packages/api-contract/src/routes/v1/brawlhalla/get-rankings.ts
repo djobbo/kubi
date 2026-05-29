@@ -2,7 +2,7 @@ import { Schema } from "effect"
 import { Region } from "../../../shared/region"
 import { TierNameSchema } from "../../../shared/tier"
 
-const Ranking = Schema.Struct({
+const rankingFields = {
   rank: Schema.Number,
   rating: Schema.Number,
   tier: TierNameSchema,
@@ -10,10 +10,10 @@ const Ranking = Schema.Struct({
   wins: Schema.Number,
   region: Region,
   peak_rating: Schema.Number,
-})
+} as const
 
 export const Ranking1v1 = Schema.Struct({
-  ...Ranking.fields,
+  ...rankingFields,
   name: Schema.String,
   id: Schema.Number,
   slug: Schema.String,
@@ -36,14 +36,14 @@ const TeamPlayer = Schema.Struct({
 })
 
 export const Ranking2v2 = Schema.Struct({
-  ...Ranking.fields,
-  team: Schema.Tuple(TeamPlayer, TeamPlayer),
+  ...rankingFields,
+  team: Schema.Tuple([TeamPlayer, TeamPlayer]),
 })
 
 export const Rankings2v2 = Schema.Array(Ranking2v2)
 
 export const RankingRotating = Schema.Struct({
-  ...Ranking.fields,
+  ...rankingFields,
   name: Schema.String,
   id: Schema.Number,
   slug: Schema.String,

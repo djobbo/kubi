@@ -1,0 +1,209 @@
+{
+  "finding_counts": {
+    "apps/api/src/routes/v1/brawlhalla/get-player-by-id.ts": {
+      "complexity_critical": {
+        "count": 1
+      },
+      "crap_critical": {
+        "count": 1
+      },
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "apps/api/src/routes/v1/brawlhalla/get-rankings.ts": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "apps/api/src/services/archive/index.ts": {
+      "complexity_critical": {
+        "count": 1
+      },
+      "crap_critical": {
+        "count": 1
+      },
+      "crap_high": {
+        "count": 3
+      },
+      "crap_moderate": {
+        "count": 4
+      }
+    },
+    "apps/api/src/services/authorization/validate-oauth-callback.ts": {
+      "crap_high": {
+        "count": 1
+      }
+    },
+    "apps/api/src/services/brawlhalla-gql/index.ts": {
+      "crap_critical": {
+        "count": 1
+      }
+    },
+    "apps/api/src/services/fetcher/index.ts": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "apps/api/src/services/middleware/response-cache.ts": {
+      "crap_high": {
+        "count": 1
+      },
+      "crap_moderate": {
+        "count": 2
+      }
+    },
+    "apps/api/src/services/proxy/brawlhalla-api.ts": {
+      "crap_high": {
+        "count": 1
+      },
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "apps/client/plugins/safe-assets-plugin.ts": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "apps/client/src/features/player/components/legend-card.tsx": {
+      "crap_high": {
+        "count": 1
+      }
+    },
+    "apps/client/src/features/player/components/player-legends-tab.tsx": {
+      "crap_moderate": {
+        "count": 2
+      }
+    },
+    "apps/client/src/features/player/components/player-overview-tab.tsx": {
+      "crap_critical": {
+        "count": 1
+      }
+    },
+    "apps/client/src/features/rankings/components/rankings-layout.tsx": {
+      "crap_high": {
+        "count": 1
+      }
+    },
+    "apps/client/src/features/rankings/components/rankings-table-item.tsx": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "apps/client/src/features/search/components/search-command.tsx": {
+      "crap_high": {
+        "count": 1
+      }
+    },
+    "apps/client/src/routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/route.tsx": {
+      "crap_critical": {
+        "count": 1
+      }
+    },
+    "apps/client/src/shared/components/sidebar.tsx": {
+      "crap_critical": {
+        "count": 1
+      }
+    },
+    "apps/migrator/src/services/aliases/index.ts": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "apps/migrator/src/services/bookmarks/index.ts": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "apps/migrator/src/services/bookmarks/schema.ts": {
+      "crap_high": {
+        "count": 1
+      }
+    },
+    "apps/workers/src/index.ts": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "packages/brawlhalla-api/src/helpers/parser.ts": {
+      "complexity_critical": {
+        "count": 1
+      },
+      "crap_critical": {
+        "count": 4
+      },
+      "crap_high": {
+        "count": 1
+      }
+    },
+    "packages/brawlhalla-api/src/helpers/season-reset.ts": {
+      "crap_high": {
+        "count": 1
+      },
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "packages/brawlhalla-api/src/schema/region.ts": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "packages/brawlhalla-gql-api/src/api/middleware.ts": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "packages/brawlhalla-replays/src/content/game-data.ts": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "packages/brawlhalla-replays/src/content/player-data.ts": {
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "packages/brawlhalla-replays/src/content/replay.ts": {
+      "complexity_critical": {
+        "count": 1
+      },
+      "crap_critical": {
+        "count": 1
+      }
+    },
+    "packages/brawlhalla-replays/src/content/utils.ts": {
+      "crap_critical": {
+        "count": 1
+      }
+    },
+    "packages/brawltools-api/src/api/client.ts": {
+      "crap_moderate": {
+        "count": 2
+      }
+    },
+    "packages/observability/src/http-server-tracer.ts": {
+      "crap_high": {
+        "count": 1
+      }
+    },
+    "scripts/setup/setup.mts": {
+      "crap_high": {
+        "count": 1
+      },
+      "crap_moderate": {
+        "count": 1
+      }
+    },
+    "scripts/setup/sync-vendored-repos.mts": {
+      "crap_moderate": {
+        "count": 1
+      }
+    }
+  },
+  "runtime_coverage_findings": [],
+  "target_keys": [
+    "packages/brawlhalla-api/src/helpers/parser.ts:untested risk"
+  ]
+}

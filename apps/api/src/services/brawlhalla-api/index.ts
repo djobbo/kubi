@@ -1,135 +1,73 @@
+import { Archive } from "@/services/archive"
 import { Fetcher } from "@/services/fetcher"
 import { shouldUseFetchFirst } from "@/services/fetch-strategy"
 import {
-  BrawlhallaApiError,
-  BrawlhallaClanNotFound,
-  BrawlhallaPlayerNotFound,
-  BrawlhallaRateLimitError,
-  BrawlhallaServiceUnavailable,
-} from "./errors"
-import { Config, Effect, flow, Layer, Redacted, Schema, pipe } from "effect"
-import { BrawlhallaApiClan } from "./schema/clan"
-import { BrawlhallaApiLegends } from "./schema/legends"
-import { BrawlhallaApiPlayerRanked } from "./schema/player-ranked"
-import { BrawlhallaApiPlayerStats } from "./schema/player-stats"
+  BrawlhallaApiClientService,
+  layerBrawlhallaApiClient,
+  layerBrawlhallaApiClientMock,
+  PlayerRanked,
+  PlayerStats,
+  Rankings1v1,
+  Rankings2v2,
+  RankingsRotating,
+  Clan,
+  Legends,
+  type RankedRegion,
+} from "@dair/brawlhalla-api"
 import {
-  BrawlhallaApiRankings1v1,
-  BrawlhallaApiRankings2v2,
-  BrawlhallaApiRankingsRotating,
-} from "./schema/rankings"
-import { NotFound } from "@effect/platform/HttpApiError"
-import { Archive } from "@/services/archive"
+  Config,
+  Context,
+  Effect,
+  Layer,
+  Option,
+  Redacted,
+  Schema,
+  pipe,
+} from "effect"
+import { BrawlhallaPlayerNotFound } from "./errors"
 
-const BASE_URL = "https://api.brawlhalla.com"
-
-type FetchBrawlhallaApiOptions<T, U> = {
-  schema: Schema.Schema<T, U>
-  path: string
-  searchParams?: Record<string, string>
-  cacheName: string
+type CachedResult<T> = {
+  data: T
+  updatedAt: Date
+  cached: boolean
 }
 
-export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
+export class BrawlhallaApi extends Context.Service<BrawlhallaApi>()(
   "@dair/services/BrawlhallaApi",
   {
-    effect: Effect.gen(function* () {
-      const apiKey = yield* Config.redacted("BRAWLHALLA_API_KEY")
+    make: Effect.gen(function* () {
+      const client = yield* BrawlhallaApiClientService
       const fetcher = yield* Fetcher
       const archive = yield* Archive
 
-      const getRequestUrl = (
-        path: string,
-        searchParams: Record<string, string>,
-      ) => {
-        const url = new URL(path, BASE_URL)
-        for (const [key, value] of Object.entries(searchParams)) {
-          url.searchParams.set(key, value)
-        }
-        url.searchParams.set("api_key", Redacted.value(apiKey))
-        return url.toString()
-      }
-
-      const fetchBrawlhallaApi = Effect.fn("fetchBrawlhallaApi")(
-        function* <T, U>({
-          schema,
-          path,
-          searchParams = {},
-          cacheName,
-        }: FetchBrawlhallaApiOptions<T, U>) {
-          const url = getRequestUrl(path, searchParams)
+      const cachedCall = <T>({
+        cacheName,
+        schema,
+        fetch,
+      }: {
+        cacheName: string
+        schema: Schema.Schema<T>
+        fetch: Effect.Effect<T, unknown, unknown>
+      }) =>
+        Effect.gen(function* () {
           const useFetchFirst = yield* shouldUseFetchFirst
 
-          if (!useFetchFirst) {
-            return yield* fetcher.fetchJsonCacheFirst(schema, {
-              method: "GET",
-              url: url.toString(),
-              cacheName,
-            })
-          } else {
-            return yield* fetcher.fetchJson(schema, {
-              method: "GET",
-              url: url.toString(),
-              cacheName,
-            })
+          if (useFetchFirst) {
+            const data = yield* fetch
+            return { data, updatedAt: new Date(), cached: false }
           }
-        },
-        flow(
-          Effect.catchTags({
-            ResponseError: (error) =>
-              Effect.gen(function* () {
-                switch (error.response.status) {
-                  case 404:
-                    return yield* Effect.fail(new NotFound())
-                  case 429:
-                    return yield* BrawlhallaRateLimitError.make({
-                      message:
-                        "Rate limit exceeded for Brawlhalla API. Please try again later.",
-                    })
-                  case 503:
-                    return yield* BrawlhallaServiceUnavailable.make({
-                      message:
-                        "Brawlhalla API is currently unavailable. Please try again later.",
-                    })
-                  default:
-                    return yield* BrawlhallaApiError.make({
-                      cause: error,
-                      message: `Brawlhalla API request failed with status ${error.response.status}`,
-                      status: error.response.status,
-                    })
-                }
-              }),
-            HttpBodyError: (error) =>
-              BrawlhallaApiError.make({
-                cause: error,
-                message: "Failed to parse Brawlhalla API response",
-              }),
-            ParseError: (error) =>
-              BrawlhallaApiError.make({
-                cause: error,
-                message: "Failed to parse Brawlhalla API response",
-              }),
-            RequestError: (error) =>
-              BrawlhallaApiError.make({
-                cause: error,
-                message: "Failed to make request to Brawlhalla API",
-              }),
-            TimeoutException: (error) =>
-              BrawlhallaApiError.make({
-                cause: error,
-                message: "Brawlhalla API request timed out",
-              }),
-          }),
-        ),
-      )
+
+          return yield* fetcher.runCacheFirst({ cacheName, schema, fetch })
+        })
 
       return {
         getPlayerStatsById: Effect.fn("getPlayerStatsById")(function* (
           playerId: number,
         ) {
-          return yield* fetchBrawlhallaApi({
-            schema: BrawlhallaApiPlayerStats,
-            path: `/player/${playerId}/stats`,
+          return yield* cachedCall({
             cacheName: `brawlhalla-player-stats-${playerId}`,
+            schema: PlayerStats,
+            fetch: client.player.stats({ params: { playerId } }),
           }).pipe(
             Effect.tapError((error) =>
               Effect.logError(
@@ -137,7 +75,7 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
                 error,
               ),
             ),
-            Effect.catchAll(() =>
+            Effect.catch(() =>
               pipe(
                 archive.getPlayerHistory(playerId, 1),
                 Effect.tapError((error) =>
@@ -151,17 +89,20 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
                     const data = playerHistory[0]
                     if (!data) {
                       return yield* Effect.fail(
-                        new BrawlhallaPlayerNotFound({ playerId }),
+                        BrawlhallaPlayerNotFound.make({
+                          playerId,
+                          status: 404,
+                        }),
                       )
                     }
-                    const rawStatsData = yield* Schema.decodeUnknown(
-                      BrawlhallaApiPlayerStats,
+                    const rawStatsData = yield* Schema.decodeUnknownEffect(
+                      PlayerStats,
                     )(data.rawStatsData)
-                    return yield* Effect.succeed({
+                    return {
                       data: rawStatsData,
-                      updatedAt: data?.recordedAt,
+                      updatedAt: data.recordedAt,
                       cached: true,
-                    })
+                    }
                   }),
                 ),
                 Effect.tap((archiveData) =>
@@ -177,10 +118,10 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
         getPlayerRankedById: Effect.fn("getPlayerRankedById")(function* (
           playerId: number,
         ) {
-          return yield* fetchBrawlhallaApi({
-            schema: BrawlhallaApiPlayerRanked,
-            path: `/player/${playerId}/ranked`,
+          return yield* cachedCall({
             cacheName: `brawlhalla-player-ranked-${playerId}`,
+            schema: PlayerRanked,
+            fetch: client.player.ranked({ params: { playerId } }),
           }).pipe(
             Effect.tapError((error) =>
               Effect.logError(
@@ -188,7 +129,7 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
                 error,
               ),
             ),
-            Effect.catchAll(() =>
+            Effect.catch(() =>
               pipe(
                 archive.getPlayerHistory(playerId, 1),
                 Effect.tapError((error) =>
@@ -202,17 +143,20 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
                     const data = playerHistory[0]
                     if (!data) {
                       return yield* Effect.fail(
-                        new BrawlhallaPlayerNotFound({ playerId }),
+                        BrawlhallaPlayerNotFound.make({
+                          playerId,
+                          status: 404,
+                        }),
                       )
                     }
-                    const rawRankedData = yield* Schema.decodeUnknown(
-                      BrawlhallaApiPlayerRanked,
+                    const rawRankedData = yield* Schema.decodeUnknownEffect(
+                      PlayerRanked,
                     )(data.rawRankedData)
-                    return yield* Effect.succeed({
+                    return {
                       data: rawRankedData,
-                      updatedAt: data?.recordedAt,
+                      updatedAt: data.recordedAt,
                       cached: true,
-                    })
+                    }
                   }),
                 ),
                 Effect.tap((archiveData) =>
@@ -226,59 +170,90 @@ export class BrawlhallaApi extends Effect.Service<BrawlhallaApi>()(
           )
         }),
         getRankings1v1: Effect.fn("getRankings1v1")(function* (
-          region: string,
+          region: RankedRegion,
           page: number,
           name?: string,
         ) {
-          return yield* fetchBrawlhallaApi({
-            schema: BrawlhallaApiRankings1v1,
-            path: `/rankings/1v1/${region.toLowerCase()}/${page}${name ? `?name=${name}` : ""}`,
+          return yield* cachedCall({
             cacheName: `brawlhalla-rankings-1v1-${region}-${page}-${name ?? ""}`,
+            schema: Rankings1v1,
+            fetch: client.rankings.oneVOne({
+              params: { region, page },
+              query: name !== undefined ? { name } : {},
+            }),
           })
         }),
         getRankings2v2: Effect.fn("getRankings2v2")(function* (
-          region: string,
+          region: RankedRegion,
           page: number,
         ) {
-          return yield* fetchBrawlhallaApi({
-            schema: BrawlhallaApiRankings2v2,
-            path: `/rankings/2v2/${region.toLowerCase()}/${page}`,
+          return yield* cachedCall({
             cacheName: `brawlhalla-rankings-2v2-${region}-${page}`,
+            schema: Rankings2v2,
+            fetch: client.rankings.twoVTwo({ params: { region, page } }),
           })
         }),
         getRankingsRotating: Effect.fn("getRankingsRotating")(function* (
-          region: string,
+          region: RankedRegion,
           page: number,
         ) {
-          return yield* fetchBrawlhallaApi({
-            schema: BrawlhallaApiRankingsRotating,
-            path: `/rankings/rotating/${region.toLowerCase()}/${page}`,
+          return yield* cachedCall({
             cacheName: `brawlhalla-rankings-rotating-${region}-${page}`,
+            schema: RankingsRotating,
+            fetch: client.rankings.rotating({ params: { region, page } }),
           })
         }),
         getClanById: Effect.fn("getClanById")(function* (clanId: number) {
-          return yield* fetchBrawlhallaApi({
-            schema: BrawlhallaApiClan,
-            path: `/clan/${clanId}`,
+          return yield* cachedCall({
             cacheName: `brawlhalla-clan-${clanId}`,
-          }).pipe(
-            Effect.catchTag("NotFound", () =>
-              Effect.fail(new BrawlhallaClanNotFound({ clanId })),
-            ),
-          )
+            schema: Clan,
+            fetch: client.clan.get({ params: { clanId } }),
+          })
         }),
         getAllLegendsData: Effect.fn("getAllLegendsData")(function* () {
-          return yield* fetchBrawlhallaApi({
-            schema: BrawlhallaApiLegends,
-            path: "/legend/all",
+          return yield* cachedCall({
             cacheName: "brawlhalla-legend-all",
+            schema: Legends,
+            fetch: client.legend.all(),
           })
         }),
       }
     }),
   },
 ) {
-  static readonly layer = this.Default.pipe(
+  static readonly layer = Layer.effect(this, this.make).pipe(
+    Layer.provide(
+      Layer.unwrap(
+        Effect.gen(function* () {
+          const isDevelopment = process.env.NODE_ENV === "development"
+
+          if (isDevelopment) {
+            const useMock = yield* Config.boolean("BRAWLHALLA_API_MOCK").pipe(
+              Config.orElse(() => Config.succeed(true)),
+            )
+
+            if (useMock) {
+              yield* Effect.log("Using Brawlhalla API mock layer")
+              return layerBrawlhallaApiClientMock
+            }
+          } else {
+            yield* Config.boolean("BRAWLHALLA_API_MOCK").pipe(
+              Config.option,
+              Effect.flatMap((mockConfig) =>
+                Option.isSome(mockConfig) && mockConfig.value
+                  ? Effect.logWarning(
+                      "BRAWLHALLA_API_MOCK is ignored outside development",
+                    )
+                  : Effect.void,
+              ),
+            )
+          }
+
+          const apiKey = yield* Config.redacted("BRAWLHALLA_API_KEY")
+          return layerBrawlhallaApiClient({ apiKey })
+        }),
+      ),
+    ),
     Layer.provide(Fetcher.layer),
     Layer.provide(Archive.layer),
   )

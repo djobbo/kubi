@@ -3,9 +3,18 @@ import {
   HttpClient,
   HttpClientRequest,
   HttpClientResponse,
-} from "@effect/platform"
-import type { HttpMethod } from "@effect/platform/HttpMethod"
-import { Duration, Effect, Layer, Option, pipe, Schedule, Schema } from "effect"
+} from "effect/unstable/http"
+import type { HttpMethod } from "effect/unstable/http/HttpMethod"
+import {
+  Context,
+  Duration,
+  Effect,
+  Layer,
+  Option,
+  pipe,
+  Schedule,
+  Schema,
+} from "effect"
 import { Cache } from "@/services/cache"
 import type { ArchiveQueryError } from "../archive/errors"
 
@@ -34,30 +43,45 @@ type FetchJsonCacheFirstOptions = FetchJsonOptions & {
   staleMaxAge?: number
 }
 
-export class Fetcher extends Effect.Service<Fetcher>()("@app/Fetcher", {
-  effect: Effect.gen(function* () {
+export class Fetcher extends Context.Service<Fetcher>()("@app/Fetcher", {
+  make: Effect.gen(function* () {
     const httpClient = yield* HttpClient.HttpClient
     const cache = yield* Cache
+
+    const executeJsonRequest = <T>(
+      schema: Schema.Schema<T>,
+      options: Pick<
+        FetchJsonOptions,
+        "url" | "method" | "body" | "timeout" | "retries"
+      >,
+    ) =>
+      Effect.gen(function* () {
+        const request = yield* pipe(
+          options.url,
+          HttpClientRequest.make(options.method),
+          HttpClientRequest.bodyJson(options.body),
+        )
+
+        const response = yield* httpClient.execute(request)
+        return yield* HttpClientResponse.schemaBodyJson(schema)(response)
+      }).pipe(
+        Effect.timeout(options.timeout ?? DEFAULT_TIMEOUT),
+        Effect.retry({
+          times: options.retries ?? DEFAULT_RETRIES,
+          schedule: Schedule.exponential(1000),
+        }),
+      )
 
     /**
      * Simple fetch without cache-first behavior
      * Used by workers that need fresh data
      */
     const fetchJson = Effect.fn("fetchJson")(function* <T, U>(
-      schema: Schema.Schema<T, U>,
+      schema: Schema.Schema<T>,
       options: FetchJsonOptions,
     ) {
-      const fetchFromApi = pipe(
-        options.url,
-        HttpClientRequest.make(options.method),
-        HttpClientRequest.bodyJson(options.body),
-        Effect.flatMap(httpClient.execute),
-        Effect.flatMap(HttpClientResponse.schemaBodyJson(schema)),
-        Effect.timeout(options.timeout ?? DEFAULT_TIMEOUT),
-        Effect.retry({
-          times: options.retries ?? DEFAULT_RETRIES,
-          schedule: Schedule.exponential(1000),
-        }),
+      const fetchFromApi = executeJsonRequest(schema, options).pipe(
+        Effect.provideService(HttpClient.HttpClient, httpClient),
       )
 
       // If no cache name is provided, just fetch directly
@@ -78,7 +102,7 @@ export class Fetcher extends Effect.Service<Fetcher>()("@app/Fetcher", {
       return yield* cache.getOrSet(
         cacheKey,
         schema,
-        fetchFromApi,
+        fetchFromApi as Effect.Effect<T, never, never>,
         Option.some(Duration.seconds(ttl)),
       )
     })
@@ -99,24 +123,15 @@ export class Fetcher extends Effect.Service<Fetcher>()("@app/Fetcher", {
     const fetchJsonCacheFirst = Effect.fn("fetchJsonCacheFirst")(function* <
       T,
       U,
-    >(schema: Schema.Schema<T, U>, options: FetchJsonCacheFirstOptions) {
+    >(schema: Schema.Schema<T>, options: FetchJsonCacheFirstOptions) {
       const cacheKey = options.cacheName
         ? `fetcher:${options.cacheName}`
         : undefined
       // Use staleMaxAge for cache TTL - data can be served while revalidating in the background
       const staleTtl = options.staleMaxAge ?? DEFAULT_STALE_MAX_AGE
 
-      const fetchFromApi = pipe(
-        options.url,
-        HttpClientRequest.make(options.method),
-        HttpClientRequest.bodyJson(options.body),
-        Effect.flatMap(httpClient.execute),
-        Effect.flatMap(HttpClientResponse.schemaBodyJson(schema)),
-        Effect.timeout(options.timeout ?? DEFAULT_TIMEOUT),
-        Effect.retry({
-          times: options.retries ?? DEFAULT_RETRIES,
-          schedule: Schedule.exponential(1000),
-        }),
+      const fetchFromApi = executeJsonRequest(schema, options).pipe(
+        Effect.provideService(HttpClient.HttpClient, httpClient),
       )
 
       // If no cache name, fetch directly with rate limiting
@@ -139,7 +154,7 @@ export class Fetcher extends Effect.Service<Fetcher>()("@app/Fetcher", {
 
         // Queue background revalidation (fire and forget)
         // This will update the cache with fresh data for the next request
-        yield* Effect.fork(
+        yield* Effect.forkDetach(
           fetchFromApi.pipe(
             Effect.tap((data) =>
               cache.set(
@@ -151,7 +166,7 @@ export class Fetcher extends Effect.Service<Fetcher>()("@app/Fetcher", {
             Effect.tap(() =>
               Effect.log(`Background revalidation complete for ${cacheKey}`),
             ),
-            Effect.catchAll((error) =>
+            Effect.catch((error) =>
               Effect.logWarning(
                 `Background revalidation failed for ${cacheKey}`,
                 { error },
@@ -181,13 +196,75 @@ export class Fetcher extends Effect.Service<Fetcher>()("@app/Fetcher", {
       }
     })
 
+    /**
+     * Cache-first wrapper for an arbitrary Effect (e.g. HttpApiClient calls).
+     */
+    const runCacheFirst = Effect.fn("runCacheFirst")(function* <T>({
+      cacheName,
+      schema,
+      fetch,
+      staleMaxAge,
+    }: {
+      cacheName: string
+      schema: Schema.Schema<T>
+      fetch: Effect.Effect<T, unknown, unknown>
+      staleMaxAge?: number
+    }) {
+      const cacheKey = `fetcher:${cacheName}`
+      const staleTtl = staleMaxAge ?? DEFAULT_STALE_MAX_AGE
+
+      const cachedResult = yield* cache.get(cacheKey, schema)
+
+      if (Option.isSome(cachedResult)) {
+        yield* Effect.log(`Cache hit for ${cacheName}`)
+
+        yield* Effect.forkDetach(
+          fetch.pipe(
+            Effect.tap((data) =>
+              cache.set(
+                cacheKey,
+                data,
+                Option.some(Duration.seconds(staleTtl)),
+              ),
+            ),
+            Effect.tap(() =>
+              Effect.log(`Background revalidation complete for ${cacheKey}`),
+            ),
+            Effect.catch((error) =>
+              Effect.logWarning(
+                `Background revalidation failed for ${cacheKey}`,
+                { error },
+              ),
+            ),
+          ),
+        )
+
+        return {
+          data: cachedResult.value,
+          updatedAt: new Date(),
+          cached: true,
+        }
+      }
+
+      yield* Effect.log(`Cache miss for ${cacheName}, fetching...`)
+      const data = yield* fetch
+      yield* cache.set(cacheKey, data, Option.some(Duration.seconds(staleTtl)))
+
+      return {
+        data,
+        updatedAt: new Date(),
+        cached: false,
+      }
+    })
+
     return {
       fetchJson,
       fetchJsonCacheFirst,
+      runCacheFirst,
     }
   }),
 }) {
-  static readonly layer = this.Default.pipe(
+  static readonly layer = Layer.effect(this, this.make).pipe(
     Layer.provide(FetchHttpClient.layer),
     Layer.provide(Cache.layer),
   )

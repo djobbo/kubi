@@ -18,13 +18,15 @@ import {
   rankedRotatingHistoryTable,
 } from "@dair/db"
 import { and, eq, desc, or, lt, max, gte, count, ilike } from "drizzle-orm"
-import { Effect, Layer } from "effect"
+import { Context, Effect, Layer } from "effect"
 import { BadRequest } from "@dair/api-contract/src/shared/errors"
-import type { BrawlhallaApiPlayerStats } from "../brawlhalla-api/schema/player-stats"
-import type { BrawlhallaApiPlayerRanked } from "../brawlhalla-api/schema/player-ranked"
+import type {
+  Clan as BrawlhallaClan,
+  PlayerRanked as BrawlhallaPlayerRanked,
+  PlayerStats as BrawlhallaPlayerStats,
+} from "@dair/brawlhalla-api"
 import type { Player } from "@dair/api-contract/src/routes/v1/brawlhalla/get-player-by-id"
 import { ArchiveQueryError } from "./errors"
-import type { BrawlhallaApiClan } from "../brawlhalla-api/schema/clan"
 import type { Clan } from "@dair/api-contract/src/routes/v1/brawlhalla/get-guild-by-id"
 import type { SearchPlayerCursor } from "@dair/api-contract/src/routes/v1/brawlhalla/search-player"
 import type { GlobalPlayerRankingsOrderBy } from "@dair/api-contract/src/routes/v1/brawlhalla/get-player-rankings"
@@ -35,10 +37,10 @@ import type { GameDelta } from "@dair/api-contract/src/routes/v1/brawlhalla/get-
 
 const MIN_ALIAS_SEARCH_LENGTH = 3
 
-export class Archive extends Effect.Service<Archive>()(
+export class Archive extends Context.Service<Archive>()(
   "@dair/services/Archive",
   {
-    effect: Effect.gen(function* () {
+    make: Effect.gen(function* () {
       const db = yield* Database
 
       return {
@@ -69,8 +71,8 @@ export class Archive extends Effect.Service<Archive>()(
           offset = 0,
         ) {
           return yield* db.query.playerHistoryTable.findMany({
-            where: eq(playerHistoryTable.playerId, playerId),
-            orderBy: desc(playerHistoryTable.recordedAt),
+            where: { playerId: { eq: playerId } },
+            orderBy: { recordedAt: "desc" },
             limit,
             offset,
             with: {
@@ -81,8 +83,8 @@ export class Archive extends Effect.Service<Archive>()(
         }),
         addPlayerHistory: Effect.fn("addPlayerHistory")(function* (
           playerData: typeof Player.Type,
-          rawStatsData: typeof BrawlhallaApiPlayerStats.Type,
-          rawRankedData: typeof BrawlhallaApiPlayerRanked.Type,
+          rawStatsData: typeof BrawlhallaPlayerStats.Type,
+          rawRankedData: typeof BrawlhallaPlayerRanked.Type,
         ) {
           const playerHistory: NewPlayerHistory = {
             playerId: playerData.id,
@@ -236,7 +238,7 @@ export class Archive extends Effect.Service<Archive>()(
         }),
         addGuildHistory: Effect.fn("addClanHistory")(function* (
           guildData: typeof Clan.Type,
-          rawGuildData?: typeof BrawlhallaApiClan.Type,
+          rawGuildData?: typeof BrawlhallaClan.Type,
         ) {
           const guildHistory: NewClanHistory = {
             clanId: guildData.id,
@@ -933,5 +935,7 @@ export class Archive extends Effect.Service<Archive>()(
     }),
   },
 ) {
-  static readonly layer = this.Default.pipe(Layer.provide(Database.layer))
+  static readonly layer = Layer.effect(this, this.make).pipe(
+    Layer.provide(Database.layer),
+  )
 }

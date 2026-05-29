@@ -1,0 +1,83 @@
+---
+description: Vite+ (vp/pnpm) monorepo with Node.js runtime for API and workers
+globs: "*.ts, *.tsx, *.html, *.css, *.js, *.jsx, package.json"
+alwaysApply: true
+---
+
+# Toolchain: Vite+ + Node.js
+
+**Monorepo:** [vite-plus](https://viteplus.dev) (`vp`) with **pnpm** (version from `packageManager`, aligned with `.repos/vite-plus`). Shared npm versions live in the **pnpm catalog** ([pnpm-workspace.yaml](../../pnpm-workspace.yaml)); workspace packages use `"catalog:"` in `package.json`, not inline semver ranges.
+
+**API / workers / scripts:** **Node.js** (≥22.12) with `tsx` for TypeScript entrypoints. Do not use Bun.
+
+## Commands
+
+```bash
+# Workspace (root)
+vp install
+vp run dev          # API + client + workers (not compose; not studio)
+vp run studio       # Drizzle Studio
+vp run setup
+vp run compose:up
+vp exec tsx scripts/compose.ts up --wait
+
+# API
+vp run -F @dair/api dev
+vp run -F @dair/api db:migrate
+vp run -F @dair/api start
+
+# Workers
+vp run -F @dair/workers dev
+
+# Client (Vite via Node)
+vp run -F @dair/client dev
+vp run -F @dair/client build
+```
+
+## Effect + Node
+
+```typescript
+import * as NodeHttpServer from "@effect/platform-node/NodeHttpServer"
+import * as NodeRuntime from "@effect/platform-node/NodeRuntime"
+import * as NodeServices from "@effect/platform-node/NodeServices"
+
+Layer.provide(NodeHttpServer.layer({ port: 3000 }))
+```
+
+Load `.env` in Node entrypoints (Bun did this automatically):
+
+```typescript
+import "dotenv/config"
+```
+
+## This project's stack
+
+| Layer | Technology |
+|-------|------------|
+| Install / scripts | `vp`, pnpm |
+| HTTP server | `@effect/platform` + `NodeHttpServer` |
+| Database | `@effect/sql-pg`, Drizzle |
+| Cache | `ioredis` |
+| Dev TS runner | `tsx`, `tsx watch` |
+| Frontend build | Vite (TanStack Start) |
+
+## Testing
+
+Use **Vitest** in packages that define tests (`vp run test`). Do not use `bun:test`.
+
+```typescript
+import { describe, expect, it } from "vitest"
+```
+
+## Effect Solutions
+
+```bash
+vp exec npx effect-solutions list
+vp exec npx effect-solutions show <topic>
+```
+
+## Anti-patterns
+
+- Do not add `bun`, `@types/bun`, or `@effect/platform-bun`
+- Do not use `bun run`, `bunx`, or `Bun.serve`
+- Do not use `bun:sqlite` or other `bun:*` imports

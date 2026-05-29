@@ -1,57 +1,66 @@
 import { Database } from "@/services/db"
-import type { SessionWithUser } from "@/services/authorization"
 import {
   type Bookmark,
-  DISCORD_PROVIDER_ID,
   type NewBookmark,
+  type Provider,
   bookmarksTable,
   legacyBookmarksTable,
 } from "@dair/db"
-import { and, eq } from "drizzle-orm"
+import { and, eq, sql } from "drizzle-orm"
 import { Context, Effect, Layer } from "effect"
-import { BookmarkError, DiscordAccountNotFoundError } from "./errors"
+import { BookmarkError } from "./errors"
+
+const mapBookmarkError = <A, E, R>(effect: Effect.Effect<A, E, R>) =>
+  effect.pipe(
+    Effect.mapError(
+      (cause) =>
+        new BookmarkError({
+          message: "Bookmark database operation failed",
+          cause,
+        }),
+    ),
+  )
 
 /**
  * Bookmarks service for managing user bookmarks
  */
-export class Bookmarks extends Context.Tag("@app/Bookmarks")<
-  Bookmarks,
+type BookmarksService = {
+  readonly getBookmarks: (
+    userId: string,
+  ) => Effect.Effect<ReadonlyArray<Bookmark>, BookmarkError>
+  readonly addBookmark: (
+    userId: string,
+    bookmark: Omit<NewBookmark, "userId">,
+  ) => Effect.Effect<Bookmark, BookmarkError>
+  readonly getBookmarksByPageIds: (
+    userId: string | undefined,
+    bookmarks: ReadonlyArray<Pick<Bookmark, "pageId" | "pageType">>,
+  ) => Effect.Effect<ReadonlyArray<Bookmark>, BookmarkError>
+  readonly deleteBookmark: (
+    userId: string,
+    bookmark: Pick<Bookmark, "pageId" | "pageType">,
+  ) => Effect.Effect<void, BookmarkError>
+  readonly migrateLegacyBookmarks: (options: {
+    readonly userId: string
+    readonly provider: Provider
+  }) => Effect.Effect<void, BookmarkError>
+}
+
+export class Bookmarks extends Context.Service<Bookmarks, BookmarksService>()(
+  "@app/Bookmarks",
   {
-    readonly getBookmarks: (
-      userId: string,
-    ) => Effect.Effect<ReadonlyArray<Bookmark>, BookmarkError>
-    readonly addBookmark: (
-      userId: string,
-      bookmark: Omit<NewBookmark, "userId">,
-    ) => Effect.Effect<Bookmark, BookmarkError>
-    readonly getBookmarksByPageIds: (
-      userId: string | undefined,
-      bookmarks: ReadonlyArray<Pick<Bookmark, "pageId" | "pageType">>,
-    ) => Effect.Effect<ReadonlyArray<Bookmark>, BookmarkError>
-    readonly deleteBookmark: (
-      userId: string,
-      bookmark: Pick<Bookmark, "pageId" | "pageType">,
-    ) => Effect.Effect<void, BookmarkError>
-    readonly migrateLegacyBookmarks: (
-      session: SessionWithUser,
-    ) => Effect.Effect<void, BookmarkError | DiscordAccountNotFoundError>
-  }
->() {
-  /**
-   * Live layer for Bookmarks service
-   */
-  static readonly layer = Layer.effect(
-    Bookmarks,
-    Effect.gen(function* () {
+    make: Effect.gen(function* () {
       const db = yield* Database
 
       const getBookmarks = Effect.fn("Bookmarks.getBookmarks")(function* (
         userId: string,
       ) {
-        return yield* db
-          .select()
-          .from(bookmarksTable)
-          .where(eq(bookmarksTable.userId, userId))
+        return yield* mapBookmarkError(
+          db
+            .select()
+            .from(bookmarksTable)
+            .where(eq(bookmarksTable.userId, userId)),
+        )
       })
 
       const addBookmark = Effect.fn("Bookmarks.addBookmark")(function* (
@@ -63,20 +72,22 @@ export class Bookmarks extends Context.Tag("@app/Bookmarks")<
           userId,
         }
 
-        const result = yield* db
-          .insert(bookmarksTable)
-          .values(newBookmark)
-          .returning()
-          .onConflictDoUpdate({
-            set: {
-              name: newBookmark.name,
-            },
-            target: [
-              bookmarksTable.userId,
-              bookmarksTable.pageId,
-              bookmarksTable.pageType,
-            ],
-          })
+        const result = yield* mapBookmarkError(
+          db
+            .insert(bookmarksTable)
+            .values(newBookmark)
+            .returning()
+            .onConflictDoUpdate({
+              set: {
+                name: newBookmark.name,
+              },
+              target: [
+                bookmarksTable.userId,
+                bookmarksTable.pageId,
+                bookmarksTable.pageType,
+              ],
+            }),
+        )
 
         if (!result[0]) {
           return yield* Effect.fail(
@@ -99,23 +110,12 @@ export class Bookmarks extends Context.Tag("@app/Bookmarks")<
           return yield* Effect.succeed([])
         }
 
-        const bookmarksData = yield* db.transaction(async (tx) => {
-          const results = await Promise.all(
-            bookmarks.map((bookmark) =>
-              tx
-                .select()
-                .from(bookmarksTable)
-                .where(
-                  and(
-                    eq(bookmarksTable.userId, userId),
-                    eq(bookmarksTable.pageId, bookmark.pageId),
-                    eq(bookmarksTable.pageType, bookmark.pageType),
-                  ),
-                ),
-            ),
-          )
-          return results.flat()
-        })
+        const bookmarksData = yield* mapBookmarkError(
+          db
+            .select()
+            .from(bookmarksTable)
+            .where(eq(bookmarksTable.userId, userId)),
+        )
 
         return bookmarks
           .map((bookmark) => {
@@ -139,65 +139,114 @@ export class Bookmarks extends Context.Tag("@app/Bookmarks")<
         userId: string,
         bookmark: Pick<Bookmark, "pageId" | "pageType">,
       ) {
-        yield* db
-          .delete(bookmarksTable)
-          .where(
-            and(
-              eq(bookmarksTable.userId, userId),
-              eq(bookmarksTable.pageId, bookmark.pageId),
-              eq(bookmarksTable.pageType, bookmark.pageType),
+        yield* mapBookmarkError(
+          db
+            .delete(bookmarksTable)
+            .where(
+              and(
+                eq(bookmarksTable.userId, userId),
+                eq(bookmarksTable.pageId, bookmark.pageId),
+                eq(bookmarksTable.pageType, bookmark.pageType),
+              ),
             ),
-          )
+        )
       })
 
       const migrateLegacyBookmarks = Effect.fn(
         "Bookmarks.migrateLegacyBookmarks",
-      )(function* (session: SessionWithUser) {
-        const oauthAccounts = session.user.oauthAccounts as ReadonlyArray<{
-          provider: string
-          providerUserId: string
-        }>
-        const discordAccount = oauthAccounts.find(
-          (account) => account.provider === DISCORD_PROVIDER_ID,
+      )(function* ({
+        userId,
+        provider,
+      }: {
+        userId: string
+        provider: Provider
+      }) {
+        const oauthAccount = yield* mapBookmarkError(
+          db.query.oauthAccountsTable.findFirst({
+            where: {
+              userId: { eq: userId },
+              provider: { eq: provider },
+            },
+          }),
         )
-        const discordId = discordAccount?.providerUserId
 
-        if (!discordId) {
-          return yield* Effect.fail(
-            new DiscordAccountNotFoundError({
-              userId: session.user.id,
-            }),
-          )
+        const providerUserId = oauthAccount?.providerUserId
+        if (!providerUserId) {
+          return
         }
 
-        yield* db.transaction(async (tx) => {
-          const legacyBookmarks = await tx
+        const legacyBookmarks = yield* mapBookmarkError(
+          db
             .select()
             .from(legacyBookmarksTable)
-            .where(eq(legacyBookmarksTable.discordId, discordId))
+            .where(
+              and(
+                eq(legacyBookmarksTable.provider, provider),
+                eq(legacyBookmarksTable.providerUserId, providerUserId),
+              ),
+            ),
+        )
 
-          if (legacyBookmarks.length > 0) {
-            await tx.insert(bookmarksTable).values(
-              legacyBookmarks.map(({ discordId: _, ...bookmark }) => ({
-                ...bookmark,
-                userId: session.user.id,
-              })),
+        if (legacyBookmarks.length === 0) {
+          return
+        }
+
+        yield* mapBookmarkError(
+          db
+            .insert(bookmarksTable)
+            .values(
+              legacyBookmarks.map(
+                ({
+                  provider: _provider,
+                  providerUserId: _providerUserId,
+                  ...bookmark
+                }) => ({
+                  ...bookmark,
+                  userId,
+                }),
+              ),
             )
+            .onConflictDoUpdate({
+              set: {
+                name: sql`excluded.name`,
+              },
+              target: [
+                bookmarksTable.userId,
+                bookmarksTable.pageId,
+                bookmarksTable.pageType,
+              ],
+            }),
+        )
 
-            await tx
-              .delete(legacyBookmarksTable)
-              .where(eq(legacyBookmarksTable.discordId, discordId))
-          }
+        yield* mapBookmarkError(
+          db
+            .delete(legacyBookmarksTable)
+            .where(
+              and(
+                eq(legacyBookmarksTable.provider, provider),
+                eq(legacyBookmarksTable.providerUserId, providerUserId),
+              ),
+            ),
+        )
+
+        yield* Effect.log("Migrated legacy bookmarks to user", {
+          userId,
+          provider,
+          count: legacyBookmarks.length,
         })
       })
 
-      return Bookmarks.of({
+      return {
         getBookmarks,
         addBookmark,
         getBookmarksByPageIds,
         deleteBookmark,
         migrateLegacyBookmarks,
-      })
+      }
     }),
+  },
+) {
+  static readonly layer = Layer.effect(this, this.make).pipe(
+    Layer.provide(Database.layer),
   )
 }

@@ -1,6 +1,5 @@
 import { lookup } from "node:dns/promises"
-import { Duration, Effect, Layer, Option, Schema } from "effect"
-import type { RankedRegion } from "@dair/brawlhalla-api/src/constants/ranked/regions"
+import { Context, Duration, Effect, Layer, Option, Schema } from "effect"
 import { Cache } from "@/services/cache"
 
 const SERVERS = [
@@ -13,10 +12,10 @@ const SERVERS = [
   { id: "JPN", url: "pingtest-jpn.brawlhalla.com" },
   { id: "ME", url: "pingtest-mde.brawlhalla.com" },
   { id: "SA", url: "pingtest-saf.brawlhalla.com" },
-] satisfies { id: RankedRegion; url: string }[]
+] as const satisfies ReadonlyArray<{ id: string; url: string }>
 
 const IpApiResponse = Schema.Struct({
-  status: Schema.Literal("success"),
+  status: Schema.Literals(["success"]),
   city: Schema.String,
   country: Schema.String,
   lat: Schema.Number,
@@ -24,7 +23,7 @@ const IpApiResponse = Schema.Struct({
   isp: Schema.String,
 })
 
-export const ServerInfo = Schema.Struct({
+const ServerInfo = Schema.Struct({
   id: Schema.String,
   url: Schema.String,
   ip: Schema.String,
@@ -41,23 +40,24 @@ export type ServerInfo = typeof ServerInfo.Type
 
 const ServersArray = Schema.Array(ServerInfo)
 
-class ServerDiscoveryError extends Schema.TaggedError<ServerDiscoveryError>(
+class ServerDiscoveryError extends Schema.TaggedErrorClass<ServerDiscoveryError>()(
   "ServerDiscoveryError",
-)("ServerDiscoveryError", {
-  message: Schema.String,
-  cause: Schema.optional(Schema.Unknown),
-}) {}
+  {
+    message: Schema.String,
+    cause: Schema.optional(Schema.Unknown),
+  },
+) {}
 
 const CACHE_KEY = "brawlhalla:servers"
 const CACHE_TTL = Duration.hours(6)
 
-export class ServerDiscovery extends Effect.Service<ServerDiscovery>()(
+export class ServerDiscovery extends Context.Service<ServerDiscovery>()(
   "@dair/services/ServerDiscovery",
   {
-    effect: Effect.gen(function* () {
+    make: Effect.gen(function* () {
       const cache = yield* Cache
 
-      const discoverServer = (server: { id: RankedRegion; url: string }) =>
+      const discoverServer = (server: { id: string; url: string }) =>
         Effect.gen(function* () {
           const ip = yield* Effect.tryPromise({
             try: () => lookup(server.url).then((result) => result.address),
@@ -66,7 +66,7 @@ export class ServerDiscovery extends Effect.Service<ServerDiscovery>()(
                 message: `DNS lookup failed for ${server.url}`,
                 cause: error,
               }),
-          }).pipe(Effect.catchAll(() => Effect.succeed(null)))
+          }).pipe(Effect.catch(() => Effect.succeed(null)))
 
           if (!ip) {
             yield* Effect.logWarning(
@@ -83,7 +83,7 @@ export class ServerDiscovery extends Effect.Service<ServerDiscovery>()(
                 message: `IP API request failed for ${ip}`,
                 cause: error,
               }),
-          }).pipe(Effect.catchAll(() => Effect.succeed(null)))
+          }).pipe(Effect.catch(() => Effect.succeed(null)))
 
           if (!locationResult) {
             yield* Effect.logWarning(
@@ -92,10 +92,10 @@ export class ServerDiscovery extends Effect.Service<ServerDiscovery>()(
             return null
           }
 
-          const location = yield* Schema.decodeUnknown(IpApiResponse)(
+          const location = yield* Schema.decodeUnknownEffect(IpApiResponse)(
             locationResult,
           ).pipe(
-            Effect.catchAll(() => {
+            Effect.catch(() => {
               return Effect.succeed(null)
             }),
           )
@@ -145,7 +145,7 @@ export class ServerDiscovery extends Effect.Service<ServerDiscovery>()(
           const result = yield* cache.getOrSet(
             CACHE_KEY,
             ServersArray,
-            discoverAllServers() as Effect.Effect<ServerInfo[], never, never>,
+            discoverAllServers(),
             Option.some(CACHE_TTL),
           )
           return result.data
@@ -161,5 +161,7 @@ export class ServerDiscovery extends Effect.Service<ServerDiscovery>()(
     }),
   },
 ) {
-  static readonly layer = this.Default.pipe(Layer.provide(Cache.layer))
+  static readonly layer = Layer.effect(this, this.make).pipe(
+    Layer.provide(Cache.layer),
+  )
 }

@@ -1,10 +1,10 @@
 import { randomUUID } from "node:crypto"
 import { Database } from "@/services/db"
 import { type NewSession, sessionsTable } from "@dair/db"
-import { HttpApiBuilder } from "@effect/platform"
+import { HttpApiBuilder } from "effect/unstable/httpapi"
 import { and, eq, gt } from "drizzle-orm"
 import { Effect, Redacted } from "effect"
-import { sessionApiKey } from "."
+import { sessionApiKey } from "./session-cookie"
 
 const isProduction = (env?: string) => env === "production"
 
@@ -76,10 +76,10 @@ export const getSession = (sessionId: string) =>
 
     // Get session from database
     const session = yield* db.query.sessionsTable.findFirst({
-      where: and(
-        eq(sessionsTable.id, sessionId),
-        gt(sessionsTable.expiresAt, new Date()),
-      ),
+      where: {
+        id: { eq: sessionId },
+        expiresAt: { gt: new Date() },
+      },
       with: {
         user: {
           with: {

@@ -4,8 +4,8 @@ export const backdrop = style({
   position: "fixed",
   minHeight: "100dvh",
   inset: 0,
-  backgroundColor: "black",
-  opacity: 0.2,
+  backgroundColor: "oklch(0.18 0.01 268.2)",
+  opacity: 0.8,
   transition: "opacity 150ms cubic-bezier(0.45, 1.005, 0, 1.005)",
 
   "@supports": {

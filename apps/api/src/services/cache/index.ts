@@ -1,174 +1,159 @@
-import { Config, Duration, Option, Schema } from "effect"
-import { Effect } from "effect"
+import {
+  Config,
+  Context,
+  Duration,
+  Effect,
+  Layer,
+  Option,
+  Schema,
+} from "effect"
 import { Redis } from "ioredis"
 
-class CacheSerializationError extends Schema.TaggedError<CacheSerializationError>(
+class CacheSerializationError extends Schema.TaggedErrorClass<CacheSerializationError>()(
   "CacheSerializationError",
-)("CacheSerializationError", {
-  cause: Schema.optional(Schema.Unknown),
-  message: Schema.String,
-}) {}
+  {
+    cause: Schema.optional(Schema.Unknown),
+    message: Schema.String,
+  },
+) {}
 
-class CacheOperationError extends Schema.TaggedError<CacheOperationError>(
+class CacheOperationError extends Schema.TaggedErrorClass<CacheOperationError>()(
   "CacheOperationError",
-)("CacheOperationError", {
-  method: Schema.String,
-  cause: Schema.optional(Schema.Unknown),
-  message: Schema.String,
-}) {}
+  {
+    method: Schema.String,
+    cause: Schema.optional(Schema.Unknown),
+    message: Schema.String,
+  },
+) {}
 
-export class Cache extends Effect.Service<Cache>()("@dair/services/Cache", {
-  effect: Effect.gen(function* () {
+type CacheResult<T> = {
+  readonly data: T
+  readonly updatedAt: Date
+  readonly cached: boolean
+}
+
+const decodeCachedValue = <T>(
+  schema: Schema.Schema<T>,
+  raw: string | null,
+): Effect.Effect<Option.Option<T>, never, never> =>
+  Effect.sync((): Option.Option<T> => {
+    if (raw === null) {
+      return Option.none()
+    }
+
+    try {
+      const parsed = JSON.parse(raw) as unknown
+      const decoded = Schema.decodeUnknownSync(
+        schema as Schema.Decoder<unknown, never>,
+      )(parsed) as T
+      return Option.some(decoded)
+    } catch {
+      return Option.none()
+    }
+  })
+
+export class Cache extends Context.Service<Cache>()("@dair/services/Cache", {
+  make: Effect.gen(function* () {
     const redisUrl = yield* Config.nonEmptyString("REDIS_URL").pipe(
       Config.withDefault("redis://localhost:6379"),
     )
     const prefix = yield* Config.nonEmptyString("CACHE_PREFIX").pipe(
       Config.withDefault("api:cache"),
     )
-    const redis = new Redis(redisUrl)
-    const prefixed = (key: string) => `${prefix}:${key}`
-    const parse =
-      <T, U>(schema: Schema.Schema<T, U>) =>
-      (str: string | null): Option.Option<T> => {
-        if (str === null) {
-          return Option.none()
-        }
 
-        return Schema.decodeUnknownOption(schema)(JSON.parse(str))
+    const redis = yield* Effect.acquireRelease(
+      Effect.sync(() => new Redis(redisUrl)),
+      (client) => Effect.promise(() => client.quit()).pipe(Effect.ignore),
+    )
+
+    const cacheKey = (name: string) => `${prefix}:${name}`
+
+    const redisIo = <A>(method: string, run: () => Promise<A>) =>
+      Effect.tryPromise({
+        try: run,
+        catch: (cause) =>
+          CacheOperationError.make({
+            method,
+            cause,
+            message: `Redis ${method} failed`,
+          }),
+      })
+
+    const get = <T>(name: string, schema: Schema.Schema<T>) =>
+      redisIo("get", () => redis.get(cacheKey(name))).pipe(
+        Effect.flatMap((raw) => decodeCachedValue(schema, raw)),
+        Effect.catch(() => Effect.succeed(Option.none<T>())),
+        Effect.withSpan("Cache.get"),
+      )
+
+    const set = Effect.fn("Cache.set")(function* (
+      name: string,
+      value: unknown,
+      ttl: Option.Option<Duration.Duration>,
+    ) {
+      const serialized = yield* Effect.try({
+        try: () => JSON.stringify(value),
+        catch: (cause) =>
+          CacheSerializationError.make({
+            cause,
+            message: "Failed to serialize cache value",
+          }),
+      })
+
+      yield* Option.match(ttl, {
+        onNone: () =>
+          redisIo("set", () => redis.set(cacheKey(name), serialized)),
+        onSome: (duration) =>
+          redisIo("set", () =>
+            redis.set(
+              cacheKey(name),
+              serialized,
+              "PX",
+              Duration.toMillis(duration),
+            ),
+          ),
+      })
+    })
+
+    const remove = Effect.fn("Cache.remove")(function* (name: string) {
+      yield* redisIo("del", () => redis.del(cacheKey(name)))
+    })
+
+    const clear = Effect.fn("Cache.clear")(function* () {
+      const keys = yield* redisIo("keys", () => redis.keys(`${prefix}:*`))
+      if (keys.length > 0) {
+        yield* redisIo("del", () => redis.del(keys))
+      }
+    })
+
+    const getOrSet = Effect.fn("Cache.getOrSet")(function* <T, E>(
+      name: string,
+      schema: Schema.Schema<T>,
+      lazyValue: Effect.Effect<T, E>,
+      ttl: Option.Option<Duration.Duration>,
+    ) {
+      const cached = yield* get(name, schema)
+
+      if (Option.isSome(cached)) {
+        return {
+          data: cached.value,
+          updatedAt: new Date(),
+          cached: true,
+        } as CacheResult<T>
       }
 
-    const cache = {
-      get: <T, U>(key: string, schema: Schema.Schema<T, U>) =>
-        Effect.map(
-          Effect.tryPromise({
-            try: () => redis.get(prefixed(key)),
-            catch: (error) =>
-              CacheOperationError.make({
-                method: "get",
-                cause: error,
-                message: "Failed to get cache",
-              }),
-          }),
-          parse(schema),
-        ).pipe(
-          Effect.tap(() => Effect.log(`Got cache for ${key}`)),
-          Effect.tapError(() =>
-            Effect.logError(`Failed to get cache for ${key}`),
-          ),
-          Effect.catchAll(() => Effect.succeed(Option.none<T>())),
-        ),
-      set: (
-        key: string,
-        value: unknown,
-        ttl: Option.Option<Duration.Duration>,
-      ) =>
-        Effect.tryMapPromise(
-          Effect.try({
-            try: () => JSON.stringify(value),
-            catch: (error) =>
-              CacheSerializationError.make({
-                cause: error,
-                message: "Failed to serialize cache value",
-              }),
-          }),
-          {
-            try: (value) =>
-              ttl._tag === "None"
-                ? redis.set(prefixed(key), value)
-                : redis.set(
-                    prefixed(key),
-                    value,
-                    "PX",
-                    Duration.toMillis(ttl.value),
-                  ),
-            catch: (error) =>
-              CacheOperationError.make({
-                method: "set",
-                cause: error,
-                message: "Failed to set cache",
-              }),
-          },
-        ).pipe(
-          Effect.tap(() => Effect.log(`Set cache for ${key}`)),
-          Effect.tapError(() =>
-            Effect.logError(`Failed to set cache for ${key}`),
-          ),
-        ),
-      remove: (key: string) =>
-        Effect.tryPromise({
-          try: () => redis.del(prefixed(key)),
-          catch: (error) =>
-            CacheOperationError.make({
-              method: "remove",
-              cause: error,
-              message: "Failed to remove cache",
-            }),
-        }).pipe(
-          Effect.tap(() => Effect.log(`Removed cache for ${key}`)),
-          Effect.tapError(() =>
-            Effect.logError(`Failed to remove cache for ${key}`),
-          ),
-        ),
-      clear: Effect.tryPromise({
-        try: () => redis.keys(`${prefix}:*`).then((keys) => redis.del(keys)),
-        catch: (error) =>
-          CacheOperationError.make({
-            method: "clear",
-            cause: error,
-            message: "Failed to clear cache",
-          }),
-      }).pipe(
-        Effect.tap(() => Effect.log(`Cleared cache`)),
-        Effect.tapError(() => Effect.logError(`Failed to clear cache`)),
-      ),
-    }
-    return {
-      ...cache,
-      getOrSet: <T, U, E>(
-        key: string,
-        schema: Schema.Schema<T, U>,
-        lazyValue: Effect.Effect<T, E>,
-        ttl: Option.Option<Duration.Duration>,
-      ) =>
-        cache
-          .get(key, schema)
-          .pipe(
-            Effect.flatMap(
-              Option.match({
-                onSome: Effect.fnUntraced(function* (value) {
-                  yield* Effect.log(`Got cache for ${key}`)
-                  return {
-                    data: value,
-                    updatedAt: new Date(),
-                    cached: true,
-                  }
-                }),
-                onNone: Effect.fnUntraced(function* () {
-                  yield* Effect.log(`No cache for ${key}, fetching...`)
-                  const value = yield* lazyValue
-                  yield* cache.set(key, value, ttl)
-                  return {
-                    data: value,
-                    updatedAt: new Date(),
-                    cached: false,
-                  }
-                }),
-              }),
-            ),
-          )
-          .pipe(
-            Effect.tap(() => Effect.log(`Got or set cache for ${key}`)),
-            Effect.tapError(() =>
-              Effect.logError(`Failed to get or set cache for ${key}`),
-            ),
-          ),
-    }
-  }).pipe(
-    Effect.tap(() => Effect.log(`Cache service initialized`)),
-    Effect.tapError(() =>
-      Effect.logError(`Failed to initialize cache service`),
-    ),
-  ),
+      const data = yield* lazyValue
+      yield* set(name, data, ttl)
+
+      return {
+        data,
+        updatedAt: new Date(),
+        cached: false,
+      } as CacheResult<T>
+    })
+
+    return { get, set, remove, clear, getOrSet }
+  }).pipe(Effect.tap(() => Effect.log("Cache service initialized"))),
 }) {
-  static readonly layer = this.Default
+  static readonly layer = Layer.effect(this, this.make)
 }

@@ -1,4 +1,4 @@
-import type { PlayerRanked } from "../api/schema/player-ranked"
+import type { PlayerRanked } from "../schema/player-ranked.js"
 
 export const getGloryFromWins = (wins: number): number =>
   wins <= 150

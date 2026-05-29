@@ -1,10 +1,5 @@
-import {
-  HttpApi,
-  HttpApiEndpoint,
-  HttpApiGroup,
-  HttpApiSchema,
-} from "@effect/platform"
 import { Schema } from "effect"
+import { HttpApi, HttpApiEndpoint, HttpApiGroup } from "effect/unstable/httpapi"
 import { providers } from "@dair/db"
 import {
   BadRequest,
@@ -15,6 +10,7 @@ import {
   ServiceUnavailable,
 } from "./shared/errors"
 import { AnyRegion } from "./shared/region"
+import { withDecodingDefault } from "./shared/schema-helpers"
 import { DeleteSessionResponse } from "./routes/v1/auth/delete-session"
 import { GetSessionResponse } from "./routes/v1/auth/get-session"
 import { State } from "./routes/v1/auth/providers/callback"
@@ -35,12 +31,10 @@ import {
 import {
   GetGlobalLegendRankingsResponse,
   GlobalLegendRankingsOrderBy,
-  LegendIdParam,
 } from "./routes/v1/brawlhalla/get-legend-rankings"
 import {
   GetGlobalWeaponRankingsResponse,
   GlobalWeaponRankingsOrderBy,
-  WeaponNameParam,
 } from "./routes/v1/brawlhalla/get-weapon-rankings"
 import {
   GetRankedQueues1v1Response,
@@ -60,283 +54,232 @@ import {
   GetNearestServerResponse,
 } from "./routes/v1/brawlhalla/get-servers"
 
-const idParam = HttpApiSchema.param("id", Schema.NumberFromString)
-const providerParam = HttpApiSchema.param(
-  "provider",
-  Schema.Literal(...providers),
+const Provider = Schema.Literals([...providers])
+
+const rankedErrors = [
+  NotFound,
+  TooManyRequests,
+  ServiceUnavailable,
+  InternalServerError,
+] as const
+
+const pageParam = Schema.NumberFromString.check(
+  Schema.isGreaterThanOrEqualTo(1),
 )
 
 class HealthGroup extends HttpApiGroup.make("health").add(
-  HttpApiEndpoint.get("health")`/`.addSuccess(Schema.String),
+  HttpApiEndpoint.get("health", "/", {
+    success: Schema.String,
+  }),
 ) {}
 
 class BrawlhallaGroup extends HttpApiGroup.make("brawlhalla")
   .add(
-    HttpApiEndpoint.get("get-status-tokens")`/status/tokens`
-      .addSuccess(GetRateLimiterStatusResponse)
-      .addError(InternalServerError),
+    HttpApiEndpoint.get("get-status-tokens", "/status/tokens", {
+      success: GetRateLimiterStatusResponse,
+      error: [InternalServerError],
+    }),
   )
   .add(
-    HttpApiEndpoint.get("get-player-by-id")`/players/${idParam}`
-      .addSuccess(GetPlayerByIdResponse)
-      .addError(NotFound)
-      .addError(TooManyRequests)
-      .addError(ServiceUnavailable)
-      .addError(InternalServerError),
+    HttpApiEndpoint.get("get-player-by-id", "/players/:id", {
+      params: { id: Schema.NumberFromString },
+      success: GetPlayerByIdResponse,
+      error: rankedErrors,
+    }),
   )
   .add(
-    HttpApiEndpoint.get("search-player")`/players/search`
-      .setUrlParams(
-        Schema.Struct({
-          name: Schema.String.pipe(Schema.minLength(3)),
-        }),
-      )
-      .addSuccess(SearchPlayerResponse)
-      .addError(BadRequest)
-      .addError(InternalServerError),
+    HttpApiEndpoint.get("search-player", "/players/search", {
+      query: {
+        name: Schema.String.check(Schema.isMinLength(3)),
+      },
+      success: SearchPlayerResponse,
+      error: [BadRequest, InternalServerError],
+    }),
   )
   .add(
-    HttpApiEndpoint.get("get-player-rankings")`/players/rankings`
-      .setUrlParams(
-        Schema.Struct({
-          orderBy: GlobalPlayerRankingsOrderBy.pipe(
-            Schema.optionalWith({ default: () => "xp" }),
-          ),
-        }),
-      )
-      .addSuccess(GetGlobalPlayerRankingsResponse)
-      .addError(InternalServerError),
+    HttpApiEndpoint.get("get-player-rankings", "/players/rankings", {
+      query: {
+        orderBy: withDecodingDefault(GlobalPlayerRankingsOrderBy, "xp"),
+      },
+      success: GetGlobalPlayerRankingsResponse,
+      error: [InternalServerError],
+    }),
   )
   .add(
-    HttpApiEndpoint.get("get-guild-by-id")`/guilds/${idParam}`
-      .addSuccess(GetClanByIdResponse)
-      .addError(NotFound)
-      .addError(TooManyRequests)
-      .addError(ServiceUnavailable)
-      .addError(InternalServerError),
+    HttpApiEndpoint.get("get-guild-by-id", "/guilds/:id", {
+      params: { id: Schema.NumberFromString },
+      success: GetClanByIdResponse,
+      error: rankedErrors,
+    }),
   )
   .add(
-    HttpApiEndpoint.get("search-guild")`/guilds/search`
-      .setUrlParams(
-        Schema.Struct({
-          page: Schema.NumberFromString.pipe(
-            Schema.greaterThanOrEqualTo(1),
-            Schema.optionalWith({ default: () => 1 }),
-          ),
-          limit: Schema.NumberFromString.pipe(
-            Schema.greaterThanOrEqualTo(1),
-            Schema.lessThanOrEqualTo(100),
-            Schema.optionalWith({ default: () => 50 }),
-          ),
-          name: Schema.String.pipe(Schema.optional),
-        }),
-      )
-      .addSuccess(SearchGuildResponse)
-      .addError(InternalServerError),
-  )
-  // TODO: add /guilds/rankings
-  .add(
-    HttpApiEndpoint.get("get-ranked-1v1")`/ranked/1v1`
-      .setUrlParams(
-        Schema.Struct({
-          name: Schema.String.pipe(Schema.optional),
-          region: AnyRegion.pipe(Schema.optionalWith({ default: () => "all" })),
-          page: Schema.NumberFromString.pipe(
-            Schema.greaterThanOrEqualTo(1),
-            Schema.optionalWith({ default: () => 1 }),
-          ),
-        }),
-      )
-      .addSuccess(GetRankings1v1Response)
-      .addError(NotFound)
-      .addError(TooManyRequests)
-      .addError(ServiceUnavailable)
-      .addError(InternalServerError),
+    HttpApiEndpoint.get("search-guild", "/guilds/search", {
+      query: {
+        page: withDecodingDefault(pageParam, 1),
+        limit: withDecodingDefault(
+          pageParam.check(Schema.isLessThanOrEqualTo(100)),
+          50,
+        ),
+        name: Schema.optional(Schema.String),
+      },
+      success: SearchGuildResponse,
+      error: [InternalServerError],
+    }),
   )
   .add(
-    HttpApiEndpoint.get("get-ranked-1v1-queue")`/ranked/1v1/queue`
-      .setUrlParams(
-        Schema.Struct({
-          region: AnyRegion.pipe(Schema.optionalWith({ default: () => "all" })),
-        }),
-      )
-      .addSuccess(GetRankedQueues1v1Response)
-      .addError(NotFound)
-      .addError(TooManyRequests)
-      .addError(InternalServerError),
+    HttpApiEndpoint.get("get-ranked-1v1", "/ranked/1v1", {
+      query: {
+        name: Schema.optional(Schema.String),
+        region: withDecodingDefault(AnyRegion, "all"),
+        page: withDecodingDefault(pageParam, 1),
+      },
+      success: GetRankings1v1Response,
+      error: rankedErrors,
+    }),
   )
   .add(
-    HttpApiEndpoint.get("get-ranked-2v2")`/ranked/2v2`
-      .setUrlParams(
-        Schema.Struct({
-          region: AnyRegion.pipe(Schema.optionalWith({ default: () => "all" })),
-          page: Schema.NumberFromString.pipe(
-            Schema.greaterThanOrEqualTo(1),
-            Schema.optionalWith({ default: () => 1 }),
-          ),
-        }),
-      )
-      .addSuccess(GetRankings2v2Response)
-      .addError(NotFound)
-      .addError(TooManyRequests)
-      .addError(ServiceUnavailable)
-      .addError(InternalServerError),
-  )
-
-  .add(
-    HttpApiEndpoint.get("get-ranked-2v2-queue")`/ranked/2v2/queue`
-      .setUrlParams(
-        Schema.Struct({
-          region: AnyRegion.pipe(Schema.optionalWith({ default: () => "all" })),
-        }),
-      )
-      .addSuccess(GetRankedQueues2v2Response)
-      .addError(NotFound)
-      .addError(TooManyRequests)
-      .addError(InternalServerError),
+    HttpApiEndpoint.get("get-ranked-1v1-queue", "/ranked/1v1/queue", {
+      query: {
+        region: withDecodingDefault(AnyRegion, "all"),
+      },
+      success: GetRankedQueues1v1Response,
+      error: [NotFound, TooManyRequests, InternalServerError],
+    }),
   )
   .add(
-    HttpApiEndpoint.get("get-ranked-rotating")`/ranked/rotating`
-      .setUrlParams(
-        Schema.Struct({
-          region: AnyRegion.pipe(Schema.optionalWith({ default: () => "all" })),
-          page: Schema.NumberFromString.pipe(
-            Schema.greaterThanOrEqualTo(1),
-            Schema.optionalWith({ default: () => 1 }),
-          ),
-        }),
-      )
-      .addSuccess(GetRankingsRotatingResponse)
-      .addError(NotFound)
-      .addError(TooManyRequests)
-      .addError(ServiceUnavailable)
-      .addError(InternalServerError),
+    HttpApiEndpoint.get("get-ranked-2v2", "/ranked/2v2", {
+      query: {
+        region: withDecodingDefault(AnyRegion, "all"),
+        page: withDecodingDefault(pageParam, 1),
+      },
+      success: GetRankings2v2Response,
+      error: rankedErrors,
+    }),
   )
   .add(
-    HttpApiEndpoint.get("get-ranked-rotating-queue")`/ranked/rotating/queue`
-      .setUrlParams(
-        Schema.Struct({
-          region: AnyRegion.pipe(Schema.optionalWith({ default: () => "all" })),
-        }),
-      )
-      .addSuccess(GetRankedQueuesRotatingResponse)
-      .addError(NotFound)
-      .addError(TooManyRequests)
-      .addError(InternalServerError),
+    HttpApiEndpoint.get("get-ranked-2v2-queue", "/ranked/2v2/queue", {
+      query: {
+        region: withDecodingDefault(AnyRegion, "all"),
+      },
+      success: GetRankedQueues2v2Response,
+      error: [NotFound, TooManyRequests, InternalServerError],
+    }),
   )
   .add(
-    HttpApiEndpoint.get("get-power-rankings")`/power-rankings`
-      .setUrlParams(
-        Schema.Struct({
-          gameMode: PowerRankingsGameMode.pipe(
-            Schema.optionalWith({ default: () => "1v1" }),
-          ),
-          region: PowerRankingsRegion.pipe(
-            Schema.optionalWith({ default: () => "LAN" }),
-          ),
-          page: Schema.NumberFromString.pipe(
-            Schema.greaterThanOrEqualTo(1),
-            Schema.optionalWith({ default: () => 1 }),
-          ),
-          orderBy: PowerRankingsOrderBy.pipe(
-            Schema.optionalWith({ default: () => "powerRanking" }),
-          ),
-        }),
-      )
-      .addSuccess(GetPowerRankingsResponse)
-      .addError(TooManyRequests)
-      .addError(InternalServerError),
+    HttpApiEndpoint.get("get-ranked-rotating", "/ranked/rotating", {
+      query: {
+        region: withDecodingDefault(AnyRegion, "all"),
+        page: withDecodingDefault(pageParam, 1),
+      },
+      success: GetRankingsRotatingResponse,
+      error: rankedErrors,
+    }),
   )
   .add(
-    HttpApiEndpoint.get(
-      "get-legend-rankings",
-    )`/legends/${LegendIdParam}/rankings`
-      .setUrlParams(
-        Schema.Struct({
-          orderBy: GlobalLegendRankingsOrderBy.pipe(
-            Schema.optionalWith({ default: () => "xp" }),
-          ),
-        }),
-      )
-      .addSuccess(GetGlobalLegendRankingsResponse)
-      .addError(InternalServerError),
+    HttpApiEndpoint.get("get-ranked-rotating-queue", "/ranked/rotating/queue", {
+      query: {
+        region: withDecodingDefault(AnyRegion, "all"),
+      },
+      success: GetRankedQueuesRotatingResponse,
+      error: [NotFound, TooManyRequests, InternalServerError],
+    }),
   )
   .add(
-    HttpApiEndpoint.get("get-weekly-rotation")`/legends/rotation`
-      .addSuccess(GetWeeklyRotationResponse)
-      .addError(NotFound)
-      .addError(TooManyRequests)
-      .addError(InternalServerError),
+    HttpApiEndpoint.get("get-power-rankings", "/power-rankings", {
+      query: {
+        gameMode: withDecodingDefault(PowerRankingsGameMode, "1v1"),
+        region: withDecodingDefault(PowerRankingsRegion, "LAN"),
+        page: withDecodingDefault(pageParam, 1),
+        orderBy: withDecodingDefault(PowerRankingsOrderBy, "powerRanking"),
+      },
+      success: GetPowerRankingsResponse,
+      error: [TooManyRequests, InternalServerError],
+    }),
   )
   .add(
-    HttpApiEndpoint.get(
-      "get-weapon-rankings",
-    )`/weapons/${WeaponNameParam}/rankings`
-      .setUrlParams(
-        Schema.Struct({
-          orderBy: GlobalWeaponRankingsOrderBy.pipe(
-            Schema.optionalWith({ default: () => "xp" }),
-          ),
-        }),
-      )
-      .addSuccess(GetGlobalWeaponRankingsResponse)
-      .addError(InternalServerError),
+    HttpApiEndpoint.get("get-legend-rankings", "/legends/:id/rankings", {
+      params: { id: Schema.NumberFromString },
+      query: {
+        orderBy: withDecodingDefault(GlobalLegendRankingsOrderBy, "xp"),
+      },
+      success: GetGlobalLegendRankingsResponse,
+      error: [InternalServerError],
+    }),
   )
   .add(
-    HttpApiEndpoint.get("get-preview-articles")`/articles/preview`
-      .addSuccess(GetPreviewArticlesResponse)
-      .addError(NotFound)
-      .addError(TooManyRequests)
-      .addError(InternalServerError),
+    HttpApiEndpoint.get("get-weekly-rotation", "/legends/rotation", {
+      success: GetWeeklyRotationResponse,
+      error: [NotFound, TooManyRequests, InternalServerError],
+    }),
   )
   .add(
-    HttpApiEndpoint.get("get-servers")`/servers`
-      .addSuccess(GetServersResponse)
-      .addError(InternalServerError),
+    HttpApiEndpoint.get("get-weapon-rankings", "/weapons/:name/rankings", {
+      params: { name: Schema.NonEmptyString },
+      query: {
+        orderBy: withDecodingDefault(GlobalWeaponRankingsOrderBy, "xp"),
+      },
+      success: GetGlobalWeaponRankingsResponse,
+      error: [InternalServerError],
+    }),
   )
   .add(
-    HttpApiEndpoint.get("get-nearest-server")`/servers/nearest`
-      .addSuccess(GetNearestServerResponse)
-      .addError(InternalServerError),
+    HttpApiEndpoint.get("get-preview-articles", "/articles/preview", {
+      success: GetPreviewArticlesResponse,
+      error: [NotFound, TooManyRequests, InternalServerError],
+    }),
+  )
+  .add(
+    HttpApiEndpoint.get("get-servers", "/servers", {
+      success: GetServersResponse,
+      error: [InternalServerError],
+    }),
+  )
+  .add(
+    HttpApiEndpoint.get("get-nearest-server", "/servers/nearest", {
+      success: GetNearestServerResponse,
+      error: [InternalServerError],
+    }),
   ) {}
 
 class AuthGroup extends HttpApiGroup.make("auth")
   .add(
-    HttpApiEndpoint.get("get_session")`/session`
-      .addSuccess(GetSessionResponse)
-      .addError(InternalServerError)
-      .addError(Unauthorized),
+    HttpApiEndpoint.get("get_session", "/session", {
+      success: GetSessionResponse,
+      error: [InternalServerError, Unauthorized],
+    }),
   )
   .add(
-    HttpApiEndpoint.del("delete_session")`/session`
-      .addSuccess(DeleteSessionResponse)
-      .addError(InternalServerError)
-      .addError(Unauthorized),
+    HttpApiEndpoint.delete("delete_session", "/session", {
+      success: DeleteSessionResponse,
+      error: [InternalServerError, Unauthorized],
+    }),
   )
   .add(
-    HttpApiEndpoint.get("logout")`/logout`
-      .addSuccess(DeleteSessionResponse)
-      .addError(InternalServerError)
-      .addError(Unauthorized),
+    HttpApiEndpoint.get("logout", "/logout", {
+      success: DeleteSessionResponse,
+      error: [InternalServerError, Unauthorized],
+    }),
   )
   .add(
-    HttpApiEndpoint.get("authorize")`/providers/${providerParam}/authorize`
-      .setUrlParams(State)
-      .addError(InternalServerError)
-      .addError(Unauthorized),
+    HttpApiEndpoint.get("authorize", "/providers/:provider/authorize", {
+      params: { provider: Provider },
+      query: {
+        path: Schema.UndefinedOr(Schema.String),
+        baseUrl: Schema.UndefinedOr(Schema.String),
+      },
+      error: [InternalServerError, Unauthorized],
+    }),
   )
   .add(
-    HttpApiEndpoint.get("callback")`/providers/${providerParam}/callback`
-      .setUrlParams(
-        Schema.Struct({
-          code: Schema.String,
-          state: Schema.String,
-        }),
-      )
-      .addSuccess(Schema.Struct({}))
-      .addError(Unauthorized)
-      .addError(BadRequest)
-      .addError(InternalServerError),
+    HttpApiEndpoint.get("callback", "/providers/:provider/callback", {
+      params: { provider: Provider },
+      query: {
+        code: Schema.String,
+        state: Schema.String,
+      },
+      success: Schema.Struct({}),
+      error: [Unauthorized, BadRequest, InternalServerError],
+    }),
   ) {}
 
 export const Api = HttpApi.make("Api")

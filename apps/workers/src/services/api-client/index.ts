@@ -1,17 +1,17 @@
 import { Api } from "@dair/api-contract"
 import {
-  HttpApiClient,
   HttpClient,
   HttpClientRequest,
   FetchHttpClient,
-} from "@effect/platform"
-import { Effect, Layer, Redacted } from "effect"
+} from "effect/unstable/http"
+import { HttpApiClient } from "effect/unstable/httpapi"
+import { Context, Effect, Layer, Redacted } from "effect"
 import { WorkerConfig } from "@/services/config"
 
-export class WorkerApiClient extends Effect.Service<WorkerApiClient>()(
+export class WorkerApiClient extends Context.Service<WorkerApiClient>()(
   "@dair/workers/WorkerApiClient",
   {
-    effect: Effect.gen(function* () {
+    make: Effect.gen(function* () {
       const config = yield* WorkerConfig
       const baseHttpClient = yield* HttpClient.HttpClient
 
@@ -37,7 +37,7 @@ export class WorkerApiClient extends Effect.Service<WorkerApiClient>()(
             playerId: number,
           ) {
             return yield* client.brawlhalla["get-player-by-id"]({
-              path: { id: playerId },
+              params: { id: playerId },
             }).pipe(Effect.tapError(Effect.logError))
           }),
           getRankings1v1: Effect.fn("getRankings1v1")(function* (
@@ -45,7 +45,7 @@ export class WorkerApiClient extends Effect.Service<WorkerApiClient>()(
             page: number,
           ) {
             return yield* client.brawlhalla["get-ranked-1v1"]({
-              urlParams: { region: region as "all", page },
+              query: { region: region as "all", page },
             })
           }),
           getRankings2v2: Effect.fn("getRankings2v2")(function* (
@@ -53,7 +53,7 @@ export class WorkerApiClient extends Effect.Service<WorkerApiClient>()(
             page: number,
           ) {
             return yield* client.brawlhalla["get-ranked-2v2"]({
-              urlParams: { region: region as "all", page },
+              query: { region: region as "all", page },
             })
           }),
           getRankingsRotating: Effect.fn("getRankingsRotating")(function* (
@@ -61,7 +61,7 @@ export class WorkerApiClient extends Effect.Service<WorkerApiClient>()(
             page: number,
           ) {
             return yield* client.brawlhalla["get-ranked-rotating"]({
-              urlParams: { region: region as "all", page },
+              query: { region: region as "all", page },
             })
           }),
         },
@@ -69,7 +69,7 @@ export class WorkerApiClient extends Effect.Service<WorkerApiClient>()(
     }),
   },
 ) {
-  static readonly layer = this.Default.pipe(
+  static readonly layer = Layer.effect(this, this.make).pipe(
     Layer.provide(WorkerConfig.layer),
     Layer.provide(FetchHttpClient.layer),
   )

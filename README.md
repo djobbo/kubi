@@ -4,17 +4,17 @@ A Brawlhalla statistics and analytics platform built with Effect, featuring real
 
 ## Tech Stack
 
-| Component       | Technology                                         |
-| --------------- | -------------------------------------------------- |
-| Package Manager | Bun (v1.3.4)                                       |
-| Monorepo        | Turborepo                                          |
-| Backend         | Bun + Effect + @effect/platform                    |
-| Frontend        | React 19 + Vite + TanStack Router + TailwindCSS    |
-| Database        | PostgreSQL + Drizzle ORM                           |
-| Cache           | Redis (LRU eviction)                               |
-| Observability   | OpenTelemetry + Grafana Stack (Alloy, Loki, Tempo) |
-| i18n            | Lingui                                             |
-| Type Safety     | TypeScript + Effect Schema                         |
+| Component     | Technology                                         |
+| ------------- | -------------------------------------------------- |
+| Toolchain     | Vite+ (`vp`) + pnpm (from `.repos/vite-plus`)      |
+| Monorepo      | Turborepo                                          |
+| Backend       | Node.js + Effect + `@effect/platform-node`         |
+| Frontend      | React 19 + Vite + TanStack Router + TailwindCSS    |
+| Database      | PostgreSQL + Drizzle ORM                           |
+| Cache         | Redis (LRU eviction)                               |
+| Observability | OpenTelemetry + Grafana Stack (Alloy, Loki, Tempo) |
+| i18n          | Lingui                                             |
+| Type Safety   | TypeScript + Effect Schema                         |
 
 ## Project Structure
 
@@ -39,6 +39,7 @@ dair/
 │   │   │   ├── routes/           # TanStack Router pages
 │   │   │   └── shared/           # Shared components & utilities
 │   │   └── public/               # Static assets
+│   ├── migrator/                 # Supabase → PG data migration (phase 3)
 │   └── monitoring/               # Grafana observability stack config
 │       ├── alloy/                # OpenTelemetry collector config
 │       ├── grafana/              # Dashboards & datasources
@@ -64,7 +65,7 @@ dair/
 │
 └── scripts/
     ├── compose.ts                # Docker compose CLI helper
-    └── migration/                # Data migration scripts
+    └── setup/                    # vp run setup bootstrap
 ```
 
 ## API Architecture
@@ -152,52 +153,40 @@ Two scheduled crawlers run alongside the API server:
 
 ### Prerequisites
 
-- [Bun](https://bun.sh) >= 1.3.4
+- [Node.js](https://nodejs.org/) >= 22.12
 - [Docker](https://www.docker.com/) (for PostgreSQL, Redis, and observability stack)
 
-### 1. Install Dependencies
+### 1. Bootstrap (recommended)
+
+From the repo root:
 
 ```bash
-bun install
+vp install
+vp run setup
+vp run dev
 ```
 
-### 2. Configure Environment
+`vp run setup` copies `.env.example` → `.env` when needed, starts Postgres + Redis via compose, installs dependencies, syncs `.repos/`, and runs Drizzle migrations.
 
-Create `apps/api/.env`:
+Optional Supabase credentials for legacy data migration:
 
 ```bash
-# Required
-API_URL=http://localhost:3000
-DATABASE_URL=postgresql://dair:dair@localhost:5432/dair
-DEFAULT_CLIENT_URL=http://localhost:3001
-BRAWLHALLA_API_KEY=your_api_key_here
-
-# OAuth (required for authentication)
-OAUTH_SECRET=your_random_secret
-DISCORD_CLIENT_ID=your_discord_client_id
-DISCORD_CLIENT_SECRET=your_discord_client_secret
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-
-# Optional
-API_PORT=3000                      # default: 3000
-ALLOWED_ORIGINS=*                  # default: * (comma-separated)
-REDIS_URL=redis://localhost:6379   # default: redis://localhost:6379
-CACHE_PREFIX=api:cache             # default: api:cache
-OTLP_ENDPOINT=http://localhost:4318
-SERVICE_NAME=api
-SERVICE_VERSION=0.0.0
+vp run setup -- --with-supabase
 ```
+
+### 2. Environment
+
+Root [`.env.example`](.env.example) lists compose defaults (`DATABASE_URL`, `REDIS_URL`, API/client URLs). The API also reads these from the root `.env` when started via `vp run dev`.
 
 ### 3. Start Services & Dev Servers
 
 ```bash
-bun dev
+vp run dev
 ```
 
 This command:
 
-1. Starts Docker services (PostgreSQL, Redis, observability stack)
+1. Starts Docker services (PostgreSQL, Redis, observability stack) when not already up
 2. Runs database migrations
 3. Starts the API server with hot reload
 4. Starts the client dev server
@@ -219,31 +208,32 @@ This command:
 
 ```bash
 # Start everything (services + dev servers)
-bun dev
+vp run dev
 
 # Docker services
-bun compose up         # Start Docker services only
-bun compose down       # Stop Docker services
+vp run compose:up
+vp run compose:down
 
 # Production
-bun server:start       # Start API in production mode
-bun build              # Build all packages
+vp run server:start
+vp run build
 
 # Code quality
-bun lint               # Format + lint + fix
-bun check:types        # Type checking
-bun check:lint         # Lint only
-bun check:format       # Format check
-bun check:deadcode     # Find unused exports
-bun test               # Run tests
+vp run lint
+vp run check:types
+vp run check:lint
+vp run check:format
+vp run health
+vp run audit
+vp run test
 
-# Database (run from apps/api)
-bun db:migrate         # Generate + apply migrations
-bun studio             # Open Drizzle Studio
+# Database
+vp run -F @dair/api db:migrate
+vp run -F @dair/api studio
 
-# Localization (run from apps/client)
-bun locales:extract    # Extract strings from code
-bun locales:compile    # Compile translation files
+# Localization
+vp run -F @dair/client locales:extract
+vp run -F @dair/client locales:compile
 ```
 
 ## Observability
@@ -275,8 +265,8 @@ bun locales:compile    # Compile translation files
 This project follows idiomatic Effect patterns. For guidance:
 
 ```bash
-bunx effect-solutions list         # List all topics
-bunx effect-solutions show <slug>  # Read a specific topic
+vp exec npx effect-solutions list         # List all topics
+vp exec npx effect-solutions show <slug>  # Read a specific topic
 ```
 
 Key patterns used:

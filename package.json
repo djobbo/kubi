@@ -2,49 +2,42 @@
   "name": "dair",
   "version": "0.0.0",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
   "type": "module",
   "scripts": {
-    "build": "turbo run build",
-    "check:deadcode": "NODE_ENV=deadcode knip-bun",
-    "check:format": "oxfmt --check",
-    "check:lint": "oxlint --type-aware --type-check",
-    "check:types": "turbo run check:types",
-    "compose": "bun run scripts/compose.ts",
-    "compose:down": "bun run scripts/compose.ts down",
-    "compose:up": "bun run scripts/compose.ts up --wait",
-    "dev": "turbo run dev studio",
-    "lint": "oxfmt && syncpack format && syncpack fix && oxlint --type-aware --type-check --fix --fix-suggestions",
-    "prepare": "husky && effect-language-service patch",
-    "server:build": "turbo run build --filter=@dair/api",
-    "server:start": "turbo run start --filter=@dair/api",
-    "test": "turbo run test",
-    "workers:dev": "turbo run dev --filter=@dair/workers",
-    "workers:start": "turbo run start --filter=@dair/workers"
+    "check": "vp check",
+    "check:fix": "vp check --fix",
+    "compose": "vp exec tsx scripts/compose.ts",
+    "compose:down": "vp exec tsx scripts/compose.ts down",
+    "health": "fallow health",
+    "audit": "fallow audit",
+    "prepare": "vp config && effect-language-service patch",
+    "server:build": "vp run -F @dair/api build",
+    "server:start": "vp run -F @dair/api start",
+    "setup": "vp exec tsx scripts/setup/setup.mts",
+    "workers:dev": "vp run -F @dair/workers dev",
+    "workers:start": "vp run -F @dair/workers start"
   },
   "devDependencies": {
-    "@effect/cli": "^0.73.0",
-    "@effect/language-service": "^0.72.0",
-    "@effect/platform-bun": "^0.87.0",
-    "@types/bun": "1.3.6",
-    "@typescript/native-preview": "^7.0.0-dev.20260120.1",
-    "effect": "^3.19.14",
-    "effect-solutions": "^0.4.13",
-    "husky": "^9.1.7",
-    "knip": "^5.82.1",
-    "lint-staged": "^16.2.7",
-    "oxfmt": "^0.26.0",
-    "oxlint": "^1.41.0",
-    "oxlint-tsgolint": "^0.11.1",
-    "syncpack": "^14.0.0-alpha.37",
-    "turbo": "^2.7.5",
-    "typescript": "^5"
+    "@effect/language-service": "catalog:",
+    "@effect/platform-node": "catalog:",
+    "@lingui/conf": "catalog:",
+    "@types/node": "catalog:",
+    "@typescript/native-preview": "catalog:",
+    "effect": "catalog:",
+    "effect-solutions": "catalog:",
+    "fallow": "catalog:",
+    "husky": "catalog:",
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:",
+    "oxlint-tsgolint": "catalog:",
+    "syncpack": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vite-plus": "catalog:"
   },
-  "lint-staged": {
-    "*": "oxlint --type-aware --fix --fix-suggestions"
+  "engines": {
+    "node": ">=24.0.0"
   },
-  "packageManager": "bun@1.3.6"
+  "packageManager": "pnpm@11.5.0"
 }

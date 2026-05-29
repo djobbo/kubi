@@ -1,5 +1,5 @@
 {
-  "typescript.experimental.useTsgo": false,
+  "typescript.experimental.useTsgo": true,
   "files.watcherExclude": {
     "**/routeTree.gen.ts": true
   },
@@ -32,5 +32,6 @@
   "oxc.enable": true,
   "oxc.typeAware": true,
   "typescript.tsdk": "./node_modules/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.native-preview.tsdk": "/home/nai/projects/kubi/node_modules/@typescript/native-preview"
 }

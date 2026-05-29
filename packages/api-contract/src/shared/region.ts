@@ -20,6 +20,6 @@ export const isValidRegion = (
   return regions.includes(input as (typeof regions)[number])
 }
 
-export const Region = Schema.NullOr(Schema.Literal(...regions))
+export const Region = Schema.NullOr(Schema.Literals([...regions]))
 
-export const AnyRegion = Schema.Literal(...regions, allRegion)
+export const AnyRegion = Schema.Literals([...regions, allRegion])

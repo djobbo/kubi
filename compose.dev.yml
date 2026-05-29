@@ -5,18 +5,22 @@ services:
   postgres:
     image: postgres:18-alpine
     ports:
-      - 5432:5432
+      - ${POSTGRES_PORT:-5432}:5432
     environment:
-      POSTGRES_USER: dair
-      POSTGRES_PASSWORD: dair
-      POSTGRES_DB: dair
+      POSTGRES_USER: ${POSTGRES_USER:-dair}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dair}
+      POSTGRES_DB: ${POSTGRES_DB:-dair}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U dair -d dair"]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-dair} -d ${POSTGRES_DB:-dair}",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
     volumes:
-      - ./.data:/var/lib/postgresql/18/docker
+      - ./.data/postgres:/var/lib/postgresql/18/docker
 
   redis:
     image: redis:8-alpine
@@ -29,7 +33,4 @@ services:
       timeout: 5s
       retries: 5
     volumes:
-      - redis-data:/data
-
-volumes:
-  redis-data:
+      - ./.data/redis:/data

@@ -1,0 +1,4 @@
+{
+  "extends": "../../packages/brawlhalla-api/tsconfig.json",
+  "include": ["src"]
+}

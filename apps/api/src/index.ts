@@ -1,6 +1,11 @@
+import "../env.js"
+
+import { createServer } from "node:http"
+
 import { Api } from "@dair/api-contract"
-import { HttpApiBuilder, HttpServer, FetchHttpClient } from "@effect/platform"
-import { BunHttpServer } from "@effect/platform-bun"
+import { HttpApiBuilder, HttpApiScalar } from "effect/unstable/httpapi"
+import { FetchHttpClient, HttpRouter, HttpServer } from "effect/unstable/http"
+import * as NodeHttpServer from "@effect/platform-node/NodeHttpServer"
 import { Effect, Layer, Duration, flow } from "effect"
 import { ApiLive } from "./api-live"
 import { Archive } from "./services/archive"
@@ -8,19 +13,25 @@ import { Authorization } from "./services/authorization"
 import { Cache } from "./services/cache"
 import { ApiServerConfig } from "./services/config/api-server-config"
 import { Database } from "./services/db"
-import * as Docs from "./services/docs"
 import { BrawlhallaApi } from "./services/brawlhalla-api"
+import { BrawlhallaGql } from "./services/brawlhalla-gql"
 import { BrawltoolsApi } from "./services/brawltools-api"
 import { Fetcher } from "./services/fetcher"
 import { responseCache } from "./services/middleware/response-cache"
 import { workerAuthMiddleware } from "./services/middleware/worker-auth"
 import { brawlhallaApiProxy } from "./services/proxy"
-import { ObservabilityLive } from "./services/observability"
+import {
+  disableBuiltInHttpTracer,
+  httpServerTracer,
+  observabilityLayer,
+} from "@dair/observability"
 import { BrawlhallaRateLimiter } from "./services/rate-limiter"
 import { ServerDiscovery } from "./services/server-discovery"
+import { Bookmarks } from "./services/bookmarks"
 
 const SharedDependencies = Layer.mergeAll(
   BrawlhallaApi.layer,
+  BrawlhallaGql.layer,
   BrawlhallaRateLimiter.layer,
   BrawltoolsApi.layer,
   Archive.layer,
@@ -29,9 +40,9 @@ const SharedDependencies = Layer.mergeAll(
   Fetcher.layer,
   Database.layer,
   ServerDiscovery.layer,
+  Bookmarks.layer,
 )
 
-// Compose middleware: proxy -> worker auth -> response cache
 const composedMiddleware = flow(
   brawlhallaApiProxy,
   workerAuthMiddleware,
@@ -39,39 +50,50 @@ const composedMiddleware = flow(
     ttlSeconds: Duration.toSeconds(Duration.minutes(5)),
     exclude: ["/auth", "/health", "/session", "/docs", "/openapi", "/proxy"],
   }),
+  httpServerTracer,
 )
 
-const ServerLive = Layer.unwrapEffect(
+const ServerLive = Layer.unwrap(
   Effect.gen(function* () {
     const serverConfig = yield* ApiServerConfig
 
-    return HttpApiBuilder.serve(composedMiddleware).pipe(
+    const ApiRouterLive = HttpApiBuilder.layer(Api, {
+      openapiPath: "/openapi",
+    }).pipe(
+      Layer.provide(ApiLive),
+      Layer.provide(HttpApiScalar.layerCdn(Api)),
       Layer.provide(
-        HttpApiBuilder.middlewareCors({
+        HttpRouter.cors({
           allowedOrigins: serverConfig.allowedOrigins,
           allowedMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         }),
       ),
+    )
+
+    return HttpRouter.serve(ApiRouterLive, {
+      middleware: composedMiddleware,
+    }).pipe(
       HttpServer.withLogAddress,
-      Layer.provide(ApiLive),
       Layer.provide(
-        BunHttpServer.layer({
+        NodeHttpServer.layer(createServer, {
           port: serverConfig.port,
         }),
       ),
       Layer.provide(SharedDependencies),
-      // Infrastructure layers
-      Layer.provide(Docs.layer(Api)),
     )
   }),
 ).pipe(
   Layer.provide(ApiServerConfig.layer),
   Layer.provide(FetchHttpClient.layer),
-  Layer.provide(ObservabilityLive),
+  Layer.provide(observabilityLayer("api")),
+  Layer.provide(disableBuiltInHttpTracer),
 )
 
-const server = Layer.launch(ServerLive).pipe(
-  Effect.catchAllCause(Effect.logError),
-)
+const server = Layer.launch(ServerLive).pipe(Effect.catchCause(Effect.logError))
 
-await Effect.runPromise(server)
+Effect.runPromise(server as Effect.Effect<void, never, never>).catch(
+  (error) => {
+    console.error(error)
+    process.exit(1)
+  },
+)

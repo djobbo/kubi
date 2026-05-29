@@ -1,7 +1,7 @@
 import { cleanString } from "@dair/common/src/helpers/clean-string"
 
-import type { PlayerRanked } from "../api/schema/player-ranked"
-import type { Ranking2v2 } from "../api/schema/rankings"
+import type { PlayerRanked } from "../schema/player-ranked.js"
+import type { Ranking2v2 } from "../schema/rankings.js"
 
 export const getTeamPlayers = (
   team: PlayerRanked["2v2"][number] | Ranking2v2,

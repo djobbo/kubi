@@ -1,7 +1,5 @@
 import { Schema } from "effect"
 import type { PlayerHistory } from "@dair/db"
-import { HttpApiSchema } from "@effect/platform"
-
 export const PlayerRanking = Schema.Struct({
   playerId: Schema.Number,
   name: Schema.String,
@@ -36,24 +34,19 @@ export const PlayerRanking = Schema.Struct({
   rankedRotatingLosses: Schema.NullOr(Schema.Number),
 })
 
-export const GlobalPlayerRankingsOrderBy = HttpApiSchema.param(
-  "orderBy",
-  Schema.Literal(
-    ...([
-      "xp",
-      "games",
-      "wins",
-      "losses",
-      "matchtime",
-      "kos",
-      "falls",
-      "suicides",
-      "teamKos",
-      "damageDealt",
-      "damageTaken",
-    ] satisfies (keyof PlayerHistory)[]),
-  ),
-)
+export const GlobalPlayerRankingsOrderBy = Schema.Literals([
+  "xp",
+  "games",
+  "wins",
+  "losses",
+  "matchtime",
+  "kos",
+  "falls",
+  "suicides",
+  "teamKos",
+  "damageDealt",
+  "damageTaken",
+] as const satisfies readonly (keyof PlayerHistory)[])
 
 null as unknown as PlayerHistory satisfies Omit<
   typeof PlayerRanking.Type,
