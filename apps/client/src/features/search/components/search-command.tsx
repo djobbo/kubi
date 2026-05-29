@@ -3,6 +3,7 @@ import * as Atom from "effect/unstable/reactivity/Atom"
 import * as AsyncResult from "effect/unstable/reactivity/AsyncResult"
 import { useAtom, useAtomSet, useAtomValue } from "@effect/atom-react"
 import { searchOpenAtom } from "../helpers/search-open-atom"
+import { useEffect } from "react"
 import * as searchCommandStyles from "./search-command.css"
 import { ApiClient } from "@/shared/api-client"
 import { Effect } from "effect"
@@ -168,6 +169,29 @@ const SearchResults = () => {
 
 export const SearchCommand = () => {
   const [searchOpen, setSearchOpen] = useAtom(searchOpenAtom)
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "/") return
+
+      const target = event.target
+      if (
+        target instanceof HTMLElement &&
+        (target.isContentEditable ||
+          target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.tagName === "SELECT")
+      ) {
+        return
+      }
+
+      event.preventDefault()
+      setSearchOpen(true)
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [setSearchOpen])
 
   return (
     <Dialog.Root open={searchOpen} onOpenChange={(open) => setSearchOpen(open)}>

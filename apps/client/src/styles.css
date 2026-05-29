@@ -33,7 +33,7 @@
   /* Layout */
   --sidebar-expanded-width: 14rem;
   --sidebar-minimized-width: 4rem;
-  --header-height: 2.5rem;
+  --header-height: 4rem;
 
   /* Corners */
   --corner-shape-smooth: superellipse(1.2);

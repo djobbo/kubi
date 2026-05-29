@@ -1,4 +1,6 @@
+import { getAppNavItems, isNavGroup } from "@/features/layout/nav-links"
 import { LandingBackground } from "@/features/layout/components/landing-background"
+import { SidebarNavGroup } from "@/features/layout/components/sidebar-nav-group"
 import {
   Sidebar,
   SidebarContent,
@@ -11,13 +13,11 @@ import {
   sidebarMenuButtonVariants,
 } from "@/shared/components/sidebar"
 import { cn } from "@dair/common/src/helpers/ui"
-import { t } from "@lingui/core/macro"
-import { Trans } from "@lingui/react/macro"
 import { Link, useParams } from "@tanstack/react-router"
-import { HomeIcon, SwordsIcon, UsersIcon } from "lucide-react"
 
 export function AppSidebar() {
   const { locale } = useParams({ strict: false })
+  const navItems = getAppNavItems(locale)
 
   return (
     <Sidebar variant="floating" collapsible="icon">
@@ -43,48 +43,31 @@ export function AppSidebar() {
         <SidebarContent>
           <SidebarGroup className="p-0">
             <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarNavLink
-                  to="/{-$locale}"
-                  params={{ locale }}
-                  tooltip={t`Home`}
-                  activeOptions={{ exact: true }}
-                >
-                  <HomeIcon />
-                  <span>
-                    <Trans>Home</Trans>
-                  </span>
-                </SidebarNavLink>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarNavLink
-                  to="/{-$locale}/brawlhalla/rankings/1v1/{-$region}/{-$page}"
-                  params={{ locale, region: "all", page: "1" }}
-                  tooltip={t`1v1 rankings`}
-                >
-                  <SwordsIcon />
-                  <span>
-                    <Trans>1v1 rankings</Trans>
-                  </span>
-                </SidebarNavLink>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarNavLink
-                  to="/{-$locale}/brawlhalla/rankings/2v2/{-$region}/{-$page}"
-                  params={{ locale, region: "all", page: "1" }}
-                  tooltip={t`2v2 rankings`}
-                >
-                  <UsersIcon />
-                  <span>
-                    <Trans>2v2 rankings</Trans>
-                  </span>
-                </SidebarNavLink>
-              </SidebarMenuItem>
+              {navItems.map((item) => {
+                if (isNavGroup(item)) {
+                  return <SidebarNavGroup key={item.tooltip} group={item} />
+                }
+
+                const ItemIcon = item.icon
+                return (
+                  <SidebarMenuItem key={item.tooltip}>
+                    <SidebarNavLink
+                      to={item.to}
+                      params={item.params}
+                      activeOptions={item.activeOptions}
+                      tooltip={item.tooltip}
+                    >
+                      <ItemIcon />
+                      <span>{item.label}</span>
+                    </SidebarNavLink>
+                  </SidebarMenuItem>
+                )
+              })}
             </SidebarMenu>
           </SidebarGroup>
         </SidebarContent>
       </div>
-      <SidebarRail />
+      <SidebarRail className="md:hidden" />
     </Sidebar>
   )
 }

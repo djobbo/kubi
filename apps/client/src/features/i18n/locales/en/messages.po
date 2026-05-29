@@ -18,8 +18,8 @@ msgstr ""
 msgid "1 KO every"
 msgstr "1 KO every"
 
-#: src/features/layout/components/app-sidebar.tsx:63
-#: src/features/layout/components/app-sidebar.tsx:67
+#: src/features/layout/nav-links.tsx:33
+#: src/features/layout/nav-links.tsx:34
 #: src/features/rankings/components/rankings-1v1-page.tsx:70
 msgid "1v1 rankings"
 msgstr "1v1 rankings"
@@ -28,8 +28,8 @@ msgstr "1v1 rankings"
 msgid "2v2"
 msgstr "2v2"
 
-#: src/features/layout/components/app-sidebar.tsx:75
-#: src/features/layout/components/app-sidebar.tsx:79
+#: src/features/layout/nav-links.tsx:40
+#: src/features/layout/nav-links.tsx:41
 #: src/features/rankings/components/rankings-2v2-page.tsx:38
 msgid "2v2 rankings"
 msgstr "2v2 rankings"
@@ -209,8 +209,8 @@ msgstr "Glory from rating"
 msgid "Glory from wins"
 msgstr "Glory from wins"
 
-#: src/features/layout/components/app-sidebar.tsx:50
-#: src/features/layout/components/app-sidebar.tsx:55
+#: src/features/layout/nav-links.tsx:54
+#: src/features/layout/nav-links.tsx:55
 msgid "Home"
 msgstr "Home"
 
@@ -350,16 +350,26 @@ msgstr "Ranked 2v2"
 msgid "Ranked season"
 msgstr "Ranked season"
 
+#: src/features/layout/nav-links.tsx:60
+#: src/features/layout/nav-links.tsx:61
+msgid "Rankings"
+msgstr "Rankings"
+
 #: src/features/rankings/components/rankings-1v1-page.tsx:95
 #: src/features/rankings/components/rankings-2v2-page.tsx:58
 msgid "Region"
 msgstr "Region"
+
+#: src/features/search/components/search-button.tsx:69
+msgid "Search"
+msgstr "Search"
 
 #: src/features/rankings/components/rankings-1v1-page.tsx:85
 msgid "Search must start with an exact match. Only players who completed placement matches are shown."
 msgstr "Search must start with an exact match. Only players who completed placement matches are shown."
 
 #: src/features/rankings/components/rankings-1v1-page.tsx:84
+#: src/features/search/components/search-button.tsx:39
 msgid "Search player..."
 msgstr "Search player..."
 

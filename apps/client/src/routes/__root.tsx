@@ -50,7 +50,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className="light">
+      <body className="dark">
         <div id="root">
           {children}
           <Grain />

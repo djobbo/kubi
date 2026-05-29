@@ -12,7 +12,7 @@ export type ImagePropsWithoutSrc = Omit<
   "src"
 > & {
   containerClassName?: string
-  Container?: "div" | "span"
+  Container?: "div" | "span" | null
   position?: "absolute" | "relative" | "fixed" | string
   containerStyle?: CSSProperties
 }
@@ -28,6 +28,10 @@ export const UnsafeImage = ({
   containerStyle,
   ...props
 }: UnsafeImageProps) => {
+  if (Container == null) {
+    return <img {...props} />
+  }
+
   return (
     <Container
       className={cn(position, containerClassName)}

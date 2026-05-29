@@ -2,6 +2,7 @@ import { AppSidebar } from "@/features/layout/components/app-sidebar"
 import { SiteHeader } from "@/features/layout/components/site-header"
 import { breadCrumbContainerAtom } from "@/shared/components/breadcrumb"
 import { SidebarInset, SidebarProvider } from "@/shared/components/sidebar"
+import { useIsMobile } from "@/shared/hooks/use-is-mobile"
 import { useAtomSet } from "@effect/atom-react"
 import { createFileRoute, Outlet } from "@tanstack/react-router"
 
@@ -11,9 +12,10 @@ export const Route = createFileRoute("/{-$locale}/_sidebar-layout")({
 
 function RouteComponent() {
   const setBreadCrumbContainer = useAtomSet(breadCrumbContainerAtom)
+  const isMobile = useIsMobile()
 
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={false} open={isMobile ? undefined : false}>
       <AppSidebar />
       <SidebarInset>
         <SiteHeader />
