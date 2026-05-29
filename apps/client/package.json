@@ -12,7 +12,7 @@
     "locales:extract": "lingui extract --clean",
     "prepare": "effect-language-service patch",
     "serve": "vite preview",
-    "test": "vitest run"
+    "test": "vp test"
   },
   "dependencies": {
     "@base-ui-components/react": "catalog:",
@@ -59,7 +59,6 @@
     "prettier": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "vitest": "catalog:",
     "web-vitals": "catalog:"
   }
 }

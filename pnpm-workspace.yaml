@@ -22,7 +22,7 @@ minimumReleaseAgeExclude:
 catalog:
   "@base-ui-components/react": ^1.0.0-beta.7
   "@effect/atom-react": 4.0.0-beta.71
-  "@effect/language-service": ^0.85.1
+  "@effect/language-service": ^0.86.2
   "@effect/opentelemetry": 4.0.0-beta.71
   "@effect/platform-node": 4.0.0-beta.71
   "@effect/sql-pg": 4.0.0-beta.71
@@ -49,10 +49,10 @@ catalog:
   "@tanstack/router-plugin": ^1.157.16
   "@testing-library/dom": ^10.4.1
   "@testing-library/react": ^16.3.2
-  "@types/node": ^22.19.19
+  "@types/node": ^25.9.1
   "@types/react": ^19.2.10
   "@types/react-dom": ^19.2.3
-  "@typescript/native-preview": 7.0.0-dev.20260527.1
+  "@typescript/native-preview": 7.0.0-dev.20260527.2
   "@vanilla-extract/css": ^1.18.0
   "@vanilla-extract/vite-plugin": ^5.1.4
   "@vitejs/plugin-react": ^5.1.2
@@ -65,35 +65,43 @@ catalog:
   drizzle-kit: 1.0.0-rc.4-ca0f029
   drizzle-orm: 1.0.0-rc.1
   effect: 4.0.0-beta.71
-  effect-solutions: ^0.4.13
+  effect-solutions: ^0.5.3
   husky: ^9.1.7
   ioredis: ^5.11.0
   jsdom: ^27.4.0
-  knip: ^5.88.1
+  knip: ^6.14.2
   lucide-react: 0.563.0
   nitro: ^3.0.1-alpha.2
-  oxfmt: 0.27.0
+  oxfmt: ^0.52.0
   oxlint: ^1.67.0
-  oxlint-tsgolint: ^0.11.5
+  oxlint-tsgolint: ^0.23.0
   postgres: ^3.4.8
   prettier: ^3.8.1
   react: ^19.2.3
   react-dom: ^19.2.3
   recharts: ^3.7.0
   scheduler: ^0.27.0
-  syncpack: ^14.3.1
+  syncpack: ^15.3.1
   tailwind-merge: ^3.4.0
   tailwindcss: ^4.1.18
   tsx: ^4.22.3
-  typescript: ^5.9.3
-  vite: ^8.0.0-beta.10
-  vite-plus: 0.1.22
+  typescript: ^6.0.3
+  vite: npm:@voidzero-dev/vite-plus-core@0.1.23
+  vite-plus: 0.1.23
   vite-tsconfig-paths: ^6.0.5
-  vitest: ^4.0.18
   web-vitals: ^5.1.0
 
+overrides:
+  vite: "catalog:"
+
+peerDependencyRules:
+  allowAny:
+    - vite
+  allowedVersions:
+    vite: "*"
+
 allowBuilds:
-  '@parcel/watcher': true
+  "@parcel/watcher": true
   esbuild: true
   msgpackr-extract: true
   protobufjs: true
