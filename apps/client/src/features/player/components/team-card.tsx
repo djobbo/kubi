@@ -56,11 +56,7 @@ export const TeamCard = ({ playerName, team }: TeamCardProps) => {
                 / {team.peak_rating} peak
               </span>
             </span>
-            <Progress
-              value={team.wins / team.games}
-              max={1}
-              intent="success"
-            />
+            <Progress value={team.wins / team.games} max={1} intent="success" />
             <div className="flex justify-between">
               <span>
                 {team.wins}W{" "}

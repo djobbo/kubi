@@ -11,8 +11,8 @@ Target stack: this monorepo (`apps/api`, `apps/client`, `apps/workers`, `package
 | ------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
 | Brawlhalla HTTP API | **Mostly done**    | Contract + handlers in `packages/api-contract`, `apps/api`                                                                          |
 | Background crawlers | **Done**           | `apps/workers` (leaderboard + full player crawl via API)                                                                            |
-| Client UI           | **Early**          | Home stub, player profile, **1v1/2v2 rankings**; legends/weapons tabs still missing                                                |
-| Toolchain           | **Mostly done**    | `vp` + `vp staged` pre-commit; see [07-vite-plus-toolchain.md](./07-vite-plus-toolchain.md)                                           |
+| Client UI           | **Early**          | Home stub, player profile, **1v1/2v2 rankings**; legends/weapons tabs still missing                                                 |
+| Toolchain           | **Mostly done**    | `vp` + `vp staged` pre-commit; see [07-vite-plus-toolchain.md](./07-vite-plus-toolchain.md)                                         |
 | Dev setup           | **Fixed (local)**  | `vp run setup` uses compose + drizzle; needs Postgres on `DATABASE_URL`                                                             |
 | Effect version      | **Done (2b)**      | `vp run check:types` green; `Context.Service`, no zod, `defineRelations` — [02-effect-v4-remaining.md](./02-effect-v4-remaining.md) |
 | Legacy data         | **Started**        | `apps/migrator` aliases + bookmarks (Effect Schema); needs Supabase creds to run                                                    |

@@ -1,20 +1,27 @@
-import { env } from "@/features/config/env";
-import { SiteNavMenu } from "@/features/layout/components/site-nav-menu";
-import { SearchButton, SearchButtonIcon } from "@/features/search/components/search-button";
-import { DiscordIcon, GithubIcon, TwitterIcon } from "@/shared/components/social-icons";
-import { SafeImage } from "@/shared/components/image";
-import { SidebarTrigger } from "@/shared/components/sidebar";
-import { cn } from "@dair/common/src/helpers/ui";
-import { Link, useParams } from "@tanstack/react-router";
+import { env } from "@/features/config/env"
+import { SiteNavMenu } from "@/features/layout/components/site-nav-menu"
+import {
+  SearchButton,
+  SearchButtonIcon,
+} from "@/features/search/components/search-button"
+import {
+  DiscordIcon,
+  GithubIcon,
+  TwitterIcon,
+} from "@/shared/components/social-icons"
+import { SafeImage } from "@/shared/components/image"
+import { SidebarTrigger } from "@/shared/components/sidebar"
+import { cn } from "@dair/common/src/helpers/ui"
+import { Link, useParams } from "@tanstack/react-router"
 
 const socialLinks = [
   { href: env.VITE_SOCIAL_DISCORD_URL, label: "Discord", Icon: DiscordIcon },
   { href: env.VITE_SOCIAL_TWITTER_URL, label: "Twitter", Icon: TwitterIcon },
   { href: env.VITE_SOCIAL_GITHUB_URL, label: "GitHub", Icon: GithubIcon },
-] as const;
+] as const
 
 export function SiteHeader({ className }: { className?: string }) {
-  const { locale } = useParams({ strict: false });
+  const { locale } = useParams({ strict: false })
 
   return (
     <header
@@ -62,5 +69,5 @@ export function SiteHeader({ className }: { className?: string }) {
         </div>
       </div>
     </header>
-  );
+  )
 }

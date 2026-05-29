@@ -14,7 +14,16 @@ import {
   Legends,
   type RankedRegion,
 } from "@dair/brawlhalla-api"
-import { Config, Context, Effect, Layer, Option, Redacted, Schema, pipe } from "effect"
+import {
+  Config,
+  Context,
+  Effect,
+  Layer,
+  Option,
+  Redacted,
+  Schema,
+  pipe,
+} from "effect"
 import { BrawlhallaPlayerNotFound } from "./errors"
 
 type CachedResult<T> = {

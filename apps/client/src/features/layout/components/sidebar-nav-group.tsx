@@ -1,7 +1,4 @@
-import {
-  isNavGroupActive,
-  type AppNavGroup,
-} from "@/features/layout/nav-links"
+import { isNavGroupActive, type AppNavGroup } from "@/features/layout/nav-links"
 import {
   SidebarMenuItem,
   SidebarNavLink,

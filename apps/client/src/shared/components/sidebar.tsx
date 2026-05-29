@@ -77,7 +77,9 @@ export function SidebarProvider({
   )
 
   const toggleSidebar = useCallback(() => {
-    return isMobile ? setOpenMobile((current) => !current) : setOpen((current) => !current)
+    return isMobile
+      ? setOpenMobile((current) => !current)
+      : setOpen((current) => !current)
   }, [isMobile, setOpen])
 
   useEffect(() => {
@@ -223,7 +225,9 @@ export function Sidebar({
             ? "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+1rem+2px)]"
             : "group-data-[collapsible=icon]:w-(--sidebar-width-icon)",
           !isFloating &&
-            (side === "left" ? "border-r border-border" : "border-l border-border"),
+            (side === "left"
+              ? "border-r border-border"
+              : "border-l border-border"),
           className,
         )}
         {...props}
@@ -233,7 +237,8 @@ export function Sidebar({
           data-slot="sidebar-inner"
           className={cn(
             "relative flex size-full flex-col overflow-hidden",
-            isFloating && "corner-smooth-xl bg-bg shadow-lg outline-1 outline-border",
+            isFloating &&
+              "corner-smooth-xl bg-bg shadow-lg outline-1 outline-border",
             !isFloating && "bg-bg",
           )}
         >
@@ -300,7 +305,10 @@ export function SidebarInset({ className, ...props }: ComponentProps<"main">) {
   return (
     <main
       data-slot="sidebar-inset"
-      className={cn("relative flex min-h-svh w-full flex-1 flex-col bg-bg-root", className)}
+      className={cn(
+        "relative flex min-h-svh w-full flex-1 flex-col bg-bg-root",
+        className,
+      )}
       {...props}
     />
   )

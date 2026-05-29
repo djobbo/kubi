@@ -10,7 +10,5 @@ export const Route = createFileRoute(
 function RouteComponent() {
   const { region, page } = Route.useParams()
 
-  return (
-    <Rankings2v2Page region={region ?? "all"} page={page ?? "1"} />
-  )
+  return <Rankings2v2Page region={region ?? "all"} page={page ?? "1"} />
 }

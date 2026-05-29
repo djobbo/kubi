@@ -19,17 +19,14 @@ export const useSortBy = <ElementType, Option extends string>(
   defaultDirection: SortDirection = SortDirection.Ascending,
 ) => {
   const [sortBy, setSortBy] = useState(defaultProp)
-  const [sortDirection, setSortDirection] = useState<SortDirection>(
-    defaultDirection,
-  )
+  const [sortDirection, setSortDirection] =
+    useState<SortDirection>(defaultDirection)
 
   const sortedArray = useMemo(
     () =>
       array
         .slice(0)
-        .sort(
-          (a, b) => compareFns[sortBy].sortFn(a, b) * sortDirection,
-        ),
+        .sort((a, b) => compareFns[sortBy].sortFn(a, b) * sortDirection),
     [sortBy, array, compareFns, sortDirection],
   )
 

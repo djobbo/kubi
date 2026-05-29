@@ -199,7 +199,11 @@ export const responseCache = (options: ResponseCacheOptions = {}) => {
           // Store in cache (fire and forget - don't block the response)
           yield* Effect.forkChild(
             cache
-              .set(cacheKey, cacheData, Option.some(Duration.seconds(ttlSeconds)))
+              .set(
+                cacheKey,
+                cacheData,
+                Option.some(Duration.seconds(ttlSeconds)),
+              )
               .pipe(Effect.catch(() => Effect.void)),
           )
         }

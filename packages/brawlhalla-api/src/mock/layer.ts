@@ -45,15 +45,11 @@ const makeMockClient = (): BrawlhallaApiClient => {
             request.query.name,
           ),
         ),
-      twoVTwo: (request: {
-        params: { region: RankedRegion; page: number }
-      }) =>
+      twoVTwo: (request: { params: { region: RankedRegion; page: number } }) =>
         Effect.succeed(
           mockRankings2v2(request.params.region, request.params.page),
         ),
-      rotating: (request: {
-        params: { region: RankedRegion; page: number }
-      }) =>
+      rotating: (request: { params: { region: RankedRegion; page: number } }) =>
         Effect.succeed(
           mockRankingsRotating(request.params.region, request.params.page),
         ),

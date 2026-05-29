@@ -83,8 +83,8 @@ export const PlayerWeaponsTab = ({
           calculateWinrate(b.stats.wins, b.stats.games),
         displayFn: (weapon) => (
           <>
-            {calculateWinrate(weapon.stats.wins, weapon.stats.games).toFixed(2)}%
-            winrate
+            {calculateWinrate(weapon.stats.wins, weapon.stats.games).toFixed(2)}
+            % winrate
           </>
         ),
       },

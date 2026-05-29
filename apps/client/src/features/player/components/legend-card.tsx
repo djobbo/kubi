@@ -1,5 +1,9 @@
 import { Card } from "@/shared/components/card"
-import { LegendIcon, RankedTierBanner, WeaponIcon } from "@/shared/components/image"
+import {
+  LegendIcon,
+  RankedTierBanner,
+  WeaponIcon,
+} from "@/shared/components/image"
 import { Progress } from "@/shared/components/progress"
 import { StatGrid } from "@/shared/components/stat-grid"
 import {
@@ -42,8 +46,15 @@ export const LegendCard = ({
   rank,
   sortSummary,
 }: LegendCardProps) => {
-  const { stats, ranked, weapon_one, weapon_two, unarmed, weapon_throws, gadgets } =
-    legend
+  const {
+    stats,
+    ranked,
+    weapon_one,
+    weapon_two,
+    unarmed,
+    weapon_throws,
+    gadgets,
+  } = legend
   const legendMeta = legendsMap[legend.id]
 
   const gamesPieData = [
@@ -108,7 +119,7 @@ export const LegendCard = ({
                 },
                 {
                   title: t`Usage rate (games)`,
-                  value: `${(((stats.games / games) * 100) || 0).toFixed(2)}%`,
+                  value: `${((stats.games / games) * 100 || 0).toFixed(2)}%`,
                 },
               ]}
             />
@@ -169,7 +180,11 @@ export const LegendCard = ({
                         {item.value.toLocaleString()}{" "}
                         <span className="text-text-muted">{item.title}</span>
                       </p>
-                      <Progress value={item.value} max={kosReference} size="sm" />
+                      <Progress
+                        value={item.value}
+                        max={kosReference}
+                        size="sm"
+                      />
                     </div>
                   ))}
                 </div>
@@ -213,7 +228,9 @@ export const LegendCard = ({
                     className="object-contain object-center"
                   />
                   <div className="flex flex-1 flex-col gap-1">
-                    <span className="text-sm text-text-muted">{ranked.tier}</span>
+                    <span className="text-sm text-text-muted">
+                      {ranked.tier}
+                    </span>
                     <span className="text-3xl font-bold">
                       {ranked.rating}
                       <span className="ml-1 text-sm font-normal text-text-muted">

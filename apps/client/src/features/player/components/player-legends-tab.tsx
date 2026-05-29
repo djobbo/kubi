@@ -104,8 +104,8 @@ export const PlayerLegendsTab = ({
           calculateWinrate(b.stats.wins, b.stats.games),
         displayFn: (legend) => (
           <>
-            {calculateWinrate(legend.stats.wins, legend.stats.games).toFixed(2)}%
-            winrate
+            {calculateWinrate(legend.stats.wins, legend.stats.games).toFixed(2)}
+            % winrate
           </>
         ),
       },

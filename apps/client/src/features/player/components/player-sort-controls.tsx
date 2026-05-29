@@ -1,7 +1,12 @@
 import { cn } from "@dair/common/src/helpers/ui"
 import { Select } from "@base-ui-components/react/select"
 import { t } from "@lingui/core/macro"
-import { ArrowDownIcon, ArrowUpIcon, CheckIcon, ChevronDownIcon } from "lucide-react"
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  CheckIcon,
+  ChevronDownIcon,
+} from "lucide-react"
 
 import { SortDirection } from "../hooks/use-sort-by"
 
@@ -61,7 +66,9 @@ export const PlayerSortControls = <Option extends string>({
                     <Select.ItemIndicator className="col-start-1">
                       <CheckIcon className="size-3" />
                     </Select.ItemIndicator>
-                    <Select.ItemText className="col-start-2">{label}</Select.ItemText>
+                    <Select.ItemText className="col-start-2">
+                      {label}
+                    </Select.ItemText>
                   </Select.Item>
                 ))}
               </Select.List>

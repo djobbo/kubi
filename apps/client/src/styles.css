@@ -22,7 +22,9 @@
 
   --success: oklch(0.749 0.175 155.6); /* #24CD7C */
   --danger: oklch(0.7 0.154 38.2); /* #ED7853 */
-  --warning: oklch(0.775 0.132 73.8); /* #E8A84A — amber, distinct from secondary */
+  --warning: oklch(
+    0.775 0.132 73.8
+  ); /* #E8A84A — amber, distinct from secondary */
   --info: var(--primary-light);
 
   /* Fonts */

@@ -123,7 +123,9 @@ export const RankingsTableItem = ({
         <div className="flex w-40 items-center justify-start">
           <p>
             <span className="text-xl font-bold">{rating}</span>{" "}
-            <span className="text-sm text-text-muted">/ {peak_rating} peak</span>
+            <span className="text-sm text-text-muted">
+              / {peak_rating} peak
+            </span>
           </p>
         </div>
       </div>

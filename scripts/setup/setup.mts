@@ -382,8 +382,12 @@ const program = Effect.gen(function* () {
   yield* Effect.logInfo(
     `Drizzle:  https://local.drizzle.studio  (studio on port ${DRIZZLE_STUDIO_PORT})`,
   )
-  yield* Effect.logInfo("Grafana:  http://localhost:3002  (admin / correcthorsebatterystaple)")
-  yield* Effect.logInfo("Alloy:    http://localhost:12345  (OTLP :4318 HTTP, :4317 gRPC)")
+  yield* Effect.logInfo(
+    "Grafana:  http://localhost:3002  (admin / correcthorsebatterystaple)",
+  )
+  yield* Effect.logInfo(
+    "Alloy:    http://localhost:12345  (OTLP :4318 HTTP, :4317 gRPC)",
+  )
 })
 
 NodeRuntime.runMain(

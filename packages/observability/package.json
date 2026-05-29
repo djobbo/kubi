@@ -3,15 +3,15 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "scripts": {
-    "check:types": "tsgo --noEmit"
-  },
   "exports": {
     ".": {
       "types": "./src/index.ts",
       "import": "./src/index.ts",
       "require": "./src/index.ts"
     }
+  },
+  "scripts": {
+    "check:types": "tsgo --noEmit"
   },
   "dependencies": {
     "@effect/opentelemetry": "catalog:",

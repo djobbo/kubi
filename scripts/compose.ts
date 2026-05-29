@@ -22,7 +22,10 @@ const runDockerCompose = (
       `Running: docker compose -f ${composeFile} ${args.join(" ")}`,
     )
 
-    const { stdout, stderr, exitCode } = yield* dockerCompose(args, options).pipe(
+    const { stdout, stderr, exitCode } = yield* dockerCompose(
+      args,
+      options,
+    ).pipe(
       Effect.mapError(
         (cause) => new Error(`Docker compose failed: ${String(cause)}`),
       ),

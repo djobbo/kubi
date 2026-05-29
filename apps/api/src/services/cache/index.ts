@@ -101,7 +101,8 @@ export class Cache extends Context.Service<Cache>()("@dair/services/Cache", {
       })
 
       yield* Option.match(ttl, {
-        onNone: () => redisIo("set", () => redis.set(cacheKey(name), serialized)),
+        onNone: () =>
+          redisIo("set", () => redis.set(cacheKey(name), serialized)),
         onSome: (duration) =>
           redisIo("set", () =>
             redis.set(

@@ -22,10 +22,7 @@ export function TooltipContent({
   children,
   ...props
 }: TooltipPrimitive.Popup.Props &
-  Pick<
-    TooltipPrimitive.Positioner.Props,
-    "align" | "side" | "sideOffset"
-  >) {
+  Pick<TooltipPrimitive.Positioner.Props, "align" | "side" | "sideOffset">) {
   return (
     <TooltipPrimitive.Portal>
       <TooltipPrimitive.Positioner

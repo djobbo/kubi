@@ -1,4 +1,4 @@
-import { style } from "@vanilla-extract/css";
+import { style } from "@vanilla-extract/css"
 
 export const grain = style({
   opacity: 0.014,
@@ -6,4 +6,4 @@ export const grain = style({
   backgroundRepeat: "repeat",
   backgroundImage: "url(/assets/images/grain.png)",
   zIndex: 999,
-});
+})

@@ -60,7 +60,11 @@ export const PlayerTeamsTab = ({ playerName, ranked }: PlayerTeamsTabProps) => {
       />
       <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
         {teams.map((team) => (
-          <TeamCard key={team.teammate.id} playerName={playerName} team={team} />
+          <TeamCard
+            key={team.teammate.id}
+            playerName={playerName}
+            team={team}
+          />
         ))}
       </div>
     </>

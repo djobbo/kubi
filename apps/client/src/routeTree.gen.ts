@@ -8,167 +8,167 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as Char123LocaleChar125RouteRouteImport } from './routes/{-$locale}/route'
-import { Route as Char123LocaleChar125SidebarLayoutRouteRouteImport } from './routes/{-$locale}/_sidebar-layout/route'
-import { Route as Char123LocaleChar125SidebarLayoutIndexRouteImport } from './routes/{-$locale}/_sidebar-layout/index'
-import { Route as Char123LocaleChar125SidebarLayoutBrawlhallaRankingsIndexRouteImport } from './routes/{-$locale}/_sidebar-layout/brawlhalla/rankings/index'
-import { Route as Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRouteImport } from './routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/route'
-import { Route as Char123LocaleChar125SidebarLayoutBrawlhallaRankings2v2Char123RegionChar125Char123PageChar125RouteImport } from './routes/{-$locale}/_sidebar-layout/brawlhalla/rankings/2v2.{-$region}.{-$page}'
-import { Route as Char123LocaleChar125SidebarLayoutBrawlhallaRankings1v1Char123RegionChar125Char123PageChar125RouteImport } from './routes/{-$locale}/_sidebar-layout/brawlhalla/rankings/1v1.{-$region}.{-$page}'
+import { Route as rootRouteImport } from "./routes/__root"
+import { Route as Char123LocaleChar125RouteRouteImport } from "./routes/{-$locale}/route"
+import { Route as Char123LocaleChar125SidebarLayoutRouteRouteImport } from "./routes/{-$locale}/_sidebar-layout/route"
+import { Route as Char123LocaleChar125SidebarLayoutIndexRouteImport } from "./routes/{-$locale}/_sidebar-layout/index"
+import { Route as Char123LocaleChar125SidebarLayoutBrawlhallaRankingsIndexRouteImport } from "./routes/{-$locale}/_sidebar-layout/brawlhalla/rankings/index"
+import { Route as Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRouteImport } from "./routes/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}/route"
+import { Route as Char123LocaleChar125SidebarLayoutBrawlhallaRankings2v2Char123RegionChar125Char123PageChar125RouteImport } from "./routes/{-$locale}/_sidebar-layout/brawlhalla/rankings/2v2.{-$region}.{-$page}"
+import { Route as Char123LocaleChar125SidebarLayoutBrawlhallaRankings1v1Char123RegionChar125Char123PageChar125RouteImport } from "./routes/{-$locale}/_sidebar-layout/brawlhalla/rankings/1v1.{-$region}.{-$page}"
 
 const Char123LocaleChar125RouteRoute =
   Char123LocaleChar125RouteRouteImport.update({
-    id: '/{-$locale}',
-    path: '/{-$locale}',
+    id: "/{-$locale}",
+    path: "/{-$locale}",
     getParentRoute: () => rootRouteImport,
   } as any)
 const Char123LocaleChar125SidebarLayoutRouteRoute =
   Char123LocaleChar125SidebarLayoutRouteRouteImport.update({
-    id: '/_sidebar-layout',
+    id: "/_sidebar-layout",
     getParentRoute: () => Char123LocaleChar125RouteRoute,
   } as any)
 const Char123LocaleChar125SidebarLayoutIndexRoute =
   Char123LocaleChar125SidebarLayoutIndexRouteImport.update({
-    id: '/',
-    path: '/',
+    id: "/",
+    path: "/",
     getParentRoute: () => Char123LocaleChar125SidebarLayoutRouteRoute,
   } as any)
 const Char123LocaleChar125SidebarLayoutBrawlhallaRankingsIndexRoute =
   Char123LocaleChar125SidebarLayoutBrawlhallaRankingsIndexRouteImport.update({
-    id: '/brawlhalla/rankings/',
-    path: '/brawlhalla/rankings/',
+    id: "/brawlhalla/rankings/",
+    path: "/brawlhalla/rankings/",
     getParentRoute: () => Char123LocaleChar125SidebarLayoutRouteRoute,
   } as any)
 const Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute =
   Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRouteImport.update(
     {
-      id: '/brawlhalla/players/$playerId/{-$tab}',
-      path: '/brawlhalla/players/$playerId/{-$tab}',
+      id: "/brawlhalla/players/$playerId/{-$tab}",
+      path: "/brawlhalla/players/$playerId/{-$tab}",
       getParentRoute: () => Char123LocaleChar125SidebarLayoutRouteRoute,
     } as any,
   )
 const Char123LocaleChar125SidebarLayoutBrawlhallaRankings2v2Char123RegionChar125Char123PageChar125Route =
   Char123LocaleChar125SidebarLayoutBrawlhallaRankings2v2Char123RegionChar125Char123PageChar125RouteImport.update(
     {
-      id: '/brawlhalla/rankings/2v2/{-$region}/{-$page}',
-      path: '/brawlhalla/rankings/2v2/{-$region}/{-$page}',
+      id: "/brawlhalla/rankings/2v2/{-$region}/{-$page}",
+      path: "/brawlhalla/rankings/2v2/{-$region}/{-$page}",
       getParentRoute: () => Char123LocaleChar125SidebarLayoutRouteRoute,
     } as any,
   )
 const Char123LocaleChar125SidebarLayoutBrawlhallaRankings1v1Char123RegionChar125Char123PageChar125Route =
   Char123LocaleChar125SidebarLayoutBrawlhallaRankings1v1Char123RegionChar125Char123PageChar125RouteImport.update(
     {
-      id: '/brawlhalla/rankings/1v1/{-$region}/{-$page}',
-      path: '/brawlhalla/rankings/1v1/{-$region}/{-$page}',
+      id: "/brawlhalla/rankings/1v1/{-$region}/{-$page}",
+      path: "/brawlhalla/rankings/1v1/{-$region}/{-$page}",
       getParentRoute: () => Char123LocaleChar125SidebarLayoutRouteRoute,
     } as any,
   )
 
 export interface FileRoutesByFullPath {
-  '/{-$locale}': typeof Char123LocaleChar125RouteRouteWithChildren
-  '/{-$locale}/': typeof Char123LocaleChar125SidebarLayoutIndexRoute
-  '/{-$locale}/brawlhalla/rankings/': typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankingsIndexRoute
-  '/{-$locale}/brawlhalla/players/$playerId/{-$tab}': typeof Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute
-  '/{-$locale}/brawlhalla/rankings/1v1/{-$region}/{-$page}': typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankings1v1Char123RegionChar125Char123PageChar125Route
-  '/{-$locale}/brawlhalla/rankings/2v2/{-$region}/{-$page}': typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankings2v2Char123RegionChar125Char123PageChar125Route
+  "/{-$locale}": typeof Char123LocaleChar125RouteRouteWithChildren
+  "/{-$locale}/": typeof Char123LocaleChar125SidebarLayoutIndexRoute
+  "/{-$locale}/brawlhalla/rankings/": typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankingsIndexRoute
+  "/{-$locale}/brawlhalla/players/$playerId/{-$tab}": typeof Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute
+  "/{-$locale}/brawlhalla/rankings/1v1/{-$region}/{-$page}": typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankings1v1Char123RegionChar125Char123PageChar125Route
+  "/{-$locale}/brawlhalla/rankings/2v2/{-$region}/{-$page}": typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankings2v2Char123RegionChar125Char123PageChar125Route
 }
 export interface FileRoutesByTo {
-  '/{-$locale}': typeof Char123LocaleChar125SidebarLayoutIndexRoute
-  '/{-$locale}/brawlhalla/rankings': typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankingsIndexRoute
-  '/{-$locale}/brawlhalla/players/$playerId/{-$tab}': typeof Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute
-  '/{-$locale}/brawlhalla/rankings/1v1/{-$region}/{-$page}': typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankings1v1Char123RegionChar125Char123PageChar125Route
-  '/{-$locale}/brawlhalla/rankings/2v2/{-$region}/{-$page}': typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankings2v2Char123RegionChar125Char123PageChar125Route
+  "/{-$locale}": typeof Char123LocaleChar125SidebarLayoutIndexRoute
+  "/{-$locale}/brawlhalla/rankings": typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankingsIndexRoute
+  "/{-$locale}/brawlhalla/players/$playerId/{-$tab}": typeof Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute
+  "/{-$locale}/brawlhalla/rankings/1v1/{-$region}/{-$page}": typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankings1v1Char123RegionChar125Char123PageChar125Route
+  "/{-$locale}/brawlhalla/rankings/2v2/{-$region}/{-$page}": typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankings2v2Char123RegionChar125Char123PageChar125Route
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/{-$locale}': typeof Char123LocaleChar125RouteRouteWithChildren
-  '/{-$locale}/_sidebar-layout': typeof Char123LocaleChar125SidebarLayoutRouteRouteWithChildren
-  '/{-$locale}/_sidebar-layout/': typeof Char123LocaleChar125SidebarLayoutIndexRoute
-  '/{-$locale}/_sidebar-layout/brawlhalla/rankings/': typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankingsIndexRoute
-  '/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}': typeof Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute
-  '/{-$locale}/_sidebar-layout/brawlhalla/rankings/1v1/{-$region}/{-$page}': typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankings1v1Char123RegionChar125Char123PageChar125Route
-  '/{-$locale}/_sidebar-layout/brawlhalla/rankings/2v2/{-$region}/{-$page}': typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankings2v2Char123RegionChar125Char123PageChar125Route
+  "/{-$locale}": typeof Char123LocaleChar125RouteRouteWithChildren
+  "/{-$locale}/_sidebar-layout": typeof Char123LocaleChar125SidebarLayoutRouteRouteWithChildren
+  "/{-$locale}/_sidebar-layout/": typeof Char123LocaleChar125SidebarLayoutIndexRoute
+  "/{-$locale}/_sidebar-layout/brawlhalla/rankings/": typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankingsIndexRoute
+  "/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}": typeof Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRoute
+  "/{-$locale}/_sidebar-layout/brawlhalla/rankings/1v1/{-$region}/{-$page}": typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankings1v1Char123RegionChar125Char123PageChar125Route
+  "/{-$locale}/_sidebar-layout/brawlhalla/rankings/2v2/{-$region}/{-$page}": typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankings2v2Char123RegionChar125Char123PageChar125Route
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/{-$locale}'
-    | '/{-$locale}/'
-    | '/{-$locale}/brawlhalla/rankings/'
-    | '/{-$locale}/brawlhalla/players/$playerId/{-$tab}'
-    | '/{-$locale}/brawlhalla/rankings/1v1/{-$region}/{-$page}'
-    | '/{-$locale}/brawlhalla/rankings/2v2/{-$region}/{-$page}'
+    | "/{-$locale}"
+    | "/{-$locale}/"
+    | "/{-$locale}/brawlhalla/rankings/"
+    | "/{-$locale}/brawlhalla/players/$playerId/{-$tab}"
+    | "/{-$locale}/brawlhalla/rankings/1v1/{-$region}/{-$page}"
+    | "/{-$locale}/brawlhalla/rankings/2v2/{-$region}/{-$page}"
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/{-$locale}'
-    | '/{-$locale}/brawlhalla/rankings'
-    | '/{-$locale}/brawlhalla/players/$playerId/{-$tab}'
-    | '/{-$locale}/brawlhalla/rankings/1v1/{-$region}/{-$page}'
-    | '/{-$locale}/brawlhalla/rankings/2v2/{-$region}/{-$page}'
+    | "/{-$locale}"
+    | "/{-$locale}/brawlhalla/rankings"
+    | "/{-$locale}/brawlhalla/players/$playerId/{-$tab}"
+    | "/{-$locale}/brawlhalla/rankings/1v1/{-$region}/{-$page}"
+    | "/{-$locale}/brawlhalla/rankings/2v2/{-$region}/{-$page}"
   id:
-    | '__root__'
-    | '/{-$locale}'
-    | '/{-$locale}/_sidebar-layout'
-    | '/{-$locale}/_sidebar-layout/'
-    | '/{-$locale}/_sidebar-layout/brawlhalla/rankings/'
-    | '/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}'
-    | '/{-$locale}/_sidebar-layout/brawlhalla/rankings/1v1/{-$region}/{-$page}'
-    | '/{-$locale}/_sidebar-layout/brawlhalla/rankings/2v2/{-$region}/{-$page}'
+    | "__root__"
+    | "/{-$locale}"
+    | "/{-$locale}/_sidebar-layout"
+    | "/{-$locale}/_sidebar-layout/"
+    | "/{-$locale}/_sidebar-layout/brawlhalla/rankings/"
+    | "/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}"
+    | "/{-$locale}/_sidebar-layout/brawlhalla/rankings/1v1/{-$region}/{-$page}"
+    | "/{-$locale}/_sidebar-layout/brawlhalla/rankings/2v2/{-$region}/{-$page}"
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   Char123LocaleChar125RouteRoute: typeof Char123LocaleChar125RouteRouteWithChildren
 }
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/{-$locale}': {
-      id: '/{-$locale}'
-      path: '/{-$locale}'
-      fullPath: '/{-$locale}'
+    "/{-$locale}": {
+      id: "/{-$locale}"
+      path: "/{-$locale}"
+      fullPath: "/{-$locale}"
       preLoaderRoute: typeof Char123LocaleChar125RouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/{-$locale}/_sidebar-layout': {
-      id: '/{-$locale}/_sidebar-layout'
-      path: ''
-      fullPath: '/{-$locale}'
+    "/{-$locale}/_sidebar-layout": {
+      id: "/{-$locale}/_sidebar-layout"
+      path: ""
+      fullPath: "/{-$locale}"
       preLoaderRoute: typeof Char123LocaleChar125SidebarLayoutRouteRouteImport
       parentRoute: typeof Char123LocaleChar125RouteRoute
     }
-    '/{-$locale}/_sidebar-layout/': {
-      id: '/{-$locale}/_sidebar-layout/'
-      path: '/'
-      fullPath: '/{-$locale}/'
+    "/{-$locale}/_sidebar-layout/": {
+      id: "/{-$locale}/_sidebar-layout/"
+      path: "/"
+      fullPath: "/{-$locale}/"
       preLoaderRoute: typeof Char123LocaleChar125SidebarLayoutIndexRouteImport
       parentRoute: typeof Char123LocaleChar125SidebarLayoutRouteRoute
     }
-    '/{-$locale}/_sidebar-layout/brawlhalla/rankings/': {
-      id: '/{-$locale}/_sidebar-layout/brawlhalla/rankings/'
-      path: '/brawlhalla/rankings'
-      fullPath: '/{-$locale}/brawlhalla/rankings/'
+    "/{-$locale}/_sidebar-layout/brawlhalla/rankings/": {
+      id: "/{-$locale}/_sidebar-layout/brawlhalla/rankings/"
+      path: "/brawlhalla/rankings"
+      fullPath: "/{-$locale}/brawlhalla/rankings/"
       preLoaderRoute: typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankingsIndexRouteImport
       parentRoute: typeof Char123LocaleChar125SidebarLayoutRouteRoute
     }
-    '/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}': {
-      id: '/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}'
-      path: '/brawlhalla/players/$playerId/{-$tab}'
-      fullPath: '/{-$locale}/brawlhalla/players/$playerId/{-$tab}'
+    "/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}": {
+      id: "/{-$locale}/_sidebar-layout/brawlhalla/players/$playerId/{-$tab}"
+      path: "/brawlhalla/players/$playerId/{-$tab}"
+      fullPath: "/{-$locale}/brawlhalla/players/$playerId/{-$tab}"
       preLoaderRoute: typeof Char123LocaleChar125SidebarLayoutBrawlhallaPlayersPlayerIdChar123TabChar125RouteRouteImport
       parentRoute: typeof Char123LocaleChar125SidebarLayoutRouteRoute
     }
-    '/{-$locale}/_sidebar-layout/brawlhalla/rankings/2v2/{-$region}/{-$page}': {
-      id: '/{-$locale}/_sidebar-layout/brawlhalla/rankings/2v2/{-$region}/{-$page}'
-      path: '/brawlhalla/rankings/2v2/{-$region}/{-$page}'
-      fullPath: '/{-$locale}/brawlhalla/rankings/2v2/{-$region}/{-$page}'
+    "/{-$locale}/_sidebar-layout/brawlhalla/rankings/2v2/{-$region}/{-$page}": {
+      id: "/{-$locale}/_sidebar-layout/brawlhalla/rankings/2v2/{-$region}/{-$page}"
+      path: "/brawlhalla/rankings/2v2/{-$region}/{-$page}"
+      fullPath: "/{-$locale}/brawlhalla/rankings/2v2/{-$region}/{-$page}"
       preLoaderRoute: typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankings2v2Char123RegionChar125Char123PageChar125RouteImport
       parentRoute: typeof Char123LocaleChar125SidebarLayoutRouteRoute
     }
-    '/{-$locale}/_sidebar-layout/brawlhalla/rankings/1v1/{-$region}/{-$page}': {
-      id: '/{-$locale}/_sidebar-layout/brawlhalla/rankings/1v1/{-$region}/{-$page}'
-      path: '/brawlhalla/rankings/1v1/{-$region}/{-$page}'
-      fullPath: '/{-$locale}/brawlhalla/rankings/1v1/{-$region}/{-$page}'
+    "/{-$locale}/_sidebar-layout/brawlhalla/rankings/1v1/{-$region}/{-$page}": {
+      id: "/{-$locale}/_sidebar-layout/brawlhalla/rankings/1v1/{-$region}/{-$page}"
+      path: "/brawlhalla/rankings/1v1/{-$region}/{-$page}"
+      fullPath: "/{-$locale}/brawlhalla/rankings/1v1/{-$region}/{-$page}"
       preLoaderRoute: typeof Char123LocaleChar125SidebarLayoutBrawlhallaRankings1v1Char123RegionChar125Char123PageChar125RouteImport
       parentRoute: typeof Char123LocaleChar125SidebarLayoutRouteRoute
     }
@@ -224,9 +224,9 @@ export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
+import type { getRouter } from "./router.tsx"
+import type { createStart } from "@tanstack/react-start"
+declare module "@tanstack/react-start" {
   interface Register {
     ssr: true
     router: Awaited<ReturnType<typeof getRouter>>

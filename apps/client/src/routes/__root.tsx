@@ -1,10 +1,10 @@
-import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router";
-import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import { TanStackDevtools } from "@tanstack/react-devtools";
-import { Grain } from "@/features/layout/components/grain";
+import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router"
+import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
+import { TanStackDevtools } from "@tanstack/react-devtools"
+import { Grain } from "@/features/layout/components/grain"
 
-import styles from "@/styles.css?url";
-import { SearchCommand } from "@/features/search/components/search-command";
+import styles from "@/styles.css?url"
+import { SearchCommand } from "@/features/search/components/search-command"
 
 export const Route = createRootRoute({
   head: () => {
@@ -39,10 +39,10 @@ export const Route = createRootRoute({
         },
         { rel: "mask-icon", href: "/mask-icon.svg", color: "#ffffff" },
       ],
-    };
+    }
   },
   shellComponent: RootDocument,
-});
+})
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
@@ -70,5 +70,5 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Scripts />
       </body>
     </html>
-  );
+  )
 }

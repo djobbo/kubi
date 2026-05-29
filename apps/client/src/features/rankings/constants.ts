@@ -1,4 +1,7 @@
-import { rankedRegions, type RankedRegion } from "@dair/brawlhalla-api/src/constants/ranked/regions"
+import {
+  rankedRegions,
+  type RankedRegion,
+} from "@dair/brawlhalla-api/src/constants/ranked/regions"
 
 export const RANKINGS_BRACKETS = [
   { page: "1v1", label: "1v1" },

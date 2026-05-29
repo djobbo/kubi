@@ -81,7 +81,8 @@ export const WeaponCard = ({
                       {stats.games.toLocaleString()}
                     </span>
                     <span className="text-sm text-text-muted">
-                      {calculateWinrate(stats.wins, stats.games).toFixed(2)}% {t`WR`}
+                      {calculateWinrate(stats.wins, stats.games).toFixed(2)}%{" "}
+                      {t`WR`}
                     </span>
                   </div>
                   <PieChart

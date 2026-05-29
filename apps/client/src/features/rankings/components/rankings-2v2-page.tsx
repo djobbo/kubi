@@ -41,12 +41,7 @@ export const Rankings2v2Page = ({
           <Trans>Live 2v2 ranked teams by region</Trans>
         </p>
       </div>
-      <RankingsLayout
-        bracket="2v2"
-        region={region}
-        page={page}
-        hasPagination
-      >
+      <RankingsLayout bracket="2v2" region={region} page={page} hasPagination>
         <div className="hidden items-center gap-4 py-4 md:flex">
           <p className="w-16 text-center">
             <Trans>Rank</Trans>

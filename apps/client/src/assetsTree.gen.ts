@@ -184,35 +184,38 @@ export const safeAssets = [
   "/assets/images/weapons/icons/Unarmed.png",
   "/favicon.png",
   "/manifest.json",
-  "/robots.txt"
-] as const;
+  "/robots.txt",
+] as const
 
-export type SafeAsset = typeof safeAssets[number];
+export type SafeAsset = (typeof safeAssets)[number]
 
 export const assetsTree = {
   "ads.txt": "/ads.txt",
-  "assets": {
-    "images": {
-      "brand": {
-        "backgrounds": {
-          "background-no-text.webp": "/assets/images/brand/backgrounds/background-no-text.webp",
-          "background-text-sm.jpg": "/assets/images/brand/backgrounds/background-text-sm.jpg",
-          "background-text.jpg": "/assets/images/brand/backgrounds/background-text.jpg"
+  assets: {
+    images: {
+      brand: {
+        backgrounds: {
+          "background-no-text.webp":
+            "/assets/images/brand/backgrounds/background-no-text.webp",
+          "background-text-sm.jpg":
+            "/assets/images/brand/backgrounds/background-text-sm.jpg",
+          "background-text.jpg":
+            "/assets/images/brand/backgrounds/background-text.jpg",
         },
-        "logos": {
+        logos: {
           "logo-192x192.png": "/assets/images/brand/logos/logo-192x192.png",
           "logo-256x256.png": "/assets/images/brand/logos/logo-256x256.png",
           "logo-384x384.png": "/assets/images/brand/logos/logo-384x384.png",
           "logo-512x512.png": "/assets/images/brand/logos/logo-512x512.png",
           "logo-animated.gif": "/assets/images/brand/logos/logo-animated.gif",
-          "logo-text.png": "/assets/images/brand/logos/logo-text.png"
-        }
+          "logo-text.png": "/assets/images/brand/logos/logo-text.png",
+        },
       },
-      "errors": {
+      errors: {
         "error-404.png": "/assets/images/errors/error-404.png",
-        "error-500.png": "/assets/images/errors/error-500.png"
+        "error-500.png": "/assets/images/errors/error-500.png",
       },
-      "flags": {
+      flags: {
         "all.png": "/assets/images/flags/all.png",
         "aus.png": "/assets/images/flags/aus.png",
         "brz.png": "/assets/images/flags/brz.png",
@@ -222,10 +225,10 @@ export const assetsTree = {
         "sa.png": "/assets/images/flags/sa.png",
         "sea.png": "/assets/images/flags/sea.png",
         "us-e.png": "/assets/images/flags/us-e.png",
-        "us-w.png": "/assets/images/flags/us-w.png"
+        "us-w.png": "/assets/images/flags/us-w.png",
       },
-      "games": {
-        "cupcakes": {
+      games: {
+        cupcakes: {
           "celestial.svg": "/assets/images/games/cupcakes/celestial.svg",
           "cupcake.svg": "/assets/images/games/cupcakes/cupcake.svg",
           "farms.svg": "/assets/images/games/cupcakes/farms.svg",
@@ -235,12 +238,12 @@ export const assetsTree = {
           "ivaldi.svg": "/assets/images/games/cupcakes/ivaldi.svg",
           "kitchen.svg": "/assets/images/games/cupcakes/kitchen.svg",
           "orion.svg": "/assets/images/games/cupcakes/orion.svg",
-          "scarlet.svg": "/assets/images/games/cupcakes/scarlet.svg"
-        }
+          "scarlet.svg": "/assets/images/games/cupcakes/scarlet.svg",
+        },
       },
       "grain.png": "/assets/images/grain.png",
-      "legends": {
-        "icons": {
+      legends: {
+        icons: {
           "ada.png": "/assets/images/legends/icons/ada.png",
           "arcadia.png": "/assets/images/legends/icons/arcadia.png",
           "artemis.png": "/assets/images/legends/icons/artemis.png",
@@ -304,14 +307,14 @@ export const assetsTree = {
           "wu shang.png": "/assets/images/legends/icons/wu shang.png",
           "xull.png": "/assets/images/legends/icons/xull.png",
           "yumiko.png": "/assets/images/legends/icons/yumiko.png",
-          "zariel.png": "/assets/images/legends/icons/zariel.png"
-        }
+          "zariel.png": "/assets/images/legends/icons/zariel.png",
+        },
       },
-      "og": {
-        "main-og.jpg": "/assets/images/og/main-og.jpg"
+      og: {
+        "main-og.jpg": "/assets/images/og/main-og.jpg",
       },
-      "ranked": {
-        "banners": {
+      ranked: {
+        banners: {
           "Bronze 0.png": "/assets/images/ranked/banners/Bronze 0.png",
           "Bronze 1.png": "/assets/images/ranked/banners/Bronze 1.png",
           "Bronze 2.png": "/assets/images/ranked/banners/Bronze 2.png",
@@ -345,9 +348,9 @@ export const assetsTree = {
           "Tin 4.png": "/assets/images/ranked/banners/Tin 4.png",
           "Tin 5.png": "/assets/images/ranked/banners/Tin 5.png",
           "Valhallan.png": "/assets/images/ranked/banners/Valhallan.png",
-          "null.png": "/assets/images/ranked/banners/null.png"
+          "null.png": "/assets/images/ranked/banners/null.png",
         },
-        "icons": {
+        icons: {
           "Bronze 0.png": "/assets/images/ranked/icons/Bronze 0.png",
           "Bronze 1.png": "/assets/images/ranked/icons/Bronze 1.png",
           "Bronze 2.png": "/assets/images/ranked/icons/Bronze 2.png",
@@ -379,11 +382,11 @@ export const assetsTree = {
           "Tin 3.png": "/assets/images/ranked/icons/Tin 3.png",
           "Tin 4.png": "/assets/images/ranked/icons/Tin 4.png",
           "Tin 5.png": "/assets/images/ranked/icons/Tin 5.png",
-          "Valhallan.webp": "/assets/images/ranked/icons/Valhallan.webp"
-        }
+          "Valhallan.webp": "/assets/images/ranked/icons/Valhallan.webp",
+        },
       },
-      "weapons": {
-        "icons": {
+      weapons: {
+        icons: {
           "Axe.png": "/assets/images/weapons/icons/Axe.png",
           "Blasters.png": "/assets/images/weapons/icons/Blasters.png",
           "Boots.png": "/assets/images/weapons/icons/Boots.png",
@@ -398,12 +401,12 @@ export const assetsTree = {
           "Scythe.png": "/assets/images/weapons/icons/Scythe.png",
           "Spear.png": "/assets/images/weapons/icons/Spear.png",
           "Sword.png": "/assets/images/weapons/icons/Sword.png",
-          "Unarmed.png": "/assets/images/weapons/icons/Unarmed.png"
-        }
-      }
-    }
+          "Unarmed.png": "/assets/images/weapons/icons/Unarmed.png",
+        },
+      },
+    },
   },
   "favicon.png": "/favicon.png",
   "manifest.json": "/manifest.json",
-  "robots.txt": "/robots.txt"
-} as const;
+  "robots.txt": "/robots.txt",
+} as const

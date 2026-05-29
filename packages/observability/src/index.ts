@@ -68,7 +68,9 @@ export const observabilityLayer = (defaultServiceName: string) =>
         Effect.gen(function* () {
           const otlpEndpoint = yield* resolveOtlpEndpoint
           const serviceName = yield* resolveServiceName(defaultServiceName)
-          const serviceVersion = yield* Config.string("OTEL_SERVICE_VERSION").pipe(
+          const serviceVersion = yield* Config.string(
+            "OTEL_SERVICE_VERSION",
+          ).pipe(
             Config.orElse(() => Config.string("SERVICE_VERSION")),
             Config.withDefault("0.0.0"),
           )

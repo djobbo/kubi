@@ -1,7 +1,13 @@
 import { t } from "@lingui/core/macro"
 import { Trans } from "@lingui/react/macro"
 import type { LinkProps, useMatchRoute } from "@tanstack/react-router"
-import { HomeIcon, SwordsIcon, TrophyIcon, UsersIcon, type LucideIcon } from "lucide-react"
+import {
+  HomeIcon,
+  SwordsIcon,
+  TrophyIcon,
+  UsersIcon,
+  type LucideIcon,
+} from "lucide-react"
 import type { ReactNode } from "react"
 
 export type AppNavLink = {
@@ -21,9 +27,7 @@ export type AppNavGroup = {
   items: AppNavLink[]
 }
 
-export type AppNavItem =
-  | ({ type: "link" } & AppNavLink)
-  | AppNavGroup
+export type AppNavItem = ({ type: "link" } & AppNavLink) | AppNavGroup
 
 export function getRankingsNavLinks(locale: string | undefined): AppNavLink[] {
   return [

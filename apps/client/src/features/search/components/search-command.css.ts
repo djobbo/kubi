@@ -1,4 +1,4 @@
-import { style } from "@vanilla-extract/css";
+import { style } from "@vanilla-extract/css"
 
 export const backdrop = style({
   position: "fixed",
@@ -13,4 +13,4 @@ export const backdrop = style({
       position: "absolute",
     },
   },
-});
+})
