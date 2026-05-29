@@ -37,7 +37,7 @@ type SidebarContextValue = {
 
 const SidebarContext = createContext<SidebarContextValue | null>(null)
 
-export function useSidebar() {
+function useSidebar() {
   const context = useContext(SidebarContext)
   if (!context) {
     throw new Error("useSidebar must be used within a SidebarProvider.")
@@ -324,7 +324,7 @@ export function SidebarHeader({ className, ...props }: ComponentProps<"div">) {
   )
 }
 
-export function SidebarFooter({ className, ...props }: ComponentProps<"div">) {
+function SidebarFooter({ className, ...props }: ComponentProps<"div">) {
   return (
     <div
       data-slot="sidebar-footer"
@@ -400,7 +400,7 @@ export const sidebarMenuButtonVariants = cva(
   },
 )
 
-export function SidebarMenuButton({
+function SidebarMenuButton({
   className,
   isActive,
   ...props

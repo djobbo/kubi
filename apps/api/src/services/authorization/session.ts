@@ -4,7 +4,7 @@ import { type NewSession, sessionsTable } from "@dair/db"
 import { HttpApiBuilder } from "effect/unstable/httpapi"
 import { and, eq, gt } from "drizzle-orm"
 import { Effect, Redacted } from "effect"
-import { sessionApiKey } from "."
+import { sessionApiKey } from "./session-cookie"
 
 const isProduction = (env?: string) => env === "production"
 

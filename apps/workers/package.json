@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@dair/api-contract": "workspace:*",
-    "@dair/brawlhalla-api": "workspace:*",
     "@dair/common": "workspace:*",
     "@dair/observability": "workspace:*",
     "dotenv": "catalog:",

@@ -3,7 +3,7 @@ import { Schema } from "effect"
 /**
  * Error when a session is not found
  */
-export class SessionNotFoundError extends Schema.TaggedErrorClass<SessionNotFoundError>()(
+class SessionNotFoundError extends Schema.TaggedErrorClass<SessionNotFoundError>()(
   "SessionNotFoundError",
   {
     sessionId: Schema.String,
@@ -13,7 +13,7 @@ export class SessionNotFoundError extends Schema.TaggedErrorClass<SessionNotFoun
 /**
  * Error when a session has expired
  */
-export class SessionExpiredError extends Schema.TaggedErrorClass<SessionExpiredError>()(
+class SessionExpiredError extends Schema.TaggedErrorClass<SessionExpiredError>()(
   "SessionExpiredError",
   {
     sessionId: Schema.String,

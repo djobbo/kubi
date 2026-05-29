@@ -224,6 +224,7 @@ vp run check:types
 vp run check:lint
 vp run check:format
 vp run health
+vp run audit
 vp run test
 
 # Database

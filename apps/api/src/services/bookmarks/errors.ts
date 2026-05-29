@@ -14,7 +14,7 @@ export class BookmarkError extends Schema.TaggedErrorClass<BookmarkError>()(
 /**
  * Error when a bookmark is not found
  */
-export class BookmarkNotFoundError extends Schema.TaggedErrorClass<BookmarkNotFoundError>()(
+class BookmarkNotFoundError extends Schema.TaggedErrorClass<BookmarkNotFoundError>()(
   "BookmarkNotFoundError",
   {
     pageId: Schema.String,
@@ -26,7 +26,7 @@ export class BookmarkNotFoundError extends Schema.TaggedErrorClass<BookmarkNotFo
 /**
  * Error when Discord account is not found during migration
  */
-export class DiscordAccountNotFoundError extends Schema.TaggedErrorClass<DiscordAccountNotFoundError>()(
+class DiscordAccountNotFoundError extends Schema.TaggedErrorClass<DiscordAccountNotFoundError>()(
   "DiscordAccountNotFoundError",
   {
     userId: Schema.String,

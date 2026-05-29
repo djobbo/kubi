@@ -7,7 +7,6 @@ import {
 } from "@dair/brawlhalla-gql-api"
 import { Context, Effect, Layer, Schema } from "effect"
 
-export { BRAWLHALLA_GQL_BASE_URL } from "@dair/brawlhalla-gql-api"
 
 export class BrawlhallaGql extends Context.Service<BrawlhallaGql>()(
   "@dair/services/BrawlhallaGql",

@@ -13,10 +13,12 @@ jobs:
           # TODO: incrementally add these checks back
           # - name: Build
           #   action: vp run build
-          - name: Health
-            action: vp run health
+          - name: Audit
+            action: vp run audit
     steps:
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - uses: voidzero-dev/setup-vp@v1
         with:

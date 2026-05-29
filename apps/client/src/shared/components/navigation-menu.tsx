@@ -98,13 +98,13 @@ export function NavigationMenuLink({
   )
 }
 
-export function NavigationMenuPortal(
+function NavigationMenuPortal(
   props: NavigationMenuPrimitive.Portal.Props,
 ) {
   return <NavigationMenuPrimitive.Portal {...props} />
 }
 
-export function NavigationMenuPositioner({
+function NavigationMenuPositioner({
   className,
   sideOffset = 8,
   ...props
@@ -121,7 +121,7 @@ export function NavigationMenuPositioner({
   )
 }
 
-export function NavigationMenuPopup({
+function NavigationMenuPopup({
   className,
   ...props
 }: NavigationMenuPrimitive.Popup.Props) {
@@ -139,7 +139,7 @@ export function NavigationMenuPopup({
   )
 }
 
-export function NavigationMenuViewport({
+function NavigationMenuViewport({
   className,
   ...props
 }: NavigationMenuPrimitive.Viewport.Props) {

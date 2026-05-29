@@ -12,7 +12,7 @@ import { Context, Duration, Effect, Layer, Option, Schema } from "effect"
 
 const CACHE_MAX_AGE = 60 * 60
 
-export class BrawltoolsApiError extends Schema.TaggedErrorClass<BrawltoolsApiError>()(
+class BrawltoolsApiError extends Schema.TaggedErrorClass<BrawltoolsApiError>()(
   "BrawltoolsApiError",
   {
     message: Schema.String,

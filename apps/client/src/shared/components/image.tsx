@@ -7,7 +7,7 @@ import type { LegendNameKey } from "@dair/brawlhalla-api/src/constants/legends"
 import type { RankedRegion } from "@dair/brawlhalla-api/src/constants/ranked/regions"
 import type { TierName } from "@dair/api-contract/src/shared/tier"
 
-export type ImagePropsWithoutSrc = Omit<
+type ImagePropsWithoutSrc = Omit<
   ImgHTMLAttributes<HTMLImageElement>,
   "src"
 > & {
@@ -21,7 +21,7 @@ type UnsafeImageProps = ImagePropsWithoutSrc & {
   src: string
 }
 
-export const UnsafeImage = ({
+const UnsafeImage = ({
   containerClassName,
   Container = "div",
   position = "relative",
@@ -54,7 +54,7 @@ type LegendIconProps = ImagePropsWithoutSrc & {
   legendNameKey: LegendNameKey
 }
 
-export const getLegendIconSrc = (
+const getLegendIconSrc = (
   legendNameKey: LegendIconProps["legendNameKey"],
 ) => `/assets/images/legends/icons/${legendNameKey}.png` as const
 

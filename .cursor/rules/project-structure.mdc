@@ -163,6 +163,7 @@ vp run build
 vp run lint
 vp run check:types
 vp run health
+vp run audit
 
 # API commands
 vp run -F @dair/api dev

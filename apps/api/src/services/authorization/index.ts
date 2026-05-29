@@ -4,7 +4,7 @@ import {
   GOOGLE_PROVIDER_ID,
   type Provider,
 } from "@dair/db"
-import { HttpApiBuilder, HttpApiSecurity } from "effect/unstable/httpapi"
+import { HttpApiBuilder } from "effect/unstable/httpapi"
 import { Unauthorized } from "effect/unstable/httpapi/HttpApiError"
 import { HttpClient } from "effect/unstable/http"
 import {
@@ -19,16 +19,10 @@ import { ClientConfig } from "@/services/config/client-config"
 import { ApiServerConfig } from "@/services/config/api-server-config"
 import { OAuthValidationError } from "./errors"
 import { createSession, deleteSession, getSession } from "./session"
+import { sessionApiKey } from "./session-cookie"
 import { validateOAuthCallback } from "./validate-oauth-callback"
 
-export const SESSION_COOKIE = "dair-session"
-
-export const sessionApiKey = HttpApiSecurity.apiKey({
-  in: "cookie",
-  key: SESSION_COOKIE,
-})
-
-export type SessionWithUser = {
+type SessionWithUser = {
   readonly id: string
   readonly userId: string
   readonly expiresAt: Date
@@ -42,7 +36,7 @@ export type SessionWithUser = {
   }
 }
 
-export type OAuthUser = {
+type OAuthUser = {
   readonly id: string
   readonly email: string
   readonly username: string

@@ -29,7 +29,7 @@ export type AppNavGroup = {
 
 export type AppNavItem = ({ type: "link" } & AppNavLink) | AppNavGroup
 
-export function getRankingsNavLinks(locale: string | undefined): AppNavLink[] {
+function getRankingsNavLinks(locale: string | undefined): AppNavLink[] {
   return [
     {
       to: "/{-$locale}/brawlhalla/rankings/1v1/{-$region}/{-$page}",

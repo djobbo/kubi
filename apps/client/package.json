@@ -27,7 +27,6 @@
     "@tanstack/react-devtools": "catalog:",
     "@tanstack/react-router": "catalog:",
     "@tanstack/react-router-devtools": "catalog:",
-    "@tanstack/react-router-ssr-query": "catalog:",
     "@tanstack/react-start": "catalog:",
     "@tanstack/router-plugin": "catalog:",
     "@vanilla-extract/css": "catalog:",
@@ -57,7 +56,6 @@
     "jsdom": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:",
-    "vite": "catalog:",
-    "web-vitals": "catalog:"
+    "vite": "catalog:"
   }
 }

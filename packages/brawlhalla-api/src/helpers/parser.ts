@@ -19,6 +19,99 @@ const weaponNameMap = {
   Chakram: "Chakrams",
 }
 
+type LegendStats = PlayerStats["legends"][number]
+type LegendRanked = PlayerRanked["legends"][number]
+
+const parseStatInt = (value: string | undefined) =>
+  Number.parseInt(value ?? "0", 10)
+
+const resolveWeaponName = (weaponKey: string) =>
+  weaponNameMap[weaponKey as keyof typeof weaponNameMap] ?? weaponKey
+
+const parseLegendCoreStats = (stats: LegendStats | undefined) => ({
+  xp: stats?.xp ?? 0,
+  level: stats?.level ?? 0,
+  xp_percentage: stats?.level === 100 ? 100 : (stats?.xp_percentage ?? 0),
+  damage_dealt: parseStatInt(stats?.damagedealt),
+  damage_taken: parseStatInt(stats?.damagetaken),
+  kos: stats?.kos ?? 0,
+  falls: stats?.falls ?? 0,
+  suicides: stats?.suicides ?? 0,
+  team_kos: stats?.teamkos ?? 0,
+  matchtime: stats?.matchtime ?? 0,
+  games: stats?.games ?? 0,
+  wins: stats?.wins ?? 0,
+})
+
+const parseLegendWeapon = (
+  weaponKey: string,
+  stats: LegendStats | undefined,
+  slot: "one" | "two",
+) => {
+  const damage =
+    slot === "one" ? stats?.damageweaponone : stats?.damageweapontwo
+  const kos = slot === "one" ? stats?.koweaponone : stats?.koweapontwo
+  const timeHeld =
+    slot === "one" ? stats?.timeheldweaponone : stats?.timeheldweapontwo
+
+  return {
+    name: resolveWeaponName(weaponKey),
+    damage_dealt: parseStatInt(damage),
+    kos: kos ?? 0,
+    time_held: timeHeld ?? 0,
+  }
+}
+
+const parseLegendUnarmed = (stats: LegendStats | undefined) => ({
+  damage_dealt: parseStatInt(stats?.damageunarmed),
+  kos: stats?.kounarmed ?? 0,
+  time_held:
+    (stats?.matchtime ?? 0) -
+    (stats?.timeheldweaponone ?? 0) -
+    (stats?.timeheldweapontwo ?? 0),
+})
+
+const parseLegendRanked = (ranked: LegendRanked | undefined) =>
+  ranked
+    ? {
+        rating: ranked.rating,
+        peak_rating: ranked.peak_rating,
+        tier: ranked.tier,
+        wins: ranked.wins,
+        games: ranked.games,
+        rating_reset: getLegendOrTeamRatingReset(ranked.rating),
+      }
+    : null
+
+const parseLegendEntry = (
+  legend: {
+    legend_id: number
+    legend_name_key: string
+    bio_name: string
+    weapon_one: string
+    weapon_two: string
+  },
+  stats: LegendStats | undefined,
+  ranked: LegendRanked | undefined,
+) => ({
+  id: legend.legend_id,
+  name: legend.bio_name,
+  name_key: legend.legend_name_key,
+  stats: parseLegendCoreStats(stats),
+  weapon_one: parseLegendWeapon(legend.weapon_one, stats, "one"),
+  weapon_two: parseLegendWeapon(legend.weapon_two, stats, "two"),
+  unarmed: parseLegendUnarmed(stats),
+  gadgets: {
+    damage_dealt: parseStatInt(stats?.damagegadgets),
+    kos: stats?.kogadgets ?? 0,
+  },
+  weapon_throws: {
+    damage_dealt: parseStatInt(stats?.damagethrownitem),
+    kos: stats?.kothrownitem ?? 0,
+  },
+  ranked: parseLegendRanked(ranked),
+})
+
 export const parsePlayerLegends = (
   stats: PlayerStats["legends"] | undefined,
   ranked: PlayerRanked["legends"] | undefined,
@@ -36,72 +129,13 @@ export const parsePlayerLegends = (
   const statsMap = arrayToMap(stats ?? [], "legend_id")
   const rankedMap = arrayToMap(ranked ?? [], "legend_id")
 
-  const parsedLegends = (allLegends ?? legends).map((legend) => {
-    const stats = statsMap[legend.legend_id]
-    const ranked = rankedMap[legend.legend_id]
-
-    return {
-      id: legend.legend_id,
-      name: legend.bio_name,
-      name_key: legend.legend_name_key,
-      stats: {
-        xp: stats?.xp ?? 0,
-        level: stats?.level ?? 0,
-        xp_percentage: stats?.level === 100 ? 100 : (stats?.xp_percentage ?? 0),
-        damage_dealt: Number.parseInt(stats?.damagedealt ?? "0", 10),
-        damage_taken: Number.parseInt(stats?.damagetaken ?? "0", 10),
-        kos: stats?.kos ?? 0,
-        falls: stats?.falls ?? 0,
-        suicides: stats?.suicides ?? 0,
-        team_kos: stats?.teamkos ?? 0,
-        matchtime: stats?.matchtime ?? 0,
-        games: stats?.games ?? 0,
-        wins: stats?.wins ?? 0,
-      },
-      weapon_one: {
-        name:
-          weaponNameMap[legend.weapon_one as keyof typeof weaponNameMap] ??
-          legend.weapon_one,
-        damage_dealt: Number.parseInt(stats?.damageweaponone ?? "0", 10),
-        kos: stats?.koweaponone ?? 0,
-        time_held: stats?.timeheldweaponone ?? 0,
-      },
-      weapon_two: {
-        name:
-          weaponNameMap[legend.weapon_two as keyof typeof weaponNameMap] ??
-          legend.weapon_two,
-        damage_dealt: Number.parseInt(stats?.damageweapontwo ?? "0", 10),
-        kos: stats?.koweapontwo ?? 0,
-        time_held: stats?.timeheldweapontwo ?? 0,
-      },
-      unarmed: {
-        damage_dealt: Number.parseInt(stats?.damageunarmed ?? "0", 10),
-        kos: stats?.kounarmed ?? 0,
-        time_held:
-          (stats?.matchtime ?? 0) -
-          (stats?.timeheldweaponone ?? 0) -
-          (stats?.timeheldweapontwo ?? 0),
-      },
-      gadgets: {
-        damage_dealt: Number.parseInt(stats?.damagegadgets ?? "0", 10),
-        kos: stats?.kogadgets ?? 0,
-      },
-      weapon_throws: {
-        damage_dealt: Number.parseInt(stats?.damagethrownitem ?? "0", 10),
-        kos: stats?.kothrownitem ?? 0,
-      },
-      ranked: ranked
-        ? {
-            rating: ranked.rating,
-            peak_rating: ranked.peak_rating,
-            tier: ranked.tier,
-            wins: ranked.wins,
-            games: ranked.games,
-            rating_reset: getLegendOrTeamRatingReset(ranked.rating),
-          }
-        : null,
-    }
-  })
+  const parsedLegends = (allLegends ?? legends).map((legend) =>
+    parseLegendEntry(
+      legend,
+      statsMap[legend.legend_id],
+      rankedMap[legend.legend_id],
+    ),
+  )
 
   return parsedLegends
 }

@@ -10,7 +10,6 @@
     "start": "tsx ./src/migrate.ts"
   },
   "dependencies": {
-    "@dair/common": "workspace:*",
     "@dair/db": "workspace:*",
     "@dair/observability": "workspace:*",
     "@effect/sql-pg": "catalog:",

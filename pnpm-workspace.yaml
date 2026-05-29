@@ -27,7 +27,6 @@ catalog:
   "@effect/opentelemetry": 4.0.0-beta.71
   "@effect/platform-node": 4.0.0-beta.71
   "@effect/sql-pg": 4.0.0-beta.71
-  "@libsql/client": ^0.17.3
   "@lingui/babel-plugin-lingui-macro": ^5.9.0
   "@lingui/cli": ^5.9.0
   "@lingui/conf": ^5.9.0
@@ -38,14 +37,11 @@ catalog:
   "@opentelemetry/exporter-trace-otlp-http": ^0.211.0
   "@opentelemetry/sdk-metrics": ^2.7.1
   "@opentelemetry/sdk-trace-base": ^2.7.1
-  "@opentelemetry/sdk-trace-node": ^2.7.1
-  "@opentelemetry/sdk-trace-web": ^2.7.1
   "@tailwindcss/vite": ^4.1.18
   "@tanstack/devtools-vite": ^0.4.1
   "@tanstack/react-devtools": ^0.9.3
   "@tanstack/react-router": ^1.157.16
   "@tanstack/react-router-devtools": ^1.157.16
-  "@tanstack/react-router-ssr-query": ^1.157.16
   "@tanstack/react-start": ^1.157.16
   "@tanstack/router-plugin": ^1.157.16
   "@testing-library/dom": ^10.4.1
@@ -61,7 +57,6 @@ catalog:
   cheerio: ^1.2.0
   class-variance-authority: ^0.7.1
   clsx: ^2.1.1
-  dayjs: ^1.11.19
   dotenv: ^16.6.1
   drizzle-kit: 1.0.0-rc.4-ca0f029
   drizzle-orm: 1.0.0-rc.1
@@ -89,7 +84,6 @@ catalog:
   typescript: ^6.0.3
   vite: npm:@voidzero-dev/vite-plus-core@0.1.23
   vite-plus: 0.1.23
-  web-vitals: ^5.1.0
 
 overrides:
   vite: "catalog:"

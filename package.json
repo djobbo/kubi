@@ -9,6 +9,7 @@
     "compose": "vp exec tsx scripts/compose.ts",
     "compose:down": "vp exec tsx scripts/compose.ts down",
     "health": "fallow health",
+    "audit": "fallow audit",
     "prepare": "vp config && effect-language-service patch",
     "server:build": "vp run -F @dair/api build",
     "server:start": "vp run -F @dair/api start",
@@ -19,6 +20,7 @@
   "devDependencies": {
     "@effect/language-service": "catalog:",
     "@effect/platform-node": "catalog:",
+    "@lingui/conf": "catalog:",
     "@types/node": "catalog:",
     "@typescript/native-preview": "catalog:",
     "effect": "catalog:",

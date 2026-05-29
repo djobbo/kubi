@@ -1,11 +1,37 @@
 {
   "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
-  "entry": ["scripts/migration/migrate.ts"],
+  "entry": [
+    "scripts/migration/migrate.ts",
+    "lingui.config.ts",
+    "apps/client/lingui.config.ts",
+    "scripts/setup/setup.mts",
+    "scripts/setup/**/*.mts",
+    "scripts/compose.ts"
+  ],
   "ignorePatterns": [
     "**/*.generated.ts",
     "**/*.gen.ts",
     "**/*.d.ts",
-    "**/locales/*/messages.ts"
+    "**/locales/*/messages.ts",
+    "apps/instrumentation/**",
+    "packages/effect-ts/**",
+    "packages/ui/**"
+  ],
+  "ignoreDependencies": [
+    "@voidzero-dev/vite-plus-core",
+    "@lingui/babel-plugin-lingui-macro",
+    "effect-solutions"
+  ],
+  "publicPackages": [
+    "@dair/api-contract",
+    "@dair/brawlhalla-api",
+    "@dair/brawlhalla-gql-api",
+    "@dair/brawlhalla-replays",
+    "@dair/brawlhalla-servers",
+    "@dair/brawltools-api",
+    "@dair/common",
+    "@dair/db",
+    "@dair/observability"
   ],
   "workspaces": {
     "packages": ["apps/*", "packages/*"]
@@ -13,9 +39,37 @@
   "rules": {
     "unresolved-imports": "error",
     "unlisted-dependencies": "error",
-    "unused-exports": "warn"
+    "unused-exports": "warn",
+    "unused-files": "warn",
+    "unused-dependencies": "warn"
+  },
+  "audit": {
+    "deadCodeBaseline": "fallow-baselines/dead-code.json",
+    "healthBaseline": "fallow-baselines/health.json",
+    "dupesBaseline": "fallow-baselines/dupes.json"
   },
   "duplicates": {
-    "minOccurrences": 3
-  }
+    "minOccurrences": 3,
+    "ignore": ["apps/migrator/src/database.types.ts"]
+  },
+  "ignoreExports": [
+    {
+      "file": "apps/migrator/src/database.types.ts",
+      "exports": [
+        "Tables",
+        "TablesInsert",
+        "TablesUpdate",
+        "Enums",
+        "CompositeTypes"
+      ]
+    },
+    {
+      "file": "packages/brawlhalla-api/src/constants/legends.ts",
+      "exports": ["*"]
+    },
+    {
+      "file": "packages/brawlhalla-api/src/schema/legends.ts",
+      "exports": ["*"]
+    }
+  ]
 }

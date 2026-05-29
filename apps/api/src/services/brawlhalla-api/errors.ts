@@ -3,7 +3,7 @@ import { Effect, Schema } from "effect"
 /**
  * Generic Brawlhalla API error
  */
-export class BrawlhallaApiError extends Schema.TaggedErrorClass<BrawlhallaApiError>()(
+class BrawlhallaApiError extends Schema.TaggedErrorClass<BrawlhallaApiError>()(
   "BrawlhallaApiError",
   {
     cause: Schema.optional(Schema.Unknown),
@@ -30,7 +30,7 @@ export class BrawlhallaPlayerNotFound extends Schema.TaggedErrorClass<Brawlhalla
 /**
  * Error when a clan is not found in Brawlhalla API
  */
-export class BrawlhallaClanNotFound extends Schema.TaggedErrorClass<BrawlhallaClanNotFound>()(
+class BrawlhallaClanNotFound extends Schema.TaggedErrorClass<BrawlhallaClanNotFound>()(
   "BrawlhallaClanNotFound",
   {
     clanId: Schema.Number,
@@ -43,7 +43,7 @@ export class BrawlhallaClanNotFound extends Schema.TaggedErrorClass<BrawlhallaCl
 /**
  * Error when Brawlhalla API rate limit is exceeded
  */
-export class BrawlhallaRateLimitError extends Schema.TaggedErrorClass<BrawlhallaRateLimitError>()(
+class BrawlhallaRateLimitError extends Schema.TaggedErrorClass<BrawlhallaRateLimitError>()(
   "BrawlhallaRateLimitError",
   {
     message: Schema.String,
@@ -53,7 +53,7 @@ export class BrawlhallaRateLimitError extends Schema.TaggedErrorClass<Brawlhalla
   },
 ) {}
 
-export class BrawlhallaServiceUnavailable extends Schema.TaggedErrorClass<BrawlhallaServiceUnavailable>()(
+class BrawlhallaServiceUnavailable extends Schema.TaggedErrorClass<BrawlhallaServiceUnavailable>()(
   "BrawlhallaServiceUnavailable",
   {
     message: Schema.String,

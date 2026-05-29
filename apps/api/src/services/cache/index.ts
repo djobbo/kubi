@@ -9,7 +9,7 @@ import {
 } from "effect"
 import { Redis } from "ioredis"
 
-export class CacheSerializationError extends Schema.TaggedErrorClass<CacheSerializationError>()(
+class CacheSerializationError extends Schema.TaggedErrorClass<CacheSerializationError>()(
   "CacheSerializationError",
   {
     cause: Schema.optional(Schema.Unknown),
@@ -17,7 +17,7 @@ export class CacheSerializationError extends Schema.TaggedErrorClass<CacheSerial
   },
 ) {}
 
-export class CacheOperationError extends Schema.TaggedErrorClass<CacheOperationError>()(
+class CacheOperationError extends Schema.TaggedErrorClass<CacheOperationError>()(
   "CacheOperationError",
   {
     method: Schema.String,
@@ -26,7 +26,7 @@ export class CacheOperationError extends Schema.TaggedErrorClass<CacheOperationE
   },
 ) {}
 
-export type CacheResult<T> = {
+type CacheResult<T> = {
   readonly data: T
   readonly updatedAt: Date
   readonly cached: boolean

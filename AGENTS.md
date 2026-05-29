@@ -62,7 +62,8 @@ vp run dev              # API, client, Drizzle studio (DB: vp run compose:up fir
 vp run build            # Build all packages
 vp run lint             # Format (oxfmt) + lint (oxlint) + fix
 vp run check:types      # Type check all workspaces
-vp run health            # Complexity hotspots and refactor targets (fallow)
+vp run health            # Full-repo complexity report (fallow; may exit non-zero on backlog)
+vp run audit             # Changed-files PR gate with baselines (fallow)
 vp run test             # Run all tests
 
 # Docker services

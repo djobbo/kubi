@@ -23,7 +23,7 @@ const IpApiResponse = Schema.Struct({
   isp: Schema.String,
 })
 
-export const ServerInfo = Schema.Struct({
+const ServerInfo = Schema.Struct({
   id: Schema.String,
   url: Schema.String,
   ip: Schema.String,

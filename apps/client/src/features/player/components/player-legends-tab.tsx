@@ -1,11 +1,12 @@
 import { StatGrid } from "@/shared/components/stat-grid"
+import { SelectMenuItem } from "@/shared/components/select-menu-item"
 import { calculateWinrate } from "@dair/brawlhalla-api"
 import type { Player } from "@dair/api-contract/src/routes/v1/brawlhalla/get-player-by-id"
 import { formatTime } from "@dair/common/src/helpers/date"
 import { cn } from "@dair/common/src/helpers/ui"
 import { t } from "@lingui/core/macro"
 import { Select } from "@base-ui-components/react/select"
-import { CheckIcon, ChevronDownIcon } from "lucide-react"
+import { ChevronDownIcon } from "lucide-react"
 import { useMemo, useState } from "react"
 
 import { SortDirection, useSortBy } from "../hooks/use-sort-by"
@@ -169,21 +170,11 @@ export const PlayerLegendsTab = ({
               <Select.Popup className="corner-smooth-md bg-bg-root outline-1 outline-border">
                 <Select.List className="relative scroll-py-6 overflow-y-auto py-1">
                   {weaponOptions.map(({ label, value }) => (
-                    <Select.Item
+                    <SelectMenuItem
                       key={value || "all"}
                       value={value}
-                      className={cn(
-                        "grid cursor-default grid-cols-[0.75rem_1fr] items-center gap-2 py-2 pr-4 pl-2.5 text-sm leading-4 outline-none select-none",
-                        "data-[highlighted]:before:absolute data-[highlighted]:before:inset-x-1 data-[highlighted]:before:inset-y-0 data-[highlighted]:before:z-[-1] data-[highlighted]:before:rounded-sm data-[highlighted]:before:bg-bg-light",
-                      )}
-                    >
-                      <Select.ItemIndicator className="col-start-1">
-                        <CheckIcon className="size-3" />
-                      </Select.ItemIndicator>
-                      <Select.ItemText className="col-start-2">
-                        {label}
-                      </Select.ItemText>
-                    </Select.Item>
+                      label={label}
+                    />
                   ))}
                 </Select.List>
               </Select.Popup>
