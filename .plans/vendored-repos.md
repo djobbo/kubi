@@ -23,6 +23,7 @@ Configured repos (see `VENDORED_REPOS` in [scripts/setup/sync-vendored-repos.mts
 | `.repos/corehalla`       | [djobbo/corehalla](https://github.com/djobbo/corehalla)                 | `next`   |
 | `.repos/alchemy`         | [alchemy-run/alchemy](https://github.com/alchemy-run/alchemy)           | `main`   |
 | `.repos/shadcn-ui`       | [shadcn-ui/ui](https://github.com/shadcn-ui/ui)                         | `main`   |
+| `.repos/fallow`          | [fallow-rs/fallow](https://github.com/fallow-rs/fallow)                 | `main`   |
 
 ## Prerequisites
 

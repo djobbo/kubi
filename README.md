@@ -223,7 +223,7 @@ vp run lint
 vp run check:types
 vp run check:lint
 vp run check:format
-vp run check:deadcode
+vp run health
 vp run test
 
 # Database

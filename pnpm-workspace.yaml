@@ -14,6 +14,7 @@ minimumReleaseAgeExclude:
   - "@oxlint-tsgolint/*"
   - drizzle-kit
   - effect
+  - fallow
   - oxfmt
   - oxlint
   - oxlint-tsgolint
@@ -66,10 +67,10 @@ catalog:
   drizzle-orm: 1.0.0-rc.1
   effect: 4.0.0-beta.71
   effect-solutions: ^0.5.3
+  fallow: ^2.84.0
   husky: ^9.1.7
   ioredis: ^5.11.0
   jsdom: ^27.4.0
-  knip: ^6.14.2
   lucide-react: 0.563.0
   nitro: ^3.0.1-alpha.2
   oxfmt: ^0.52.0

@@ -65,6 +65,11 @@ const VENDORED_REPOS: ReadonlyArray<VendoredRepo> = [
     url: "https://github.com/shadcn-ui/ui.git",
     branch: "main",
   },
+  {
+    name: "fallow",
+    url: "https://github.com/fallow-rs/fallow.git",
+    branch: "main",
+  },
 ]
 
 export class VendoredReposError extends Data.TaggedError("VendoredReposError")<{

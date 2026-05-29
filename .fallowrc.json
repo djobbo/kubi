@@ -1,0 +1,21 @@
+{
+  "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
+  "entry": ["scripts/migration/migrate.ts"],
+  "ignorePatterns": [
+    "**/*.generated.ts",
+    "**/*.gen.ts",
+    "**/*.d.ts",
+    "**/locales/*/messages.ts"
+  ],
+  "workspaces": {
+    "packages": ["apps/*", "packages/*"]
+  },
+  "rules": {
+    "unresolved-imports": "error",
+    "unlisted-dependencies": "error",
+    "unused-exports": "warn"
+  },
+  "duplicates": {
+    "minOccurrences": 3
+  }
+}

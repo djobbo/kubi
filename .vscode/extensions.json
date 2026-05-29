@@ -5,6 +5,7 @@
     "mrorz.language-gettext",
     "oxc.oxc-vscode",
     "TypeScriptTeam.native-preview",
-    "effectful-tech.effect-vscode"
+    "effectful-tech.effect-vscode",
+    "fallow-rs.fallow-vscode"
   ]
 }

@@ -162,7 +162,7 @@ vp run dev
 vp run build
 vp run lint
 vp run check:types
-vp run check:deadcode
+vp run health
 
 # API commands
 vp run -F @dair/api dev

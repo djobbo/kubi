@@ -13,8 +13,8 @@ jobs:
           # TODO: incrementally add these checks back
           # - name: Build
           #   action: vp run build
-          - name: Dead Code
-            action: vp run check:deadcode
+          - name: Health
+            action: vp run health
     steps:
       - uses: actions/checkout@v6
 

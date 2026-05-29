@@ -25,6 +25,7 @@ When working on code that uses these libraries:
 | `.repos/corehalla`       | [djobbo/corehalla](https://github.com/djobbo/corehalla) (`next`)                 | Legacy [corehalla.com](https://corehalla.com) monorepo — Next.js app, tRPC, worker, and packages         |
 | `.repos/alchemy`         | [alchemy-run/alchemy](https://github.com/alchemy-run/alchemy) (`main`)           | `alchemy` IaC library, provider resources, examples, and docs in that monorepo                           |
 | `.repos/shadcn-ui`       | [shadcn-ui/ui](https://github.com/shadcn-ui/ui) (`main`)                         | `shadcn` CLI, component registry source, templates, and docs in that monorepo                            |
+| `.repos/fallow`          | [fallow-rs/fallow](https://github.com/fallow-rs/fallow) (`main`)                 | `fallow` CLI, GitHub Action, MCP/LSP, `@fallow-cli/*` npm packages, and bundled docs in that monorepo    |
 
 If `.repos/` is missing, run `vp run setup` or `syncVendoredRepos({})` before relying on vendored source. Do not treat vendored trees as editable forks unless the task explicitly requires upstream contributions.
 
@@ -61,7 +62,7 @@ vp run dev              # API, client, Drizzle studio (DB: vp run compose:up fir
 vp run build            # Build all packages
 vp run lint             # Format (oxfmt) + lint (oxlint) + fix
 vp run check:types      # Type check all workspaces
-vp run check:deadcode   # Find unused exports (knip)
+vp run health            # Complexity hotspots and refactor targets (fallow)
 vp run test             # Run all tests
 
 # Docker services

@@ -23,7 +23,7 @@ const config = defineConfig(({ mode }) => {
       tsconfigPaths: true,
     },
     plugins: [
-      ...(process.env.NODE_ENV !== "deadcode" ? [lingui()] : []),
+      lingui(),
       devtools(),
       nitro(),
       vanillaExtractPlugin(),
