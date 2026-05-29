@@ -88,7 +88,6 @@ catalog:
   typescript: ^6.0.3
   vite: npm:@voidzero-dev/vite-plus-core@0.1.23
   vite-plus: 0.1.23
-  vite-tsconfig-paths: ^6.0.5
   web-vitals: ^5.1.0
 
 overrides:

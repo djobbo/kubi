@@ -38,8 +38,7 @@
     "react-dom": "catalog:",
     "recharts": "catalog:",
     "scheduler": "catalog:",
-    "tailwindcss": "catalog:",
-    "vite-tsconfig-paths": "catalog:"
+    "tailwindcss": "catalog:"
   },
   "devDependencies": {
     "@effect/language-service": "catalog:",
